@@ -3,7 +3,7 @@ Unit tests for ISIS PVL and PvlSequence bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-12
+Last Modified: 2026-07-24
 Updated: 2026-03-30  Geng Xun added PvlSequence regression coverage alongside core PVL keyword, group, object, and container tests.
 Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer focused unit tests.
 Updated: 2026-04-09  Geng Xun added PvlFormat, PvlTranslationTable, PvlFormatPds, PvlToPvlTranslationManager unit tests.
@@ -15,6 +15,8 @@ Updated: 2026-04-14  Geng Xun added focused Pvl set_format_template and validate
 Updated: 2026-04-10  Geng Xun aligned PVL helper test expectations with upstream ISIS behavior for empty units and PDS uppercase names.
 Updated: 2026-04-14  Geng Xun added regressions for set_format_template and empty-valued validate_pvl template keywords.
 Updated: 2026-04-15  Geng Xun added a regression ensuring PvlGroup.validate_group safely handles empty-valued template keywords.
+Updated: 2026-07-24  Geng Xun added ISIS 9/10 version-gated Pvl JSON and GDAL API coverage.
+Updated: 2026-07-24  Geng Xun added ISIS 9/10 PvlKeyword JSON helper coverage.
 """
 
 import unittest
@@ -38,6 +40,17 @@ class PvlUnitTest(unittest.TestCase):
         self.assertEqual(keyword.comment(0), "# Primary instrument")
         self.assertIn("InstrumentId", str(keyword))
 
+    def test_pvl_keyword_versioned_json_helpers(self):
+        keyword = ip.PvlKeyword("Numbers")
+        if hasattr(keyword, "set_json_array_value"):
+            keyword.set_json_array_value([1, 2, 3])
+            self.assertEqual(keyword.to_json(), ["1", "2", "3"])
+            keyword.add_json_array_value([4, 5])
+            self.assertEqual(keyword.size(), 5)
+            self.assertEqual(keyword.to_json(), ["1", "2", "3", "4", "5"])
+        else:
+            self.assertFalse(hasattr(keyword, "to_json"))
+
     def test_pvl_group_and_container_keyword_management(self):
         group = ip.PvlGroup("Instrument")
         group.add_keyword(ip.PvlKeyword("InstrumentId", "HIRISE"))
@@ -57,6 +70,13 @@ class PvlUnitTest(unittest.TestCase):
         group.delete_keyword("SpacecraftName")
         self.assertFalse(group.has_keyword("SpacecraftName"))
         self.assertIn("Group = Instrument", str(group))
+
+    def test_pvl_container_versioned_default_constructor(self):
+        try:
+            container = ip.PvlContainer()
+            self.assertEqual(container.keywords(), 0)
+        except TypeError:
+            pass
 
     def test_pvl_object_and_recursive_lookup(self):
         pvl = make_simple_pvl()
@@ -81,6 +101,16 @@ class PvlUnitTest(unittest.TestCase):
             loaded = ip.Pvl(str(file_path))
             self.assertTrue(loaded.has_group("Instrument"))
             self.assertEqual(loaded.find_group("Instrument").find_keyword("InstrumentId")[0], "HIRISE")
+
+    def test_pvl_versioned_json_and_gdal_surface(self):
+        pvl = make_simple_pvl()
+        if hasattr(pvl, "to_json"):
+            json_label = pvl.to_json()
+            self.assertIsInstance(json_label, (dict, list))
+            self.assertTrue(json_label)
+            self.assertTrue(hasattr(pvl, "read_gdal"))
+        else:
+            self.assertFalse(hasattr(pvl, "read_gdal"))
 
     def test_pvl_set_format_template(self):
         """Test set_format_template with a Pvl object."""

@@ -2323,3 +2323,352 @@ Ledger syncs: ControlMeasureLogData, Enlarge, TableRecord, FileName
 - `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新（全部 100%）
 - `class_bind_methods_details/`: 5 个 detail CSV 更新
 - `pybind_progress_log.md`: 本条目
+
+## ISIS 10 Batch 1 — 2026-07-23
+
+**Queue (3 ISIS 10-only classes):** IProj, Chandrayaan2OhrcCamera,
+Chandrayaan2TmcCamera
+
+- 新增 `src/bind_isis10.cpp`，以 `PYISIS_ISIS10_API` 隔离 ISIS 10 专属 API；
+  ISIS 9 保持原有导出面。
+- `IProj` 完成构造、名称、版本、Mapping、正反算和 Python 4-tuple
+  `xy_range` 绑定。
+- 两项 Chandrayaan-2 线阵相机完成 Cube 构造、生命周期和 SPICE ID 绑定。
+- `tests/unitTest/isis10_api_unit_test.py` 在 ISIS 9 验证符号缺席，在 ISIS 10
+  验证导出、继承关系和 IProj 行为。
+- `asp360_new`（ISIS 9.0.0/Python 3.12/Qt5）和
+  `asp370`（ISIS 10.0.0/Python 3.13/Qt6）均完成重新编译；ISIS 10 聚焦测试
+  3/3 通过。
+
+## ISIS 9/10 Compatibility Queue 1 — 2026-07-24
+
+**Queue:** Cube, CubeAttribute, Blob, Table, ProcessByBrick
+
+### Class 1: Cube（closed / shared-wrapper）
+
+- ISIS 10 将 `labelsAttached/setLabelsAttached` 从 `bool` 改为
+  `Cube::LabelAttachment`，删除 `storesDnData()`，并在 `Cube::Format`
+  增加 `GTiff`。
+- 保持 `labels_attached()` 返回 `bool`、`set_labels_attached(bool)` 接受
+  布尔值；新增 `label_attachment/set_label_attachment` 精确枚举接口。
+- ISIS 10的`stores_dn_data()`由`LabelAttachment != ExternalLabel`推导；
+  ISIS 9继续调用原方法。
+- ISIS 9和ISIS 10均重新构建成功；两边`cube_unit_test`各30/30通过，
+  `tests/smoke_import.py`均通过。
+- 兼容台账：`reference/compatibility/isis9-isis10-binding-review.csv`。
+
+### Class 2: CubeAttribute（closed / shared-wrapper）
+
+- ISIS 9的`LabelAttachmentEnumeration()`存在大小写归一化后仍比较混合大小写
+  `"External"`的问题；绑定层统一保证`External`字符串可跨版本解析。
+- ISIS 10新增`GdalLabel`、`Cube::Format::GTiff`与
+  `CubeAttributeOutput::propagateFileFormat()`；仅在ISIS 10导出。
+- 不为`+Gdal`属性字符串提供虚假兼容：ISIS 10上游解析器本身仍不接受该值。
+- ISIS 9和ISIS 10均增量重建成功；两边CubeAttribute聚焦测试各7/7通过，
+  `tests/smoke_import.py`均通过。
+
+### Class 3: Blob（closed / version-gated-addition）
+
+- 两版已有文件、bytes、label及缓冲区所有权接口签名保持兼容。
+- ISIS 10新增`Key()`与`StartByte()`，按版本暴露为`key()`和
+  `start_byte()`；正式环境确认key格式为`Blob_UnitTest`。
+- ISIS 10新增GDALDataset裸指针接口，且C++ `fstream`写入签名发生变化；
+  两者均不直接作为Python API暴露，避免形成不稳定的跨语言流契约。
+- ISIS 9和ISIS 10均增量重建成功；两边Blob聚焦测试各2/2通过，
+  `tests/smoke_import.py`均通过。
+
+### Class 4: Table（closed / shared-no-change）
+
+- ISIS 10只移除了ISIS 9的`Table()`无参构造；该构造原本未在Python绑定，
+  因此现有契约不受影响。`TableRecord.h`与`TableField.h`声明完全一致。
+- 审计发现详情台账明显落后于真实绑定：绝大多数Table公开方法早已导出。
+  本轮补齐`Table(Blob&)`与`to_blob()`，形成稳定的双向值语义往返。
+- ISIS 9和ISIS 10均增量重建成功；两边Table/TableRecord/TableField聚焦
+  测试各8/8通过，`tests/smoke_import.py`均通过。
+
+### Class 5: ProcessByBrick（closed / shared-no-change）
+
+- 唯一头文件差异位于QtConcurrent内部：ISIS 9使用`QFuture<void>`，
+  ISIS 10使用`QFuture<void*>`；公开配置方法及当前绑定引用的签名未变。
+- 无需增加版本分支。详情台账中多项已经绑定的方法仍被误记为N，本轮按
+  实际代码校正；模板实现内部语句不等同于可直接绑定的公开Python API。
+- Python回调式`StartProcess/ProcessCube*`仍是独立设计项，需要明确GIL、
+  Buffer生命周期和线程模型后再实现，不阻塞当前跨版本兼容闭环。
+- 两边`process_unit_test`各6/6通过，`tests/smoke_import.py`均通过。
+
+**Queue 1 closed. Next queue:** Pvl, PvlObject, PvlKeyword, PvlContainer
+
+## ISIS 9/10 Compatibility Queue 2 — 2026-07-24
+
+**Queue:** Pvl, PvlObject, PvlKeyword, PvlContainer
+
+### Class 1: Pvl（closed / version-gated-addition）
+
+- ISIS 10新增`toJson()`、`readGdal(path)`和递归`readObject(...)` helper。
+- `to_json()`将`ordered_json`序列化后交给Python标准库，返回原生
+  `dict/list`；`read_gdal(path)`按版本导出。
+- `readObject(PvlObject&, ordered_json)`是递归实现细节且采用引用out-param，
+  不作为用户级API直接暴露。
+- 双版本均重新构建成功；两边`PvlUnitTest`各17/17通过，smoke均通过。
+
+**Next:** PvlObject
+
+### Class 2: PvlObject（closed / shared-no-change）
+
+- ISIS 10仅将内部PVL组/对象容器从QList切换为QLinkedList；Python绑定
+  不暴露Qt容器或迭代器，现有对象/组查找和引用返回无需版本分支。
+- 双版本PvlUnitTest各19/19通过，smoke均通过。
+
+### Class 3: PvlKeyword（closed / version-gated-addition）
+
+- ISIS 10新增JSON标量/数组helper和toJson；Python侧转换为原生容器。
+- 双版本focused测试各2/2通过，smoke均通过。
+
+### Class 4: PvlContainer（closed / version-gated-addition）
+
+- ISIS 10新增默认构造；内部QList到QLinkedList变化不泄漏到Python。
+- 仅ISIS 10暴露PvlContainer()；双版本PvlUnitTest各19/19通过，smoke均通过。
+
+**Next:** 下一轮兼容队列从Control/Bundle与Shape高风险组开始
+
+### Control/Bundle Class: BundleSettings（closed / shared-no-change）
+
+- ISIS 10仅在头文件中补充Qt6兼容的QStringRef include，公开配置、枚举
+  和求解设置签名没有变化。
+- 复用现有控制网绑定，不增加版本分支；ISIS 9/10的control_core与
+  bundle_advanced测试均为85项通过（各有1项已知跳过），smoke均通过。
+
+**Next:** Shape组的ImagePolygon
+
+### Shape Class: ImagePolygon（closed / shared-no-change）
+
+- ISIS 9/10的ImagePolygon.h声明完全一致，当前绑定涉及的坐标、WKT、
+  几何参数和Blob序列化接口无需版本分支。
+- 双版本ImagePolygon focused测试各10/10通过，smoke均通过。
+
+**Next:** Shape组的SurfaceModel与相关Geometry公共类
+
+### Shape/Geometry Batch: SurfaceModel, Latitude, Longitude（closed / shared-no-change）
+
+- 三个头文件在ISIS 9/10中声明一致，当前数值、坐标和范围绑定无需版本分支。
+- SurfaceModel、Latitude、Longitude双版本focused测试分别通过
+  6/6、6/6、6/6，smoke均通过。
+
+**Next:** 继续检查Shape与Camera/Spice组的声明变化
+
+### Camera/Spice Class: Spice（closed / shared-wrapper）
+
+- ISIS 10将未绑定的Pvl+JSON构造改为Cube+Pvl+JSON，并将load移到公开区。
+- 当前Python只使用两版共有的Spice(Cube)构造及访问器，因此不增加
+  版本分支，也不暴露不稳定的JSON/关键字装载接口。
+- 双版本camera_unit_test各9/9通过，smoke均通过。
+
+**Next:** SpiceRotation与SpicePosition声明复核
+
+### Camera/Spice Classes: SpiceRotation, SpicePosition（closed / shared-no-change）
+
+- SpiceRotation仅有内部成员初始化与布局变化，SpicePosition声明完全一致；
+  当前Python暴露的缓存、旋转、位置、多项式接口均无版本差异。
+- 双版本spice_navigation测试各57/57通过，smoke均通过。
+
+**Next:** 继续检查Camera层的CameraFactory、CameraStatistics和地图类
+
+### Camera Classes: CameraFactory, CameraStatistics, CameraDetectorMap, CameraDistortionMap（closed / ISIS 9/10 compatibility verified）
+
+- CameraFactory.h only adds ISIS 10 CSM ISD helpers returning csm::Model*/QStringList; current Python surface intentionally keeps the stable Cube-driven factory API.
+- CameraStatistics.h, CameraDetectorMap.h, and CameraDistortionMap.h have no public declaration drift.
+- Both asp360_new (ISIS 9) and asp370 (ISIS 10) passed camera_unit_test 9/9, camera_maps_unit_test 50/50, and image_overlap_camera_unit_test 43 tests with 4 expected skips; smoke checks passed.
+
+- CameraFocalPlaneMap, CameraGroundMap, CameraSkyMap, and CSMSkyMap were additionally checked; only CameraFocalPlaneMap changes an internal QVector include strategy, with no Python-visible API drift.
+
+## ISIS 10 Batch 2 — 2026-07-24
+
+### OsirisRexOcamsOpenCVDistortionMap（closed / ISIS 10-only）
+
+- 在正式ISIS10头文件、上游实现和libOsirisRexOcamsCamera导出符号中核实构造及三个公开方法。
+- 在src/bind_isis10.cpp完成条件绑定：Python str显式转换QString，父Camera使用keep_alive，空父相机抛ValueError。
+- ISIS9重新构建通过，符号保持不导出；isis10_api测试1项通过、4项按版本预期跳过。
+- ISIS10重新构建通过，isis10_api测试5/5、osirisrex_camera测试14/14通过。
+- 两个版本使用各自构建目录运行smoke_import.py均通过。
+
+### ImageIoHandler / GdalIoHandler（closed / ISIS 10-only curated facade）
+
+- 注册`ImageIoHandler`抽象基类，暴露`Buffer`读写、数据大小、Python列表
+  虚拟波段设置和标签更新；不暴露抽象构造、裸缓存算法所有权、无操作的
+  基类`clearCache`和`QMutex`。
+- 为`GdalIoHandler`提供路径、Python波段列表、`PixelType`和`writable`
+  参数 facade；在进入上游构造器前预检文件和波段，避免失败打开后的
+  空`GDALDataset*`解引用。
+- 不暴露裸`GDALDataset*`构造和构造器已调用的`init()`；派生类
+  `clear_cache`保留。
+- ISIS10使用真实`grayscale.tif`完成`Brick`读取、有效像元、
+  `update_labels`及错误路径/波段防护测试，`isis10_api`为7/7；
+  ISIS9为1项通过、6项按版本预期跳过，双版本smoke均通过。
+
+**Next:** ISIS 10-only类候选已完成；返回共享兼容队列并准备双版本发布门禁。
+
+## ISIS 9 / ISIS 10 Compatibility Continuation — 2026-07-24
+
+### Base utility batch: Environment, FileName, IException, SpecialPixel（4 headers closed）
+
+- `Environment.h`新增`aleVersion()`；仅ISIS 10导出`Environment.ale_version()`，
+  显式转换为Python字符串。
+- `FileName.h`把比较运算符从成员改为friend；聚焦测试进一步发现ISIS 9
+  对两个相同但不存在的路径返回false。Python `__eq__/__ne__`现统一采用
+  ISIS 10的canonical/expanded path算法。
+- `IException.h`新增`length()`，但现有`py::register_exception`不会保留
+  可调用的C++异常实例；为保持异常翻译稳定而明确排除。
+- `SpecialPixel.h`新增signed int32/int8存储常量；现有Python `Pixel`
+  使用稳定double哨兵与predicate，不零散增加仅ISIS 10常量。
+- 双版本重新构建成功；utility/support聚焦测试各133/133，smoke均通过。
+
+**Continuous goal:** 4/20 additional compatibility headers closed.
+
+### PVL translation batch: PvlFormat and translation managers（5 headers closed）
+
+- `PvlFormat.h`仅把Qt5 `QRegExp` inline实现切换为Qt6
+  `QRegularExpression`；公开格式化和`KeywordType`接口不变。
+- `LabelTranslationManager.h`、`PvlToPvlTranslationManager.h`、
+  `PvlToXmlTranslationManager.h`和`XmlToPvlTranslationManager.h`
+  仅移除未使用的`PvlTokenizer`传递性include或调整空白。
+- 不增加版本分支；现有构造、翻译facade、抽象继承链和
+  `QDomDocument`排除边界保持一致。
+- ISIS 9/10的`pvl_unit_test`各82/82通过，smoke均通过。
+
+**Continuous goal:** 9/20 additional compatibility headers closed.
+
+### Shape/DSK batch: ShapeModel hierarchy and BulletTargetShape（7 headers closed）
+
+- ISIS 10将`calculateDefaultNormal()`和`calculateSurfaceNormal()`的默认实现
+  上移至`ShapeModel`，多个派生类删除重复override；Python仍通过基类继承
+  保持原方法名。
+- `NaifDskShape`、`EmbreeShapeModel`和`BulletShapeModel`删除原
+  `QVector`版`ellipsoidNormal()`；既有条件wrapper在ISIS 9调用原方法，
+  ISIS 10调用`calculateSurfaceNormal()`后返回`normal()`列表。
+- `DemShape`新增的DEM误差/取值helper均为private；不进入Python API。
+- `BulletTargetShape`内部所有权从`QSharedPointer`切换为带deleter的
+  `std::shared_ptr`；Python load factory返回对象的`take_ownership`
+  策略不变。
+- 默认构造`BulletShapeModel`在两版本都没有内部Bullet world，不能直接
+  用于求交；这属于上游生命周期限制，不作为ISIS 10回归。
+- ISIS 9/10的`target_shape_unit_test`各7项（1项环境跳过），smoke均通过。
+
+**Continuous goal:** 16/20 additional compatibility headers closed.
+
+### Math/Pixel batch: Calculator family, InfixToPostfix, PixelType（4 headers closed）
+
+- `Calculator.h`和`CubeCalculator.h`仅删除重复的`QVector`前置声明；
+  现有RPN接口和Python list/QVector facade不变。
+- `InfixToPostfix.h`只增加Qt6 `QRegularExpression`显式include；
+  `convert()`和`tokenize_equation()`契约不变。
+- `PixelType.h`枚举保持一致；ISIS 10新增GDAL双向映射inline helper，
+  已由`GdalIoHandler`内部使用。Python继续只接收`PixelType`，不泄漏
+  `GDALDataType`。
+- ISIS 9/10的math、CubeCalculator和low-level组合测试各204项通过
+  （含1项既有expected failure），smoke均通过。
+
+**Continuous goal:** 20/20 additional compatibility headers closed; pause for user review.
+
+### Refreshed camera/support batch（6 headers closed）
+
+- 重新对当前`asp360_new`与`asp370`安装头文件运行审计后，
+  `Camera.h`、`CameraPointInfo.h`、`CSMCamera.h`、
+  `LineScanCameraGroundMap.h`、`SerialNumberList.h`和`Target.h`
+  均从待复核变为文本一致。
+- 现有Camera层级、campt风格查询、序列号列表和Target接口无需代码分支；
+  `LineScanCameraGroundMap`仍保留“缺少稳定line-scan fixture”的测试边界。
+- ISIS 9/10的camera、camera maps、serial number和target/shape组合测试
+  各70项通过（1项环境依赖跳过），smoke均通过。
+
+**Current 19-header batch:** 6/19 closed.
+
+### I/O and statistics compatibility batch（6 headers closed）
+
+- 当前安装面中的`JP2Decoder.h`、`JP2Encoder.h`和`JP2Error.h`在
+  ISIS 9/10间文本一致；`JP2Error.h`已重新出现在当前`asp370`安装面。
+  既有`PYISIS_HAS_JP2_ERROR`条件编译继续保留，以兼容未安装该头的构建。
+- ISIS 9的`Endian.h`与ISIS 10的`IEndian.h`公开内容一致；
+  `__has_include`选择已覆盖重命名，不改变Python的`ByteOrder`接口。
+- `GroupedStatistics.h`仅以显式`QVector` include替代前置声明，
+  统计接口无需分支。
+- ISIS 9/10的high-level I/O、low-level I/O和statistics组合测试各93项通过
+  （2项既有JP2不稳定行为测试跳过），smoke均通过。
+
+**Current 19-header batch:** 12/19 closed.
+
+### Projection and UniversalGroundMap batch（3 headers closed）
+
+- `Projection.h`与`TProjection.h`只删除未使用的`<string>` include，
+  公开投影声明和既有Python派生类接口不变。
+- ISIS 10的`UniversalGroundMap`新增`LocalRadius()`、`currentPriority()`
+  和`setPriority()`；已条件暴露为`local_radius()`、`current_priority()`
+  和接收`CameraPriority`枚举的`set_priority()`。
+- ISIS 9保持原有Python表面；ISIS 10新增接口在camera-backed和
+  projection-backed fixture上均完成覆盖。
+- ISIS 9/10的projection与UniversalGroundMap组合测试各87项通过，
+  smoke均通过。
+
+**Current 19-header batch:** 15/19 closed.
+
+### Seeder, validation, and OSIRIS-REx batch（4 headers closed）
+
+- `GridPolygonSeeder.h`只把private `CheckSubGrid`参数从`MultiPolygon`
+  收窄为`Polygon`；不影响现有构造、`sub_grid`和`plugin_parameters`。
+- `MeasureValidationResults.h`只以显式`QVector` include替代前置声明；
+  验证结果公开API不变。
+- ISIS 10的`OsirisRexOcamsCamera`新增protected
+  `getFunctionalIkCode()`，属于内部相机初始化逻辑，按规则不绑定。
+- `OsirisRexDistortionMap.set_distortion()`已按版本适配并显式处理
+  Python `str`到`QString`：ISIS 9保留必填filter和None返回，
+  ISIS 10提供`UNKNOWN`默认值并返回bool。
+- ISIS 9/10的polygon seeder、control core与OSIRIS-REx组合测试各87项通过
+  （1项插件环境跳过），smoke均通过。
+
+**Current 19-header batch:** 19/19 closed.
+
+### ISIS 10-only compatibility closure（3 headers closed）
+
+- `IProj.h`、`Chandrayaan2OhrcCamera.h`和
+  `Chandrayaan2TmcCamera.h`的当前安装头文件公开面已由既有
+  `src/bind_isis10.cpp`完整覆盖，并继续由`PYISIS_ISIS10_API`隔离。
+- ISIS 9验证这些符号不导出；ISIS 10验证全部7项专属API测试通过，
+  包括真实PROJ投影行为和两项线阵相机的继承关系；两版本smoke均通过。
+- ISIS 10新增候选台账已将三项从`candidate`收口为`complete`。
+
+**Current 9-header batch:** 3/9 closed.
+
+### Control/Bundle Qt compatibility closure（6 headers closed）
+
+- `BundleResults.h`仅删除Qt 6中冗余的`QVector` residual-list overload；
+  现有clone helper和Python facade继续使用`QList`/Python list。
+- `BundleSolutionInfo.h`只有history注释变化；`ControlMeasure.h`、
+  `ControlNet.h`、`ControlPoint.h`和`ImageList.h`只有Qt include或未使用
+  前置声明调整，公开数据API不变。
+- 继续有意排除signals、slots、`QVariant` observer emission及Qt容器专属
+  overload；没有引入版本分支或重复绑定。
+- ISIS 9/10的control core、bundle advanced和image utility组合测试各126项
+  通过（1项既有BundleResults copy测试跳过），smoke均通过。
+
+**Current 9-header batch:** 9/9 closed.
+
+### Final conda matrix residual（1 header closed）
+
+- 重新生成conda安装面矩阵后，`Statistics.h`因含`Q_OBJECT`仍被列为
+  `qt_observer_review`；ISIS 9/10安装头SHA-256实际完全一致。
+- 稳定数值、像素计数和PVL接口保持共享，QObject observer元数据继续不绑定。
+- ISIS 9/10的statistics与cube组合测试各57项通过，smoke均通过。
+
+**Current conda risk matrix:** 57/57 unique headers closed; 0 remaining.
+
+## Dual-version release preflight — 2026-07-24
+
+- 实际运行时导出面对比确认：ISIS 10新增6个类；这些类含30个构造/方法入口。
+  既有类新增15个可调用入口和2个枚举值，另有1个方法签名/返回值按版本变化；
+  ISIS 9已有Python类和方法没有被删除。
+- 发布/运行时配置测试66项通过。
+- `tools/packaging/basic_tests.txt`发布门槛在ISIS 9/10中各329项通过
+  （各1项既有expected failure），两版本smoke均通过。
+- 全仓库discovery还会混入图像匹配多进程、CLI错误路径和实验/E2E测试；
+  该混合运行的失败不作为wheel绑定发布门槛，相关测试应在其独立工作流处理。
+- 下一门槛是将分支合入`main`后运行四条wheel链，重点重新验证Windows
+  ISIS 10 prefix的SpiceQL/mgs链接。

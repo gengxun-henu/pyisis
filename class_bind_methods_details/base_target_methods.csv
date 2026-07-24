@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Target,"Spice, Instruments, and Cameras",reference/upstream_isis/src/base/objs/Target/Target.h,src/base/bind_base_target.cpp; src/bind_camera.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已补齐 `Target(Pvl&)`、NAIF/frame/body-rotation accessor，并通过 `Camera.target()` 暴露已附着 SPICE 的运行时 Target；显式 `Spice *` API 仍因缺少 Python Spice 绑定而保留未转换
+Target,"Spice, Instruments, and Cameras",reference/upstream_isis/src/base/objs/Target/Target.h,src/base/bind_base_target.cpp; src/bind_camera.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；既有Target(Pvl&)、NAIF/frame/body-rotation及Camera.target接口不变；显式Spice*边界继续保留
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Target,isis_pybind.Target,Y,Python class symbol 已存在于 `src/base/bind_base_target.cpp`

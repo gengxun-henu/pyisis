@@ -10,6 +10,7 @@ import importlib
 import os
 from os import PathLike
 from pathlib import Path
+import re
 from typing import Any
 
 
@@ -25,6 +26,10 @@ class RuntimeDiscovery:
     isisroot: str | None
     isisdata: str | None
     dll_directories: tuple[str, ...]
+    isis_version: str | None
+
+
+_ISIS_VERSION_RE = re.compile(r"^\s*(\d+)\.(\d+)\.(\d+)")
 
 
 def _path_text(value: str | PathLike[str]) -> str:
@@ -55,6 +60,49 @@ def _minimal_data_path() -> str | None:
     except ImportError:
         return None
     return _path_text(data_module.data_path())
+
+
+def read_isis_version(prefix: str | PathLike[str] | None) -> str | None:
+    """Read the semantic ISIS version from a runtime prefix."""
+
+    if prefix is None:
+        return None
+    version_file = Path(prefix) / "isis_version.txt"
+    try:
+        first_line = version_file.read_text(encoding="utf-8").splitlines()[0]
+    except (OSError, IndexError):
+        return None
+    match = _ISIS_VERSION_RE.match(first_line)
+    if match is None:
+        return None
+    return ".".join(match.groups())
+
+
+def validate_runtime_version(
+    expected_version: str,
+    expected_major: int,
+    *,
+    discovery: RuntimeDiscovery | None = None,
+) -> str:
+    """Reject a runtime prefix from another ISIS ABI major version."""
+
+    runtime = discovery or configure_runtime(register_dll_directories=True)
+    prefix = runtime.isis_prefix or runtime.isisroot
+    actual_version = runtime.isis_version or read_isis_version(prefix)
+    if actual_version is None:
+        raise RuntimeError(
+            "Unable to verify the ISIS runtime version because "
+            f"{prefix or 'the selected prefix'} has no readable isis_version.txt. "
+            f"PyISIS was built for ISIS {expected_version}."
+        )
+    actual_major = int(actual_version.split(".", 1)[0])
+    if actual_major != expected_major:
+        raise RuntimeError(
+            f"PyISIS was built for ISIS {expected_version}, but the selected "
+            f"runtime is ISIS {actual_version} at {prefix}. Use separate "
+            "environments for the ISIS 9 and ISIS 10 package lines."
+        )
+    return actual_version
 
 
 def _configure_packaged_runtime(runtime: Any | None) -> str | None:
@@ -132,7 +180,13 @@ def configure_runtime(*, register_dll_directories: bool = True) -> RuntimeDiscov
         isisroot=isisroot,
         isisdata=isisdata,
         dll_directories=deduped_dll_directories,
+        isis_version=read_isis_version(isis_prefix or isisroot),
     )
 
 
-__all__ = ["RuntimeDiscovery", "configure_runtime"]
+__all__ = [
+    "RuntimeDiscovery",
+    "configure_runtime",
+    "read_isis_version",
+    "validate_runtime_version",
+]

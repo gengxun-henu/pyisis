@@ -3,7 +3,8 @@ Unit tests for ISIS OSIRIS-REx mission camera bindings
 
 Author: Geng Xun
 Created: 2026-04-07
-Last Modified: 2026-04-07
+Last Modified: 2026-07-24
+Updated: 2026-07-24  Geng Xun covered the versioned OCAMS distortion filter signature.
 """
 
 import unittest
@@ -45,6 +46,15 @@ class OsirisRexDistortionMapBindingsUnitTest(unittest.TestCase):
             hasattr(ip.OsirisRexDistortionMap, "set_undistorted_focal_plane")
         )
         self.assertTrue(hasattr(ip.OsirisRexDistortionMap, "__repr__"))
+
+    def test_set_distortion_signature_tracks_isis_version(self):
+        signature = ip.OsirisRexDistortionMap.set_distortion.__doc__
+        self.assertIn("naif_ik_code", signature)
+        self.assertIn("filter_name", signature)
+        if ip.__isis_major__ >= 10:
+            self.assertIn("UNKNOWN", signature)
+        else:
+            self.assertNotIn("UNKNOWN", signature)
 
     def test_osiris_rex_distortion_map_inherits_base_methods(self):
         """Inherited from CameraDistortionMap base class."""

@@ -18,6 +18,14 @@ on:
         required: false
         default: false
         type: boolean
+      release_line:
+        description: "Versioned package line to publish"
+        required: false
+        default: isis10
+        type: choice
+        options:
+          - isis9
+          - isis10
   pull_request:
     paths:
       - "CMakeLists.txt"
@@ -181,6 +189,157 @@ jobs:
             --venv "$GITHUB_WORKSPACE/build/packaging/linux-pip-smoke-venv" \
             --test-list tools/packaging/basic_tests.txt
 
+  linux-isis10-cp313-build:
+    name: Build ISIS 10 Linux cp313 manylinux_2_35 wheels
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/pypa/manylinux_2_28_x86_64
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    env:
+      MAMBA_ROOT_PREFIX: /opt/pyisis-isis10-micromamba
+      HOSTED_CONDA_PREFIX: /opt/pyisis-isis10-conda
+      WHEELHOUSE: ${{ github.workspace }}/wheelhouse-isis10
+      ABI_REPORT_DIR: ${{ github.workspace }}/build/packaging/linux-isis10-abi-report
+      PYISIS_MAX_LINUX_RUNTIME_BYTES: "1100000000"
+      PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES: "550000000"
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Linux ISIS 10 wheel environment
+        uses: ./.github/actions/setup-hosted-micromamba
+        with:
+          environment-name: pyisis-isis10-linux-64
+          environment-file: ports/linux/env/pyisis-isis10-linux-64.yml
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Resolve Linux ISIS 10 prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: github-hosted
+          fallback-conda-prefix: ""
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Select conda compiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          compiler=""
+          for compiler_name in \
+            x86_64-conda-linux-gnu-c++ \
+            x86_64-conda-linux-gnu-g++ \
+            g++; do
+            candidate="$(command -v "$compiler_name" || true)"
+            if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+              compiler="$candidate"
+              break
+            fi
+          done
+          if [ -z "$compiler" ]; then
+            echo "::error::No usable C++ compiler was found in the manylinux container."
+            exit 1
+          fi
+          "$compiler" --version
+          echo "CXX=$compiler" >> "$GITHUB_ENV"
+
+      - name: Build ISIS 10 Linux wheelhouse
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash tools/packaging/build_wheels_linux.sh \
+            --isis-prefix "$ISIS_PREFIX" \
+            --output-dir "$WHEELHOUSE" \
+            --python-executable "$PYTHON_BIN" \
+            --dependency-prefix "$CONDA_PREFIX" \
+            --platform-tag manylinux_2_35_x86_64 \
+            --binding-project-dir packaging/bindings-isis10 \
+            --distribution-name usgs-pyisis-isis10 \
+            --runtime-distribution usgs-pyisis-runtime-isis10-linux-x86_64 \
+            --package-version 1.4.0rc1 \
+            --vendor-toolchain-runtime
+
+      - name: Audit ISIS 10 Linux ABI and wheel policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$ABI_REPORT_DIR"
+          "$PYTHON_BIN" tools/packaging/audit_linux_wheelhouse.py \
+            --wheelhouse "$WHEELHOUSE" \
+            --target-glibc 2.35 \
+            --require-target \
+            --wheel-pattern "usgs_pyisis_isis10-*.whl" \
+            --report "$ABI_REPORT_DIR/glibc-symbol-report.json"
+          native_wheel_count=0
+          for wheel in "$WHEELHOUSE"/*-manylinux_2_35_x86_64.whl; do
+            test -f "$wheel"
+            native_wheel_count=$((native_wheel_count + 1))
+            wheel_name="$(basename "$wheel" .whl)"
+            report="$ABI_REPORT_DIR/private-toolchain-${wheel_name}.txt"
+            "$PYTHON_BIN" tools/packaging/vendor_linux_toolchain_runtime.py \
+              --wheel "$wheel" \
+              --verify-only 2>&1 | tee "$report"
+          done
+          test "$native_wheel_count" -eq 1
+
+      - name: Upload ISIS 10 Linux ABI report
+        uses: actions/upload-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-linux-cp313-abi-report
+          if-no-files-found: error
+          path: build/packaging/linux-isis10-abi-report/*
+
+      - name: Upload ISIS 10 Linux wheelhouse
+        uses: actions/upload-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse
+          if-no-files-found: error
+          path: wheelhouse-isis10/*.whl
+
+  linux-isis10-cp313-clean-install:
+    name: Test ISIS 10 Linux cp313 wheels on ${{ matrix.os }}
+    needs: linux-isis10-cp313-build
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up clean Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Download ISIS 10 Linux wheelhouse
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse
+          path: wheelhouse-isis10
+
+      - name: Test isolated ISIS 10 wheel install
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/packaging/test_wheel_install.py \
+            --wheelhouse "$GITHUB_WORKSPACE/wheelhouse-isis10" \
+            --venv "$GITHUB_WORKSPACE/build/packaging/linux-isis10-pip-smoke-venv" \
+            --package usgs-pyisis-isis10 \
+            --expected-isis-version 10.0.0 \
+            --test-list tools/packaging/basic_tests.txt
+
   windows-cp312:
     name: Build Windows cp312 wheels
     runs-on: windows-2022
@@ -237,14 +396,14 @@ jobs:
         if: ${{ steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' }}
         run: |
           . .\ports\windows\activate_msvc.ps1
-          .\ports\windows\isis\fetch_isis_900.ps1
+          .\ports\windows\isis\fetch_isis.ps1
           .\ports\windows\isis\apply_patches.ps1
           .\ports\windows\isis\configure_isis.ps1
           .\ports\windows\isis\build_isis.ps1
           .\ports\windows\isis\install_isis.ps1
 
       - name: Verify ISIS 9.0.0 Windows prefix
-        run: .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+        run: .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX -ExpectedVersion 9.0.0
 
       - name: Report ISIS 9.0.0 Windows prefix size
         run: |
@@ -285,6 +444,7 @@ jobs:
           & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_wheel_install.py `
             --wheelhouse $env:WHEELHOUSE `
             --venv $venv `
+            --expected-isis-version 9.0.0 `
             --test-list tools\packaging\basic_tests.txt
 
       - name: Check wheel metadata
@@ -324,13 +484,154 @@ jobs:
           if-no-files-found: error
           path: wheelhouse/*.whl
 
+  windows-isis10-cp313:
+    name: Build ISIS 10 Windows cp313 wheels
+    runs-on: windows-2022
+    timeout-minutes: 360
+    permissions:
+      contents: read
+
+    defaults:
+      run:
+        shell: pwsh
+
+    env:
+      PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis10-prefix
+      PYISIS_WINDOWS_ISIS_SOURCE: ${{ github.workspace }}\build\windows\external\isis-10.0.0-src
+      PYISIS_WINDOWS_ISIS_BUILD: ${{ github.workspace }}\build\windows\isis10-build
+      WHEELHOUSE: ${{ github.workspace }}\wheelhouse-isis10-windows
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python for packaging checks
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Windows ISIS 10 build environment
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-file: ports/windows/env/pyisis-isis10-win64.yml
+          cache-environment: true
+          init-shell: powershell
+
+      - name: Resolve Windows ISIS 10 dependency prefix
+        run: |
+          $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          $env:CONDA_PREFIX = $prefix
+          "CONDA_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "PYISIS_WINDOWS_DEP_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "$prefix" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Activate MSVC and build SpiceQL 1.3.0
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.3.0 -Jobs 2
+
+      - name: Restore cached ISIS 10.0.0 Windows prefix
+        id: windows-isis10-prefix-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: build/windows/isis10-prefix
+          key: windows-2022-isis-10.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/**') }}
+
+      - name: Build ISIS 10.0.0 Windows prefix
+        if: ${{ steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' }}
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          .\ports\windows\isis\fetch_isis.ps1 `
+            -Ref 10.0.0 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE
+          .\ports\windows\isis\apply_patches.ps1 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
+            -PatchDir .\ports\windows\isis\patches\10.0.0
+          .\ports\windows\isis\configure_isis.ps1 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+          .\ports\windows\isis\build_isis.ps1 `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+            -Jobs 2
+          .\ports\windows\isis\install_isis.ps1 `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
+
+      - name: Verify ISIS 10.0.0 Windows prefix
+        run: |
+          .\ports\windows\isis\verify_isis_prefix.ps1 `
+            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+            -ExpectedVersion 10.0.0
+
+      - name: Save ISIS 10.0.0 Windows prefix cache
+        if: >-
+          ${{
+            steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' &&
+            (
+              github.event_name == 'workflow_dispatch' ||
+              github.event.pull_request.head.repo.full_name == github.repository
+            )
+          }}
+        uses: actions/cache/save@v6
+        with:
+          path: build/windows/isis10-prefix
+          key: ${{ steps.windows-isis10-prefix-cache.outputs.cache-primary-key }}
+
+      - name: Build ISIS 10 Windows wheelhouse
+        run: |
+          .\tools\packaging\build_wheels.ps1 `
+            -IsisPrefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+            -OutputDir $env:WHEELHOUSE `
+            -PythonExecutable "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" `
+            -DependencyPrefix $env:PYISIS_WINDOWS_DEP_PREFIX `
+            -BindingProjectDir packaging\bindings-isis10 `
+            -DistributionName usgs-pyisis-isis10 `
+            -RuntimeDistribution usgs-pyisis-runtime-isis10-win64 `
+            -PackageVersion 1.4.0rc1
+
+      - name: Test isolated ISIS 10 Windows wheel install
+        run: |
+          $venv = Join-Path $env:GITHUB_WORKSPACE "build\packaging\isis10-windows-pip-smoke-venv"
+          if (Test-Path -LiteralPath $venv) {
+            Remove-Item -LiteralPath $venv -Recurse -Force
+          }
+          & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_wheel_install.py `
+            --wheelhouse $env:WHEELHOUSE `
+            --venv $venv `
+            --package usgs-pyisis-isis10 `
+            --expected-isis-version 10.0.0 `
+            --test-list tools\packaging\basic_tests.txt
+
+      - name: Check ISIS 10 Windows wheel metadata
+        run: |
+          .\tools\packaging\publish_testpypi.ps1 `
+            -Wheelhouse $env:WHEELHOUSE `
+            -PythonExecutable "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" `
+            -CheckOnly
+
+      - name: Upload ISIS 10 Windows wheel artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-windows-cp313-wheels
+          if-no-files-found: error
+          path: wheelhouse-isis10-windows/*.whl
+
   github-release:
     name: Publish configured GitHub Release
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.event.inputs.publish_github_release == 'true' }}
     needs:
       - linux-cp312-build
       - linux-cp312-clean-install
+      - linux-isis10-cp313-build
+      - linux-isis10-cp313-clean-install
       - windows-cp312
+      - windows-isis10-cp313
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -349,8 +650,12 @@ jobs:
           from pathlib import Path
           import tomllib
 
+          release_line = "${{ github.event.inputs.release_line }}"
+          if release_line not in {"isis9", "isis10"}:
+              raise ValueError(f"Unsupported release line: {release_line}")
+          manifest = Path("packaging/releases") / f"{release_line}.toml"
           release = tomllib.loads(
-              Path("packaging/release.toml").read_text(encoding="utf-8")
+              manifest.read_text(encoding="utf-8")
           )["release"]
           values = {
               "PACKAGE_VERSION": release["package_version"],
@@ -360,6 +665,13 @@ jobs:
               "PYTHON_ABI": release["python_abi"],
               "LINUX_PLATFORM": release["linux_platform"],
               "WINDOWS_PLATFORM": release["windows_platform"],
+              "DISTRIBUTION_NORMALIZED": release["distribution"].replace("-", "_"),
+              "RUNTIME_DISTRIBUTION_NORMALIZED": release[
+                  "runtime_distribution"
+              ].replace("-", "_"),
+              "MINIMAL_DATA_VERSION": release["minimal_data_version"],
+              "LINUX_ARTIFACT": release["linux_artifact"],
+              "WINDOWS_ARTIFACT": release["windows_artifact"],
               "RELEASE_PRERELEASE": str(release["prerelease"]).lower(),
               "LINUX_ASSET": release["linux_asset"],
               "WINDOWS_ASSET": release["windows_asset"],
@@ -374,16 +686,32 @@ jobs:
                   stream.write(f"{key}={value}\n")
           PY
 
-      - name: Download validated Linux wheelhouse
+      - name: Download validated ISIS 9 Linux wheelhouse
+        if: ${{ github.event.inputs.release_line == 'isis9' }}
         uses: actions/download-artifact@v4
         with:
           name: usgs-pyisis-linux-cp312-manylinux-wheelhouse
           path: release-input/linux/wheelhouse
 
-      - name: Download validated Windows wheelhouse
+      - name: Download validated ISIS 9 Windows wheelhouse
+        if: ${{ github.event.inputs.release_line == 'isis9' }}
         uses: actions/download-artifact@v4
         with:
           name: usgs-pyisis-windows-cp312-wheels
+          path: release-input/windows/wheelhouse
+
+      - name: Download validated ISIS 10 Linux wheelhouse
+        if: ${{ github.event.inputs.release_line == 'isis10' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse
+          path: release-input/linux/wheelhouse
+
+      - name: Download validated ISIS 10 Windows wheelhouse
+        if: ${{ github.event.inputs.release_line == 'isis10' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-windows-cp313-wheels
           path: release-input/windows/wheelhouse
 
       - name: Validate release wheel sets
@@ -393,13 +721,13 @@ jobs:
           linux_wheelhouse="release-input/linux/wheelhouse"
           windows_wheelhouse="release-input/windows/wheelhouse"
 
-          test -f "$linux_wheelhouse/usgs_pyisis-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${LINUX_PLATFORM}.whl"
-          test -f "$linux_wheelhouse/usgs_pyisis_isisdata_minimal-${PACKAGE_VERSION}-py3-none-any.whl"
+          test -f "$linux_wheelhouse/${DISTRIBUTION_NORMALIZED}-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${LINUX_PLATFORM}.whl"
+          test -f "$linux_wheelhouse/usgs_pyisis_isisdata_minimal-${MINIMAL_DATA_VERSION}-py3-none-any.whl"
           test "$(find "$linux_wheelhouse" -maxdepth 1 -type f -name '*.whl' | wc -l)" -eq 2
 
-          test -f "$windows_wheelhouse/usgs_pyisis-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${WINDOWS_PLATFORM}.whl"
-          test -f "$windows_wheelhouse/usgs_pyisis_runtime_win64-${PACKAGE_VERSION}-py3-none-${WINDOWS_PLATFORM}.whl"
-          test -f "$windows_wheelhouse/usgs_pyisis_isisdata_minimal-${PACKAGE_VERSION}-py3-none-any.whl"
+          test -f "$windows_wheelhouse/${DISTRIBUTION_NORMALIZED}-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${WINDOWS_PLATFORM}.whl"
+          test -f "$windows_wheelhouse/${RUNTIME_DISTRIBUTION_NORMALIZED}-${PACKAGE_VERSION}-py3-none-${WINDOWS_PLATFORM}.whl"
+          test -f "$windows_wheelhouse/usgs_pyisis_isisdata_minimal-${MINIMAL_DATA_VERSION}-py3-none-any.whl"
           test "$(find "$windows_wheelhouse" -maxdepth 1 -type f -name '*.whl' | wc -l)" -eq 3
 
       - name: Assemble release archives and checksums

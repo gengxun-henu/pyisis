@@ -3,9 +3,10 @@ Unit tests for ISIS Cube bindings
 
 Author: Geng Xun
 Created: 2026-03-27
-Last Modified: 2026-06-18
+Last Modified: 2026-07-24
 Updated: 2026-03-29  Geng Xun added Cube lifecycle regression coverage for create/open/format/access behavior.
 Updated: 2026-06-18  Geng Xun fixed temporary cube cleanup for Windows file locking.
+Updated: 2026-07-24  Geng Xun added ISIS 9/10 Cube label-attachment compatibility coverage.
 """
 
 import unittest
@@ -31,6 +32,10 @@ class CubeConstructionAndLifecycleTest(unittest.TestCase):
     def test_format_enum_values_exist(self):
         self.assertTrue(hasattr(ip.Cube.Format, "Bsq"))
         self.assertTrue(hasattr(ip.Cube.Format, "Tile"))
+        self.assertEqual(
+            hasattr(ip.Cube.Format, "GTiff"),
+            ip.__isis_major__ >= 10,
+        )
 
     def test_construct_from_filename_opens_existing_cube(self):
         with temporary_directory() as temp_dir:
@@ -120,12 +125,33 @@ class CubeConstructionAndLifecycleTest(unittest.TestCase):
                 labels_attached=False,
             )
 
+            self.assertIs(type(cube.labels_attached()), bool)
             self.assertFalse(cube.labels_attached())
+            self.assertEqual(
+                cube.label_attachment(),
+                ip.LabelAttachment.DetachedLabel,
+            )
 
             cube.close()
 
         # Explicitly close to ensure clean destructor behavior
         cube.close()
+
+    def test_label_attachment_enum_round_trip(self):
+        cube = ip.Cube()
+        cube.set_label_attachment(ip.LabelAttachment.AttachedLabel)
+        self.assertTrue(cube.labels_attached())
+        self.assertEqual(
+            cube.label_attachment(),
+            ip.LabelAttachment.AttachedLabel,
+        )
+
+        cube.set_label_attachment(ip.LabelAttachment.DetachedLabel)
+        self.assertFalse(cube.labels_attached())
+        self.assertEqual(
+            cube.label_attachment(),
+            ip.LabelAttachment.DetachedLabel,
+        )
 
 
 class CubeMetadataAndLabelTest(unittest.TestCase):

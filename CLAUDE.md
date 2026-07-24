@@ -1,6 +1,7 @@
 # CLAUDE.md
 
-Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+Behavioral guidelines to reduce common LLM coding mistakes. Also read and
+follow the repository's `AGENTS.md`; its project-specific rules are mandatory.
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
@@ -59,6 +60,43 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+## 5. ISIS Version Expansion
+
+Before adding or updating support for an ISIS version, read and follow
+`docs/isis-version-expansion-policy.md`.
+
+The local ISIS 10 authority is the `asp370` environment containing USGS
+`isis 10.0.0 h1f94ec8_1` on CPython 3.13. Keep `csm 3.0.3.3` pinned because
+`csm 3.1.0` is ABI-incompatible with that ISIS binary. Do not use the removed
+NASA ASP `asp_4` package as the ISIS 10 binding surface.
+
+Do not infer the binding scope from newly installed header names alone:
+
+- record the official tag/commit and exact conda version, build, channel,
+  platform, and subdir
+- compare added, removed, renamed, and same-name changed headers and public C++
+  declarations
+- inspect the official Changelog for Added, Changed, Deprecated, Removed, and
+  Breaking entries, while treating the target conda prefix as the compile/link
+  source of truth
+- record differences between the official source tag and channel-specific
+  package contents
+- verify Linux `.so` and Windows DLL/import-library symbols before exposing an
+  API
+- classify every discovered item, including explicit reasons for exclusions
+- keep compatible bindings shared and use version guards only where necessary
+- do not publish until the Linux/Windows × supported-ISIS-version validation
+  matrix is complete
+
+## 6. Disk Space and Build Cleanup
+
+This workstation has limited disk space. After a build succeeds and its result
+is verified, keep only artifacts needed for later use, such as wheels, shared
+libraries/DLLs, install packages, and reports. Promptly remove disposable build
+directories, downloaded CI copies, staging trees, build-only caches, and other
+temporary files. Identify and preserve the exact final artifacts first; never
+delete user files, reusable source/reference checkouts, or an active build.
 
 ---
 

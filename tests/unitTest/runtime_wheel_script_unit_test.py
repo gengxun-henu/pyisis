@@ -2,11 +2,14 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-23
+Last Modified: 2026-07-24
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
 Updated: 2026-07-23  Geng Xun limited Linux runtime staging to ISIS-owned binding files.
+Updated: 2026-07-23  Geng Xun covered versioned ISIS 10 runtime distribution metadata.
+Updated: 2026-07-23  Geng Xun covered versioned ISIS 10 Windows runtime metadata.
+Updated: 2026-07-24  Geng Xun preserved declared ELF SONAME aliases in Linux dependency closures.
 """
 
 from __future__ import annotations
@@ -81,6 +84,10 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     str(dep_prefix),
                     "--dependency-copy-mode",
                     "pattern",
+                    "--distribution-name",
+                    "usgs-pyisis-runtime-isis10-win64",
+                    "--package-version",
+                    "1.4.0rc1",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -105,6 +112,12 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             self.assertFalse((vendor / "include" / "isis" / "Cube.h").exists())
             self.assertFalse((vendor / "Library" / "lib" / "zlib.lib").exists())
             self.assertFalse((vendor / "Library" / "include" / "zlib.h").exists())
+            runtime_pyproject = (stage / "pyproject.toml").read_text(encoding="utf-8")
+            self.assertIn(
+                'name = "usgs-pyisis-runtime-isis10-win64"',
+                runtime_pyproject,
+            )
+            self.assertIn('version = "1.4.0rc1"', runtime_pyproject)
 
             sys.path.insert(0, str(stage / "src"))
             sys.modules.pop("pyisis_runtime", None)
@@ -211,6 +224,10 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     str(dep_prefix),
                     "--dependency-copy-mode",
                     "pattern",
+                    "--distribution-name",
+                    "usgs-pyisis-runtime-isis10-linux-x86_64",
+                    "--package-version",
+                    "1.4.0rc1",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -234,6 +251,12 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             self.assertFalse((vendor / "lib" / "libisis.a").exists())
             self.assertFalse((vendor / "include" / "isis" / "Cube.h").exists())
             self.assertFalse((vendor / "include" / "qt.h").exists())
+            runtime_pyproject = (stage / "pyproject.toml").read_text(encoding="utf-8")
+            self.assertIn(
+                'name = "usgs-pyisis-runtime-isis10-linux-x86_64"',
+                runtime_pyproject,
+            )
+            self.assertIn('version = "1.4.0rc1"', runtime_pyproject)
 
             sys.path.insert(0, str(stage / "src"))
             sys.modules.pop("pyisis_runtime", None)
@@ -356,6 +379,64 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             self.assertEqual((vendor_lib / "libcsmapi.so.3").read_bytes(), b"csmapi")
             self.assertFalse((vendor_lib / "libcsmapi.so.3").is_symlink())
             self.assertEqual((vendor_lib / "libcsmapi.so.3.0.3").read_bytes(), b"csmapi")
+
+    def test_stage_linux_runtime_preserves_declared_elf_soname_alias(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_linux_soname",
+            LINUX_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        with TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            prefix = temp / "isis-prefix"
+            (prefix / "lib").mkdir(parents=True)
+            (prefix / "IsisPreferences").write_text(
+                "Group = DataDirectory",
+                encoding="utf-8",
+            )
+            (prefix / "lib" / "libisis.so").write_bytes(b"isis")
+            (prefix / "lib" / "Camera.plugin").write_bytes(b"camera")
+
+            dep_prefix = temp / "dep-prefix"
+            (dep_prefix / "lib").mkdir(parents=True)
+            (dep_prefix / "lib" / "libblas.so.3").write_bytes(b"openblas")
+
+            def fake_ldd_dependencies(binary):
+                if binary.name == "libisis.so":
+                    return ("libblas.so.3",)
+                return ()
+
+            stage = temp / "runtime-stage"
+            with mock.patch.object(
+                stage_module,
+                "_ldd_dependencies",
+                fake_ldd_dependencies,
+            ), mock.patch.object(
+                stage_module,
+                "_elf_soname",
+                return_value="libopenblas.so.0",
+            ), mock.patch.object(
+                stage_module,
+                "_missing_runtime_dependencies",
+                return_value=(),
+            ):
+                stage_module.stage_runtime(
+                    prefix,
+                    stage,
+                    (dep_prefix,),
+                    dependency_copy_mode="closure",
+                )
+
+            vendor_lib = stage / "src" / "pyisis_runtime" / "vendor" / "isis" / "lib"
+            self.assertEqual((vendor_lib / "libblas.so.3").read_bytes(), b"openblas")
+            self.assertEqual(
+                (vendor_lib / "libopenblas.so.0").read_bytes(),
+                b"openblas",
+            )
 
     def test_verify_linux_runtime_closure_reports_missing_dependencies(self):
         spec = importlib.util.spec_from_file_location(

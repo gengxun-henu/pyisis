@@ -89,6 +89,36 @@ if(NOT ISIS_PREFIX)
   message(FATAL_ERROR "ISIS_PREFIX is not set. Point it to the external ISIS installation (for example the asp360_new conda environment).")
 endif()
 
+set(PYISIS_ISIS_VERSION_FILE "${ISIS_PREFIX}/isis_version.txt")
+if(NOT EXISTS "${PYISIS_ISIS_VERSION_FILE}")
+  message(FATAL_ERROR
+    "ISIS version metadata is missing: ${PYISIS_ISIS_VERSION_FILE}. "
+    "Use a complete ISIS development/runtime prefix.")
+endif()
+file(STRINGS "${PYISIS_ISIS_VERSION_FILE}" _pyisis_isis_version_line LIMIT_COUNT 1)
+string(REGEX MATCH
+  "^[ \t]*([0-9]+)\\.([0-9]+)\\.([0-9]+)"
+  _pyisis_isis_version_match
+  "${_pyisis_isis_version_line}")
+if(NOT _pyisis_isis_version_match)
+  message(FATAL_ERROR
+    "Unable to parse an ISIS semantic version from ${PYISIS_ISIS_VERSION_FILE}: "
+    "${_pyisis_isis_version_line}")
+endif()
+set(PYISIS_ISIS_VERSION "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${CMAKE_MATCH_3}")
+set(PYISIS_ISIS_VERSION_MAJOR "${CMAKE_MATCH_1}")
+set(PYISIS_ISIS_VERSION_MINOR "${CMAKE_MATCH_2}")
+set(PYISIS_ISIS_VERSION_PATCH "${CMAKE_MATCH_3}")
+set(PYISIS_PACKAGE_VERSION "1.3.0rc1" CACHE STRING
+  "Python distribution version embedded in the generated package metadata")
+if(DEFINED SKBUILD_PROJECT_VERSION_FULL AND NOT SKBUILD_PROJECT_VERSION_FULL STREQUAL "")
+  set(PYISIS_PACKAGE_VERSION "${SKBUILD_PROJECT_VERSION_FULL}" CACHE STRING
+    "Python distribution version embedded in the generated package metadata" FORCE)
+elseif(DEFINED SKBUILD_PROJECT_VERSION AND NOT SKBUILD_PROJECT_VERSION STREQUAL "")
+  set(PYISIS_PACKAGE_VERSION "${SKBUILD_PROJECT_VERSION}" CACHE STRING
+    "Python distribution version embedded in the generated package metadata" FORCE)
+endif()
+
 if(NOT DEFINED pybind11_DIR OR pybind11_DIR STREQUAL "")
   execute_process(
     COMMAND "${Python3_EXECUTABLE}" -m pybind11 --cmakedir
@@ -292,6 +322,7 @@ endif()
 
 set(ISIS_PROJECTION_LIB_NAMES
     Equirectangular
+    IProj
     LambertAzimuthalEqualArea
     LambertConformal
     LunarAzimuthalEqualArea
@@ -328,18 +359,28 @@ set(BULLET_LIBRARY_NAMES
 
 set(BULLET_RUNTIME_LIBS "")
 foreach(bullet_lib_name IN LISTS BULLET_LIBRARY_NAMES)
+  if(PYISIS_ISIS_VERSION_MAJOR GREATER_EQUAL 10)
+    set(_pyisis_bullet_candidates
+        "${bullet_lib_name}-float64"
+        "${bullet_lib_name}")
+  else()
+    set(_pyisis_bullet_candidates "${bullet_lib_name}")
+  endif()
+  unset(BULLET_LIB_${bullet_lib_name} CACHE)
   find_library(BULLET_LIB_${bullet_lib_name}
-               NAMES ${bullet_lib_name}
+               NAMES ${_pyisis_bullet_candidates}
                PATHS ${ISIS_DEP_LIBRARY_SEARCH_DIRS}
                NO_DEFAULT_PATH)
   if(BULLET_LIB_${bullet_lib_name})
     list(APPEND BULLET_RUNTIME_LIBS "${BULLET_LIB_${bullet_lib_name}}")
   endif()
 endforeach()
+unset(_pyisis_bullet_candidates)
 list(REMOVE_DUPLICATES BULLET_RUNTIME_LIBS)
 
 set(ISIS_RUNTIME_DEP_LIB_NAMES
     ale
+    core
     csmapi
     geos
     geos_c
@@ -433,8 +474,12 @@ set(ISIS_PYBIND_BUILD_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/python/${ISIS_PYB
 set(ISIS_PYBIND_LICENSE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(ISIS_PYBIND_SOURCE_INIT_FILE
     "${CMAKE_CURRENT_SOURCE_DIR}/python/${ISIS_PYBIND_PACKAGE_NAME}/__init__.py")
+set(ISIS_PYBIND_SOURCE_BUILD_INFO_FILE
+    "${CMAKE_CURRENT_SOURCE_DIR}/python/${ISIS_PYBIND_PACKAGE_NAME}/_build_info.py.in")
 set(ISIS_PYBIND_BUILD_INIT_FILE
     "${ISIS_PYBIND_BUILD_PACKAGE_DIR}/__init__.py")
+set(ISIS_PYBIND_BUILD_INFO_FILE
+    "${ISIS_PYBIND_BUILD_PACKAGE_DIR}/_build_info.py")
 set(ISIS_PYBIND_BUILD_LICENSE_FILE
     "${ISIS_PYBIND_BUILD_PACKAGE_DIR}/LICENSE")
 set(PYISIS_FACADE_PACKAGE_NAME pyisis)
@@ -456,6 +501,10 @@ configure_file(
   "${ISIS_PYBIND_BUILD_INIT_FILE}"
   COPYONLY)
 configure_file(
+  "${ISIS_PYBIND_SOURCE_BUILD_INFO_FILE}"
+  "${ISIS_PYBIND_BUILD_INFO_FILE}"
+  @ONLY)
+configure_file(
   "${ISIS_PYBIND_LICENSE_FILE}"
   "${ISIS_PYBIND_BUILD_LICENSE_FILE}"
   COPYONLY)
@@ -475,6 +524,7 @@ configure_file(
 add_custom_command(
   OUTPUT
     "${ISIS_PYBIND_BUILD_INIT_FILE}"
+    "${ISIS_PYBIND_BUILD_INFO_FILE}"
     "${ISIS_PYBIND_BUILD_LICENSE_FILE}"
     "${PYISIS_FACADE_BUILD_INIT_FILE}"
     "${PYISIS_FACADE_BUILD_RUNTIME_FILE}"
@@ -498,6 +548,7 @@ add_custom_command(
           "${PYISIS_FACADE_BUILD_LICENSE_FILE}"
   DEPENDS
     "${ISIS_PYBIND_SOURCE_INIT_FILE}"
+    "${ISIS_PYBIND_SOURCE_BUILD_INFO_FILE}"
     "${PYISIS_FACADE_SOURCE_INIT_FILE}"
     "${PYISIS_FACADE_SOURCE_RUNTIME_FILE}"
     "${ISIS_PYBIND_LICENSE_FILE}"
@@ -507,6 +558,7 @@ add_custom_command(
 add_custom_target(sync_python_package_files
   DEPENDS
     "${ISIS_PYBIND_BUILD_INIT_FILE}"
+    "${ISIS_PYBIND_BUILD_INFO_FILE}"
     "${ISIS_PYBIND_BUILD_LICENSE_FILE}"
     "${PYISIS_FACADE_BUILD_INIT_FILE}"
     "${PYISIS_FACADE_BUILD_RUNTIME_FILE}"
@@ -549,6 +601,7 @@ pybind11_add_module(_isis_core
   src/lro/bind_lro_utilities.cpp
   src/bind_mro_hical.cpp
   src/bind_spice_navigation.cpp
+  src/bind_isis10.cpp
   src/bind_camera_factory.cpp)
 
 if(NOT WIN32)
@@ -558,6 +611,10 @@ endif()
 if(EXISTS "${ISIS_INCLUDE_DIR}/IEndian.h")
   target_compile_definitions(_isis_core PRIVATE PYISIS_ISIS10_API=1)
 endif()
+
+target_compile_definitions(_isis_core PRIVATE
+  PYISIS_COMPILED_ISIS_VERSION="${PYISIS_ISIS_VERSION}"
+  PYISIS_COMPILED_ISIS_VERSION_MAJOR=${PYISIS_ISIS_VERSION_MAJOR})
 
 if(EXISTS "${ISIS_INCLUDE_DIR}/JP2Error.h")
   target_compile_definitions(_isis_core PRIVATE PYISIS_HAS_JP2_ERROR=1)
@@ -641,7 +698,7 @@ if(PYISIS_BUILD_BENCHMARKS)
       ${ISIS_EXTRA_PROJECTION_LIBS}
       ${ISIS_RUNTIME_DEP_LIBS}
       ${BULLET_RUNTIME_LIBS}
-      ${PYISIS_QT_CORE_TARGET})
+      ${PYISIS_QT_TARGETS})
 
   set_target_properties(isis_cpp_benchmark PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/benchmarks")
@@ -657,6 +714,8 @@ install(TARGETS _isis_core
         LIBRARY DESTINATION "${PYISIS_INSTALL_SITEARCH}/${ISIS_PYBIND_PACKAGE_NAME}"
         RUNTIME DESTINATION "${PYISIS_INSTALL_SITEARCH}/${ISIS_PYBIND_PACKAGE_NAME}")
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/python/${ISIS_PYBIND_PACKAGE_NAME}/__init__.py"
+        DESTINATION "${PYISIS_INSTALL_SITELIB}/${ISIS_PYBIND_PACKAGE_NAME}")
+install(FILES "${ISIS_PYBIND_BUILD_INFO_FILE}"
         DESTINATION "${PYISIS_INSTALL_SITELIB}/${ISIS_PYBIND_PACKAGE_NAME}")
 install(FILES "${ISIS_PYBIND_LICENSE_FILE}"
   DESTINATION "${PYISIS_INSTALL_SITELIB}/${ISIS_PYBIND_PACKAGE_NAME}")
@@ -703,6 +762,8 @@ set_tests_properties(python-unit-tests PROPERTIES
   ENVIRONMENT "${_python_test_environment}")
 
 message(STATUS "Using external ISIS prefix: ${ISIS_PREFIX}")
+message(STATUS "Using ISIS version: ${PYISIS_ISIS_VERSION}")
+message(STATUS "Using PyISIS package version: ${PYISIS_PACKAGE_VERSION}")
 message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")
 message(STATUS "Using ISIS dependency include dir: ${ISIS_DEP_INCLUDE_DIR}")
 message(STATUS "Using ISIS dependency include dirs: ${ISIS_DEP_INCLUDE_SEARCH_DIRS}")

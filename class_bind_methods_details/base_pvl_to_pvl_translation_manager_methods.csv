@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PvlToPvlTranslationManager,Parsing,reference/upstream_isis/src/base/objs/PvlToPvlTranslationManager/PvlToPvlTranslationManager.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_pvl.cpp 完成绑定
+PvlToPvlTranslationManager,Parsing,reference/upstream_isis/src/base/objs/PvlToPvlTranslationManager/PvlToPvlTranslationManager.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 10仅移除传递性PvlTokenizer include及空白变化；公开构造和翻译API不变；双版本验证通过
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,PvlToPvlTranslationManager,isis_pybind.PvlToPvlTranslationManager,Y,Inherits LabelTranslationManager

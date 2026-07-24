@@ -4,23 +4,22 @@
 
 - ISIS 9 source: `asp360_new: ISIS 9.0.0 h1f94ec8_0, Python 3.12.2`
 - ISIS 10 source: `asp370: ISIS 10.0.0 asp_4, Python 3.13.14`
-- 当前 binding-header 引用行数（过滤 GUI 后）: 532
-- 当前 ISIS 头文件数: 378
-- 文本一致: 319
-- 需要人工复核: 56
+- 当前 binding-header 引用行数（过滤 GUI 后）: 544
+- 当前 ISIS 头文件数: 384
+- 文本一致: 328
+- 需要人工复核: 48
 - 已识别头文件重命名候选: 1
-- ISIS 9 缺失: 1
-- ISIS 10 缺失: 1
+- ISIS 9 缺失: 7
+- ISIS 10 缺失: 0
 - 路径不唯一: 0
 
 ## 需要复核的头文件
 
 | Bindings | Header | Comparison | Replacement | GUI status |
 | --- | --- | --- | --- | --- |
-| `src/base/bind_auto_reg_factory.cpp, src/base/bind_base_filters.cpp, src/base/bind_base_pattern.cpp, src/base/bind_base_photometry.cpp, src/base/bind_base_polygon_seeder.cpp, src/base/bind_base_projection.cpp, src/base/bind_base_projection_types.cpp, src/base/bind_base_pvl.cpp, src/base/bind_base_support.cpp, src/base/bind_base_target.cpp, src/bind_camera_maps.cpp, src/bind_low_level_cube_io.cpp, src/bind_mro_hical.cpp, src/bind_spice_navigation.cpp, src/control/bind_control_core.cpp, src/control/bind_interest_operator_factory.cpp, src/mission/bind_mission_cameras.cpp` | `Pvl.h` | `changed_review_required` | `` | `non_gui` |
+| `src/base/bind_auto_reg_factory.cpp, src/base/bind_base_filters.cpp, src/base/bind_base_pattern.cpp, src/base/bind_base_photometry.cpp, src/base/bind_base_polygon_seeder.cpp, src/base/bind_base_projection.cpp, src/base/bind_base_projection_types.cpp, src/base/bind_base_pvl.cpp, src/base/bind_base_support.cpp, src/base/bind_base_target.cpp, src/bind_camera_maps.cpp, src/bind_isis10.cpp, src/bind_low_level_cube_io.cpp, src/bind_mro_hical.cpp, src/bind_spice_navigation.cpp, src/control/bind_control_core.cpp, src/control/bind_interest_operator_factory.cpp, src/mission/bind_mission_cameras.cpp` | `Pvl.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_geometry.cpp, src/base/bind_base_image_polygon.cpp, src/base/bind_base_pvl.cpp, src/base/bind_base_support.cpp, src/bind_mro_hical.cpp, src/bind_spice_navigation.cpp` | `IException.h` | `changed_review_required` | `` | `non_gui` |
-| `src/base/bind_base_ground_map.cpp, src/bind_camera.cpp, src/bind_camera_factory.cpp, src/bind_camera_hierarchy.cpp, src/bind_low_level_cube_io.cpp, src/bind_statistics.cpp, src/control/bind_bundle_advanced.cpp, src/control/bind_control_core.cpp, src/lro/bind_lro_utilities.cpp, src/mgs/bind_mgs_utilities.cpp, src/mission/bind_mission_cameras.cpp` | `Camera.h` | `changed_review_required` | `` | `non_gui` |
-| `src/base/bind_base_ground_map.cpp, src/base/bind_base_math.cpp, src/base/bind_base_pattern.cpp, src/base/bind_base_projection.cpp, src/base/bind_base_support.cpp, src/bind_camera_factory.cpp, src/bind_low_level_cube_io.cpp, src/bind_mro_hical.cpp, src/bind_spice_navigation.cpp, src/bind_statistics.cpp, src/mgs/bind_mgs_utilities.cpp, src/mission/bind_mission_cameras.cpp` | `Cube.h` | `changed_review_required` | `` | `non_gui` |
+| `src/base/bind_base_ground_map.cpp, src/base/bind_base_math.cpp, src/base/bind_base_pattern.cpp, src/base/bind_base_projection.cpp, src/base/bind_base_support.cpp, src/bind_camera_factory.cpp, src/bind_isis10.cpp, src/bind_low_level_cube_io.cpp, src/bind_mro_hical.cpp, src/bind_spice_navigation.cpp, src/bind_statistics.cpp, src/mgs/bind_mgs_utilities.cpp, src/mission/bind_mission_cameras.cpp` | `Cube.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_ground_map.cpp, src/base/bind_base_projection.cpp, src/base/bind_base_projection_types.cpp, src/bind_low_level_cube_io.cpp` | `Projection.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_ground_map.cpp` | `UniversalGroundMap.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_image_polygon.cpp, src/bind_low_level_cube_io.cpp` | `Blob.h` | `changed_review_required` | `` | `non_gui` |
@@ -31,7 +30,7 @@
 | `src/base/bind_base_pds_io.cpp, src/base/bind_base_pvl.cpp, src/base/bind_base_utility.cpp, src/bind_spice_navigation.cpp, src/bind_statistics.cpp, src/control/bind_control_core.cpp` | `PvlObject.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_pds_io.cpp, src/bind_low_level_cube_io.cpp` | `Table.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_polygon_seeder.cpp` | `GridPolygonSeeder.h` | `changed_review_required` | `` | `non_gui` |
-| `src/base/bind_base_projection.cpp, src/base/bind_base_projection_types.cpp` | `TProjection.h` | `changed_review_required` | `` | `non_gui` |
+| `src/base/bind_base_projection.cpp, src/base/bind_base_projection_types.cpp, src/bind_isis10.cpp` | `TProjection.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_pvl.cpp, src/base/bind_base_support.cpp, src/bind_high_level_cube_io.cpp, src/bind_low_level_cube_io.cpp, src/control/bind_bundle_advanced.cpp, src/control/bind_control_core.cpp` | `FileName.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_pvl.cpp` | `LabelTranslationManager.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_pvl.cpp` | `PvlContainer.h` | `changed_review_required` | `` | `non_gui` |
@@ -47,23 +46,21 @@
 | `src/base/bind_base_shape.cpp` | `NaifDskShape.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_shape.cpp, src/base/bind_base_target.cpp` | `ShapeModel.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_shape_support.cpp` | `BulletTargetShape.h` | `changed_review_required` | `` | `non_gui` |
-| `src/base/bind_base_support.cpp` | `SerialNumberList.h` | `changed_review_required` | `` | `non_gui` |
-| `src/base/bind_base_target.cpp, src/bind_camera.cpp, src/bind_spice_navigation.cpp` | `Target.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_utility.cpp` | `Environment.h` | `changed_review_required` | `` | `non_gui` |
 | `src/base/bind_base_utility.cpp` | `SpecialPixel.h` | `changed_review_required` | `` | `non_gui` |
 | `src/bind_camera.cpp, src/bind_camera_maps.cpp, src/lro/bind_lro_utilities.cpp` | `CameraFocalPlaneMap.h` | `changed_review_required` | `` | `non_gui` |
-| `src/bind_camera.cpp` | `CameraPointInfo.h` | `changed_review_required` | `` | `non_gui` |
 | `src/bind_camera_factory.cpp` | `CameraFactory.h` | `changed_review_required` | `` | `non_gui` |
-| `src/bind_camera_hierarchy.cpp, src/bind_camera_maps.cpp` | `CSMCamera.h` | `changed_review_required` | `` | `non_gui` |
-| `src/bind_camera_hierarchy.cpp, src/bind_camera_maps.cpp` | `LineScanCameraGroundMap.h` | `changed_review_required` | `` | `non_gui` |
 | `src/bind_high_level_cube_io.cpp, src/bind_low_level_cube_io.cpp` | `CubeAttribute.h` | `changed_review_required` | `` | `non_gui` |
-| `src/bind_high_level_cube_io.cpp` | `JP2Decoder.h` | `changed_review_required` | `` | `non_gui` |
-| `src/bind_high_level_cube_io.cpp` | `JP2Encoder.h` | `changed_review_required` | `` | `non_gui` |
-| `src/bind_high_level_cube_io.cpp` | `JP2Error.h` | `missing_in_isis10` | `` | `non_gui` |
 | `src/bind_high_level_cube_io.cpp` | `ProcessByBrick.h` | `changed_review_required` | `` | `non_gui` |
+| `src/bind_isis10.cpp` | `Chandrayaan2OhrcCamera.h` | `missing_in_isis9` | `` | `non_gui` |
+| `src/bind_isis10.cpp` | `Chandrayaan2TmcCamera.h` | `missing_in_isis9` | `` | `non_gui` |
+| `src/bind_isis10.cpp` | `GdalIoHandler.h` | `missing_in_isis9` | `` | `non_gui` |
+| `src/bind_isis10.cpp` | `IProj.h` | `missing_in_isis9` | `` | `non_gui` |
+| `src/bind_isis10.cpp` | `ImageIoHandler.h` | `missing_in_isis9` | `` | `non_gui` |
+| `src/bind_isis10.cpp` | `OsirisRexOcamsOpenCVDistortionMap.h` | `missing_in_isis9` | `` | `non_gui` |
+| `src/bind_isis10.cpp, src/bind_low_level_cube_io.cpp` | `PixelType.h` | `changed_review_required` | `` | `non_gui` |
 | `src/bind_low_level_cube_io.cpp` | `Endian.h` | `renamed_review_required` | `IEndian.h:IEndian.h` | `non_gui` |
 | `src/bind_low_level_cube_io.cpp` | `IEndian.h` | `missing_in_isis9` | `` | `non_gui` |
-| `src/bind_low_level_cube_io.cpp` | `PixelType.h` | `changed_review_required` | `` | `non_gui` |
 | `src/bind_spice_navigation.cpp` | `Spice.h` | `changed_review_required` | `` | `non_gui` |
 | `src/bind_spice_navigation.cpp, src/control/bind_bundle_advanced.cpp, src/control/bind_control_core.cpp` | `SpiceRotation.h` | `changed_review_required` | `` | `non_gui` |
 | `src/bind_statistics.cpp` | `GroupedStatistics.h` | `changed_review_required` | `` | `non_gui` |

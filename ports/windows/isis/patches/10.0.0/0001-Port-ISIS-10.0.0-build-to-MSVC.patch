@@ -1,0 +1,2639 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: gengxun-henu <gengxun@henu.edu.cn>
+Date: Thu, 23 Jul 2026 21:45:07 +0800
+Subject: [PATCH] Port ISIS 10.0.0 build to MSVC
+
+---
+ SensorUtilities/CMakeLists.txt                |  10 +-
+ isis/CMakeLists.txt                           | 204 ++++++++++++++----
+ isis/cmake/AddIsisModule.cmake                |  23 +-
+ isis/cmake/CodeGeneration.cmake               |  13 +-
+ isis/cmake/FindGeoTIFF.cmake                  |   2 +-
+ isis/cmake/FindOpenCV.cmake                   |  48 +++--
+ isis/cmake/MSVCWindowsCompat.h                |  29 +++
+ isis/cmake/Utilities.cmake                    |  10 +
+ isis/src/base/apps/caminfo/caminfo.cpp        |  10 +-
+ isis/src/base/apps/histeq/main.cpp            |   6 +-
+ isis/src/base/apps/remrx/main.cpp             |   3 +-
+ .../src/base/objs/Application/Application.cpp |   9 +-
+ isis/src/base/objs/Application/Application.h  |  19 +-
+ .../objs/AtmosModel/NumericalAtmosApprox.cpp  |   2 +-
+ isis/src/base/objs/AutoReg/AutoReg.cpp        |   6 +-
+ isis/src/base/objs/Cube/Cube.cpp              |  24 ++-
+ .../src/base/objs/CubeManager/CubeManager.cpp |  17 ++
+ .../objs/ExportPdsTable/ExportPdsTable.cpp    |  13 +-
+ .../GridPolygonSeeder/GridPolygonSeeder.cpp   |  51 +++--
+ isis/src/base/objs/Gui/Gui.cpp                |  30 ++-
+ isis/src/base/objs/Isis/Isis.h                |   4 +-
+ .../NaifDskPlateModel/NaifDskPlateModel.cpp   |   4 +-
+ .../NumericalApproximation.cpp                |   5 +-
+ .../src/base/objs/PolygonTools/PolygonTools.h |  29 ++-
+ .../objs/ProcessPolygons/ProcessPolygons.cpp  |   6 +-
+ .../objs/ProgramLauncher/ProgramLauncher.cpp  |  19 +-
+ isis/src/base/objs/Progress/Progress.cpp      |   2 +
+ isis/src/base/objs/Reduce/Reduce.cpp          |  10 +-
+ .../ReseauDistortionMap.cpp                   |   7 +-
+ .../ShapeModelFactory/ShapeModelFactory.cpp   |  10 +
+ .../SparseBlockMatrix/SparseBlockMatrix.cpp   |   9 +-
+ isis/src/base/objs/Spice/Spice.cpp            |   5 +-
+ .../base/objs/SpiceRotation/SpiceRotation.cpp |  32 +--
+ .../StandardDeviationOperator.cpp             |   6 +-
+ isis/src/base/objs/iTime/iTime.h              |   3 +-
+ .../src/clementine/apps/clem2isis/bitstrm.cpp |  10 +-
+ isis/src/clementine/apps/clem2isis/jpeg_c.h   |   7 +-
+ isis/src/clementine/apps/clem2isis/pds.cpp    |   2 +-
+ .../control/apps/cnet2dem/DatumFunctoid.cpp   |   2 +
+ .../src/control/apps/cnet2dem/DatumFunctoid.h |   4 +
+ .../apps/cnet2dem/PointCloudSearchResult.h    |   4 +-
+ .../control/apps/cnet2dem/PointCloudTree.h    |  14 +-
+ .../apps/cnetcombinept/PointCloudTree.h       |  14 +-
+ isis/src/control/apps/pointreg/pointreg.cpp   |   8 +
+ isis/src/core/include/IString.h               |   3 +
+ isis/src/core/src/Blob.cpp                    |   4 +-
+ isis/src/core/src/IString.cpp                 |   6 +
+ isis/src/core/src/Pvl.cpp                     |   2 +-
+ isis/src/kaguya/apps/kaguyasp2ascii/main.cpp  |  18 +-
+ isis/src/kaguya/apps/kaguyasp2isis/main.cpp   |   9 +-
+ isis/src/mgs/apps/mocgap/main.cpp             |  10 +-
+ isis/src/mgs/apps/mocuncompress/image_io.cpp  |  10 +
+ isis/src/mgs/apps/mocuncompress/main.cpp      |   5 +-
+ isis/src/mgs/apps/mocuncompress/xmain.cpp     |   2 +-
+ .../newhorizons/apps/mvic2isis/mvic2isis.cpp  |   2 +-
+ isis/src/qisis/apps/qview/main.cpp            |  10 +
+ isis/src/qisis/objs/HelpTool/HelpTool.cpp     |  20 +-
+ isis/src/qisis/objs/Project/Project.cpp       |   7 +-
+ .../qisis/objs/SocketThread/SocketThread.cpp  |  19 +-
+ isis/src/viking/apps/vdcomp/main.cpp          |  12 +-
+ 60 files changed, 654 insertions(+), 230 deletions(-)
+ create mode 100644 isis/cmake/MSVCWindowsCompat.h
+
+diff --git a/SensorUtilities/CMakeLists.txt b/SensorUtilities/CMakeLists.txt
+index e69081b4d..84b6d9b15 100644
+--- a/SensorUtilities/CMakeLists.txt
++++ b/SensorUtilities/CMakeLists.txt
+@@ -16,10 +16,14 @@ set(SENSOR_UTILITIES_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+ set(SENSOR_UTILITIES_INSTALL_INCLUDE_DIR "include/sensorutilities")
+ set(SENSOR_UTILITIES_HEADER_FILES "${SENSOR_UTILITIES_INCLUDE_DIR}/SensorUtilities.h"
+                                   "${SENSOR_UTILITIES_INCLUDE_DIR}/MathUtils.h")
++set(SENSOR_UTILITIES_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/MathUtils.cpp"
++                                  "${CMAKE_CURRENT_SOURCE_DIR}/src/SensorUtilities.cpp")
+ 
+-add_library(sensorutilities SHARED
+-            "${CMAKE_CURRENT_SOURCE_DIR}/src/MathUtils.cpp"
+-            "${CMAKE_CURRENT_SOURCE_DIR}/src/SensorUtilities.cpp")
++if(MSVC)
++  add_library(sensorutilities STATIC ${SENSOR_UTILITIES_SOURCE_FILES})
++else()
++  add_library(sensorutilities SHARED ${SENSOR_UTILITIES_SOURCE_FILES})
++endif()
+ 
+ target_include_directories(sensorutilities
+                            PUBLIC
+diff --git a/isis/CMakeLists.txt b/isis/CMakeLists.txt
+index f1fb6b281..d070b19dd 100644
+--- a/isis/CMakeLists.txt
++++ b/isis/CMakeLists.txt
+@@ -128,7 +128,7 @@ endif()
+ if(${testOutputDir} STREQUAL "OFF")
+  message("Writing test data folders to = ${CMAKE_BINARY_DIR}/testOutputDir")
+  set(testOutputDir "${CMAKE_BINARY_DIR}/testOutputDir")
+- execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/testOutputDir)
++ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/testOutputDir)
+ else()
+  # User specified a test output folder, make sure it exists.
+  message("Writing test data folders to = ${testOutputDir}")
+@@ -187,28 +187,42 @@ endif()
+ # Specify flags used
+ # on linux, add the conda prefix to handle possible issues with rpaths at link time
+ # sometimes third parties do not set their rpaths correctly
+-set(thirdPartyCppFlags -Wall
+-                       -fPIC
+-                       -std=gnu++17
+-                       -DISIS_LITTLE_ENDIAN=1
+-                       -Wno-unused-parameter
+-                       -Wno-overloaded-virtual
+-                       -Wno-strict-aliasing
+-                       -DUSE_UNSTABLE_GEOS_CPP_API=1
+-                       -Wno-strict-overflow
+-                       -DENABLEJP2K=${JP2KFLAG}
+-                     )
++if(MSVC)
++  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
++  set(thirdPartyCppFlags /DISIS_LITTLE_ENDIAN=1
++                         /DUSE_UNSTABLE_GEOS_CPP_API=1
++                         /D_USE_MATH_DEFINES
++                         /DQWT_DLL
++                         /DH5_BUILT_AS_DYNAMIC_LIB
++                         /DEIGEN_MAX_ALIGN_BYTES=32
++                         /DNOMINMAX
++                         /DWIN32_LEAN_AND_MEAN
++                         /DENABLEJP2K=${JP2KFLAG}
++                         /FI${CMAKE_CURRENT_LIST_DIR}/cmake/MSVCWindowsCompat.h
++                         /permissive-)
++else()
++  set(thirdPartyCppFlags -Wall
++                         -fPIC
++                         -std=gnu++17
++                         -DISIS_LITTLE_ENDIAN=1
++                         -Wno-unused-parameter
++                         -Wno-overloaded-virtual
++                         -Wno-strict-aliasing
++                         -DUSE_UNSTABLE_GEOS_CPP_API=1
++                         -Wno-strict-overflow
++                         -DENABLEJP2K=${JP2KFLAG})
++endif()
+ 
+ set(CMAKE_CXX_STANDARD 17)
+ 
+-if (NOT JP2KFLAG)
++if (NOT JP2KFLAG AND NOT MSVC)
+   # Pass the NO_JP2K flag to C++
+   set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DNO_JP2K")
+ endif()
+ 
+ # Flag to fix numeric literals problem with boost on linux
+ # Add gold linker (and therefore, phtread) to speed up linux (spec. Ubuntu18.04) builds
+-if(NOT APPLE)
++if(NOT APPLE AND NOT MSVC)
+   set(thirdPartyCppFlags ${thirdPartyCppFlags} -pthread
+                                                -fext-numeric-literals
+                                                -Wl,-rpath,$ENV{CONDA_PREFIX}/lib
+@@ -223,19 +236,21 @@ if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "RELEASE")
+ endif()
+ 
+-if(APPLE)
++if(MSVC)
++  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi /Od" CACHE STRING "" FORCE)
++elseif(APPLE)
+   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0" CACHE STRING "" FORCE)
+ else()
+   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Og"  CACHE STRING "" FORCE)
+ endif()
+ 
+ # Paths to required executables
+-if (buildDocs)
++if(buildDocs)
+   find_program(XALAN Xalan REQUIRED)
++  find_program(LATEX tectonic)
++  find_program(DOXYGEN NAME doxygen PATH_SUFFIXES doxygen REQUIRED)
+ endif()
+ 
+-find_program(LATEX tectonic)
+-find_program(DOXYGEN NAME doxygen PATH_SUFFIXES doxygen REQUIRED)
+ find_program(UIC uic PATH_SUFFIXES lib/qt6/ REQUIRED)
+ find_program(MOC moc PATH_SUFFIXES lib/qt6/ REQUIRED)
+ find_program(RCC rcc PATH_SUFFIXES lib/qt6/ REQUIRED)
+@@ -262,16 +277,15 @@ find_package(Qt6 COMPONENTS
+                  # Search this path explicitly for MacOS OpenGL Framework
+                  PATHS /System/Library/Frameworks/ REQUIRED CONFIG)
+ 
+-find_package(Boost 1.59.0 REQUIRED      atomic
++set(BOOST_COMPONENTS                  atomic
+                                         log
+                                         regex
+                                         log_setup
+                                         serialization
+                                         chrono
+                                         math_c99
+                                         container
+                                         math_c99f
+                                         context
+                                         math_c99l
+-                                        system
+                                         math_tr1
+@@ -282,12 +297,15 @@ find_package(Boost 1.59.0 REQUIRED      atomic
+                                         exception
+                                         timer
+                                         filesystem
+-                                        prg_exec_monitor
+                                         program_options
+                                         iostreams
+                                         wave
+                                         random
+-                                        wserialization CONFIG)
++                                        wserialization)
++if(buildTests)
++  list(APPEND BOOST_COMPONENTS prg_exec_monitor unit_test_framework test_exec_monitor)
++endif()
++find_package(Boost 1.59.0 REQUIRED ${BOOST_COMPONENTS} CONFIG)
+ 
+ find_package(Ale               REQUIRED)
+ find_package(Json              REQUIRED)
+@@ -303,7 +321,7 @@ SET(GSL_ROOT_DIR $ENV{CONDA_PREFIX})
+ find_package(GSL       2.2.1   REQUIRED)
+ find_package(HDF5      1.8.15  REQUIRED)
+ find_package(Jama      125     REQUIRED)
+-find_package(NN                REQUIRED)
++find_package(NN)
+ find_package(OpenCV    4.9.0   REQUIRED CONFIG)
+ find_package(PCL               REQUIRED)
+ find_package(Protobuf          REQUIRED CONFIG)
+@@ -314,7 +332,9 @@ find_package(SpiceQL           REQUIRED)
+ find_package(TIFF      4.0.0   REQUIRED)
+ find_package(TNT       126     REQUIRED)
+ find_package(XercesC   3.1.2   REQUIRED)
+-find_package(X11       6       REQUIRED)
++if(NOT WIN32)
++  find_package(X11     6       REQUIRED)
++endif()
+ find_package(nanoflann         REQUIRED)
+ find_package(PNG               REQUIRED)
+ find_package(Kakadu)
+@@ -323,6 +343,39 @@ find_package(Armadillo         REQUIRED)
+ find_package(Threads)
+ find_package(inja              REQUIRED)
+ 
++set(ISIS_HAVE_EMBREE_SHAPEMODEL OFF)
++if(PCL_INCLUDE_DIR AND
++   PCL_COMMON_LIBRARY AND
++   PCL_OCTREE_LIBRARY AND
++   PCL_IO_LIBRARY AND
++   NOT PCL_INCLUDE_DIR MATCHES "-NOTFOUND$" AND
++   NOT PCL_COMMON_LIBRARY MATCHES "-NOTFOUND$" AND
++   NOT PCL_OCTREE_LIBRARY MATCHES "-NOTFOUND$" AND
++   NOT PCL_IO_LIBRARY MATCHES "-NOTFOUND$")
++  set(ISIS_HAVE_EMBREE_SHAPEMODEL ON)
++endif()
++
++if(ISIS_HAVE_EMBREE_SHAPEMODEL)
++  add_compile_definitions(ISIS_HAVE_EMBREE_SHAPEMODEL)
++else()
++  message(WARNING "PCL was not found; disabling Embree shape model objects.")
++  list(APPEND ISIS_DISABLED_OBJ_FOLDERS EmbreeShapeModel EmbreeTargetManager EmbreeTargetShape)
++endif()
++
++set(ISIS_HAVE_NN OFF)
++if(NN_INCLUDE_DIR AND
++   NN_LIBRARY AND
++   NOT NN_INCLUDE_DIR MATCHES "-NOTFOUND$" AND
++   NOT NN_LIBRARY MATCHES "-NOTFOUND$")
++  set(ISIS_HAVE_NN ON)
++endif()
++
++if(ISIS_HAVE_NN)
++  add_compile_definitions(ISIS_HAVE_NN)
++else()
++  message(WARNING "NN was not found; disabling cnet2dem NaturalNeighborRadius.")
++endif()
++
+ # Setup for googletest/googlemock before adding SensorUtilities so we build its tests
+ if(buildTests)
+   set(INSTALL_GTEST OFF)
+@@ -353,9 +406,17 @@ set(ALLINCDIRS "")
+ # Get all include dir variables
+ foreach (_variableName ${_variableNames})
+   if (_variableName MATCHES ".+_INCLUDE_DIR$")
+-    list(APPEND ALLINCDIRS "${${_variableName}}")
++    foreach(ITEM IN LISTS ${_variableName})
++      if(ITEM AND NOT ITEM MATCHES "-NOTFOUND$")
++        list(APPEND ALLINCDIRS "${ITEM}")
++      endif()
++    endforeach()
+   elseif (_variableName MATCHES ".+_INCLUDE_PATH$")
+-    list(APPEND ALLINCDIRS "${${_variableName}}")
++    foreach(ITEM IN LISTS ${_variableName})
++      if(ITEM AND NOT ITEM MATCHES "-NOTFOUND$")
++        list(APPEND ALLINCDIRS "${ITEM}")
++      endif()
++    endforeach()
+   endif()
+ endforeach()
+ 
+@@ -371,18 +432,18 @@ endif()
+ 
+ # get all Library variables
+ foreach (_variableName ${_variableNames})
+-  get_filename_component(LIBDIR "${${_variableName}}" DIRECTORY)
+-  get_filename_component(LIBNAME "${${_variableName}}" NAME)
+-
+   if (_variableName MATCHES "^CMAKE+")
+   elseif (_variableName MATCHES ".+_LIBRARY$|.+_LIBRARIES")
+     foreach(ITEM IN LISTS ${_variableName})
++      if(NOT ITEM OR ITEM MATCHES "-NOTFOUND$")
++        continue()
++      endif()
+       get_filename_component(LIBDIR ${ITEM} DIRECTORY)
+       get_filename_component(LIBNAME ${ITEM} NAME)
+       # Some library dependencies identified by the find_package commands are not
+       # libraries (i.e., *.so,*.dylib,*.a) or name spaces (e.g., Qt5::Xml).
+       # Remove the ones that are not libraries or name spaces  (e.g., OPENGL.framework).
+-      if(LIBNAME MATCHES ".+\.so$|.+\.dylib$|.+\.a$|.+::.+$|.+\.SO$|.+\.DYLIB$|.+\.A$")
++      if(LIBNAME MATCHES ".+\.so$|.+\.dylib$|.+\.a$|.+\.lib$|.+::.+$|.+\.SO$|.+\.DYLIB$|.+\.A$|.+\.LIB$")
+         # For MacOS, .so's are not the same as .dylib's, need to add the full path to the .so
+         if((APPLE) AND (LIBNAME MATCHES ".+\.so$|.+\.SO"))
+           list(APPEND ALLLIBS "${ITEM}")
+@@ -397,6 +458,13 @@ endforeach()
+ 
+ # add target based linkages to ALLLIBS variable
+ list(APPEND ALLLIBS pantor::inja sensorutilities protobuf::libprotobuf embree GDAL::GDAL Bullet::Bullet_double CSPICE::cspice)
++if(MSVC)
++  file(GLOB ISIS_MSVC_PROTOBUF_DEP_LIBS
++       "$ENV{CONDA_PREFIX}/Library/lib/abseil*.lib"
++       "$ENV{CONDA_PREFIX}/Library/lib/absl_*.lib"
++       "$ENV{CONDA_PREFIX}/Library/lib/utf8_*.lib")
++  list(APPEND ALLLIBS ${ISIS_MSVC_PROTOBUF_DEP_LIBS})
++endif()
+ 
+ list(APPEND ALLLIBS ${OpenCV_LIBS})
+ list(APPEND ALLINCDIRS ${OpenCV_INCLUDE_DIRS})
+@@ -432,7 +500,9 @@ endif()
+ 
+ # Specify relative library include paths which will be set up on
+ #  the installed files.
+-if(APPLE)
++if(MSVC)
++  set(CMAKE_INSTALL_RPATH "")
++elseif(APPLE)
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};@loader_path/../lib;@loader_path/../3rdParty/lib")
+ else()
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};$ORIGIN/../lib;$ORIGIN/../3rdParty/lib")
+@@ -440,14 +510,15 @@ endif()
+ 
+ # We will set up some links with these files at the end of the install process so
+ #  make sure they are cleared at the start of the install process.
+-install(CODE "EXECUTE_PROCESS(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/lib/libisis${VERSION}${SO})")
+-install(CODE "EXECUTE_PROCESS(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/lib/libisis${VERSION_MAJOR}.${VERSION_MINOR}${SO})")
+-install(CODE "EXECUTE_PROCESS(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/lib/libisis${VERSION_MAJOR}${SO})")
+-EXECUTE_PROCESS(COMMAND cp -f ${CMAKE_SOURCE_DIR}/TestPreferences ${CMAKE_BINARY_DIR}/)
+-install(CODE "EXECUTE_PROCESS(COMMAND cp -f ${CMAKE_SOURCE_DIR}/IsisPreferences ${CMAKE_INSTALL_PREFIX}/)")
++if(NOT WIN32)
++  install(CODE "file(REMOVE ${CMAKE_INSTALL_PREFIX}/lib/libisis${VERSION}${SO})")
++  install(CODE "file(REMOVE ${CMAKE_INSTALL_PREFIX}/lib/libisis${VERSION_MAJOR}.${VERSION_MINOR}${SO})")
++  install(CODE "file(REMOVE ${CMAKE_INSTALL_PREFIX}/lib/libisis${VERSION_MAJOR}${SO})")
++endif()
++configure_file(${CMAKE_SOURCE_DIR}/TestPreferences ${CMAKE_BINARY_DIR}/TestPreferences COPYONLY)
++install(FILES ${CMAKE_SOURCE_DIR}/IsisPreferences DESTINATION ${CMAKE_INSTALL_PREFIX})
+ 
+ # Install the header files
+-install(CODE "EXECUTE_PROCESS(COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/include/isis)")
+ file(GLOB ISIS_INCLUDE_FILES ${CMAKE_BINARY_DIR}/inc/*)
+ install(DIRECTORY ${CMAKE_BINARY_DIR}/inc/ DESTINATION  ${CMAKE_INSTALL_PREFIX}/include/isis)
+ 
+@@ -463,11 +534,11 @@ file(WRITE "${CMAKE_BINARY_DIR}/qt.conf" "[Paths]\nPlugins=../3rdParty/plugins/\
+ install(FILES "${CMAKE_BINARY_DIR}/qt.conf" DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/xml)
+ 
+ # Create the inc directory
+-execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/inc)
++file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/inc)
+ 
+ # Create an xml folder in the source directory that we will need later
+ set(sourceXmlFolder ${CMAKE_BINARY_DIR}/bin/xml)
+-execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/bin/xml)
++file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xml)
+ 
+ # Create the version file
+ configure_file(${CMAKE_SOURCE_DIR}/cmake/version.in ${CMAKE_BINARY_DIR}/isis_version.txt)
+@@ -528,6 +599,47 @@ endif()
+ # ALL is specified so that the target is added to the default build target, i.e. the copy command
+ # will be executed when running "ninja install"
+ # On a clean build, all files will be copied over.
++if(MSVC)
++  file(GLOB_RECURSE ISIS_WINDOWS_HEADERS
++       ${CMAKE_SOURCE_DIR}/src/*/objs/*/*.h
++       ${CMAKE_SOURCE_DIR}/src/*/objs/*/*.hpp
++       ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.h)
++  foreach(ISIS_WINDOWS_HEADER ${ISIS_WINDOWS_HEADERS})
++    get_filename_component(ISIS_WINDOWS_HEADER_NAME ${ISIS_WINDOWS_HEADER} NAME)
++    configure_file(${ISIS_WINDOWS_HEADER}
++                   ${CMAKE_BINARY_DIR}/inc/${ISIS_WINDOWS_HEADER_NAME}
++                   COPYONLY)
++  endforeach()
++
++  file(COPY ${CMAKE_SOURCE_DIR}/appdata/ DESTINATION ${CMAKE_BINARY_DIR}/appdata)
++  file(GLOB_RECURSE ISIS_WINDOWS_APPDATA
++       ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.trn
++       ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.typ
++       ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.pft
++       ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.def)
++  file(COPY ${ISIS_WINDOWS_APPDATA}
++       DESTINATION ${CMAKE_BINARY_DIR}/appdata/translations)
++
++  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
++  file(GLOB ISIS_WINDOWS_CAMERA_PLUGINS
++       ${CMAKE_SOURCE_DIR}/src/*/objs/*/Camera.plugin)
++  set(ISIS_WINDOWS_CAMERA_PLUGIN ${CMAKE_BINARY_DIR}/lib/Camera.plugin)
++  file(WRITE ${ISIS_WINDOWS_CAMERA_PLUGIN} "")
++  foreach(ISIS_WINDOWS_CAMERA_PLUGIN_FILE ${ISIS_WINDOWS_CAMERA_PLUGINS})
++    file(READ ${ISIS_WINDOWS_CAMERA_PLUGIN_FILE} ISIS_WINDOWS_CAMERA_PLUGIN_CONTENT)
++    file(APPEND ${ISIS_WINDOWS_CAMERA_PLUGIN}
++         "${ISIS_WINDOWS_CAMERA_PLUGIN_CONTENT}")
++  endforeach()
++
++  foreach(ISIS_WINDOWS_RESOURCE_TARGET
++          incs appdata apollotemplate autoreg autoseed noproj cnetref
++          cnetstats cnetvalid controlnetworks findfeatures fullcnetdiff
++          jigsaw kernels photometry icons targets maps labels hidtmgen import
++          export cameraPlugins)
++    add_custom_target(${ISIS_WINDOWS_RESOURCE_TARGET} ALL)
++    add_dependencies(isis ${ISIS_WINDOWS_RESOURCE_TARGET})
++  endforeach()
++else()
+ add_custom_target(incs ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+   ${CMAKE_SOURCE_DIR}/src/*/objs/*/*.h ${CMAKE_SOURCE_DIR}/src/*/objs/*/*.hpp
+   ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.h ${CMAKE_BINARY_DIR}/inc)
+@@ -630,18 +742,23 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/updateBuildPlugins.sh.in ${CMAKE_BINARY
+ # Add custom build target to copy modified Camera.plugin files to the build/lib/Camera.plugin file
+ add_custom_target(cameraPlugins ALL COMMAND ${CMAKE_BINARY_DIR}/scripts/updateBuildPlugins.sh)
+ add_dependencies(isis cameraPlugins)
++endif()
+ 
+ # Add a custom build target to clean out everything that gets added to the source
+ #  directory during the build process.
+ # - Only a few things are added in order to make the tests work properly so
+ #   this is very straightforward.
+-add_custom_target(clean_source COMMAND rm -rf "${CMAKE_BINARY_DIR}/*" "${CMAKE_INSTALL_PREFIX}/*")
++if(NOT WIN32)
++  add_custom_target(clean_source COMMAND rm -rf "${CMAKE_BINARY_DIR}/*" "${CMAKE_INSTALL_PREFIX}/*")
++endif()
+ 
+ # Set up a few top level files for installation.
+-EXECUTE_PROCESS(COMMAND cp -f  ${CMAKE_SOURCE_DIR}/IsisPreferences   ${CMAKE_BINARY_DIR})
+-EXECUTE_PROCESS(COMMAND cp -rf ${CMAKE_SOURCE_DIR}/scripts           ${CMAKE_BINARY_DIR})
+-EXECUTE_PROCESS(COMMAND cp -f  ${CMAKE_SOURCE_DIR}/../LICENSE.md    ${CMAKE_BINARY_DIR})
+-EXECUTE_PROCESS(COMMAND cp -rf ${CMAKE_SOURCE_DIR}/make              ${CMAKE_BINARY_DIR})
++configure_file(${CMAKE_SOURCE_DIR}/IsisPreferences
++               ${CMAKE_BINARY_DIR}/IsisPreferences COPYONLY)
++configure_file(${CMAKE_SOURCE_DIR}/../LICENSE.md
++               ${CMAKE_BINARY_DIR}/LICENSE.md COPYONLY)
++file(COPY ${CMAKE_SOURCE_DIR}/scripts DESTINATION ${CMAKE_BINARY_DIR})
++file(COPY ${CMAKE_SOURCE_DIR}/make DESTINATION ${CMAKE_BINARY_DIR})
+ 
+ # Copy the files on make install as well
+ install(FILES     ${CMAKE_SOURCE_DIR}/IsisPreferences DESTINATION  ${CMAKE_INSTALL_PREFIX})
+@@ -694,4 +811,3 @@ if(buildTests)
+     )
+   endif()
+ endif()
+-
+diff --git a/isis/cmake/AddIsisModule.cmake b/isis/cmake/AddIsisModule.cmake
+index 93262e5d3..b7615f2df 100644
+--- a/isis/cmake/AddIsisModule.cmake
++++ b/isis/cmake/AddIsisModule.cmake
+@@ -31,8 +31,14 @@ function(add_isis_app folder libDependencies)
+     endif()
+   endforeach()
+ 
+-  # Generate required QT files
+-  generate_moc_files(mocFiles ${folder})
++  # Non-main app sources are already included in the ISIS module library. On
++  # MSVC, generating app MOC files again in the executable creates direct
++  # references to QObject staticMetaObject data exported from isis.dll.
++  if(MSVC)
++    set(mocFiles)
++  else()
++    generate_moc_files(mocFiles ${folder})
++  endif()
+   set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+ 
+   # Set up the executable
+@@ -96,6 +102,19 @@ function(add_isis_obj folder reqLibs)
+ 
+   get_filename_component(folderName ${folder} NAME)
+ 
++  if(ISIS_DISABLED_OBJ_FOLDERS)
++    foreach(disabledObjFolder ${ISIS_DISABLED_OBJ_FOLDERS})
++      if(${folderName} STREQUAL ${disabledObjFolder})
++        message("Skipping disabled object folder: ${folderName}")
++        set(newSourceFiles PARENT_SCOPE)
++        set(newTestFiles PARENT_SCOPE)
++        set(newTruthFiles PARENT_SCOPE)
++        set(newPluginLib PARENT_SCOPE)
++        return()
++      endif()
++    endforeach()
++  endif()
++
+   # Look inside this folder for include files
+ 
+   # Find the source and header files
+diff --git a/isis/cmake/CodeGeneration.cmake b/isis/cmake/CodeGeneration.cmake
+index 9f48041af..dc0d4dc1e 100644
+--- a/isis/cmake/CodeGeneration.cmake
++++ b/isis/cmake/CodeGeneration.cmake
+@@ -35,7 +35,8 @@ function( generate_ui_files uiGenOut folder)
+     # - The generated files will be put in the CMake build directory,
+     #   not the source tree
+     add_custom_command(OUTPUT   ${outUiFile}
+-                       COMMAND  ${UIC}  ${uiFile} -o ${outUiFile} && cp ${outUiFile} ${CMAKE_BINARY_DIR}/inc
++                       COMMAND  ${UIC}  ${uiFile} -o ${outUiFile}
++                       COMMAND  ${CMAKE_COMMAND} -E copy_if_different ${outUiFile} ${CMAKE_BINARY_DIR}/inc
+                        DEPENDS  ${uiFile}
+                        WORKING_DIRECTORY ${folder}
+                        COMMENT "Generating UI headers...")
+@@ -57,12 +58,11 @@ function( generate_moc_files mocGenOut folder)
+   file(GLOB candidateFiles "${folder}/*.h")
+   set(mocInput)
+   foreach(f ${candidateFiles})
+-    execute_process(COMMAND grep Q_OBJECT ${f}
+-                    OUTPUT_VARIABLE result
+-                    RESULT_VARIABLE code)
+-    if("${code}" STREQUAL "0")
++    file(STRINGS "${f}" qObjectLines REGEX "Q_OBJECT")
++    if(qObjectLines)
+       set(mocInput ${mocInput} ${f})
+     endif()
++    unset(qObjectLines)
+   endforeach()
+ 
+   # If no Q_OBJECT files in this folder we are finished.
+@@ -129,7 +129,8 @@ function(generate_protobuf_files protoGenOut folder)
+   # Add the custom command that will generate all the files
+   # - The generated files will be put in the CMake build directory, not the source tree.
+   add_custom_command(OUTPUT   ${protoGen}
+-                     COMMAND  ${PROTOC} --proto_path ${folder} --cpp_out ${protoGenDir} ${protoInput} && cp ${PROTO_HEADERS} ${CMAKE_BINARY_DIR}/inc
++                     COMMAND  ${PROTOC} --proto_path ${folder} --cpp_out ${protoGenDir} ${protoInput}
++                     COMMAND  ${CMAKE_COMMAND} -E copy_if_different ${PROTO_HEADERS} ${CMAKE_BINARY_DIR}/inc
+                      DEPENDS  ${protoInput}
+                      WORKING_DIRECTORY ${folder}
+                      COMMENT "Generating Protocol Buffers...")
+diff --git a/isis/cmake/FindAle.cmake b/isis/cmake/FindAle.cmake
+index 5e3274153..b17e91ed4 100644
+--- a/isis/cmake/FindAle.cmake
++++ b/isis/cmake/FindAle.cmake
+@@ -27,10 +27,10 @@ execute_process(
+ )
+ 
+ # Extract version and build string
+-string(REGEX MATCH "\"version\": \"([^\"]+)\"" _ ${ALE_VERSION_JSON})
++string(REGEX MATCH "\"version\": \"([^\"]+)\"" _ "${ALE_VERSION_JSON}")
+ set(ALE_VERSION ${CMAKE_MATCH_1})
+ 
+-string(REGEX MATCH "\"build_string\": \"([^\"]+)\"" _ ${ALE_VERSION_JSON})
++string(REGEX MATCH "\"build_string\": \"([^\"]+)\"" _ "${ALE_VERSION_JSON}")
+ set(ALE_BUILD ${CMAKE_MATCH_1})
+ 
+ set(ALE_VERSION_FULL "${ALE_VERSION} | ${ALE_BUILD}")
+diff --git a/isis/cmake/FindGeoTIFF.cmake b/isis/cmake/FindGeoTIFF.cmake
+index 9bfbb68ca..84517c02d 100644
+--- a/isis/cmake/FindGeoTIFF.cmake
++++ b/isis/cmake/FindGeoTIFF.cmake
+@@ -11,7 +11,7 @@ find_path(GEOTIFF_INCLUDE_DIR
+ )
+ 
+ find_library(GEOTIFF_LIBRARY
+-  NAMES geotiff
++  NAMES geotiff geotiff_i
+ )
+ 
+ get_filename_component(GEOTIFF_ROOT_INCLUDE_DIR "${GEOTIFF_INCLUDE_DIR}" DIRECTORY)
+diff --git a/isis/cmake/FindOpenCV.cmake b/isis/cmake/FindOpenCV.cmake
+index 3f1004357..5c6dca067 100644
+--- a/isis/cmake/FindOpenCV.cmake
++++ b/isis/cmake/FindOpenCV.cmake
+@@ -5,26 +5,40 @@
+ #   OPENCV_INCLUDE_DIR
+ #   OPENCV_LIBLSIT
+ 
++function(find_opencv_library outputName baseName)
++  find_library(${outputName} NAMES ${baseName})
++  if(WIN32 AND NOT ${outputName})
++    file(GLOB opencvCandidates
++      "$ENV{CONDA_PREFIX}/Library/lib/${baseName}*.lib"
++      "$ENV{CONDA_PREFIX}/lib/${baseName}*.lib")
++    list(SORT opencvCandidates)
++    list(GET opencvCandidates 0 opencvCandidate)
++    if(opencvCandidate)
++      set(${outputName} "${opencvCandidate}" CACHE FILEPATH "OpenCV library ${baseName}" FORCE)
++    endif()
++  endif()
++endfunction()
++
+ find_path(OPENCV_INCLUDE_DIR
+-    NAMES cv.h opencv.hpp
+-    PATH_SUFFIXES opencv "opencv4/opencv2"
++    NAMES opencv.hpp
++    PATH_SUFFIXES opencv2 "opencv4/opencv2"
+ )
+ 
+-find_library(OPENCV_CORE_LIBRARY              NAMES opencv_core)
+-find_library(OPENCV_VIDEOSTAB_LIBRARY         NAMES opencv_videostab)
+-find_library(OPENCV_VIDEO_LIBRARY             NAMES opencv_video)
+-find_library(OPENCV_SUPERRES_LIBRARY          NAMES opencv_superres)
+-find_library(OPENCV_STITCHING_LIBRARY         NAMES opencv_stitching)
+-find_library(OPENCV_PHOTO_LIBRARY             NAMES opencv_photo)
+-find_library(OPENCV_OBJDETECT_LIBRARY         NAMES opencv_objdetect)
+-find_library(OPENCV_ML_LIBRARY                NAMES opencv_ml)
+-find_library(OPENCV_IMGCODECS_LIBRARY         NAMES opencv_imgcodecs)
+-find_library(OPENCV_IMGPROC_LIBRARY           NAMES opencv_imgproc)
+-find_library(OPENCV_CALIB3D_LIBRARY           NAMES opencv_calib3d)
+-find_library(OPENCV_FEATURES2D_LIBRARY        NAMES opencv_features2d)
+-find_library(OPENCV_XFEATURES2D_LIBRARY       NAMES opencv_xfeatures2d)
+-find_library(OPENCV_HIGHGUI_LIBRARY           NAMES opencv_highgui)
+-find_library(OPENCV_FLANN_LIBRARY             NAMES opencv_flann)
++find_opencv_library(OPENCV_CORE_LIBRARY              opencv_core)
++find_opencv_library(OPENCV_VIDEOSTAB_LIBRARY         opencv_videostab)
++find_opencv_library(OPENCV_VIDEO_LIBRARY             opencv_video)
++find_opencv_library(OPENCV_SUPERRES_LIBRARY          opencv_superres)
++find_opencv_library(OPENCV_STITCHING_LIBRARY         opencv_stitching)
++find_opencv_library(OPENCV_PHOTO_LIBRARY             opencv_photo)
++find_opencv_library(OPENCV_OBJDETECT_LIBRARY         opencv_objdetect)
++find_opencv_library(OPENCV_ML_LIBRARY                opencv_ml)
++find_opencv_library(OPENCV_IMGCODECS_LIBRARY         opencv_imgcodecs)
++find_opencv_library(OPENCV_IMGPROC_LIBRARY           opencv_imgproc)
++find_opencv_library(OPENCV_CALIB3D_LIBRARY           opencv_calib3d)
++find_opencv_library(OPENCV_FEATURES2D_LIBRARY        opencv_features2d)
++find_opencv_library(OPENCV_XFEATURES2D_LIBRARY       opencv_xfeatures2d)
++find_opencv_library(OPENCV_HIGHGUI_LIBRARY           opencv_highgui)
++find_opencv_library(OPENCV_FLANN_LIBRARY             opencv_flann)
+ 
+ get_filename_component(OPENCV_ROOT_INCLUDE_DIR "${OPENCV_INCLUDE_DIR}" DIRECTORY)
+ 
+diff --git a/isis/cmake/MSVCWindowsCompat.h b/isis/cmake/MSVCWindowsCompat.h
+new file mode 100644
+index 000000000..050e8816a
+--- /dev/null
++++ b/isis/cmake/MSVCWindowsCompat.h
+@@ -0,0 +1,38 @@
++#ifndef ISIS_MSVC_WINDOWS_COMPAT_H
++#define ISIS_MSVC_WINDOWS_COMPAT_H
++
++#if defined(_WIN32) && defined(_MSC_VER)
++#  ifndef NOMINMAX
++#    define NOMINMAX
++#  endif
++#  ifndef WIN32_LEAN_AND_MEAN
++#    define WIN32_LEAN_AND_MEAN
++#  endif
++#  ifndef NOGDI
++#    define NOGDI
++#  endif
++
++#  define Ellipse WindowsSdkEllipse
++#  include <windows.h>
++#  undef Ellipse
++#  ifdef DIFFERENCE
++#    undef DIFFERENCE
++#  endif
++#  ifdef near
++#    undef near
++#  endif
++#  ifdef far
++#    undef far
++#  endif
++
++extern "C" {
++int __cdecl _open(const char *filename, int open_flag, ...);
++int __cdecl _close(int file_descriptor);
++long __cdecl _lseek(int file_descriptor, long offset, int origin);
++int __cdecl _read(int file_descriptor, void *buffer, unsigned int buffer_size);
++int __cdecl _write(int file_descriptor, const void *buffer, unsigned int buffer_size);
++int __cdecl _chsize(int file_descriptor, long size);
++}
++#endif
++
++#endif
+diff --git a/isis/cmake/Utilities.cmake b/isis/cmake/Utilities.cmake
+index d4c2a723d..4085ededb 100644
+--- a/isis/cmake/Utilities.cmake
++++ b/isis/cmake/Utilities.cmake
+@@ -184,6 +184,16 @@ function(get_os_version text)
+       set(prefix "Darwin_x86_64_")
+     endif()
+ 
++  elseif(WIN32)
++
++    set(name "Windows")
++    set(version "${CMAKE_SYSTEM_VERSION}")
++    if(NOT version)
++      set(version "unknown")
++    endif()
++    string(REPLACE "." "_" version "${version}")
++    set(prefix "Windows_x86_64_")
++
+   else()
+     message( FATAL_ERROR "Did not recognize a supported operating system!" )
+   endif()
+diff --git a/isis/src/base/apps/caminfo/caminfo.cpp b/isis/src/base/apps/caminfo/caminfo.cpp
+index 8cb6a5b94..baa2b37ab 100644
+--- a/isis/src/base/apps/caminfo/caminfo.cpp
++++ b/isis/src/base/apps/caminfo/caminfo.cpp
+@@ -157,14 +157,14 @@ namespace Isis{
+       // Add some common/general things
+       for(int i = 0; i < general->size(); i++)
+         if((*general)[i].first != "RunDate") {
+-          if(not appending) keys += (*general)[i].first + delim;
++          if(!appending) keys += (*general)[i].first + delim;
+           values += (*general)[i].second + delim;
+         }
+ 
+       // Add the camstats
+       if(ui.GetBoolean("CAMSTATS")) {
+         for(int i = 0; i < camstats->size(); i++) {
+-          if(not appending) keys += "CamStats_" + (*camstats)[i].first + delim;
++          if(!appending) keys += "CamStats_" + (*camstats)[i].first + delim;
+           values += (*camstats)[i].second + delim;
+         }
+       }
+@@ -172,7 +172,7 @@ namespace Isis{
+       // Add the stats
+       if(ui.GetBoolean("STATISTICS")) {
+         for(int i = 0; i < statistics->size(); i++) {
+-          if(not appending) keys += "Stats_" + (*statistics)[i].first + delim;
++          if(!appending) keys += "Stats_" + (*statistics)[i].first + delim;
+           values += (*statistics)[i].second + delim;
+         }
+       }
+@@ -182,12 +182,12 @@ namespace Isis{
+         PvlObject geomGrp("Geometry");
+         bandGeom->generateGeometryKeys(geomGrp);
+         for(int i = 0; i < geomGrp.keywords(); i++) {
+-          if(not appending) keys += "Geom_" + geomGrp[i].name() + delim;
++          if(!appending) keys += "Geom_" + geomGrp[i].name() + delim;
+           values += geomGrp[i][0] + delim;
+         }
+       }
+ 
+-      if (not appending) {
++      if (!appending) {
+         keys.remove(QRegularExpression(delim + "$")); // Get rid of the extra delim char (",")
+         outFile << keys << endl;
+       }
+diff --git a/isis/src/base/apps/histeq/main.cpp b/isis/src/base/apps/histeq/main.cpp
+index 896c6cdc2..100243a94 100644
+--- a/isis/src/base/apps/histeq/main.cpp
++++ b/isis/src/base/apps/histeq/main.cpp
+@@ -5,6 +5,8 @@
+ #include "Stretch.h"
+ #include "Histogram.h"
+ 
++#include <vector>
++
+ using namespace std;
+ using namespace Isis;
+ 
+@@ -31,7 +33,7 @@ void IsisMain() {
+   double fromMin = from->Percent(minimum);
+   double fromMax = from->Percent(maximum);
+   int fromBins = from->Bins();
+-  double data[fromBins];
++  vector<double> data(fromBins);
+   double slope = (fromMax - fromMin) / (fromBins - 1);
+ 
+   // Set "match" to have the same data range and number of bins as "to"
+@@ -40,7 +42,7 @@ void IsisMain() {
+   for(int i = 0; i < fromBins; i++) {
+     data[i] = fromMin + (slope * i);
+   }
+-  match->AddData(data, fromBins);
++  match->AddData(data.data(), fromBins);
+ 
+   stretch.ClearPairs();
+   double lastPer = from->Percent(minimum);
+diff --git a/isis/src/base/apps/remrx/main.cpp b/isis/src/base/apps/remrx/main.cpp
+index d5385f72e..f0bf43762 100644
+--- a/isis/src/base/apps/remrx/main.cpp
++++ b/isis/src/base/apps/remrx/main.cpp
+@@ -2,6 +2,7 @@
+ 
+ #include <string>
+ #include <cstdlib>
++#include <vector>
+ 
+ #include "ProcessByLine.h"
+ #include "SpecialPixel.h"
+@@ -83,7 +84,7 @@ void IsisMain() {
+       }
+       else if(action == "BILINEAR") {
+         Statistics stats;
+-        double array[sdim][ldim];
++        vector<vector<double>> array(sdim, vector<double>(ldim));
+         for(int s = 0; s < sdim; s++) {
+           for(int l = 0; l < ldim; l++) {
+             int index = l * sdim + s;
+diff --git a/isis/src/base/objs/Application/Application.cpp b/isis/src/base/objs/Application/Application.cpp
+index 8b611ef84..d84acd14d 100644
+--- a/isis/src/base/objs/Application/Application.cpp
++++ b/isis/src/base/objs/Application/Application.cpp
+@@ -7,11 +7,10 @@ find files of those names at the top level of this repository. **/
+ 
+ #include <cstdio>
+ #include <sstream>
++#if !defined(_WIN32)
+ #include <unistd.h>
+ #include <sys/wait.h>
+-#include <errno.h>
+-
+-extern int errno;
++#endif
+ 
+ #include <fstream>
+ 
+@@ -47,6 +46,10 @@ namespace Isis {
+   Application *iApp = NULL;
+   bool Application::p_applicationForceGuiApp = false;
+ 
++  void Application::SetForceGuiApplication(bool forceGuiApp) {
++    p_applicationForceGuiApp = forceGuiApp;
++  }
++
+   /**
+    * Constuctor for the Application object
+    *
+diff --git a/isis/src/base/objs/Application/Application.h b/isis/src/base/objs/Application/Application.h
+index 9ec0274cb..3692bbd40 100644
+--- a/isis/src/base/objs/Application/Application.h
++++ b/isis/src/base/objs/Application/Application.h
+@@ -10,10 +10,14 @@ find files of those names at the top level of this repository. **/
+ 
+ #include "Environment.h"
+ 
++#if defined(_WIN32)
++using pid_t = int;
++#else
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#endif
+ 
+ #include <iostream>
+ #include <fstream>
+@@ -32,6 +36,16 @@ namespace Isis {
+   class IException;
+   class Progress;
+ 
++#if defined(_WIN32) && defined(_MSC_VER)
++#  if defined(isis_EXPORTS)
++#    define ISIS_APPLICATION_GLOBAL __declspec(dllexport)
++#  else
++#    define ISIS_APPLICATION_GLOBAL __declspec(dllimport)
++#  endif
++#else
++#  define ISIS_APPLICATION_GLOBAL
++#endif
++
+   /**
+    *  @author ????-??-?? Unknown
+    *
+@@ -115,6 +129,7 @@ namespace Isis {
+       static void GuiLog(const QString &results);
+       static QString Name();
+       static QString formatError(IException &e);
++      static void SetForceGuiApplication(bool forceGuiApp);
+ 
+       static bool p_applicationForceGuiApp;
+ 
+@@ -194,7 +209,9 @@ namespace Isis {
+ 
+   };
+ 
+-  extern Application *iApp;
++  extern ISIS_APPLICATION_GLOBAL Application *iApp;
+ };
+ 
++#undef ISIS_APPLICATION_GLOBAL
++
+ #endif
+diff --git a/isis/src/base/objs/AtmosModel/NumericalAtmosApprox.cpp b/isis/src/base/objs/AtmosModel/NumericalAtmosApprox.cpp
+index c5d1853dc..75ee37e23 100644
+--- a/isis/src/base/objs/AtmosModel/NumericalAtmosApprox.cpp
++++ b/isis/src/base/objs/AtmosModel/NumericalAtmosApprox.cpp
+@@ -53,7 +53,7 @@ namespace Isis {
+     // This method was derived from an algorithm in the text
+     // Numerical Recipes in C: The Art of Scientific Computing
+     // Section 4.3 by Flannery, Press, Teukolsky, and Vetterling
+-    int maxits = 20;       // maximium number of iterations allowed to converge
++    const int maxits = 20; // maximium number of iterations allowed to converge
+     double dss = 0;        // error estimate for
+     double h[maxits+1];    // relative stepsizes for trap
+     double trap[maxits+1]; // successive trapeziodal approximations
+diff --git a/isis/src/base/objs/AutoReg/AutoReg.cpp b/isis/src/base/objs/AutoReg/AutoReg.cpp
+index 3dc47a2ce..ee2a7a8db 100644
+--- a/isis/src/base/objs/AutoReg/AutoReg.cpp
++++ b/isis/src/base/objs/AutoReg/AutoReg.cpp
+@@ -19,6 +19,8 @@ find files of those names at the top level of this repository. **/
+ #include "PolynomialBivariate.h"
+ #include "Pvl.h"
+ 
++#include <vector>
++
+ using namespace std;
+ namespace Isis {
+   /**
+@@ -895,11 +897,11 @@ namespace Isis {
+   bool AutoReg::ComputeChipZScore(Chip &chip) {
+     Statistics patternStats;
+     for(int i = 0; i < chip.Samples(); i++) {
+-      double pixels[chip.Lines()];
++      vector<double> pixels(chip.Lines());
+       for(int j = 0; j < chip.Lines(); j++) {
+         pixels[j] = chip.GetValue(i + 1, j + 1);
+       }
+-      patternStats.AddData(pixels, chip.Lines());
++      patternStats.AddData(pixels.data(), chip.Lines());
+     }
+ 
+     // If it does not pass, return
+diff --git a/isis/src/base/objs/Cube/Cube.cpp b/isis/src/base/objs/Cube/Cube.cpp
+index 1a5b96329..85bec174e 100644
+--- a/isis/src/base/objs/Cube/Cube.cpp
++++ b/isis/src/base/objs/Cube/Cube.cpp
+@@ -7,7 +7,9 @@ find files of those names at the top level of this repository. **/
+ #include "Cube.h"
+ 
+ #include <sstream>
++#if !defined(_WIN32)
+ #include <unistd.h>
++#endif
+ 
+ #include <QDebug>
+ #include <QDir>
+@@ -2226,7 +2228,7 @@ namespace Isis {
+ 
+           if (gdalDataset()) {
+-            CPLStringList metadata = CPLStringList(gdalDataset()->GetMetadata("json:ISIS3"), false);
++            CSLConstList metadata = gdalDataset()->GetMetadata("json:ISIS3");
+             const char *metadataJsonString = metadata[0];
+             nlohmann::ordered_json jsonblob = nlohmann::ordered_json::parse(metadataJsonString);
+ 
+             bool keyErased = jsonblob.erase(key.toStdString());
+@@ -2397,9 +2399,13 @@ namespace Isis {
+       m_ioHandler = NULL;
+     }
+ 
++    QString tempCubeToRemove;
++    QString labelFileToRemove;
++    QString dataFileToRemove;
++
+     // Always remove a temporary file
+     if (m_tempCube) {
+-      QFile::remove(m_tempCube->expanded());
++      tempCubeToRemove = m_tempCube->expanded();
+       removeIt = false; // dont remove originals
+ 
+       delete m_tempCube;
+@@ -2407,10 +2413,10 @@ namespace Isis {
+     }
+ 
+     if (removeIt) {
+-      QFile::remove(m_labelFileName->expanded());
++      labelFileToRemove = m_labelFileName->expanded();
+ 
+       if (*m_labelFileName != *m_dataFileName)
+-        QFile::remove(m_dataFileName->expanded());
++        dataFileToRemove = m_dataFileName->expanded();
+     }
+ 
+     delete m_labelFile;
+@@ -2436,6 +2442,18 @@ namespace Isis {
+     delete m_virtualBandList;
+     m_virtualBandList = NULL;
+ 
++    if (!tempCubeToRemove.isEmpty()) {
++      QFile::remove(tempCubeToRemove);
++    }
++
++    if (!labelFileToRemove.isEmpty()) {
++      QFile::remove(labelFileToRemove);
++    }
++
++    if (!dataFileToRemove.isEmpty()) {
++      QFile::remove(dataFileToRemove);
++    }
++
+     initialize();
+   }
+ 
+@@ -2946,7 +2964,7 @@ namespace Isis {
+       nlohmann::ordered_json jsonOut;
+ 
+       // Check for existing data, if there is data update it
+-      CPLStringList metadata = CPLStringList(gdalDataset()->GetMetadata("json:ISIS3"), false);
++      CSLConstList metadata = gdalDataset()->GetMetadata("json:ISIS3");
+ 
+       if (metadata[0] != nullptr) {
+         const char *metadataJsonString = metadata[0];
+diff --git a/isis/src/base/objs/CubeManager/CubeManager.cpp b/isis/src/base/objs/CubeManager/CubeManager.cpp
+index a80c7858f..4e3b97652 100644
+--- a/isis/src/base/objs/CubeManager/CubeManager.cpp
++++ b/isis/src/base/objs/CubeManager/CubeManager.cpp
+@@ -7,7 +7,11 @@ find files of those names at the top level of this repository. **/
+ #include "CubeManager.h"
+ 
+ #include <iostream>
++#if defined(_WIN32)
++#include <stdio.h>
++#else
+ #include <sys/resource.h>
++#endif
+ #include <cstdlib>  // atexit
+ #include <memory>   // smart pointers
+ #include <QCoreApplication>
+@@ -44,6 +48,18 @@ namespace Isis {
+     }
+ 
+     // Get the maximum allowable number of open files for a process
++#if defined(_WIN32)
++    int fileLimit = _getmaxstdio();
++
++    if (fileLimit < 0) {
++      QString msg = "Cannot read the maximum allowable open files from system resources.";
++      throw IException(IException::Programmer, msg, _FILEINFO_);
++    }
++
++    // Allow for library files, etc used by this process
++    // So set or file limit to 60% of maximum allowed number of opened files
++    p_maxOpenFiles = static_cast<unsigned int>(fileLimit * .60);
++#else
+     struct rlimit fileLimit;
+ 
+     if (getrlimit(RLIMIT_NOFILE, &fileLimit) != 0) {
+@@ -54,6 +70,7 @@ namespace Isis {
+     // Allow for library files, etc used by this process
+     // So set or file limit to 60% of maximum allowed number of opened files
+     p_maxOpenFiles = fileLimit.rlim_cur * .60;
++#endif
+     p_currentLimit = p_maxOpenFiles;
+ 
+     // Add the CleanUp() call to QCoreApplication's clean up routine,
+diff --git a/isis/src/base/objs/ExportPdsTable/ExportPdsTable.cpp b/isis/src/base/objs/ExportPdsTable/ExportPdsTable.cpp
+index a496a5ba8..45405e625 100644
+--- a/isis/src/base/objs/ExportPdsTable/ExportPdsTable.cpp
++++ b/isis/src/base/objs/ExportPdsTable/ExportPdsTable.cpp
+@@ -8,6 +8,7 @@ find files of those names at the top level of this repository. **/
+ 
+ #include <cmath>
+ #include <iostream>
++#include <vector>
+ 
+ #include "IEndian.h"
+ #include "EndianSwapper.h"
+@@ -93,7 +94,7 @@ namespace Isis {
+     // create an array of nulls to pad
+     // from the end of each row to the end of the record
+     int numRowNulls = outputFileRecordBytes - m_rowBytes;
+-    char endRowPadding[numRowNulls];
++    vector<char> endRowPadding(numRowNulls);
+     for (int i = 0; i < numRowNulls; i++) {
+       endRowPadding[i] = '\0';
+     }
+@@ -102,13 +103,13 @@ namespace Isis {
+     // fill rowBuffer with packed record values, then fill with padding
+     EndianSwapper *endianSwap = new EndianSwapper(m_pdsByteOrder);
+ 
+-    for(int recIndex = 0; recIndex < m_isisTable->Records(); recIndex++) {
++  for(int recIndex = 0; recIndex < m_isisTable->Records(); recIndex++) {
+       TableRecord record = (*m_isisTable)[recIndex];
+-      char rowBuffer[record.RecordSize()];
+-      Pack(record, rowBuffer, endianSwap);
++      vector<char> rowBuffer(record.RecordSize());
++      Pack(record, rowBuffer.data(), endianSwap);
+       int i = recIndex*m_outputRecordBytes;
+-      memmove(pdsTableBuffer + i, &rowBuffer, record.RecordSize());
+-      memmove(pdsTableBuffer + i + m_rowBytes, &endRowPadding, numRowNulls);
++      memmove(pdsTableBuffer + i, rowBuffer.data(), record.RecordSize());
++      memmove(pdsTableBuffer + i + m_rowBytes, endRowPadding.data(), numRowNulls);
+     }
+     return fillMetaData();
+   }
+diff --git a/isis/src/base/objs/GridPolygonSeeder/GridPolygonSeeder.cpp b/isis/src/base/objs/GridPolygonSeeder/GridPolygonSeeder.cpp
+index 408185d75..a62214b21 100644
+--- a/isis/src/base/objs/GridPolygonSeeder/GridPolygonSeeder.cpp
++++ b/isis/src/base/objs/GridPolygonSeeder/GridPolygonSeeder.cpp
+@@ -169,12 +169,15 @@ namespace Isis {
+       //   of the grid.
+       int xSteps = (int)((polyBoundBox->getMaxX() - polyBoundBox->getMinX()) / p_Xspacing + 1.5);
+       int ySteps = (int)((polyBoundBox->getMaxY() - polyBoundBox->getMinY()) / p_Yspacing + 1.5);
+-      PointStatus pointCheck[xSteps][ySteps];
++      std::vector<PointStatus> pointCheck(xSteps * ySteps);
++      auto pointStatus = [&pointCheck, ySteps](int x, int y) -> PointStatus & {
++        return pointCheck[x * ySteps + y];
++      };
+ 
+       // Initialize our grid of point status'
+       for(int y = 0; y < ySteps; y++) {
+         for(int x = 0; x < xSteps; x++) {
+-          pointCheck[x][y] = pointShouldCheck;
++          pointStatus(x, y) = pointShouldCheck;
+         }
+       }
+ 
+@@ -206,12 +209,12 @@ namespace Isis {
+ 
+             // pointShouldCheck tells us we need to check center. Calling
+             //   CheckSubGrid with precision=0 will do this for us.
+-            if(pointCheck[x][y] == pointShouldCheck) {
++            if(pointStatus(x, y) == pointShouldCheck) {
+               p = CheckSubGrid(*poly, centerX, centerY, 0);
+             }
+             // pointShouldSubGridCheck tells us we're next to a grid
+             //   square where a point was found, so check in depth
+-            else if(pointCheck[x][y] == pointShouldSubGridCheck) {
++            else if(pointStatus(x, y) == pointShouldSubGridCheck) {
+               p = CheckSubGrid(*poly, centerX, centerY, precision);
+             }
+ 
+@@ -233,14 +236,14 @@ namespace Isis {
+ 
+               // We found something new and need a new pass
+               bGridCleared = false;
+-              pointCheck[x][y] = pointFound;
++              pointStatus(x, y) = pointFound;
+             }
+             else {
+-              if(pointCheck[x][y] == pointShouldCheck) {
+-                pointCheck[x][y] = pointNotFound;
++              if(pointStatus(x, y) == pointShouldCheck) {
++                pointStatus(x, y) = pointNotFound;
+               }
+-              else if(pointCheck[x][y] == pointShouldSubGridCheck) {
+-                pointCheck[x][y] = pointCantFind;
++              else if(pointStatus(x, y) == pointShouldSubGridCheck) {
++                pointStatus(x, y) = pointCantFind;
+               }
+             }
+           }
+@@ -249,14 +252,14 @@ namespace Isis {
+         // now that the grid has been updated with it's founds, we can look for subgrid checks
+         for(int y = 0; y < ySteps; y++) {
+           for(int x = 0; x < xSteps; x++) {
+-            if(pointCheck[x][y] == pointFound) {
++            if(pointStatus(x, y) == pointFound) {
+               for(int yOff = -1; yOff <= 1; yOff++) {
+                 for(int xOff = -1; xOff <= 1; xOff++) {
+                   if(x + xOff >= 0 && x + xOff < xSteps &&
+                       y + yOff >= 0 && y + yOff < ySteps &&
+-                      pointCheck[x+xOff][y+yOff] == pointNotFound) {
++                      pointStatus(x + xOff, y + yOff) == pointNotFound) {
+ 
+-                    pointCheck[x+xOff][y+yOff] = pointShouldSubGridCheck;
++                    pointStatus(x + xOff, y + yOff) = pointShouldSubGridCheck;
+ 
+                     // We need to do a searchso we need another pass
+                     bGridCleared = false;
+@@ -313,16 +316,19 @@ namespace Isis {
+       gridCheckPt
+     };
+ 
+-    GridPoint grid[gridSize][gridSize];
++    std::vector<GridPoint> grid(gridSize * gridSize);
++    auto gridPoint = [&grid, gridSize](int x, int y) -> GridPoint & {
++      return grid[x * gridSize + y];
++    };
+ 
+     for(int y = 0; y < gridSize; y++) {
+       for(int x = 0; x < gridSize; x++) {
+-        grid[x][y] = gridEmpty;
++        gridPoint(x, y) = gridEmpty;
+       }
+     }
+ 
+     // Precision 0: Always center, this is always true
+-    grid[gridSize/2][gridSize/2] = gridCheckPt;
++    gridPoint(gridSize / 2, gridSize / 2) = gridCheckPt;
+ 
+     // now populate the grid with what we wish to check for
+     for(int prec = 0; prec < precision; prec ++) {
+@@ -332,12 +338,12 @@ namespace Isis {
+       // Search the grid for already found points and set everything checkDist away to be checked too
+       for(int y = 0; y < gridSize; y++) {
+         for(int x = 0; x < gridSize; x++) {
+-          if(grid[x][y] == gridCheckPt) {
++          if(gridPoint(x, y) == gridCheckPt) {
+             // We should never overwrite found points, the checkDist should assure this wont happen
+-            if(x - checkDist > 0) grid[x-checkDist][y] = gridNewCheckPt;
+-            if(y - checkDist > 0) grid[x][y-checkDist] = gridNewCheckPt;
+-            if(x + checkDist < gridSize) grid[x+checkDist][y] = gridNewCheckPt;
+-            if(y + checkDist < gridSize) grid[x][y+checkDist] = gridNewCheckPt;
++            if(x - checkDist > 0) gridPoint(x - checkDist, y) = gridNewCheckPt;
++            if(y - checkDist > 0) gridPoint(x, y - checkDist) = gridNewCheckPt;
++            if(x + checkDist < gridSize) gridPoint(x + checkDist, y) = gridNewCheckPt;
++            if(y + checkDist < gridSize) gridPoint(x, y + checkDist) = gridNewCheckPt;
+           }
+         }
+       }
+@@ -346,7 +352,7 @@ namespace Isis {
+       // Do this separately to avoid changing the data we're processing
+       for(int y = 0; y < gridSize; y++) {
+         for(int x = 0; x < gridSize; x++) {
+-          if(grid[x][y] == gridNewCheckPt) grid[x][y] = gridCheckPt;
++          if(gridPoint(x, y) == gridNewCheckPt) gridPoint(x, y) = gridCheckPt;
+         }
+       }
+     }
+@@ -360,7 +366,7 @@ namespace Isis {
+     // Now loop through this grid, checking each point that needs checked, return the first valid pt
+     for(int y = 0; !result && y < gridSize; y++) {
+       for(int x = 0; !result && x < gridSize; x++) {
+-        if(grid[x][y] != gridCheckPt) continue;
++        if(gridPoint(x, y) != gridCheckPt) continue;
+ 
+         double xPos = centerX + (x - gridSize / 2) * deltaXSize;
+         double yPos = centerY + (y - gridSize / 2) * deltaYSize;
+@@ -480,4 +486,3 @@ namespace Isis {
+ extern "C" Isis::PolygonSeeder *GridPolygonSeederPlugin(Isis::Pvl &pvl) {
+   return new Isis::GridPolygonSeeder(pvl);
+ }
+-
+diff --git a/isis/src/base/objs/Gui/Gui.cpp b/isis/src/base/objs/Gui/Gui.cpp
+index d623d97b9..f3c90be80 100644
+--- a/isis/src/base/objs/Gui/Gui.cpp
++++ b/isis/src/base/objs/Gui/Gui.cpp
+@@ -13,6 +13,7 @@ find files of those names at the top level of this repository. **/
+ 
+ #include <QApplication>
+ #include <QCoreApplication>
++#include <QDesktopServices>
+ #include <QFont>
+ #include <QFrame>
+ #include <QIcon>
+@@ -25,6 +26,7 @@ find files of those names at the top level of this repository. **/
+ #include <QSplitter>
+ #include <QStatusBar>
+ #include <QToolBar>
++#include <QUrl>
+ #include <QWhatsThis>
+ #include <QWidget>
+ 
+@@ -883,31 +885,45 @@ namespace Isis {
+   // Show help for Isis
+   void Gui::AboutIsis() {
+     Isis::PvlGroup &uig = Isis::Preference::Preferences().findGroup("UserInterface");
++#if defined(_WIN32)
++    QString url = "http://isis.astrogeology.usgs.gov";
++    if (!QDesktopServices::openUrl(QUrl(url))) {
++      QString msg = "Unable to open help URL [" + url + "].";
++      throw IException(IException::Unknown, msg, _FILEINFO_);
++    }
++#else
+ #if defined(__linux__)
+     QString command = (QString) uig["GuiHelpBrowser"] +
+                           " http://isis.astrogeology.usgs.gov >> /dev/null &";
+ #elif defined(__APPLE__)
+     QString command = "open -a" + (QString) uig["GuiHelpBrowser"] +
+                       " http://isis.astrogeology.usgs.gov >> /dev/null &";
+-#endif                  
++#endif
+     ProgramLauncher::RunSystemCommand(command);
++#endif
+   }
+ 
+   // Show help for the current app
+   void Gui::AboutProgram() {
+     Isis::PvlGroup &uig = Isis::Preference::Preferences().findGroup("UserInterface");
++    QString url = "http://isis.astrogeology.usgs.gov/Application/presentation/Tabbed/" +
++                  Isis::Application::GetUserInterface().ProgramName() + "/" +
++                  Isis::Application::GetUserInterface().ProgramName() + ".html";
++#if defined(_WIN32)
++    if (!QDesktopServices::openUrl(QUrl(url))) {
++      QString msg = "Unable to open help URL [" + url + "].";
++      throw IException(IException::Unknown, msg, _FILEINFO_);
++    }
++#else
+ #if defined(__linux__)
+     QString command = (QString) uig["GuiHelpBrowser"] +
+-                      " http://isis.astrogeology.usgs.gov/Application/presentation/Tabbed/" +
+-                      Isis::Application::GetUserInterface().ProgramName() + "/" +
+-                      Isis::Application::GetUserInterface().ProgramName() + ".html";
++                      " " + url;
+ #elif defined(__APPLE__)
+     QString command = "open -a" + (QString) uig["GuiHelpBrowser"] +
+-                      " http://isis.astrogeology.usgs.gov/Application/presentation/Tabbed/" +
+-                      Isis::Application::GetUserInterface().ProgramName() + "/" +
+-                      Isis::Application::GetUserInterface().ProgramName() + ".html";
++                      " " + url;
+ #endif
+     ProgramLauncher::RunSystemCommand(command);
++#endif
+   }
+ 
+   //! Activate helper buttons
+diff --git a/isis/src/base/objs/Isis/Isis.h b/isis/src/base/objs/Isis/Isis.h
+index cb445c1f5..53d1ce1aa 100644
+--- a/isis/src/base/objs/Isis/Isis.h
++++ b/isis/src/base/objs/Isis/Isis.h
+@@ -96,10 +96,10 @@ int main(int argc, char *argv[]) {
+     exit(1);
+   }
+ 
+-  Isis::Application::p_applicationForceGuiApp  = false;
++  Isis::Application::SetForceGuiApplication(false);
+ 
+ #ifdef USE_GUI_QAPP
+-  Isis::Application::p_applicationForceGuiApp = true;
++  Isis::Application::SetForceGuiApplication(true);
+ #endif
+ 
+   Isis::Application *app = new Isis::Application(argc, argv);
+diff --git a/isis/src/base/objs/NaifDskPlateModel/NaifDskPlateModel.cpp b/isis/src/base/objs/NaifDskPlateModel/NaifDskPlateModel.cpp
+index bb49a8dd7..cf3865d44 100755
+--- a/isis/src/base/objs/NaifDskPlateModel/NaifDskPlateModel.cpp
++++ b/isis/src/base/objs/NaifDskPlateModel/NaifDskPlateModel.cpp
+@@ -83,7 +83,7 @@ namespace Isis {
+ 
+ 
+   /** Returns the number of plates in the model */
+-  int NaifDskPlateModel::numberPlates() const {
++  SpiceInt NaifDskPlateModel::numberPlates() const {
+     if ( !isValid() )  return (0);
+     return ( m_dsk->m_plates );
+   }
+@@ -91,7 +91,7 @@ namespace Isis {
+ 
+ 
+   /** Returns the number of vertices in the plate model */
+-  int NaifDskPlateModel::numberVertices() const {
++  SpiceInt NaifDskPlateModel::numberVertices() const {
+     if ( !isValid() )  return (0);
+     return ( m_dsk->m_vertices );
+   }
+diff --git a/isis/src/base/objs/NumericalApproximation/NumericalApproximation.cpp b/isis/src/base/objs/NumericalApproximation/NumericalApproximation.cpp
+index ebf6cfe1b..51a37bdbc 100644
+--- a/isis/src/base/objs/NumericalApproximation/NumericalApproximation.cpp
++++ b/isis/src/base/objs/NumericalApproximation/NumericalApproximation.cpp
+@@ -2752,7 +2752,7 @@ namespace Isis {
+     }
+     int n = Size();
+     p_clampedSecondDerivs.resize(n);
+-    double u[n];
++    vector<double> u(n);
+     double p, sig, qn, un;
+ 
+     if(p_clampedDerivFirstPt > 0.99e30) {
+@@ -3244,7 +3244,8 @@ namespace Isis {
+     double y;
+ 
+     int ns;
+-    double den, dif, dift, c[n], d[n], ho, hp, w;
++    double den, dif, dift, ho, hp, w;
++    vector<double> c(n), d(n);
+     double *err = 0;
+     ns = 1;
+     dif = fabs(a - p_x[0]);
+diff --git a/isis/src/base/objs/PolygonTools/PolygonTools.h b/isis/src/base/objs/PolygonTools/PolygonTools.h
+index 51d6bd7be..c463f5905 100644
+--- a/isis/src/base/objs/PolygonTools/PolygonTools.h
++++ b/isis/src/base/objs/PolygonTools/PolygonTools.h
+@@ -47,8 +47,33 @@ namespace Isis {
+   class UniversalGroundMap;
+   class TProjection;
+   
+-  
+-  static geos::geom::GeometryFactory::Ptr globalFactory = geos::geom::GeometryFactory::create();
++  class LazyGeometryFactory {
++    public:
++      geos::geom::GeometryFactory *operator->() {
++        return factory().get();
++      }
++
++      const geos::geom::GeometryFactory *operator->() const {
++        return factory().get();
++      }
++
++      geos::geom::GeometryFactory &operator*() {
++        return *factory();
++      }
++
++      const geos::geom::GeometryFactory &operator*() const {
++        return *factory();
++      }
++
++    private:
++      static geos::geom::GeometryFactory::Ptr &factory() {
++        static geos::geom::GeometryFactory::Ptr globalFactory =
++            geos::geom::GeometryFactory::create();
++        return globalFactory;
++      }
++  };
++
++  static LazyGeometryFactory globalFactory;
+ 
+   /**
+    * @brief Provides various tools to work with geos multipolygons
+diff --git a/isis/src/base/objs/ProcessPolygons/ProcessPolygons.cpp b/isis/src/base/objs/ProcessPolygons/ProcessPolygons.cpp
+index f5b46aacd..7f72f0dd2 100644
+--- a/isis/src/base/objs/ProcessPolygons/ProcessPolygons.cpp
++++ b/isis/src/base/objs/ProcessPolygons/ProcessPolygons.cpp
+@@ -17,7 +17,6 @@ find files of those names at the top level of this repository. **/
+ #include "geos/geom/Geometry.h"
+ #include "geos/geom/Point.h"
+ #include "geos/geom/prep/PreparedGeometryFactory.h"
+-#include "geos/geom/prep/PreparedPolygon.h"
+ #include "geos/util/IllegalArgumentException.h"
+ #include "geos/operation/overlay/snap/GeometrySnapper.h"
+ 
+@@ -134,8 +133,8 @@ namespace Isis {
+ 
+       geos::geom::MultiPolygon *intersectPoly = PolygonTools::MakeMultiPolygon(
+           m_imagePoly->intersection(projectedInputPixelPoly).release());
+-      geos::geom::prep::PreparedPolygon *preparedPoly =
+-        new geos::geom::prep::PreparedPolygon(intersectPoly);
++      std::unique_ptr<geos::geom::prep::PreparedGeometry> preparedPoly =
++        geos::geom::prep::PreparedGeometryFactory::prepare(intersectPoly);
+       const geos::geom::Envelope *envelope = intersectPoly->getEnvelopeInternal();
+ 
+       // Go thru each coord. in the envelope and ask if it is within the polygon
+@@ -223,7 +222,6 @@ namespace Isis {
+ 
+       delete projectedInputPixelPoly;
+       delete intersectPoly;
+-      delete preparedPoly;
+ 
+     } /*end try*/
+ 
+diff --git a/isis/src/base/objs/ProgramLauncher/ProgramLauncher.cpp b/isis/src/base/objs/ProgramLauncher/ProgramLauncher.cpp
+index 0a23d20f2..c51e488f3 100644
+--- a/isis/src/base/objs/ProgramLauncher/ProgramLauncher.cpp
++++ b/isis/src/base/objs/ProgramLauncher/ProgramLauncher.cpp
+@@ -8,8 +8,12 @@ find files of those names at the top level of this repository. **/
+ 
+ #include <iostream>
+ #include <sstream>
++#if !defined(_WIN32)
++#include <unistd.h>
+ #include <sys/wait.h>
++#endif
+ 
++#include <QCoreApplication>
+ #include <QLocalServer>
+ #include <QLocalSocket>
+ #include <QProcess>
+@@ -21,6 +25,17 @@ find files of those names at the top level of this repository. **/
+ #include "Preference.h"
+ 
+ using namespace std;
++
++namespace {
++  int currentProcessId() {
++#if defined(_WIN32)
++    return static_cast<int>(QCoreApplication::applicationPid());
++#else
++    return getpid();
++#endif
++  }
++}
++
+ namespace Isis {
+   /**
+    * Executes the Isis program with the given arguments. This will handle logs,
+@@ -49,7 +64,7 @@ namespace Isis {
+     QString tempDir = dataDir["Temporary"];
+ 
+     QString command = program.expanded() + " " + parameters +
+-        " -pid=" + toString(getpid());
++        " -pid=" + toString(currentProcessId());
+     QStringList split = QProcess::splitCommand(command);
+     QString app = split.takeFirst();
+     QStringList paramList = split;
+@@ -61,7 +76,7 @@ namespace Isis {
+     }
+ 
+     QString serverName = "isis_" + Application::UserName() +
+-        "_" + toString(getpid());
++        "_" + toString(currentProcessId());
+ 
+     QLocalServer server;
+     server.listen(serverName);
+diff --git a/isis/src/base/objs/Progress/Progress.cpp b/isis/src/base/objs/Progress/Progress.cpp
+index 138e321cf..5bc0a8d4b 100644
+--- a/isis/src/base/objs/Progress/Progress.cpp
++++ b/isis/src/base/objs/Progress/Progress.cpp
+@@ -1,7 +1,9 @@
++#if !defined(_WIN32)
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#endif
+ /** This is free and unencumbered software released into the public domain.
+ The authors of ISIS do not claim copyright on the contents of this file.
+ For more details about the LICENSE terms and the AUTHORS, you will
+diff --git a/isis/src/base/objs/Reduce/Reduce.cpp b/isis/src/base/objs/Reduce/Reduce.cpp
+index 7c1723bd2..54133e33f 100644
+--- a/isis/src/base/objs/Reduce/Reduce.cpp
++++ b/isis/src/base/objs/Reduce/Reduce.cpp
+@@ -9,6 +9,10 @@ find files of those names at the top level of this repository. **/
+ #include "SpecialPixel.h"
+ #include "SubArea.h"
+ 
++#include <algorithm>
++#include <unordered_map>
++#include <vector>
++
+ using namespace std;
+ 
+ namespace Isis {
+@@ -193,7 +197,7 @@ namespace Isis {
+       mdIncTab[miOutputSamples-1] = miInputSamples;
+     }
+ 
+-    unordered_map<QString, int> specialPixelCounts[miOutputSamples];
++    vector<unordered_map<QString, int>> specialPixelCounts(miOutputSamples);
+ 
+     while(mdLine < rline) {
+       if((int)mdLine <= miInputLines) {
+@@ -227,7 +231,7 @@ namespace Isis {
+         }
+         if (IsSpecial((*m_iPortal)[isamp-1])) {
+           specialPixelCounts[osamp][PixelToString((*m_iPortal)[isamp-1])]++;
+-          if(osamp+1 <= miOutputSamples){
++          if(osamp+1 < miOutputSamples){
+             specialPixelCounts[osamp+1][PixelToString((*m_iPortal)[isamp-1])]++;
+           }
+         } 
+@@ -275,7 +279,7 @@ namespace Isis {
+       }
+       if (IsSpecial((*m_iPortal)[isamp-1])) {
+         specialPixelCounts[osamp][PixelToString((*m_iPortal)[isamp-1])]++;
+-        if(osamp+1 <= miOutputSamples){
++        if(osamp+1 < miOutputSamples){
+           specialPixelCounts[osamp+1][PixelToString((*m_iPortal)[isamp-1])]++;
+         }
+       } 
+diff --git a/isis/src/base/objs/ReseauDistortionMap/ReseauDistortionMap.cpp b/isis/src/base/objs/ReseauDistortionMap/ReseauDistortionMap.cpp
+index 86d7de55b..238d3cd63 100644
+--- a/isis/src/base/objs/ReseauDistortionMap/ReseauDistortionMap.cpp
++++ b/isis/src/base/objs/ReseauDistortionMap/ReseauDistortionMap.cpp
+@@ -11,6 +11,7 @@ find files of those names at the top level of this repository. **/
+ #include "Pvl.h"
+ #include "Statistics.h"
+ #include <float.h>
++#include <vector>
+ 
+ using namespace std;
+ namespace Isis {
+@@ -89,7 +90,8 @@ namespace Isis {
+                        p_camera->FocalPlaneMap()->DetectorLineOrigin();
+ 
+     // Find distance from input point to all nominal reseaus
+-    double distances[p_numRes], wt[5];
++    vector<double> distances(p_numRes);
++    double wt[5];
+     int closepts[5];
+     double ldiffsq, sdiffsq;
+     for(int i = 0; i < p_numRes; i++) {
+@@ -199,7 +201,8 @@ namespace Isis {
+     double undistortedFocalLine = uy / p_pixelPitch + p_undistortedLines / 2.0;
+ 
+     // Find distance from input point to all nominal reseaus
+-    double distances[p_numRes], wt[5];
++    vector<double> distances(p_numRes);
++    double wt[5];
+     int closepts[5];
+     double ldiffsq, sdiffsq;
+     for(int i = 0; i < p_numRes; i++) {
+diff --git a/isis/src/base/objs/ShapeModelFactory/ShapeModelFactory.cpp b/isis/src/base/objs/ShapeModelFactory/ShapeModelFactory.cpp
+index 63a36a61a..5b03a682d 100644
+--- a/isis/src/base/objs/ShapeModelFactory/ShapeModelFactory.cpp
++++ b/isis/src/base/objs/ShapeModelFactory/ShapeModelFactory.cpp
+@@ -14,8 +14,10 @@ find files of those names at the top level of this repository. **/
+ #include "Cube.h"
+ #include "DemShape.h"
+ #include "EllipsoidShape.h"
++#if defined(ISIS_HAVE_EMBREE_SHAPEMODEL)
+ #include "EmbreeShapeModel.h"
+ #include "EmbreeTargetManager.h"
++#endif
+ #include "EquatorialCylindricalShape.h"
+ #include "FileName.h"
+ #include "IException.h"
+@@ -204,6 +206,7 @@ namespace Isis {
+       //-------------- Check for Embree engine -------------------------------//
+       if ( "embree" == preferred ) {
+ 
++#if defined(ISIS_HAVE_EMBREE_SHAPEMODEL)
+         // Check to see of ISIS cube DEMs get a pass
+         FileName v_shapefile(shapeModelFilenames);
+         QString ext = v_shapefile.extension().toLower();
+@@ -233,6 +236,13 @@ namespace Isis {
+             throw fileError;
+           }
+         }
++#else
++        QString mess = "EmbreeShapeModel is unavailable because ISIS was built without PCL support.";
++        fileError.append(IException(IException::Unknown, mess, _FILEINFO_));
++        if ("fail" == onerror) {
++          throw fileError;
++        }
++#endif
+       }
+ 
+       //-------------- Is the shape model a NAIF DSK? ------------------------------//
+diff --git a/isis/src/base/objs/SparseBlockMatrix/SparseBlockMatrix.cpp b/isis/src/base/objs/SparseBlockMatrix/SparseBlockMatrix.cpp
+index d187b1aad..7c982533e 100644
+--- a/isis/src/base/objs/SparseBlockMatrix/SparseBlockMatrix.cpp
++++ b/isis/src/base/objs/SparseBlockMatrix/SparseBlockMatrix.cpp
+@@ -9,6 +9,7 @@ find files of those names at the top level of this repository. **/
+ // std lib
+ #include <iostream>
+ #include <iomanip>
++#include <vector>
+ 
+ // qt lib
+ #include <QDataStream>
+@@ -355,10 +356,10 @@ namespace Isis {
+       // read block number (key); rows (size1); and columns (size2)
+       stream >> nBlockNumber >> nRows >> nCols;
+ 
+-      double data[nRows*nCols];
++      std::vector<double> data(nRows*nCols);
+ 
+       // read raw matrix data
+-      stream.readRawData((char*)data, nRows*nCols*sizeof(double));
++      stream.readRawData((char*)data.data(), nRows*nCols*sizeof(double));
+ 
+       // insert matrix at correct key
+       sbcm.insertMatrixBlock(nBlockNumber, nRows, nCols);
+@@ -737,10 +738,10 @@ namespace Isis {
+       // read block number (key); rows (size1); and columns (size2)
+       stream >> nBlockNumber >> nRows >> nCols;
+ 
+-      double data[nRows*nCols];
++      std::vector<double> data(nRows*nCols);
+ 
+       // read raw matrix data
+-      stream.readRawData((char*)data, nRows*nCols*sizeof(double));
++      stream.readRawData((char*)data.data(), nRows*nCols*sizeof(double));
+ 
+       // insert matrix at correct key
+       sbrm.insertMatrixBlock(nBlockNumber, nRows, nCols);
+diff --git a/isis/src/base/objs/Spice/Spice.cpp b/isis/src/base/objs/Spice/Spice.cpp
+index c191890d8..8db0c1b0d 100644
+--- a/isis/src/base/objs/Spice/Spice.cpp
++++ b/isis/src/base/objs/Spice/Spice.cpp
+@@ -211,8 +211,9 @@ namespace Isis {
+       // Get target body code and radii and store them in the Naif group
+       // DAC modified to look for and store body code so that the radii keyword name
+       // will be able to be constructed even for new bodies not in the standard PCK yet.
+-      QString radiiKey = "BODY" + Isis::toString(m_target->naifBodyCode()) + "_RADII";
+-      QVariant result = m_target->naifBodyCode();
++      BigInt naifBodyCode = static_cast<BigInt>(m_target->naifBodyCode());
++      QString radiiKey = "BODY" + Isis::toString(naifBodyCode) + "_RADII";
++      QVariant result = static_cast<qlonglong>(naifBodyCode);
+       storeValue("BODY_CODE", 0, SpiceIntType, result);
+       std::vector<Distance> radii(3,Distance());
+       radii[0] = Distance(getDouble(radiiKey, 0), Distance::Kilometers);
+@@ -538,8 +539,9 @@ namespace Isis {
+       // Get target body code and radii and store them in the Naif group
+       // DAC modified to look for and store body code so that the radii keyword name
+       // will be able to be constructed even for new bodies not in the standard PCK yet.
+-      QString radiiKey = "BODY" + Isis::toString(m_target->naifBodyCode()) + "_RADII";
+-      QVariant result = m_target->naifBodyCode();
++      BigInt naifBodyCode = static_cast<BigInt>(m_target->naifBodyCode());
++      QString radiiKey = "BODY" + Isis::toString(naifBodyCode) + "_RADII";
++      QVariant result = static_cast<qlonglong>(naifBodyCode);
+       storeValue("BODY_CODE", 0, SpiceIntType, result);
+       std::vector<Distance> radii(3,Distance());
+       radii[0] = Distance(getDouble(radiiKey, 0), Distance::Kilometers);
+diff --git a/isis/src/base/objs/SpiceRotation/SpiceRotation.cpp b/isis/src/base/objs/SpiceRotation/SpiceRotation.cpp
+index cb49356f9..cc741d040 100644
+--- a/isis/src/base/objs/SpiceRotation/SpiceRotation.cpp
++++ b/isis/src/base/objs/SpiceRotation/SpiceRotation.cpp
+@@ -7,7 +7,9 @@ find files of those names at the top level of this repository. **/
+ #include "SpiceRotation.h"
+ 
+ #include <algorithm>
++#include <array>
+ #include <cfloat>
++#include <cstring>
+ #include <cmath>
+ #include <iomanip>
+ #include <string>
+@@ -993,7 +995,8 @@ namespace Isis {
+       // added, this case is not being used in the pck file.  It is mentioned in the Naif required
+       // reading file, pck.req, as a possibility for future pck files.
+       // Look for a reference frame keyword for the body.  The default is J2000.
+-      QString naifKeyword = "BODY" + toString(centerBodyCode) + "_CONSTANTS_REF_FRAME" ;
++      BigInt bodyCode = static_cast<BigInt>(centerBodyCode);
++      QString naifKeyword = "BODY" + toString(bodyCode) + "_CONSTANTS_REF_FRAME" ;
+       SpiceInt numExpected;
+       SpiceInt numReturned;
+       SpiceChar naifType;
+@@ -1012,7 +1015,7 @@ namespace Isis {
+ 
+         // Make sure the standard coefficients are available for the body code by
+         // checking for ra
+-        naifKeyword = "BODY" + toString(centerBodyCode) + "_POLE_RA" ;
++        naifKeyword = "BODY" + toString(bodyCode) + "_POLE_RA" ;
+         dtpool_c(naifKeyword.toLatin1().data(), &found, &numExpected, &naifType);
+ 
+         if (found) {
+@@ -1041,13 +1044,13 @@ namespace Isis {
+ 
+           // Now check for nutation/precession terms.  Check for nut/prec ra values
+           // first to see if the terms are even used for this body.
+-          naifKeyword = "BODY" + toString(centerBodyCode) + "_NUT_PREC_RA" ;
++          naifKeyword = "BODY" + toString(bodyCode) + "_NUT_PREC_RA" ;
+           dtpool_c(naifKeyword.toLatin1().data(), &found, &numReturned, &naifType);
+           if (found) {
+             // Get the barycenter (bc) linear coefficients first (2 for each period).
+             // Then we can get the maximum expected coefficients.
+             SpiceInt bcCode = centerBodyCode/100;  // Ex: bc code for Jupiter (599) & its moons is 5
+-            naifKeyword = "BODY" + toString(bcCode) + "_NUT_PREC_ANGLES" ;
++            naifKeyword = "BODY" + toString(static_cast<BigInt>(bcCode)) + "_NUT_PREC_ANGLES" ;
+             dtpool_c(naifKeyword.toLatin1().data(), &found, &numExpected, &naifType);
+             std::vector<double>npAngles(numExpected, 0.);
+             bodvcd_c(bcCode, "NUT_PREC_ANGLES", numExpected, &numReturned, &npAngles[0]);
+@@ -2511,12 +2514,13 @@ namespace Isis {
+       double radTol = 0.000000017453; //.000001 degrees  Make this instrument dependent TODO
+       SpiceInt avflag = 1;            // Don't use angular velocity for now
+       SpiceInt nints = 1;             // Always make an observation a single interpolation interval
+-      double dparr[p_fullCacheSize];    // Double precision work array
+-      SpiceInt intarr[p_fullCacheSize]; // Integer work array
++      std::vector<double> dparr(p_fullCacheSize);    // Double precision work array
++      std::vector<SpiceInt> intarr(p_fullCacheSize); // Integer work array
+       SpiceInt sizOut = p_fullCacheSize; // Size of downsized cache
+ 
+       ck3sdn(radTol, avflag, (int *) &sizOut, &timeSclkdp[0], (doublereal *) &quats[0],
+-             (SpiceDouble *) &avvs[0], nints, &cubeStarts, dparr, (int *) intarr);
++             (SpiceDouble *) &avvs[0], nints, &cubeStarts,
++             dparr.data(), (int *) intarr.data());
+ 
+       // Clear full cache and load with downsized version
+       p_cacheTime.clear();
+@@ -2559,9 +2563,9 @@ namespace Isis {
+       SpiceInt handle;
+ 
+       // Define some Naif constants
+-      int FILESIZ = 128;
+-      int TYPESIZ = 32;
+-      int SOURCESIZ = 128;
++      constexpr int FILESIZ = 128;
++      constexpr int TYPESIZ = 32;
++      constexpr int SOURCESIZ = 128;
+ //      double DIRSIZ = 100;
+ 
+       SpiceChar file[FILESIZ];
+@@ -3174,9 +3178,9 @@ namespace Isis {
+     ktotal_c("PCK", &count);
+ 
+     // Define some Naif constants
+-    int FILESIZ = 128;
+-    int TYPESIZ = 32;
+-    int SOURCESIZ = 128;
++    constexpr int FILESIZ = 128;
++    constexpr int TYPESIZ = 32;
++    constexpr int SOURCESIZ = 128;
+     SpiceChar file[FILESIZ];
+     SpiceChar filetype[TYPESIZ];
+     SpiceChar source[SOURCESIZ];
+@@ -3190,7 +3194,7 @@ namespace Isis {
+       kdata_c(knum, "PCK", FILESIZ, TYPESIZ, SOURCESIZ, file, filetype, source, &handle, &found);
+ 
+       // search file for "bpc"
+-      if (strstr(file, "bpc") != NULL) {
++      if (std::strstr(static_cast<const char *>(file), "bpc") != nullptr) {
+         m_frameType = BPC;
+       }
+     }
+diff --git a/isis/src/base/objs/StandardDeviationOperator/StandardDeviationOperator.cpp b/isis/src/base/objs/StandardDeviationOperator/StandardDeviationOperator.cpp
+index 9f512c817..f65d1341b 100644
+--- a/isis/src/base/objs/StandardDeviationOperator/StandardDeviationOperator.cpp
++++ b/isis/src/base/objs/StandardDeviationOperator/StandardDeviationOperator.cpp
+@@ -8,6 +8,8 @@ find files of those names at the top level of this repository. **/
+ #include "Chip.h"
+ #include "Statistics.h"
+ 
++#include <vector>
++
+ namespace Isis {
+   /**
+    * This method returns the amount of interest for the given chip.
+@@ -20,7 +22,7 @@ namespace Isis {
+     Statistics stats;
+     stats.SetValidRange(mdMinDN, mdMaxDN);
+     for(int i = 0; i < chip.Samples(); i++) {
+-      double pixels[chip.Lines()];
++      std::vector<double> pixels(chip.Lines());
+       int n = 0;
+       for(int j = 0; j < chip.Lines(); j++) {
+         if(!IsSpecial(chip.GetValue(i + 1, j + 1))) {
+@@ -28,7 +30,7 @@ namespace Isis {
+           n++;
+         }
+       }
+-      stats.AddData(pixels, n);
++      stats.AddData(pixels.data(), n);
+     }
+ 
+     return stats.StandardDeviation();
+diff --git a/isis/src/base/objs/iTime/iTime.h b/isis/src/base/objs/iTime/iTime.h
+index 46511c71f..186693f26 100644
+--- a/isis/src/base/objs/iTime/iTime.h
++++ b/isis/src/base/objs/iTime/iTime.h
+@@ -74,8 +74,7 @@ namespace Isis {
+       * @param time An ephemeris time (ET).
+       */
+       iTime(const double time) {
+-        if(!p_lpInitialized)
+-          LoadLeapSecondKernel();
++        LoadLeapSecondKernel();
+ 
+         p_et = time;
+       }
+diff --git a/isis/src/clementine/apps/clem2isis/bitstrm.cpp b/isis/src/clementine/apps/clem2isis/bitstrm.cpp
+index 27a50ec12..acd99c5b1 100644
+--- a/isis/src/clementine/apps/clem2isis/bitstrm.cpp
++++ b/isis/src/clementine/apps/clem2isis/bitstrm.cpp
+@@ -27,7 +27,7 @@ void *cBitStream(BitStream *bs, char *fn, Fmode fm) {
+   bs->BitBuffer = 0;
+   bs->bytesout = 0;
+   bs->outstring = NULL;
+-  bs->BitBuffMask = (fm == OUTPUT) ? 0x80 : 0x00;
++  bs->BitBuffMask = (fm == JPEG_OUTPUT) ? 0x80 : 0x00;
+   bs->bitmask[0] = 0x0000;
+   bs->bitmask[1] = 0x0001;
+   bs->bitmask[2] = 0x0002;
+@@ -49,7 +49,7 @@ void *cBitStream(BitStream *bs, char *fn, Fmode fm) {
+ }
+ 
+ void *dBitStream(BitStream *bs) {
+-  if(bs->bytestream.mode == OUTPUT) {
++  if(bs->bytestream.mode == JPEG_OUTPUT) {
+     if(bs->BitBuffMask != 0x80) {
+       while(bs->BitBuffMask) {
+         bs->BitBuffer |= bs->BitBuffMask;
+@@ -120,7 +120,7 @@ short BitStream_read(BitStream *bs, short w) {
+ void *cByteStream(ByteStream *Bs, char *FileName, Fmode FileMode) {
+   Bs->mode = FileMode;
+   if(FileName != NULL) {
+-    Bs->file = fopen(FileName, (Bs->mode == INPUT) ? "rb" : "wb");
++    Bs->file = fopen(FileName, (Bs->mode == JPEG_INPUT) ? "rb" : "wb");
+     if(Bs->file == NULL) printf("ByteStream constructor error.\n");
+     Bs->stat = 0;
+   }
+@@ -140,7 +140,7 @@ short ByteStream_read(ByteStream *Bs) {
+   char  cval;
+   int   n;
+ 
+-  if(Bs->mode == INPUT) {
++  if(Bs->mode == JPEG_INPUT) {
+     /* c = fgetc( Bs->file ); */
+     n = fread(&cval, sizeof(char), 1, Bs->file);
+     c   = cval;
+@@ -153,7 +153,7 @@ short ByteStream_read(ByteStream *Bs) {
+ }
+ 
+ short ByteStream_write(ByteStream *Bs, short c) {
+-  if((Bs->mode != OUTPUT) || (fputc(c, Bs->file) == EOF)) Bs->stat = EOF;
++  if((Bs->mode != JPEG_OUTPUT) || (fputc(c, Bs->file) == EOF)) Bs->stat = EOF;
+   return Bs->stat;
+ }
+ 
+diff --git a/isis/src/clementine/apps/clem2isis/jpeg_c.h b/isis/src/clementine/apps/clem2isis/jpeg_c.h
+index 205f3b14d..736f0eba3 100644
+--- a/isis/src/clementine/apps/clem2isis/jpeg_c.h
++++ b/isis/src/clementine/apps/clem2isis/jpeg_c.h
+@@ -10,7 +10,7 @@ find files of those names at the top level of this repository. **/
+ /* SPDX-License-Identifier: CC0-1.0 */
+ 
+ /* Structure Definitions */
+-enum FmodeDef { INPUT, OUTPUT };
++enum FmodeDef { JPEG_INPUT, JPEG_OUTPUT };
+ typedef enum FmodeDef Fmode;
+ 
+ struct ByteStreamDef {
+@@ -32,11 +32,16 @@ extern short ByteStream_status(ByteStream *);
+ #define MALLOC  farmalloc
+ #define FREE    farfree
+ #define CHARH   unsigned char huge
++#ifndef FAR
+ #define FAR             far
++#endif
+ #else
+ #define MALLOC  malloc
+ #define FREE    free
+ #define CHARH   unsigned char
++#ifdef FAR
++#undef FAR
++#endif
+ #define FAR
+ #endif
+ 
+diff --git a/isis/src/clementine/apps/clem2isis/pds.cpp b/isis/src/clementine/apps/clem2isis/pds.cpp
+index 659f72550..daa4a6663 100644
+--- a/isis/src/clementine/apps/clem2isis/pds.cpp
++++ b/isis/src/clementine/apps/clem2isis/pds.cpp
+@@ -430,7 +430,7 @@ void pds_decomp(FILE *fptr, CHARH *p, long sizej, long sizei) {
+   CHARH   *ptr;
+   int     FLAG = 0;
+ 
+-  cBitStream(&ibs, NULL, INPUT);
++  cBitStream(&ibs, NULL, JPEG_INPUT);
+ 
+   filepos1 = ftell(fptr);
+   fseek(fptr, 0, 2);
+diff --git a/isis/src/control/apps/cnet2dem/DatumFunctoid.cpp b/isis/src/control/apps/cnet2dem/DatumFunctoid.cpp
+index 669352b83..624d84bf3 100644
+--- a/isis/src/control/apps/cnet2dem/DatumFunctoid.cpp
++++ b/isis/src/control/apps/cnet2dem/DatumFunctoid.cpp
+@@ -189,7 +189,9 @@ void DatumFunctoidFactory::init() {
+   m_functoids.append( SharedDatumFunctoid(new TypeCount()) );
+   m_functoids.append( SharedDatumFunctoid(new ShepardsRadius()) );
+   m_functoids.append( SharedDatumFunctoid(new FrankeNelsonRadius()) );
++#if defined(ISIS_HAVE_NN)
+   m_functoids.append( SharedDatumFunctoid(new NaturalNeighborRadius()) );
++#endif
+   return;
+ }
+ 
+diff --git a/isis/src/control/apps/cnet2dem/DatumFunctoid.h b/isis/src/control/apps/cnet2dem/DatumFunctoid.h
+index 61d4204dc..6fe3c734f 100644
+--- a/isis/src/control/apps/cnet2dem/DatumFunctoid.h
++++ b/isis/src/control/apps/cnet2dem/DatumFunctoid.h
+@@ -22,9 +22,11 @@ find files of those names at the top level of this repository. **/
+ #include "Statistics.h"
+ 
+ // Add NaturalNeighbor headers.
++#if defined(ISIS_HAVE_NN)
+ extern "C" {
+ #include "nn.h"
+ }
++#endif
+ 
+ namespace Isis {
+ 
+@@ -515,6 +517,7 @@ namespace Isis {
+ 
+ 
+ 
++#if defined(ISIS_HAVE_NN)
+   /**
+    * @brief Natural Neighbor interpolation method
+    *
+@@ -584,6 +587,7 @@ namespace Isis {
+         return (nnp);
+       }
+   };
++#endif
+ 
+ 
+   // Definitions
+diff --git a/isis/src/control/apps/cnet2dem/PointCloudSearchResult.h b/isis/src/control/apps/cnet2dem/PointCloudSearchResult.h
+index d161a4b9b..415d4a680 100644
+--- a/isis/src/control/apps/cnet2dem/PointCloudSearchResult.h
++++ b/isis/src/control/apps/cnet2dem/PointCloudSearchResult.h
+@@ -12,6 +12,7 @@ find files of those names at the top level of this repository. **/
+ #include <QPair>
+ #include <QSharedPointer>
+ #include <QVector>
++#include <vector>
+ 
+ namespace Isis {
+ 
+@@ -79,8 +80,9 @@ namespace Isis {
+         }
+       }
+ 
++      template <typename Match>
+       PointCloudSearchResult(const T &source, const double radius_sq,
+-                      std::vector< std::pair<unsigned int, double> > &matches,
++                      std::vector<Match> &matches,
+                       const QSharedPointer<PointCloud<T,D> > &pc,
+                       const int nfound = 0) {
+         m_search_type = Radius;
+diff --git a/isis/src/control/apps/cnet2dem/PointCloudTree.h b/isis/src/control/apps/cnet2dem/PointCloudTree.h
+index 50b5163c4..5f844836c 100644
+--- a/isis/src/control/apps/cnet2dem/PointCloudTree.h
++++ b/isis/src/control/apps/cnet2dem/PointCloudTree.h
+@@ -22,6 +22,14 @@ find files of those names at the top level of this repository. **/
+ 
+ namespace Isis {
+ 
++#if defined(NANOFLANN_VERSION) && NANOFLANN_VERSION >= 0x150
++  typedef nanoflann::SearchParameters IsisNanoflannSearchParams;
++  typedef nanoflann::ResultItem<size_t, double> IsisNanoflannRadiusResult;
++#else
++  typedef nanoflann::SearchParams IsisNanoflannSearchParams;
++  typedef std::pair<size_t, double> IsisNanoflannRadiusResult;
++#endif
++
+   /**
+    * @brief Point cloud kd-tree class using the nanoflann kd-tree library
+    *
+@@ -70,7 +78,7 @@ namespace Isis {
+       // specified at compile time
+       typedef nanoflann::KDTreeSingleIndexAdaptor<
+                             nanoflann::L2_Simple_Adaptor<double, PointCloud<T,D> >,
+-                            PointCloud<T,D>, D::Dimension >  PcKdTree_t;
++                            PointCloud<T,D>, D::Dimension, size_t >  PcKdTree_t;
+ 
+     public:
+       /**
+@@ -102,10 +110,10 @@ namespace Isis {
+       /** Perform radius query for points in kilometer units */
+       PointCloudSearchResult<T,D> radius_query(const T &point,
+                                                const double &radius_sq) {
+-        std::vector<std::pair<unsigned int, double> > matches;
++        std::vector<IsisNanoflannRadiusResult> matches;
+ 
+         int n = m_kd_index.radiusSearch(point.array(), radius_sq, matches,
+-                                        nanoflann::SearchParams());
++                                        IsisNanoflannSearchParams());
+         return (PointCloudSearchResult<T,D>(point, radius_sq, matches, m_pc, n));
+       }
+ 
+diff --git a/isis/src/control/apps/cnetcombinept/PointCloudTree.h b/isis/src/control/apps/cnetcombinept/PointCloudTree.h
+index 841338226..52d777021 100644
+--- a/isis/src/control/apps/cnetcombinept/PointCloudTree.h
++++ b/isis/src/control/apps/cnetcombinept/PointCloudTree.h
+@@ -21,6 +21,14 @@ find files of those names at the top level of this repository. **/
+ 
+ namespace Isis {
+ 
++#if defined(NANOFLANN_VERSION) && NANOFLANN_VERSION >= 0x150
++  typedef nanoflann::SearchParameters IsisNanoflannSearchParams;
++  typedef nanoflann::ResultItem<size_t, double> IsisNanoflannRadiusResult;
++#else
++  typedef nanoflann::SearchParams IsisNanoflannSearchParams;
++  typedef std::pair<size_t, double> IsisNanoflannRadiusResult;
++#endif
++
+ /**
+  * @brief Point cloud kd-tree class using the nanoflann kd-tree library
+  *
+@@ -70,7 +78,7 @@ template <class T> class PointCloudTree {
+    // specified at compile time
+   typedef nanoflann::KDTreeSingleIndexAdaptor<
+                         nanoflann::L2_Simple_Adaptor<double, PointCloud<T> >,
+-                        PointCloud<T>, 2 >  PcKdTree_t;
++                        PointCloud<T>, 2, size_t >  PcKdTree_t;
+ 
+  public:
+ 
+@@ -114,10 +122,10 @@ template <class T> class PointCloudTree {
+      * @return @b QList<T> A list of all the points within the radius.
+      */
+     QList<T> radius_query(const T &point, const double &radius_sq) {
+-      std::vector<std::pair<unsigned int, double> > matches;
++      std::vector<IsisNanoflannRadiusResult> matches;
+ 
+       (void) m_kd_index.radiusSearch(point.array(), radius_sq, matches,
+-                                     nanoflann::SearchParams());
++                                     IsisNanoflannSearchParams());
+ 
+       QList<T> points;
+       for ( int i = 0 ; i < (int) matches.size() ; i++ ) {
+diff --git a/isis/src/control/apps/pointreg/pointreg.cpp b/isis/src/control/apps/pointreg/pointreg.cpp
+index 18a36a4cb..1659169e5 100644
+--- a/isis/src/control/apps/pointreg/pointreg.cpp
++++ b/isis/src/control/apps/pointreg/pointreg.cpp
+@@ -6,7 +6,11 @@ find files of those names at the top level of this repository. **/
+ 
+ /* SPDX-License-Identifier: CC0-1.0 */
+ 
++#if defined(_WIN32)
++#include <stdio.h>
++#else
+ #include <sys/resource.h>
++#endif
+ 
+ #include "pointreg.h"
+ 
+@@ -250,6 +254,9 @@ namespace Isis {
+     progress.CheckStatus();
+ 
+     //  Get the maximum allowable number of open files
++#if defined(_WIN32)
++    unsigned int maxOpenFiles = static_cast<unsigned int>(_getmaxstdio() * .60);
++#else
+     struct rlimit limit;
+     if (getrlimit(RLIMIT_NOFILE, &limit) != 0) {
+       QString msg = "Cannot read the maximum allowable open files from system resources.";
+@@ -257,6 +264,7 @@ namespace Isis {
+     }
+     //  Allow for library files, etc
+     unsigned int maxOpenFiles = limit.rlim_cur * .60;
++#endif
+ 
+ 
+     cubeMgr = new CubeManager;
+diff --git a/isis/src/core/include/IString.h b/isis/src/core/include/IString.h
+index 4c06c47af..60c66d84b 100644
+--- a/isis/src/core/include/IString.h
++++ b/isis/src/core/include/IString.h
+@@ -26,6 +26,9 @@ namespace Isis {
+   QString toString(char);
+   QString toString(const int &);
+   QString toString(const unsigned int &);
++#if defined(_WIN32)
++  QString toString(const long &);
++#endif
+   QString toString(const BigInt &);
+   QString toString(double, int precision = 14);
+ 
+diff --git a/isis/src/core/src/Blob.cpp b/isis/src/core/src/Blob.cpp
+index a200ebb05..d17d05fd1 100644
+--- a/isis/src/core/src/Blob.cpp
++++ b/isis/src/core/src/Blob.cpp
+@@ -347,7 +347,7 @@ namespace Isis {
+ 
+     // Open the file
+     fstream istm;
+-    istm.open(temp.toLatin1().data(), std::ios::in);
++    istm.open(temp.toLatin1().data(), std::ios::in | std::ios::binary);
+     if (!istm) {
+       QString message = Message::FileOpen(temp);
+       throw IException(IException::Io, message, _FILEINFO_);
+@@ -381,7 +381,7 @@ namespace Isis {
+       ReadInit();
+       if (p_detached != "") {
+         fstream dstm;
+-        dstm.open(p_detached.toLatin1().data(), std::ios::in);
++        dstm.open(p_detached.toLatin1().data(), std::ios::in | std::ios::binary);
+         if (!dstm) {
+           QString message = Message::FileOpen(p_detached);
+           throw IException(IException::Io, message, _FILEINFO_);
+diff --git a/isis/src/core/src/IString.cpp b/isis/src/core/src/IString.cpp
+index b4f7750f3..a7b03e336 100644
+--- a/isis/src/core/src/IString.cpp
++++ b/isis/src/core/src/IString.cpp
+@@ -250,6 +250,12 @@ namespace Isis {
+     return QString::number(intToConvert);
+   }
+ 
++#if defined(_WIN32)
++  QString toString(const long &intToConvert) {
++    return QString::number(intToConvert);
++  }
++#endif
++
+ 
+   /**
+    * Global function to convert a big integer to a string.
+diff --git a/isis/src/core/src/Pvl.cpp b/isis/src/core/src/Pvl.cpp
+index e5db4b5b4..3b6d7b223 100644
+--- a/isis/src/core/src/Pvl.cpp
++++ b/isis/src/core/src/Pvl.cpp
+@@ -135,7 +135,7 @@ namespace Isis {
+       throw IException(IException::Programmer, msg, _FILEINFO_);
+     }
+ 
+-    CPLStringList metadata = CPLStringList(dataset->GetMetadata("json:ISIS3"), false);
++    CSLConstList metadata = dataset->GetMetadata("json:ISIS3");
+ 
+     if (metadata[0] != nullptr) {
+       const char *metadataJsonString = metadata[0];
+@@ -354,7 +354,7 @@ namespace Isis {
+ 
+     // Open the file
+     ifstream istm;
+-    istm.open(m_filename.toLatin1().data(), std::ios::in);
++    istm.open(m_filename.toLatin1().data(), std::ios::in | std::ios::binary);
+     if(!istm) {
+       QString message = Message::FileOpen(temp.expanded());
+       throw IException(IException::Io, message, _FILEINFO_);
+diff --git a/isis/src/kaguya/apps/kaguyasp2ascii/main.cpp b/isis/src/kaguya/apps/kaguyasp2ascii/main.cpp
+index def372984..36d3b2b52 100644
+--- a/isis/src/kaguya/apps/kaguyasp2ascii/main.cpp
++++ b/isis/src/kaguya/apps/kaguyasp2ascii/main.cpp
+@@ -10,6 +10,7 @@ find files of those names at the top level of this repository. **/
+ 
+ #include <bitset>
+ #include <cstdio>
++#include <vector>
+ #include <QString>
+ #include <QDir>
+ 
+@@ -189,7 +190,7 @@ void IsisMain() {
+     rawoffset = 0.0;
+   }
+ 
+-  double raw[296*rawlines];
++  std::vector<double> raw(296 * rawlines);
+   fseek(spcptr,rawptr,SEEK_SET);
+   for (int i=0; i<rawlines; i++) {
+     for (int j=0; j<rawsamps; j++) {
+@@ -227,7 +228,7 @@ void IsisMain() {
+     qaoffset = 0.0;
+   }
+ 
+-  double qa[296*qalines];
++  std::vector<double> qa(296 * qalines);
+   fseek(spcptr,qaptr,SEEK_SET);
+   for (int i=0; i<qalines; i++) {
+     for (int j=0; j<qasamps; j++) {
+@@ -265,7 +266,7 @@ void IsisMain() {
+     radoffset = 0.0;
+   }
+ 
+-  double rad[296*radlines];
++  std::vector<double> rad(296 * radlines);
+   fseek(spcptr,radptr,SEEK_SET);
+   for (int i=0; i<radlines; i++) {
+     for (int j=0; j<radsamps; j++) {
+@@ -314,7 +315,7 @@ void IsisMain() {
+   }
+ 
+   //import reflectance or "reflectance 1" in newer files
+-  double ref[296*reflines];
++  std::vector<double> ref(296 * reflines);
+   fseek(spcptr,refptr1,SEEK_SET);
+   for (int i=0; i<reflines; i++) {
+     for (int j=0; j<refsamps; j++) {
+@@ -330,8 +331,10 @@ void IsisMain() {
+   }
+ 
+   //import reflectance 2 if it exists
+-  double *ref2 = NULL;
++  bool hasRef2 = false;
++  std::vector<double> ref2;
+   if (lab.hasKeyword("^SP_SPECTRUM_REF2")) {
++    hasRef2 = true;
+     int reflines2 = toInt(refobj2.findKeyword("LINES")[0]);
+     int refsamps2 = toInt(refobj2.findKeyword("LINE_SAMPLES")[0]);
+     QString reftype2 = refobj2.findKeyword("SAMPLE_TYPE");
+@@ -355,7 +358,7 @@ void IsisMain() {
+       refoffset2 = 0.0;
+     }
+ 
+-    ref2 = new double[296*reflines2];
++    ref2.resize(296 * reflines2);
+     fseek(spcptr,refptr2,SEEK_SET);
+     for (int i=0; i<reflines2; i++) {
+       for (int j=0; j<refsamps2; j++) {
+@@ -387,7 +390,7 @@ void IsisMain() {
+   os << "Wavelength";
+ 
+   //If we have a newer-format file with two Reflectances, output both
+-  if (ref2 != NULL) {
++  if (hasRef2) {
+     for (int i=minobs; i<=maxobs; i++) {
+       os << "\t" << "Raw" << i << "\t"<< "Rad" << i << "\t" <<"Ref1_" << i << "\t" << "Ref2_" << i
+           << "\t" << "QA" << i;
+@@ -402,7 +405,6 @@ void IsisMain() {
+       }
+       os << endl;
+      }
+-     delete[] ref2;
+   }
+   else {
+     for (int i=minobs; i<=maxobs; i++) {
+diff --git a/isis/src/kaguya/apps/kaguyasp2isis/main.cpp b/isis/src/kaguya/apps/kaguyasp2isis/main.cpp
+index 1db52986f..8f361233f 100644
+--- a/isis/src/kaguya/apps/kaguyasp2isis/main.cpp
++++ b/isis/src/kaguya/apps/kaguyasp2isis/main.cpp
+@@ -10,6 +10,7 @@ find files of those names at the top level of this repository. **/
+ 
+ #include <bitset>
+ #include <cstdio>
++#include <vector>
+ #include <QString>
+ 
+ #include "ProcessImportPds.h"
+@@ -158,7 +159,7 @@ void IsisMain() {
+     rawoffset = 0.0;
+   }
+ 
+-  double raw[296*rawlines];
++  std::vector<double> raw(296 * rawlines);
+   fseek(spcptr,rawptr,SEEK_SET);
+   for (int i=0; i<rawlines; i++) {
+     for (int j=0; j<rawsamps; j++) {
+@@ -196,7 +197,7 @@ void IsisMain() {
+     qaoffset = 0.0;
+   }
+ 
+-  double qa[296*qalines];
++  std::vector<double> qa(296 * qalines);
+   fseek(spcptr,qaptr,SEEK_SET);
+   for (int i=0; i<qalines; i++) {
+     for (int j=0; j<qasamps; j++) {
+@@ -234,7 +235,7 @@ void IsisMain() {
+     radoffset = 0.0;
+   }
+ 
+-  double rad[296*radlines];
++  std::vector<double> rad(296 * radlines);
+   fseek(spcptr,radptr,SEEK_SET);
+   for (int i=0; i<radlines; i++) {
+     for (int j=0; j<radsamps; j++) {
+@@ -272,7 +273,7 @@ void IsisMain() {
+     refoffset = 0.0;
+   }
+ 
+-  double ref[296*reflines];
++  std::vector<double> ref(296 * reflines);
+   fseek(spcptr,refptr,SEEK_SET);
+   for (int i=0; i<reflines; i++) {
+     for (int j=0; j<refsamps; j++) {
+diff --git a/isis/src/mgs/apps/mocgap/main.cpp b/isis/src/mgs/apps/mocgap/main.cpp
+index 55d809962..8a7e596fd 100644
+--- a/isis/src/mgs/apps/mocgap/main.cpp
++++ b/isis/src/mgs/apps/mocgap/main.cpp
+@@ -49,16 +49,8 @@ void fixgap(Buffer &in, Buffer &out) {
+     }
+   }
+ 
+-  //Move the values from the vector into an array of doubles.
+-  //This step and the previous one are included because with the vector, we
+-  //can acount for special pixels, otherwise we might end up with trailing zeros
+-  //in the array, skewing the data. Also, Statistics requires a double array.
+-  double data[tempData.size()];
+-  for(int i = 0; i < (int)tempData.size(); ++i) {
+-    data[i] = tempData[i];
+-  }
+   Statistics stats;
+-  stats.AddData(data, tempData.size());
++  stats.AddData(tempData.data(), tempData.size());
+   //calulate average and standard deviation
+   double avg = stats.Average();
+   double sd = stats.StandardDeviation();
+diff --git a/isis/src/mgs/apps/mocuncompress/image_io.cpp b/isis/src/mgs/apps/mocuncompress/image_io.cpp
+index 5b72e4ba7..3660fe5e5 100644
+--- a/isis/src/mgs/apps/mocuncompress/image_io.cpp
++++ b/isis/src/mgs/apps/mocuncompress/image_io.cpp
+@@ -41,7 +41,17 @@ Copyright (C) 1999 Malin Space Science Systems.  All Rights Reserved.
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
++#if defined(_WIN32)
++#include <io.h>
++#define close _close
++#define creat _creat
++#define lseek _lseek
++#define open _open
++#define read _read
++#define write _write
++#else
+ #include <unistd.h>
++#endif
+ #include <fcntl.h>
+ 
+ #include "image_io.h"
+diff --git a/isis/src/mgs/apps/mocuncompress/main.cpp b/isis/src/mgs/apps/mocuncompress/main.cpp
+index 655ce79b0..f8c732023 100644
+--- a/isis/src/mgs/apps/mocuncompress/main.cpp
++++ b/isis/src/mgs/apps/mocuncompress/main.cpp
+@@ -85,6 +85,7 @@ Copyright (C) 1999 Malin Space Science Systems.  All Rights Reserved.
+ 
+ #include <stdlib.h>
+ #include <stdio.h>
++#include <stdint.h>
+ #include <string.h>
+ #include <memory.h>
+ #include <math.h>
+@@ -537,7 +538,7 @@ int main(int argc, char **argv)
+       if(!(h.compression[0] & 3) && n_pad > 0) {
+         errors += 1;
+         status |= STAT_BADSEQ;
+-        bzero(frag, 240 * 1024);
++        memset(frag, 0, 240 * 1024);
+         total_image += n_pad * 240 * 1024;
+         if(verbose) fprintf(stderr, "padding %d frags\n", n_pad);
+         while(n_pad--) fwrite(frag, 1, 240 * 1024, out);
+@@ -574,7 +575,7 @@ int main(int argc, char **argv)
+         errors += 1;
+         if(pad_cs) {
+           char *frag = (char *) malloc(240 * 1024);
+-          bzero(frag, 240 * 1024);
++          memset(frag, 0, 240 * 1024);
+           total_image += 240 * 1024;
+           total += sizeof(struct msdp_header) + datlen + 1;
+           if(verbose) fprintf(stderr, "trashing bad frag\n");
+diff --git a/isis/src/mgs/apps/mocuncompress/xmain.cpp b/isis/src/mgs/apps/mocuncompress/xmain.cpp
+index de1ab477a..b12d66c69 100644
+--- a/isis/src/mgs/apps/mocuncompress/xmain.cpp
++++ b/isis/src/mgs/apps/mocuncompress/xmain.cpp
+@@ -113,7 +113,7 @@ uint8 *transform_decomp_main(uint8 *data, int len, int height, int width, uint32
+     for(block = 0; block < numBlocks; block++) {
+       if(*scanGroups >= numLevels) {
+         (void)fprintf(stderr, "Group level too large: %d > %d\n", *scanGroups, numLevels - 1);
+-        bzero(image, width * height);
++        memset(image, 0, width * height);
+         return image;
+       };
+ 
+diff --git a/isis/src/newhorizons/apps/mvic2isis/mvic2isis.cpp b/isis/src/newhorizons/apps/mvic2isis/mvic2isis.cpp
+index 0348756ac..db63ba377 100644
+--- a/isis/src/newhorizons/apps/mvic2isis/mvic2isis.cpp
++++ b/isis/src/newhorizons/apps/mvic2isis/mvic2isis.cpp
+@@ -240,7 +240,7 @@ namespace Isis {
+ 
+     SpiceInt sclkCode;
+     if (fitslabel.hasKeyword("SPCSCID", Pvl::Traverse)) {
+-      sclkCode = fitslabel.findKeyword("SPCSCID", Pvl::Traverse);
++      sclkCode = static_cast<SpiceInt>((int) fitslabel.findKeyword("SPCSCID", Pvl::Traverse));
+     }
+     else {
+       QString msg = "Input file is missing the spacecraft Naif Id.";
+diff --git a/isis/src/qisis/apps/qview/main.cpp b/isis/src/qisis/apps/qview/main.cpp
+index eb8a1198e..0ff3c53cc 100644
+--- a/isis/src/qisis/apps/qview/main.cpp
++++ b/isis/src/qisis/apps/qview/main.cpp
+@@ -7,11 +7,15 @@ find files of those names at the top level of this repository. **/
+ /* SPDX-License-Identifier: CC0-1.0 */
+ 
+ #include <fcntl.h>
++#include <cstdio>
++#include <cstdlib>
+ #include <iostream>
++#if !defined(_WIN32)
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
+ #include <unistd.h>
++#endif
+ 
+ #include <QApplication>
+ #include <QCoreApplication>
+@@ -85,6 +89,7 @@ int main(int argc, char *argv[]) {
+     }
+   }
+ 
++#if !defined(_WIN32)
+   QString p_socketFile = "/tmp/isis_qview_" + Application::UserName();
+   if (newWindow < 0) {
+     struct sockaddr_un p_socketName;
+@@ -134,6 +139,7 @@ int main(int argc, char *argv[]) {
+       }
+     }
+   }
++#endif
+ 
+   // Creates the qview application window
+   QIsisApplication *app = new QIsisApplication(argc, argv);
+@@ -235,6 +241,7 @@ int main(int argc, char *argv[]) {
+     }
+   }
+ 
++#if !defined(_WIN32)
+   SocketThread *temp = NULL;
+   // We don't want to start a thread if the user is forcing a new window
+   if (newWindow < 0) {
+@@ -244,6 +251,7 @@ int main(int argc, char *argv[]) {
+     temp->connect(temp, SIGNAL(focusApp()), vw, SLOT(raise()));
+     temp->start();
+   }
++#endif
+ 
+   //Connect the editTool to the file tool in order to save and discard changes
+   QObject::connect(editTool, SIGNAL(cubeChanged(bool)),
+@@ -264,6 +272,7 @@ int main(int argc, char *argv[]) {
+ 
+   int status = app->exec();
+ 
++#if !defined(_WIN32)
+   // If we created a thread for listening to qview connections, then stop the thread and free its memory
+   if (temp) {
+     temp->stop();
+@@ -272,6 +281,7 @@ int main(int argc, char *argv[]) {
+ 
+     remove(p_socketFile.toLatin1().data());
+   }
++#endif
+ 
+   delete panTool;
+   delete statsTool;
+diff --git a/isis/src/qisis/objs/HelpTool/HelpTool.cpp b/isis/src/qisis/objs/HelpTool/HelpTool.cpp
+index fc29bd2e6..75b7b433a 100644
+--- a/isis/src/qisis/objs/HelpTool/HelpTool.cpp
++++ b/isis/src/qisis/objs/HelpTool/HelpTool.cpp
+@@ -2,9 +2,11 @@
+ 
+ #include <QAction>
+ #include <QApplication>
++#include <QDesktopServices>
+ #include <QMenu>
+ #include <QString>
+ #include <QToolBar>
++#include <QUrl>
+ #include <QWhatsThis>
+ 
+ #include "IException.h"
+@@ -62,17 +64,17 @@ namespace Isis {
+    */
+   void HelpTool::aboutProgram() {
+     PvlGroup &uig = Preference::Preferences().findGroup("UserInterface");
++    QString url = "http://isis.astrogeology.usgs.gov/Application/presentation/Tabbed/" +
++                  QApplication::applicationName() + "/" +
++                  QApplication::applicationName() + ".html";
+ #if defined(__linux__)
+-    QString command = (QString) uig["GuiHelpBrowser"] +
+-                      " http://isis.astrogeology.usgs.gov/Application/presentation/Tabbed/" +
+-                      QApplication::applicationName() + "/" +
+-                      QApplication::applicationName() + ".html";
++    QString command = (QString) uig["GuiHelpBrowser"] + " " + url;
++    ProgramLauncher::RunSystemCommand(command);
+ #elif defined(__APPLE__)
+-    QString command = "open -a" + (QString) uig["GuiHelpBrowser"] +
+-                      " http://isis.astrogeology.usgs.gov/Application/presentation/Tabbed/" +
+-                      QApplication::applicationName() + "/" +
+-                      QApplication::applicationName() + ".html";
+-#endif
++    QString command = "open -a" + (QString) uig["GuiHelpBrowser"] + " " + url;
+     ProgramLauncher::RunSystemCommand(command);
++#elif defined(_WIN32)
++    QDesktopServices::openUrl(QUrl(url));
++#endif
+   }
+ }
+diff --git a/isis/src/qisis/objs/Project/Project.cpp b/isis/src/qisis/objs/Project/Project.cpp
+index 28dbefdef..8d7a03fa6 100644
+--- a/isis/src/qisis/objs/Project/Project.cpp
++++ b/isis/src/qisis/objs/Project/Project.cpp
+@@ -22,9 +22,8 @@
+  */
+ #include "Project.h"
+ 
+-#include <unistd.h>
+-
+ #include <QApplication>
++#include <QCoreApplication>
+ #include <QDateTime>
+ #include <QDir>
+ #include <QDebug>
+@@ -168,7 +167,7 @@ namespace Isis {
+     try {
+       QString tmpFolder = QDir::temp().absolutePath() + "/"
+             + Environment::userName() + "_"
+-            + QApplication::applicationName() + "_" + QString::number( getpid() );
++            + QApplication::applicationName() + "_" + QString::number(QCoreApplication::applicationPid());
+       QDir temp(tmpFolder + "/tmpProject");
+       m_projectRoot = new QDir(temp);
+ 
+@@ -632,7 +631,7 @@ namespace Isis {
+     try {
+       QString tmpFolder = QDir::temp().absolutePath() + "/"
+             + Environment::userName() + "_"
+-            + QApplication::applicationName() + "_" + QString::number( getpid() );
++            + QApplication::applicationName() + "_" + QString::number(QCoreApplication::applicationPid());
+       QDir temp(tmpFolder + "/tmpProject");
+       m_projectRoot = new QDir(temp);
+     }
+diff --git a/isis/src/qisis/objs/SocketThread/SocketThread.cpp b/isis/src/qisis/objs/SocketThread/SocketThread.cpp
+index 3f2390a77..0410b8053 100644
+--- a/isis/src/qisis/objs/SocketThread/SocketThread.cpp
++++ b/isis/src/qisis/objs/SocketThread/SocketThread.cpp
+@@ -2,13 +2,19 @@
+ #include "IException.h"
+ #include "Application.h"
+ 
+-#include <errno.h>
+-#include <sys/types.h>
+-#include <unistd.h>
++#include <iostream>
++
++#if !defined(_WIN32)
++#include <cerrno>
++#include <cstdio>
++#include <cstring>
++#include <fcntl.h>
+ #include <sys/socket.h>
++#include <sys/types.h>
+ #include <sys/un.h>
+ #include <sys/wait.h>
+-#include <fcntl.h>
++#include <unistd.h>
++#endif
+ 
+ #include <QObject>
+ #include <QThread>
+@@ -33,6 +39,10 @@ namespace Isis {
+ 
+   //! Starts the socket thread
+   void SocketThread::run() {
++#if defined(_WIN32)
++    std::cerr << "SocketThread IPC is not available on Windows" << std::endl;
++    return;
++#else
+     std::string p_socketFile = ("/tmp/isis_qview_" + Application::UserName()).toLatin1().data();
+     struct sockaddr_un p_socketName;
+     p_socketName.sun_family = AF_UNIX;
+@@ -107,5 +117,6 @@ namespace Isis {
+         else emit newImage(token.c_str());
+       }
+     };
++#endif
+   }
+ }
+diff --git a/isis/src/viking/apps/vdcomp/main.cpp b/isis/src/viking/apps/vdcomp/main.cpp
+index 6823b6f82..f493df647 100644
+--- a/isis/src/viking/apps/vdcomp/main.cpp
++++ b/isis/src/viking/apps/vdcomp/main.cpp
+@@ -119,7 +119,15 @@
+ /********************************************************************/
+ 
+ #include <stdlib.h>
++#if defined(_WIN32)
++#include <io.h>
++#define close _close
++#define lseek _lseek
++#define open _open
++#define read _read
++#else
+ #include <unistd.h>
++#endif
+ #include <stdio.h>
+ #include <string.h>
+ #include <fcntl.h>
+@@ -129,7 +137,9 @@
+ 
+ /* pc i/o defines               */
+ //#define O_RDONLY         0x0000     /* open for reading only        */
++#ifndef O_BINARY
+ #define O_BINARY         0x8000     /* file mode is binary          */
++#endif
+ 
+ /* vax i/o defines              */
+ #define RECORD_TYPE      "rfm=fix"  /* VAX fixed length output      */
+@@ -488,7 +498,7 @@ int get_files(int host)
+ //     printf("This is not a VAX variable length file.");
+       }
+ //       else printf("This is a VAX variable length file.");
+-      lseek(infile, (off_t) 0, SEEK_SET);        /* reposition to beginning of file */
++      lseek(infile, 0L, SEEK_SET);        /* reposition to beginning of file */
+     }
+   }
+ 

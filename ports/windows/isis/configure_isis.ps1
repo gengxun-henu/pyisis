@@ -87,6 +87,8 @@ $cmakeArgs = @(
     "-DCMAKE_INSTALL_PREFIX=$Prefix",
     "-DCMAKE_PREFIX_PATH=$($env:CONDA_PREFIX)",
     "-DbuildTests=$buildTestsValue",
+    "-DBUILD_CORE_TESTS=$buildTestsValue",
+    "-DbuildCoverage=OFF",
     "-Dpybindings=$pybindingsValue",
     "-DbuildDocs=$buildDocsValue"
 )
@@ -117,4 +119,16 @@ if ((Test-Path $blasLibrary) -and (Test-Path $lapackLibrary)) {
     )
 }
 
-Invoke-CheckedCommand cmake -S $CMakeSourceDir -B $BuildDir -G Ninja @cmakeArgs
+$originalIsisRoot = $env:ISISROOT
+try {
+    $env:ISISROOT = $CMakeSourceDir
+    Invoke-CheckedCommand cmake -S $CMakeSourceDir -B $BuildDir -G Ninja @cmakeArgs
+}
+finally {
+    if ($null -eq $originalIsisRoot) {
+        Remove-Item Env:\ISISROOT -ErrorAction SilentlyContinue
+    }
+    else {
+        $env:ISISROOT = $originalIsisRoot
+    }
+}

@@ -1,9 +1,9 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-CameraFactory,"Spice, Instruments, and Cameras",isis/src/base/objs/CameraFactory/CameraFactory.h,isis_pybind_standalone/src/bind_camera_factory.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+CameraFactory,"Spice, Instruments, and Cameras",isis/src/base/objs/CameraFactory/CameraFactory.h,isis_pybind_standalone/src/bind_camera_factory.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,ISIS 9/10兼容闭环：保留 Cube 驱动的 create/camera_version/init_plugin；ISIS 10 新增 CSM ISD 工厂接口因 csm::Model 生命周期与插件依赖暂不暴露
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,CameraFactory,isis_pybind.CameraFactory,Y,Python class symbol is exported; constructor exposure may be limited; 工厂类，静态创建接口较多；第五批已补基础单测与失败路径
-Static/Factory,static Camera *Create(Cube &cube),isis_pybind.CameraFactory.create,N,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
-Static/Factory,static int CameraVersion(Cube &cube),isis_pybind.CameraFactory.camera_version,N,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+Class Symbol,CameraFactory,isis_pybind.CameraFactory,Y,Python class symbol is exported; constructor exposure may be limited; 2026-07-24 双版本验证通过
+Static/Factory,static Camera *Create(Cube &cube),isis_pybind.CameraFactory.create,Y,2026-07-24 双版本 camera_unit_test 覆盖
+Static/Factory,static int CameraVersion(Cube &cube),isis_pybind.CameraFactory.camera_version,Y,2026-07-24 双版本 camera_unit_test 覆盖
 Static/Factory,static int CameraVersion(Pvl &lab),isis_pybind.CameraFactory.camera_version,N,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
-Static/Factory,static void initPlugin(),isis_pybind.CameraFactory.init_plugin,N,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
+Static/Factory,static void initPlugin(),isis_pybind.CameraFactory.init_plugin,Y,2026-07-24 双版本导出与导入验证通过

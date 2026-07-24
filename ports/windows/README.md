@@ -58,7 +58,7 @@ session with:
 ## Stage 1: ISIS Prefix
 
 ```powershell
-.\ports\windows\isis\fetch_isis_900.ps1
+.\ports\windows\isis\fetch_isis.ps1
 .\ports\windows\isis\apply_patches.ps1
 .\ports\windows\isis\configure_isis.ps1
 .\ports\windows\isis\build_isis.ps1
@@ -67,7 +67,7 @@ session with:
 .\ports\windows\isis\test_isis_apps_smoke.ps1
 ```
 
-`fetch_isis_900.ps1` defaults to a sparse Git checkout of the `9.0.0` tag
+`fetch_isis.ps1` defaults to a sparse Git checkout of the `9.0.0` tag
 because this keeps the source patchable and avoids GitHub archive resume issues
 seen on Windows. Use `-Method archive` when direct archive downloads are more
 reliable on a given network.

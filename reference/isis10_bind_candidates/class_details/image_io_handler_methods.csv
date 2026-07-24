@@ -1,14 +1,14 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ImageIoHandler,Image I/O,isis/src/base/objs/ImageIoHandler/ImageIoHandler.h,N/A,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,仅作为 GdalIoHandler 的抽象基类注册；不单独提供裸指针构造
+ImageIoHandler,Image I/O,isis/src/base/objs/ImageIoHandler/ImageIoHandler.h,src/bind_isis10.cpp,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,已注册抽象基类并暴露共享 I/O 方法；排除裸所有权、Qt mutex 和无操作基类缓存接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ImageIoHandler,isis_pybind.ImageIoHandler,N,主要是底层抽象和 Qt 指针生命周期接口，直接 Python 使用价值有限。
-Construction/Enum,ImageIoHandler(const QList<int> *virtualBandList),isis_pybind.ImageIoHandler(),N,抽象类；默认不暴露构造器
-Read/Write IO,virtual void read(Buffer &bufferToFill) const = 0,isis_pybind.ImageIoHandler.read,N,ISIS 10-only candidate; not bound yet
-Read/Write IO,virtual void write(const Buffer &bufferToWrite) = 0,isis_pybind.ImageIoHandler.write,N,ISIS 10-only candidate; not bound yet
-Mutation/Configuration,virtual void addCachingAlgorithm(CubeCachingAlgorithm *algorithm),isis_pybind.ImageIoHandler.add_caching_algorithm,N,需要明确所有权
-Mutation/Configuration,virtual void clearCache(bool blockForWriteCache = true) const,isis_pybind.ImageIoHandler.clear_cache,N,ISIS 10-only candidate; not bound yet
-Query,virtual BigInt getDataSize() const = 0,isis_pybind.ImageIoHandler.get_data_size,N,ISIS 10-only candidate; not bound yet
-Mutation/Configuration,void setVirtualBands(const QList<int> *virtualBandList),isis_pybind.ImageIoHandler.set_virtual_bands,N,建议改为 Python list 拷贝
-Mutation/Configuration,virtual void updateLabels(Pvl &labels) = 0,isis_pybind.ImageIoHandler.update_labels,N,ISIS 10-only candidate; not bound yet
-Public API,QMutex *dataFileMutex(),isis_pybind.ImageIoHandler.data_file_mutex,N,Qt 同步原语默认不绑定
+Class Symbol,ImageIoHandler,isis_pybind.ImageIoHandler,Y,ISIS 10-only binding; tested against the target ISIS 10 environment
+Construction/Enum,ImageIoHandler(const QList<int> *virtualBandList),isis_pybind.ImageIoHandler(),N,Intentionally excluded: abstract base is not directly constructible
+Read/Write IO,virtual void read(Buffer &bufferToFill) const = 0,isis_pybind.ImageIoHandler.read,Y,Bound as the inherited I/O contract
+Read/Write IO,virtual void write(const Buffer &bufferToWrite) = 0,isis_pybind.ImageIoHandler.write,Y,Bound as the inherited I/O contract
+Mutation/Configuration,virtual void addCachingAlgorithm(CubeCachingAlgorithm *algorithm),isis_pybind.ImageIoHandler.add_caching_algorithm,N,Intentionally excluded: raw algorithm ownership is unclear
+Mutation/Configuration,virtual void clearCache(bool blockForWriteCache = true) const,isis_pybind.ImageIoHandler.clear_cache,N,Intentionally excluded: base implementation is a no-op; derived clear_cache is exposed
+Query,virtual BigInt getDataSize() const = 0,isis_pybind.ImageIoHandler.get_data_size,Y,Bound
+Mutation/Configuration,void setVirtualBands(const QList<int> *virtualBandList),isis_pybind.ImageIoHandler.set_virtual_bands,Y,Bound through a copied Python list
+Mutation/Configuration,virtual void updateLabels(Pvl &labels) = 0,isis_pybind.ImageIoHandler.update_labels,Y,Bound
+Public API,QMutex *dataFileMutex(),isis_pybind.ImageIoHandler.data_file_mutex,N,Intentionally excluded: Qt synchronization primitive

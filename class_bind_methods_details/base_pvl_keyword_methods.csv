@@ -36,3 +36,8 @@ Static/Factory,"static bool readCleanKeyword(QString keyword, std::vector< QStri
 Static/Factory,"static QString readValue(QString &keyword, bool &quoteProblem)",isis_pybind.PvlKeyword.read_value,N,Qt 类型/信号槽较多
 Static/Factory,"static QString readValue(QString &keyword, bool &quoteProblem, const std::vector< std::pair<char, char> > & otherDelimiters)",isis_pybind.PvlKeyword.read_value,N,Qt 类型/信号槽较多
 Query,"void validateKeyword(PvlKeyword & pvlKwrd, QString psValueType="""", PvlKeyword* pvlKwrdRange=NULL)",isis_pybind.PvlKeyword.validate_keyword,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setJsonValue(nlohmann::json jsonobj),isis_pybind.PvlKeyword.set_json_value,Y,ISIS 10新增；Python对象经标准json序列化后传入
+Mutation/Configuration,void setJsonArrayValue(nlohmann::json jsonobj),isis_pybind.PvlKeyword.set_json_array_value,Y,ISIS 10新增数组接口
+Mutation/Configuration,void addJsonValue(nlohmann::json jsonobj),isis_pybind.PvlKeyword.add_json_value,Y,ISIS 10新增
+Mutation/Configuration,void addJsonArrayValue(nlohmann::json jsonobj),isis_pybind.PvlKeyword.add_json_array_value,Y,ISIS 10新增数组接口
+Public API,nlohmann::json toJson(),isis_pybind.PvlKeyword.to_json,Y,ISIS 10新增；返回Python原生list/dict

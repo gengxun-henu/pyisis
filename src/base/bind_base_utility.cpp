@@ -29,6 +29,7 @@
  * Updated: 2026-04-11  Geng Xun fixed PolygonTools/GSLUtility bindings to match the actual ISIS 9.0.0 public API and singleton lifetime rules.
  * Updated: 2026-04-11  Geng Xun exported PolygonTools as a real Python utility class while preserving module-level helper aliases for backward compatibility.
  * Updated: 2026-04-14  Geng Xun added EndianSwapper export_float, swap_uint32, and swap_long_long methods.
+ * Updated: 2026-07-24  Geng Xun exposed the ISIS 10-only ALE version query.
  * Purpose: Expose CollectorMap, Column, EndianSwapper, Environment, ID, IString, LineEquation, Message helpers, Pixel, Plugin, Resource, and TextFile utility classes to Python via pybind11.
  */
 
@@ -131,7 +132,8 @@ class PluginWrapper {
 void bind_base_utility(py::module_ &m) {
      using CollectorMapIntString = Isis::CollectorMap<int, QString>;
 
-     py::class_<Isis::Environment>(m, "Environment")
+     auto environment = py::class_<Isis::Environment>(m, "Environment");
+     environment
                .def_static(
                          "user_name",
                          []() {
@@ -161,6 +163,14 @@ void bind_base_utility(py::module_ &m) {
                          py::arg("variable"),
                          py::arg("default_value") = "",
                          "Get an environment variable with an optional default value");
+#ifdef PYISIS_ISIS10_API
+     environment.def_static(
+               "ale_version",
+               []() {
+                    return qStringToStdString(Isis::Environment::aleVersion());
+               },
+               "Get the ALE version string from $ISISROOT/ale_version.txt");
+#endif
 
   // Added: 2026-04-09 - bind a stable Python-facing CollectorMap specialization.
   py::class_<CollectorMapIntString> collector_map(m, "CollectorMap");
@@ -1366,5 +1376,4 @@ void bind_base_utility(py::module_ &m) {
         []() { return qStringToStdString(Isis::PolygonTools::GMLSchema()); },
         "Return the GML schema string for polygons.");
 }
-
 

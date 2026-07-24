@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Blob,Low Level Cube I/O,reference/upstream_isis/src/base/objs/Blob/Blob.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,基础二进制数据块类；后续绑定需处理裸缓冲区与流 IO 生命周期
+Blob,Low Level Cube I/O,reference/upstream_isis/src/base/objs/Blob/Blob.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 9/10兼容闭环；稳定文件与bytes接口共享，ISIS 10新增安全只读元数据按版本暴露，GDAL裸指针和C++流接口保留为排除项
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Blob,isis_pybind.Blob,Y,2026-04-08 已在 src/bind_low_level_cube_io.cpp 注册 Blob 类符号
@@ -12,13 +12,17 @@ Construction/Enum,virtual ~Blob(),isis_pybind.Blob,Y,2026-04-08 Python 生命周
 Public API,"Blob &operator=(const Blob &other)",isis_pybind.Blob.__copy__,Y,2026-04-08 已通过 copy/deepcopy 语义覆盖赋值式复制
 Public API,QString Type() const,isis_pybind.Blob.type,Y,2026-04-08 已暴露 blob 类型查询
 Public API,QString Name() const,isis_pybind.Blob.name,Y,2026-04-08 已暴露 blob 名称查询
+Public API,QString Key() const,isis_pybind.Blob.key,Y,ISIS 10新增只读元数据；ISIS 9不导出
+Public API,int StartByte() const,isis_pybind.Blob.start_byte,Y,ISIS 10新增只读元数据；ISIS 9不导出
 Public API,int Size() const,isis_pybind.Blob.size,Y,2026-04-08 已暴露字节数查询
 Public API,"PvlObject &Label()",isis_pybind.Blob.label,Y,2026-04-08 已按 reference_internal 返回标签对象引用
 Public API,"void Read(const QString &file, const std::vector<PvlKeyword> keywords = std::vector<PvlKeyword>())",isis_pybind.Blob.read,Y,2026-04-08 已暴露稳定的按文件读取路径
 Public API,"void Read(const QString &file, const Pvl &pvlLabels, const std::vector<PvlKeyword> keywords = std::vector<PvlKeyword>())",isis_pybind.Blob.read,Y,2026-04-08 已绑定外部标签重载；当前 focused 先覆盖稳定 file-only 读取路径
 Public API,"virtual void Read(const Pvl &pvl, std::istream &is, const std::vector<PvlKeyword> keywords = std::vector<PvlKeyword>())",isis_pybind.Blob.read,N,2026-04-08 暂未暴露流读取；需额外设计 Python 侧流适配
 Public API,"void Write(const QString &file)",isis_pybind.Blob.write,Y,2026-04-08 已暴露按文件写入路径
-Public API,"void Write(Pvl &pvl, std::fstream &stm, const QString &detachedFileName = \"\", bool overwrite = true)",isis_pybind.Blob.write,N,2026-04-08 暂未暴露流写入；需额外设计 Python 侧 fstream 适配
+Public API,"void Write(Pvl &pvl, std::fstream &stm [, const QString &detachedFileName, bool overwrite])",isis_pybind.Blob.write,N,ISIS 10移除detachedFileName/overwrite参数；两版均需额外Python流适配，当前不暴露
+Public API,void WriteGdal(std::string &json),isis_pybind.Blob.write_gdal,N,ISIS 10新增；可变C++字符串输出协议尚无稳定Python契约
+Public API,void ReadGdal(GDALDataset *dataset),isis_pybind.Blob.read_gdal,N,ISIS 10新增；不直接向Python暴露GDALDataset裸指针
 Public API,"char *getBuffer()",isis_pybind.Blob.get_buffer,Y,2026-04-08 已适配为 bytes 返回，避免暴露裸指针
 Public API,"void setData(const char *buffer, int nbytes)",isis_pybind.Blob.set_data,Y,2026-04-08 已适配为 bytes 输入复制
 Public API,"void takeData(char *buffer, int nbytes)",isis_pybind.Blob.take_data,Y,2026-04-08 已适配为 bytes 输入并在 C++ 侧接管新分配缓冲区所有权

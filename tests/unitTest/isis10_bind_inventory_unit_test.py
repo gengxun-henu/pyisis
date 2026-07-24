@@ -2,8 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-07-23
-Last Modified: 2026-07-23
+Last Modified: 2026-07-24
 Updated: 2026-07-23  Geng Xun added source-diff and generated-inventory coverage.
+Updated: 2026-07-24  Geng Xun added installed-header discovery and classification-gate coverage.
+Updated: 2026-07-24  Geng Xun covered C++ .hpp discovery for the official ISIS 10 prefix.
 """
 
 from __future__ import annotations
@@ -31,10 +33,10 @@ class Isis10BindInventoryUnitTest(unittest.TestCase):
     def setUp(self) -> None:
         self.isis9_root = PROJECT_ROOT / "reference" / "upstream_isis" / "9.0.0"
         self.isis10_root = PROJECT_ROOT / "reference" / "upstream_isis" / "10.0.0"
-        if not self.isis9_root.is_dir() or not self.isis10_root.is_dir():
-            self.skipTest("versioned upstream ISIS source trees are not restored")
 
     def test_candidates_exist_only_at_the_isis10_source_path(self) -> None:
+        if not self.isis9_root.is_dir() or not self.isis10_root.is_dir():
+            self.skipTest("versioned upstream ISIS source trees are not restored")
         inventory._validate_candidates(self.isis9_root, self.isis10_root)
 
     def test_inventory_covers_high_value_new_isis10_apis(self) -> None:
@@ -53,6 +55,59 @@ class Isis10BindInventoryUnitTest(unittest.TestCase):
             }.issubset(classes)
         )
         self.assertEqual({"csv2table", "ocams2isis", "eisstitch"}, functions)
+
+    def test_installed_header_diff_is_discovered_without_a_curated_seed(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            isis9_prefix = root / "isis9"
+            isis10_prefix = root / "isis10"
+            isis9_headers = isis9_prefix / "include" / "isis"
+            isis10_headers = isis10_prefix / "include" / "isis"
+            isis9_headers.mkdir(parents=True)
+            isis10_headers.mkdir(parents=True)
+            for name in ("Common.h", "OnlyNine.h"):
+                (isis9_headers / name).touch()
+            for name in ("Common.h", "NewClass.h", "NewFunction.h", "NewInternal.hpp"):
+                (isis10_headers / name).touch()
+
+            self.assertEqual(
+                ["NewClass.h", "NewFunction.h", "NewInternal.hpp"],
+                inventory._discover_new_installed_headers(
+                    isis9_prefix, isis10_prefix
+                ),
+            )
+
+    def test_classification_gate_rejects_unclassified_discovered_headers(self) -> None:
+        classifications = {
+            "Known.h": inventory.HeaderClassification(
+                "class", "candidate", "Known", "public class"
+            )
+        }
+        with self.assertRaisesRegex(ValueError, "Unclassified ISIS 10 headers: New.h"):
+            inventory._validate_header_classifications(
+                ["Known.h", "New.h"], classifications
+            )
+
+    def test_raw_header_diff_records_every_discovered_header(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir)
+            classifications = {
+                "Class.h": inventory.HeaderClassification(
+                    "class", "candidate", "Class", "public class"
+                ),
+                "Internal.h": inventory.HeaderClassification(
+                    "internal", "excluded", "", "third-party implementation"
+                ),
+            }
+            inventory._write_raw_header_diff(
+                output_dir, ["Class.h", "Internal.h"], classifications
+            )
+            with (output_dir / "raw_new_headers.csv").open(
+                encoding="utf-8", newline=""
+            ) as stream:
+                rows = list(csv.DictReader(stream))
+            self.assertEqual(["Class.h", "Internal.h"], [row["Header"] for row in rows])
+            self.assertEqual(["candidate", "excluded"], [row["Disposition"] for row in rows])
 
     def test_generated_inventory_matches_isis9_ledger_shape(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -87,7 +142,13 @@ class Isis10BindInventoryUnitTest(unittest.TestCase):
                 rows[0],
             )
             self.assertIn(
-                ["Class Symbol", "IProj", "isis_pybind.IProj", "N", inventory.CLASS_CANDIDATES[0].reason],
+                [
+                    "Class Symbol",
+                    "IProj",
+                    "isis_pybind.IProj",
+                    "Y",
+                    "ISIS 10-only binding; tested against the target ISIS 10 environment",
+                ],
                 rows,
             )
 

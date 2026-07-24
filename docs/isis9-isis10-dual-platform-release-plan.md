@@ -1,9 +1,11 @@
 # ISIS 9 / ISIS 10 双版本绑定与跨平台发布规划
 
-> 状态：Linux 双版本源码兼容基线已在本机验证；CI、分版安装包和
-> Windows ISIS 10 仍待后续阶段实施。
+> 状态：双版本绑定兼容风险集合已57/57关闭，6个ISIS 10专属类已完成；
+> Linux ISIS 9/10 与 Windows ISIS 9 的既有CI构建和干净安装已通过。
+> Windows ISIS 10仍需在GitHub Windows runner重新验证，最近已知门槛位于
+> ISIS prefix的`mgs.dll`/SpiceQL链接阶段。
 >
-> 更新日期：2026-07-23。本规划不表示 ISIS 10 已获得稳定支持；每条产品线
+> 更新日期：2026-07-24。本规划不表示 ISIS 10 已获得稳定支持；每条产品线
 > 仍需分别通过对应验收门槛。
 
 ## 1. 目标
@@ -64,6 +66,9 @@ manylinux 构建与 `auditwheel` 修复，Windows wheel 使用 GitHub 托管 run
 - [USGS Astrogeology ISIS conda package](https://anaconda.org/usgs-astrogeology/isis)
 
 ## 4. 总体架构
+
+详细的384个当前绑定头文件影响范围、57个风险头文件闭环结果见
+`docs/isis9-isis10-binding-compatibility-plan.md`。
 
 ### 4.1 单一主线、共享源码
 
@@ -166,20 +171,21 @@ ISIS 9 与 ISIS 10 分别从 USGS channel 安装精确版本，随后校验：
 
 Linux 开发环境与最终 manylinux wheel 构建环境分开：开发环境用于日常编译测试，manylinux 容器用于正式发行兼容性验证。
 
-截至 2026-07-23，本机已有两套可直接用于对比的开发环境：
+截至 2026-07-24，本机已有两套可直接用于对比的开发环境：
 
 - `asp360_new`：Python 3.12.2、ISIS 9.0.0 `h1f94ec8_0`
   (`usgs-astrogeology`)；
-- `asp370`：Python 3.13.14、ISIS 10.0.0 `asp_4`
-  (`nasa-ames-stereo-pipeline`)。
+- `asp370`：Python 3.13.14、ISIS 10.0.0 `h1f94ec8_1`
+  (`usgs-astrogeology`)；为保持该二进制所需的
+  `libcsmapi.so.3` ABI，固定 `csm 3.0.3.3`。
 
 切换产品线时必须同时把 `ISISROOT` 指向对应 conda prefix，并设置匹配的
 `ISISDATA` 和 binding build 目录。只更换 Python 解释器会继承 shell 中
 另一 ISIS 主版本的 plugin、ALE 和偏好路径，形成运行时混用。
 
-USGS channel 同期可解析到的 ISIS 10.0.0 `h1f94ec8_1` 也依赖 CPython
-3.13。因此第一轮 ISIS 10 Linux 编译验证直接使用 `asp370`，而 CPython
-3.12 wheel 不能在未解决 runtime prefix 与 Python ABI 解耦前直接承诺。
+USGS ISIS 10.0.0 `h1f94ec8_1` 依赖 CPython 3.13。因此第一轮 ISIS 10
+Linux 编译验证直接使用 `asp370`，而 CPython 3.12 wheel 不能在未解决
+runtime prefix 与 Python ABI 解耦前直接承诺。
 可选路线是构建独立 ISIS 10 runtime prefix，或先把 ISIS 10 wheel 产品线
 调整到 CPython 3.13，二者需通过实际构建结果再决定。
 
@@ -246,6 +252,10 @@ conda 侧建议使用两个明确包名或 build variant：
 两者分别精确依赖 `isis >=9,<10` 和 `isis >=10,<11`，并增加互斥约束。正式 recipe 需要按 Linux/Windows 分别验证；Windows 若仍使用自建 ISIS prefix，则可先通过内部 channel 或 GitHub Release 提供环境包，不虚构官方 Windows ISIS 依赖。
 
 ## 7. CI 与发布矩阵
+
+当前双版本核心绑定发布完成后的 Windows 行星摄影测量 APP 扩展，单独按
+`docs/windows-planetary-photogrammetry-app-roadmap.md` 推进。该工作不阻塞
+本规划的首个 ISIS 9/10 核心绑定 Release。
 
 ### 7.1 最小矩阵
 
@@ -470,7 +480,7 @@ Windows ISIS 10 移植适合使用独立 worktree 和功能分支，确认可行
 
 ## 14. 当前进度与下一项实施工作
 
-2026-07-23 已在隔离分支和 worktree 完成：
+截至2026-07-24，已在隔离分支和worktree完成：
 
 1. 锁定 ISIS 9.0.0 与 ISIS 10.0.0 的源码 commit，并生成当前绑定头文件
    差异报告。
@@ -485,13 +495,17 @@ Windows ISIS 10 移植适合使用独立 worktree 和功能分支，确认可行
    Cube I/O 聚焦测试。
 6. 建立独立的 ISIS 10 新增类/函数候选目录，不把工作限制为迁移 ISIS 9
    已绑定 API。
+7. 关闭当前conda矩阵57个风险头文件，并保持ISIS 9原有Python导出面。
+8. 完成6个ISIS 10专属类，共30个构造/方法入口。
+9. 当前Python导出差异为6个新增类、45个新增构造/方法入口、2个新增枚举值
+   和1个版本化方法；没有删除ISIS 9已有的类或方法。
+10. 发布/运行时配置测试66项通过；wheel基本测试在ISIS 9/10中各329项通过
+    （各1项既有expected failure），smoke均通过。
 
-下一环节建议拆成两个独立 PR，避免把兼容基线和新增能力耦合：
+下一环节：
 
-1. 先提交本轮双版本锁文件、审计工具、Linux 兼容层、候选目录和测试。
-2. 再建立 Linux 双版本 GitHub Actions 矩阵，并让日志明确输出 Python、
-   ISIS、Qt 和扩展产物路径。
-3. CI 稳定后，按候选目录先绑定 `IProj`，再绑定两项 Chandrayaan-2
-   camera；每一批分别在 ISIS 9/10 下验证公共导入面。
-4. Linux ISIS 10 稳定后，再进入 Windows ISIS 9 脚本参数化和 Windows
-   ISIS 10 实验性源码移植。
+1. 提交并推送当前双版本兼容与新增能力分支，通过PR合入`main`。
+2. 在`main`手动运行`wheels`工作流，先关闭Windows ISIS 10 prefix门槛。
+3. 四条构建和干净安装全部通过后，先选择`release_line=isis9`创建
+   ISIS 9 prerelease，再重新运行并选择`release_line=isis10`创建ISIS 10
+   prerelease。

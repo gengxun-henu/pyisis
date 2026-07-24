@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Pvl,Parsing,isis/src/base/objs/Pvl/Pvl.h,isis_pybind_standalone/src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+Pvl,Parsing,isis/src/base/objs/Pvl/Pvl.h,isis_pybind_standalone/src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 9/10兼容闭环；共有PVL接口保持共享，ISIS 10新增JSON/GDAL能力按版本暴露
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Pvl,isis_pybind.Pvl,Y,Python class symbol is exported
@@ -13,3 +13,6 @@ Public API,QString terminator() const { return m_terminator,isis_pybind.Pvl.term
 Mutation/Configuration,void setFormatTemplate(Isis::Pvl &temp),isis_pybind.Pvl.set_format_template,Y,2026-04-14 新增绑定；使用 keep_alive 保留外部模板对象生命周期
 Mutation/Configuration,void setFormatTemplate(const QString &filename),isis_pybind.Pvl.set_format_template_file,Y,2026-04-14 新增绑定；作为 Python 文件路径 helper 暴露
 Query,"void validatePvl(const Pvl & pPvl, Pvl & pPvlResults)",isis_pybind.Pvl.validate_pvl,Y,2026-04-14 新增绑定；返回验证结果 Pvl 而非 out-param；通过 Python-safe wrapper 将空模板关键字视为仅检查存在性并规避上游段错误路径
+Public API,"static PvlObject &readObject(PvlObject &pvlobj, nlohmann::ordered_json jdata)",isis_pybind.Pvl.read_object,N,ISIS 10新增递归实现helper；引用out-param与内部递归协议不作为用户级Python API
+Public API,nlohmann::ordered_json toJson(),isis_pybind.Pvl.to_json,Y,ISIS 10新增；通过标准库json转换为Python dict/list而非暴露C++ JSON类型
+Read/Write IO,void readGdal(const QString &file),isis_pybind.Pvl.read_gdal,Y,ISIS 10新增；以Python路径字符串暴露

@@ -1,11 +1,11 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-CubeAttribute,Low Level Cube I/O,reference/upstream_isis/src/base/objs/CubeAttribute/CubeAttribute.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已按 ISIS 真实使用方式暴露 `LabelAttachment`、`CubeAttributeInput` 与 `CubeAttributeOutput`；模板基类通过具体化类型完成覆盖
+CubeAttribute,Low Level Cube I/O,reference/upstream_isis/src/base/objs/CubeAttribute/CubeAttribute.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 9/10兼容闭环：模板基类通过具体化类型覆盖；External字符串转换跨版本稳定；ISIS 10新增能力按版本暴露
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,LabelAttachment,isis_pybind.LabelAttachment,Y,头文件级枚举已直接暴露
-Construction/Enum,"enum LabelAttachment { AttachedLabel, DetachedLabel, ExternalLabel }",isis_pybind.LabelAttachment,Y,标签附着方式枚举
+Construction/Enum,"enum LabelAttachment { AttachedLabel, DetachedLabel, ExternalLabel [, GdalLabel] }",isis_pybind.LabelAttachment,Y,前三项双版本共有；GdalLabel仅ISIS 10导出
 Public API,"QString LabelAttachmentName(LabelAttachment labelType)",isis_pybind.label_attachment_name,Y,头文件级辅助函数已按 snake_case 模块函数暴露
-Public API,"LabelAttachment LabelAttachmentEnumeration(const QString &labelType)",isis_pybind.label_attachment_enumeration,Y,字符串到枚举转换辅助函数已暴露
+Public API,"LabelAttachment LabelAttachmentEnumeration(const QString &labelType)",isis_pybind.label_attachment_enumeration,Y,绑定层修复ISIS 9对External大小写均解析失败的问题；Gdal仅ISIS 10可用
 Class Symbol,"CubeAttribute<ChildClass>",isis_pybind.CubeAttribute,Y,模板基类通过 `CubeAttributeInput` / `CubeAttributeOutput` 具体化后完成 Python 覆盖
 Construction/Enum,"CubeAttribute(QList<bool (ChildClass::*)(QString) const> testers)",isis_pybind.CubeAttribute,Y,由具体化的 `CubeAttributeInput()` / `CubeAttributeOutput()` 默认构造覆盖
 Construction/Enum,"CubeAttribute(QList<bool (ChildClass::*)(QString) const> testers, const FileName &fileName)",isis_pybind.CubeAttribute,Y,由 `CubeAttributeInput(file_name)` / `CubeAttributeOutput(file_name)` 构造覆盖
@@ -16,3 +16,4 @@ Public API,"void addAttributes(const FileName &fileNameWithAtts)",isis_pybind.Cu
 Public API,"void addAttributes(const char *attributesString)",isis_pybind.CubeAttribute.addAttributes,Y,已通过 Python `str` 重载覆盖
 Public API,"void addAttributes(const QString &attributesString)",isis_pybind.CubeAttribute.addAttributes,Y,已通过 Python `str` 重载覆盖
 Public API,"void setAttributes(const FileName &fileName)",isis_pybind.CubeAttribute.setAttributes,Y,已在 `CubeAttributeInput` / `CubeAttributeOutput` 上暴露 `set_attributes(...)`
+Public API,bool CubeAttributeOutput::propagateFileFormat() const,isis_pybind.CubeAttributeOutput.propagate_file_format,Y,ISIS 10新增方法；ISIS 9不导出

@@ -7,6 +7,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added UniversalGroundMap image/ground conversion helpers and camera/projection accessors
+// Updated: 2026-07-24  Geng Xun exposed ISIS 10 local-radius and backend-priority controls.
 // Purpose: Expose Isis::UniversalGroundMap image/ground conversion helpers.
 
 #include <string>
@@ -56,6 +57,20 @@ void bind_base_ground_map(py::module_ &m) {
       .def("universal_latitude", &Isis::UniversalGroundMap::UniversalLatitude)
       .def("universal_longitude", &Isis::UniversalGroundMap::UniversalLongitude)
       .def("resolution", &Isis::UniversalGroundMap::Resolution)
+#ifdef PYISIS_ISIS10_API
+      .def("local_radius", &Isis::UniversalGroundMap::LocalRadius)
+      .def("current_priority",
+           [](Isis::UniversalGroundMap &self) {
+             return static_cast<Isis::UniversalGroundMap::CameraPriority>(
+                 self.currentPriority());
+           })
+      .def("set_priority",
+           [](Isis::UniversalGroundMap &self,
+              Isis::UniversalGroundMap::CameraPriority priority) {
+             self.setPriority(static_cast<int>(priority));
+           },
+           py::arg("priority"))
+#endif
       .def("ground_range",
            [](Isis::UniversalGroundMap &self, Isis::Cube *cube, bool allow_estimation) -> py::object {
              Isis::Latitude min_lat;

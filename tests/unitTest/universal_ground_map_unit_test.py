@@ -3,8 +3,9 @@ Unit tests for ISIS UniversalGroundMap bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-25
+Last Modified: 2026-07-24
 Updated: 2026-03-25  Geng Xun added camera-backed and projection-backed UniversalGroundMap round-trip coverage.
+Updated: 2026-07-24  Geng Xun added ISIS 10 local-radius and backend-priority coverage.
 """
 
 import math
@@ -54,6 +55,20 @@ class UniversalGroundMapUnitTest(unittest.TestCase):
         self.assertTrue(surface_point.valid())
         self.assertTrue(ground_map.set_ground(surface_point))
 
+        if hasattr(ground_map, "current_priority"):
+            self.assertEqual(
+                ground_map.current_priority(),
+                ip.UniversalGroundMap.CameraPriority.CameraFirst,
+            )
+            self.assertGreater(ground_map.local_radius(), 0.0)
+            ground_map.set_priority(
+                ip.UniversalGroundMap.CameraPriority.CameraFirst
+            )
+            self.assertEqual(
+                ground_map.current_priority(),
+                ip.UniversalGroundMap.CameraPriority.CameraFirst,
+            )
+
     def test_projection_backed_ground_map_round_trip(self):
         cube = self.open_cube(PROJECTED_CUBE)
         ground_map = ip.UniversalGroundMap(cube)
@@ -72,6 +87,20 @@ class UniversalGroundMapUnitTest(unittest.TestCase):
         self.assertTrue(math.isfinite(latitude))
         self.assertTrue(math.isfinite(longitude))
         self.assertGreater(ground_map.resolution(), 0.0)
+
+        if hasattr(ground_map, "current_priority"):
+            self.assertEqual(
+                ground_map.current_priority(),
+                ip.UniversalGroundMap.CameraPriority.ProjectionFirst,
+            )
+            self.assertGreater(ground_map.local_radius(), 0.0)
+            ground_map.set_priority(
+                ip.UniversalGroundMap.CameraPriority.ProjectionFirst
+            )
+            self.assertEqual(
+                ground_map.current_priority(),
+                ip.UniversalGroundMap.CameraPriority.ProjectionFirst,
+            )
 
         self.assertTrue(ground_map.set_universal_ground(latitude, longitude))
         self.assertAlmostEqual(ground_map.sample(), sample, places=6)

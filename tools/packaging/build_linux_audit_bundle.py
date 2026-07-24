@@ -33,14 +33,17 @@ def _copy_member(
     records.append((member.filename, f"sha256={encoded}", str(size)))
 
 
-def _metadata_without_runtime_dependency(payload: bytes) -> bytes:
+def _metadata_without_runtime_dependency(
+    payload: bytes,
+    runtime_dependency: str,
+) -> bytes:
     lines = payload.decode("utf-8").splitlines(keepends=True)
     return "".join(
         line
         for line in lines
         if not (
             line.lower().startswith("requires-dist:")
-            and RUNTIME_DEPENDENCY in line.lower()
+            and runtime_dependency.lower() in line.lower()
         )
     ).encode("utf-8")
 
@@ -58,7 +61,12 @@ def _write_payload(
     records.append((member.filename, f"sha256={encoded}", str(len(payload))))
 
 
-def build_audit_bundle(extension_wheel: Path, runtime_wheel: Path, output: Path) -> Path:
+def build_audit_bundle(
+    extension_wheel: Path,
+    runtime_wheel: Path,
+    output: Path,
+    runtime_dependency: str = RUNTIME_DEPENDENCY,
+) -> Path:
     """Build a valid main wheel containing the Linux runtime payload."""
 
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -75,7 +83,10 @@ def build_audit_bundle(extension_wheel: Path, runtime_wheel: Path, output: Path)
                     _write_payload(
                         target,
                         member,
-                        _metadata_without_runtime_dependency(extension.read(member)),
+                        _metadata_without_runtime_dependency(
+                            extension.read(member),
+                            runtime_dependency,
+                        ),
                         records,
                     )
                 else:
@@ -108,12 +119,14 @@ def main() -> int:
     parser.add_argument("--extension-wheel", required=True, type=Path)
     parser.add_argument("--runtime-wheel", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--runtime-dependency", default=RUNTIME_DEPENDENCY)
     args = parser.parse_args()
     print(
         build_audit_bundle(
             args.extension_wheel.resolve(),
             args.runtime_wheel.resolve(),
             args.output.resolve(),
+            args.runtime_dependency,
         )
     )
     return 0

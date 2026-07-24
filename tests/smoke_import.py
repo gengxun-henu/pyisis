@@ -108,6 +108,12 @@ def temporary_raw_input_file(name="example.raw"):
 
 
 def test_basic_symbols_present():
+    assert (
+        hasattr(ip, "OsirisRexOcamsOpenCVDistortionMap")
+        == (ip.__isis_major__ >= 10)
+    )
+    assert hasattr(ip, "ImageIoHandler") == (ip.__isis_major__ >= 10)
+    assert hasattr(ip, "GdalIoHandler") == (ip.__isis_major__ >= 10)
     assert hasattr(ip, "CollectorMap")
     assert hasattr(ip, "CubeAttributeInput")
     assert hasattr(ip, "CubeAttributeOutput")

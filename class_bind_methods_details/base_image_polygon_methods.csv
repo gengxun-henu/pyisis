@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ImagePolygon,Pattern Matching,isis/src/base/objs/ImagePolygon/ImagePolygon.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+ImagePolygon,Pattern Matching,isis/src/base/objs/ImagePolygon/ImagePolygon.h,src/base/bind_base_image_polygon.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 9/10兼容闭环；头文件声明一致，WKT和Blob边界保持共享
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,ImagePolygon,isis_pybind.ImagePolygon,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露

@@ -1,0 +1,295 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7bdc2ec..9124b7b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -151,4 +151,4 @@ target_include_directories(SpiceQL
+                             PRIVATE
+                             ${CMAKE_CURRENT_SOURCE_DIR}/submodules/BTree/include/
+-                            cereal
++                            ${CEREAL_INCLUDE_DIRS}
+                             ${CSPICE_INCLUDE_DIRS}
+@@ -157,7 +157,23 @@ target_include_directories(SpiceQL
++  set_target_properties(SpiceQL
++                        PROPERTIES
++                        WINDOWS_EXPORT_ALL_SYMBOLS ON)
++
++  target_compile_options(SpiceQL
++                         PRIVATE
++                         $<$<CXX_COMPILER_ID:MSVC>:/FImsvc_compat.h>
++                         )
++
++  target_compile_definitions(SpiceQL
++                             PRIVATE
++                             $<$<CXX_COMPILER_ID:MSVC>:NOMINMAX>
++                             $<$<CXX_COMPILER_ID:MSVC>:RESTINCURL_ENABLE_ASYNC=0>
++                             )
++
+   target_link_libraries(SpiceQL
+                         PUBLIC
+                         fmt::fmt-header-only
+                         nlohmann_json::nlohmann_json
++                        ghc_filesystem
+                         PRIVATE
+                         CSPICE::cspice
+                         spdlog::spdlog_header_only
+diff --git a/SpiceQL/include/api.h b/SpiceQL/include/api.h
+index 2185db4..42e7af1 100644
+--- a/SpiceQL/include/api.h
++++ b/SpiceQL/include/api.h
+@@ -7 +7,11 @@
++#if defined(_WIN32)
++#  if defined(SpiceQL_EXPORTS)
++#    define SPICEQL_API __declspec(dllexport)
++#  else
++#    define SPICEQL_API __declspec(dllimport)
++#  endif
++#else
++#  define SPICEQL_API
++#endif
++
+ namespace SpiceQL {
+@@ -261 +271 @@ namespace SpiceQL {
+-    std::pair<double, nlohmann::json> strSclkToEt(
++    SPICEQL_API std::pair<double, nlohmann::json> strSclkToEt(
+diff --git a/SpiceQL/src/config.cpp b/SpiceQL/src/config.cpp
+index 1565d50..a83aa4d 100644
+--- a/SpiceQL/src/config.cpp
++++ b/SpiceQL/src/config.cpp
+@@ -143 +143 @@ namespace SpiceQL {
+-      if (fs::exists((string)fsDataPath + kernelPath.to_string())) {
++      if (fs::exists(fsDataPath.string() + kernelPath.to_string())) {
+@@ -148 +148 @@ namespace SpiceQL {
+-        if (fs::exists((string)fsDataPath + kernelPath.to_string())) {
++        if (fs::exists(fsDataPath.string() + kernelPath.to_string())) {
+@@ -153 +153 @@ namespace SpiceQL {
+-      vector<vector<string>> res = getPathsFromRegex(fsDataPath, jsonArrayToVector(eval_json[json_pointer]));
++      vector<vector<string>> res = getPathsFromRegex(fsDataPath.string(), jsonArrayToVector(eval_json[json_pointer]));
+diff --git a/SpiceQL/include/msvc_compat.h b/SpiceQL/include/msvc_compat.h
+new file mode 100644
+index 0000000..43f2869
+--- /dev/null
++++ b/SpiceQL/include/msvc_compat.h
+@@ -0,0 +1,12 @@
++#pragma once
++
++#ifdef _MSC_VER
++#include <memory_resource>
++namespace stdpmr = std::pmr;
++
++extern "C" {
++__int64 __cdecl _get_osfhandle(int file_descriptor);
++int __cdecl _isatty(int file_descriptor);
++__int64 __cdecl _filelengthi64(int file_descriptor);
++}
++#endif
+diff --git a/SpiceQL/include/memo.h b/SpiceQL/include/memo.h
+index 0fe5435..4120ecb 100644
+--- a/SpiceQL/include/memo.h
++++ b/SpiceQL/include/memo.h
+@@ -108 +108 @@ namespace Memo {
+-                cache_dir = fs::temp_directory_path() / tempname / "spiceql_cache"; 
++                cache_dir = (fs::temp_directory_path() / tempname / "spiceql_cache").string();
+diff --git a/SpiceQL/include/restincurl.h b/SpiceQL/include/restincurl.h
+index 6818b03..1e05357 100644
+--- a/SpiceQL/include/restincurl.h
++++ b/SpiceQL/include/restincurl.h
+@@ -50,5 +50,12 @@
++#ifdef _WIN32
++#include <winsock2.h>
++#ifdef DELETE
++#undef DELETE
++#endif
++#else
+ #include <sys/select.h>
+ #include <sys/time.h>
++#include <unistd.h>
++#endif
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#include <unistd.h>
+diff --git a/SpiceQL/src/api.cpp b/SpiceQL/src/api.cpp
+index 5dd1d04..5448984 100644
+--- a/SpiceQL/src/api.cpp
++++ b/SpiceQL/src/api.cpp
+@@ -5,3 +5,6 @@
+ #include <SpiceUsr.h>
+ #include <SpiceZfc.h>
+-#include <SpiceZmc.h>
++#include <SpiceZmc.h>
++#ifdef _WIN32
++#undef VOID
++#endif
+@@ -134,2 +137,4 @@ namespace SpiceQL {
++#if RESTINCURL_ENABLE_ASYNC
+         client.CloseWhenFinished();
+         client.WaitForFinish();
++#endif
+@@ -1199,3 +1204,3 @@ namespace SpiceQL {
+-        int FILESIZ = 128;
+-        int TYPESIZ = 32;
+-        int SOURCESIZ = 128;
++        constexpr int FILESIZ = 128;
++        constexpr int TYPESIZ = 32;
++        constexpr int SOURCESIZ = 128;
+diff --git a/SpiceQL/src/inventory.cpp b/SpiceQL/src/inventory.cpp
+index ffa969f..2cc147f 100644
+--- a/SpiceQL/src/inventory.cpp
++++ b/SpiceQL/src/inventory.cpp
+@@ -80 +80 @@ namespace SpiceQL {
+-                string key = p.parent_path();
++                string key = p.parent_path().string();
+@@ -89 +89 @@ namespace SpiceQL {
+-                        kernel_type = part; 
++                        kernel_type = part.string();
+@@ -91 +91 @@ namespace SpiceQL {
+-                        quality = part; 
++                        quality = part.string();
+@@ -94 +94 @@ namespace SpiceQL {
+-                string regex = p.filename();
++                string regex = p.filename().string();
+@@ -123 +123 @@ namespace SpiceQL {
+-                    temp = fs::path(f).filename();
++                    temp = fs::path(f).filename().string();
+@@ -154 +154 @@ namespace SpiceQL {
+-            static string db_path = fs::path(getCacheDir()) / DB_HDF_FILE;
++            static string db_path = (fs::path(getCacheDir()) / DB_HDF_FILE).string();
+diff --git a/SpiceQL/src/inventoryimpl.cpp b/SpiceQL/src/inventoryimpl.cpp
+index 46f1a28..ab44cd7 100644
+--- a/SpiceQL/src/inventoryimpl.cpp
++++ b/SpiceQL/src/inventoryimpl.cpp
+@@ -67 +67 @@ namespace SpiceQL {
+-      CACHE_DIRECTORY = fs::temp_directory_path() / tempname / "spiceql_cache"; 
++      CACHE_DIRECTORY = (fs::temp_directory_path() / tempname / "spiceql_cache").string();
+@@ -119 +119 @@ namespace SpiceQL {
+-      static std::string db_path = fs::path(getCacheDir()) / DB_HDF_FILE;
++      static std::string db_path = (fs::path(getCacheDir()) / DB_HDF_FILE).string();
+@@ -165 +165 @@ namespace SpiceQL {
+-          kernel_times->file_paths.push_back(relative_path_kernel);
++          kernel_times->file_paths.push_back(relative_path_kernel.generic_string());
+@@ -267 +267 @@ namespace SpiceQL {
+-                  kernel_vec.push_back(relative_path_kernel); 
++                  kernel_vec.push_back(relative_path_kernel.generic_string());
+@@ -286 +286 @@ namespace SpiceQL {
+-    string hdf_file = fs::path(getCacheDir()) / DB_HDF_FILE;
++    string hdf_file = (fs::path(getCacheDir()) / DB_HDF_FILE).string();
+@@ -461 +461 @@ namespace SpiceQL {
+-                  limitedKernels.push_back(data_dir / final_time_kernels[i]);
++                  limitedKernels.push_back((data_dir / final_time_kernels[i]).string());
+@@ -473 +473 @@ namespace SpiceQL {
+-                  allKernels.push_back(data_dir / e);
++                  allKernels.push_back((data_dir / e).string());
+@@ -493 +493 @@ namespace SpiceQL {
+-            for(auto &e : ks) e =  data_dir / e; // re-add the data dir 
++            for(auto &e : ks) e = (data_dir / e).string(); // re-add the data dir
+@@ -503 +503 @@ namespace SpiceQL {
+-              for(auto &e : ks) e = data_dir / e; // re-add the data dir
++              for(auto &e : ks) e = (data_dir / e).string(); // re-add the data dir
+@@ -519 +519 @@ namespace SpiceQL {
+-    string hdf_file = db_root / DB_HDF_FILE;
++    string hdf_file = (db_root / DB_HDF_FILE).string();
+diff --git a/SpiceQL/src/utils.cpp b/SpiceQL/src/utils.cpp
+index 0d7ebb0..1931a1c 100644
+--- a/SpiceQL/src/utils.cpp
++++ b/SpiceQL/src/utils.cpp
+@@ -13,3 +13,6 @@
+ #include <SpiceUsr.h>
+ #include <SpiceZfc.h>
+-#include <SpiceZmc.h>
++#include <SpiceZmc.h>
++#ifdef _WIN32
++#undef VOID
++#endif
+@@ -65 +68 @@ template <> struct fmt::formatter<fs::path> {
+-        p.c_str());
++        p.string());
+@@ -72,4 +76,4 @@ namespace SpiceQL {
+   string gen_random(const int len) {
+       size_t seed = 0;
+-      seed = Memo::hash_combine(seed, clock(), time(NULL), getpid());
++      seed = Memo::hash_combine(seed, clock(), time(NULL), _getpid());
+       srand(seed);
+@@ -141 +144 @@ namespace SpiceQL {
+-        temp = fs::path(f).filename();
++        temp = fs::path(f).filename().string();
+@@ -260 +263 @@ namespace SpiceQL {
+-    frmchg_((int *) &refFrame, (int *) &toFrame, &et, (doublereal *) stateCJ);
++    frmchg_((integer *) &refFrame, (integer *) &toFrame, &et, (doublereal *) stateCJ);
+@@ -278 +281 @@ namespace SpiceQL {
+-      refchg_((int *) &refFrame, (int *) &toFrame, &et, (doublereal *) CJ_spice);
++      refchg_((integer *) &refFrame, (integer *) &toFrame, &et, (doublereal *) CJ_spice);
+@@ -674 +677 @@ namespace SpiceQL {
+-          paths.emplace_back(i->path());
++          paths.emplace_back(i->path().string());
+@@ -692 +695 @@ namespace SpiceQL {
+-      if (regex_search(f.c_str(), basic_regex(reg, regex_constants::optimize|regex_constants::ECMAScript)) && string(fs::path(f).filename()).at(0) != '.') {
++      if (regex_search(f.c_str(), basic_regex(reg, regex_constants::optimize|regex_constants::ECMAScript)) && fs::path(f).filename().string().at(0) != '.') {
+@@ -990 +993 @@ namespace SpiceQL {
+-         return spiceDataDir;
++         return spiceDataDir.string();
+@@ -994 +997 @@ namespace SpiceQL {
+-        return aleDataDir;
++        return aleDataDir.string();
+@@ -998 +1001 @@ namespace SpiceQL {
+-        return isisDataDir;
++        return isisDataDir.string();
+@@ -1025 +1028 @@ namespace SpiceQL {
+-    return dbPath; 
++    return dbPath.string();
+@@ -1032 +1035 @@ namespace SpiceQL {
+-    return glob(dbDir, ".json", false);
++    return glob(dbDir.string(), ".json", false);
+@@ -1053 +1056 @@ namespace SpiceQL {
+-        return p;
++        return p.string();
+@@ -1316 +1319 @@ namespace SpiceQL {
+-    return aliasMapPath; 
++    return aliasMapPath.string();
+diff --git a/SpiceQL/src/query.cpp b/SpiceQL/src/query.cpp
+index 951b610..a91142f 100644
+--- a/SpiceQL/src/query.cpp
++++ b/SpiceQL/src/query.cpp
+@@ -75,2 +75,2 @@ namespace SpiceQL {
+-      string fna = static_cast<fs::path>(a).filename();
+-      string fnb = static_cast<fs::path>(b).filename();
++      string fna = static_cast<fs::path>(a).filename().string();
++      string fnb = static_cast<fs::path>(b).filename().string();
+@@ -88 +88 @@ namespace SpiceQL {
+-    string extension = static_cast<fs::path>(kernels.at(0)).extension();
++    string extension = static_cast<fs::path>(kernels.at(0)).extension().string();
+@@ -92 +92 @@ namespace SpiceQL {
+-      string currentKernelExt = k.extension();
++      string currentKernelExt = k.extension().string();
+@@ -95 +95 @@ namespace SpiceQL {
+-        throw invalid_argument("The input extensions (" + (string)k.filename() + ") are not different versions of the same file " + kernels.at(0));
++        throw invalid_argument("The input extensions (" + k.filename().string() + ") are not different versions of the same file " + kernels.at(0));
+@@ -101,2 +101,2 @@ namespace SpiceQL {
+-        string fileName = firstVecElem.filename();
+-        string kernelName = k.filename();
++        string fileName = firstVecElem.filename().string();
++        string kernelName = k.filename().string();
+@@ -119 +119 @@ namespace SpiceQL {
+-          files[i].push_back(k);
++          files[i].push_back(k.string());
+@@ -124 +124 @@ namespace SpiceQL {
+-        files.push_back({k});
++        files.push_back({k.string()});
+diff --git a/SpiceQL/src/spice_types.cpp b/SpiceQL/src/spice_types.cpp
+index 027ac7c..9c7f320 100644
+--- a/SpiceQL/src/spice_types.cpp
++++ b/SpiceQL/src/spice_types.cpp
+@@ -138 +138 @@ namespace SpiceQL {
+-      this->path = getDataDirectory() / fs::path(path);
++      this->path = (getDataDirectory() / fs::path(path)).string();
+diff --git a/SpiceQL/src/spiceql.cpp b/SpiceQL/src/spiceql.cpp
+index 89e8eab..8b88d99 100644
+--- a/SpiceQL/src/spiceql.cpp
++++ b/SpiceQL/src/spiceql.cpp
+@@ -68,7 +68,7 @@ namespace SpiceQL {
+           auto max_size = 1048576 * 10;
+           auto max_files = 5;
+           try {
+-              auto logger = spdlog::rotating_logger_mt("spiceql_file_log", log_file, max_size, max_files);
++              auto logger = spdlog::rotating_logger_mt("spiceql_file_log", log_file.string(), max_size, max_files);
+           }
+           catch (const spdlog::spdlog_ex &ex) {
+               SPDLOG_ERROR("file log init failed: {}", ex.what());

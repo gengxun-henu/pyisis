@@ -7,6 +7,11 @@ against USGS ISIS 9.0.0. Separate Ubuntu 22.04 and 24.04 GitHub-hosted runners
 download the same wheelhouse and verify clean installs without access to the
 build-time conda prefix.
 
+The ISIS 10 lane uses `env/pyisis-isis10-linux-64.yml`, CPython 3.13, and the
+official USGS `isis 10.0.0 h1f94ec8_1` build. It pins `csm 3.0.3.3` because
+later unconstrained CSM packages do not provide the `libcsmapi.so.3` ABI needed
+by this ISIS binary.
+
 The binding runtime is assembled from files owned by the ISIS conda package
 plus the transitive native-library closure. ISIS command-line apps, headers,
 build files, and unrelated environment libraries are excluded. CI enforces a

@@ -2,11 +2,12 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-19
+Last Modified: 2026-07-23
 Updated: 2026-06-18  Geng Xun added runtime package discovery coverage for pip wheels.
 Updated: 2026-06-18  Geng Xun kept packaged runtime discovery behind explicit envs.
 Updated: 2026-06-19  Geng Xun verified packaged runtime environment hooks.
 Updated: 2026-06-19  Geng Xun made Windows DLL directory tests portable under WSL.
+Updated: 2026-07-23  Geng Xun added ISIS runtime version and ABI-major validation coverage.
 """
 
 from __future__ import annotations
@@ -16,6 +17,7 @@ import importlib
 import ntpath
 from pathlib import Path
 import sys
+import tempfile
 from types import ModuleType
 from unittest import mock
 import unittest
@@ -54,6 +56,46 @@ class PyisisRuntimeUnitTest(unittest.TestCase):
 
         self.assertEqual(config.isis_prefix, r"C:\external\isis")
         self.assertEqual(config.isisroot, r"C:\external\isis")
+        self.assertIsNone(config.isis_version)
+
+    def test_read_isis_version_accepts_version_file_comments(self):
+        from pyisis._runtime import read_isis_version
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            prefix = Path(temp_dir)
+            (prefix / "isis_version.txt").write_text(
+                "9.0.0 # Public version\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(read_isis_version(prefix), "9.0.0")
+
+    def test_validate_runtime_version_accepts_same_major(self):
+        from pyisis._runtime import RuntimeDiscovery, validate_runtime_version
+
+        discovery = RuntimeDiscovery(
+            isis_prefix="/runtime/isis",
+            isisroot="/runtime/isis",
+            isisdata=None,
+            dll_directories=(),
+            isis_version="10.1.2",
+        )
+        self.assertEqual(
+            validate_runtime_version("10.0.0", 10, discovery=discovery),
+            "10.1.2",
+        )
+
+    def test_validate_runtime_version_rejects_other_major(self):
+        from pyisis._runtime import RuntimeDiscovery, validate_runtime_version
+
+        discovery = RuntimeDiscovery(
+            isis_prefix="/runtime/isis9",
+            isisroot="/runtime/isis9",
+            isisdata=None,
+            dll_directories=(),
+            isis_version="9.0.0",
+        )
+        with self.assertRaisesRegex(RuntimeError, "built for ISIS 10.0.0"):
+            validate_runtime_version("10.0.0", 10, discovery=discovery)
 
     def test_configure_runtime_ignores_packaged_runtime_when_environment_exists(self):
         fake_runtime = ModuleType("pyisis_runtime")
@@ -153,6 +195,7 @@ class PyisisRuntimeUnitTest(unittest.TestCase):
         fake_pyisis.__path__ = []
         fake_runtime = ModuleType("pyisis._runtime")
         fake_runtime.configure_runtime = mock.Mock(side_effect=RuntimeError("broken runtime"))
+        fake_runtime.validate_runtime_version = mock.Mock()
         sys.modules["pyisis"] = fake_pyisis
         sys.modules["pyisis._runtime"] = fake_runtime
 

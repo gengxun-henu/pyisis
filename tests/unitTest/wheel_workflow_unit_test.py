@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-23
+Last Modified: 2026-07-24
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
@@ -10,6 +10,11 @@ Updated: 2026-07-22  Geng Xun added isolated Linux wheel build and install cover
 Updated: 2026-07-23  Geng Xun required manylinux 2.35 builds and Ubuntu 22.04/24.04 install tests.
 Updated: 2026-07-23  Geng Xun covered trusted Windows ISIS prefix cache reuse.
 Updated: 2026-07-23  Geng Xun gated GitHub Release publication on validated platform wheelhouses.
+Updated: 2026-07-23  Geng Xun covered ISIS 10 cp313 manylinux build and clean-install jobs.
+Updated: 2026-07-23  Geng Xun covered measured ISIS 10 runtime size budgets.
+Updated: 2026-07-23  Geng Xun covered the ISIS 10 Windows source-build wheel gate.
+Updated: 2026-07-24  Geng Xun covered ISIS 10 private toolchain verification for Ubuntu 22.04 compatibility.
+Updated: 2026-07-24  Geng Xun pinned the official ISIS 10 build and compatible CSM ABI.
 """
 
 from __future__ import annotations
@@ -20,6 +25,9 @@ import unittest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WHEEL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "wheels.yml"
+ISIS10_LINUX_ENV = (
+    PROJECT_ROOT / "ports" / "linux" / "env" / "pyisis-isis10-linux-64.yml"
+)
 
 
 class WheelWorkflowUnitTest(unittest.TestCase):
@@ -83,7 +91,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         )
         self.assertEqual(
             workflow.count("ports\\windows\\isis\\verify_isis_prefix.ps1"),
-            1,
+            2,
         )
         self.assertIn("actions/cache/save@v6", workflow)
         self.assertIn("github.event_name == 'workflow_dispatch'", workflow)
@@ -137,6 +145,61 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("runs-on: ${{ matrix.os }}", workflow)
         self.assertIn("--test-list tools/packaging/basic_tests.txt", workflow)
 
+    def test_workflow_builds_and_tests_isis10_cp313_linux_wheels(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("linux-isis10-cp313-build:", workflow)
+        self.assertIn("linux-isis10-cp313-clean-install:", workflow)
+        self.assertIn("ports/linux/env/pyisis-isis10-linux-64.yml", workflow)
+        self.assertIn("packaging/bindings-isis10", workflow)
+        self.assertIn("--distribution-name usgs-pyisis-isis10", workflow)
+        self.assertIn(
+            "--runtime-distribution usgs-pyisis-runtime-isis10-linux-x86_64",
+            workflow,
+        )
+        self.assertIn('python-version: "3.13"', workflow)
+        self.assertIn("--package usgs-pyisis-isis10", workflow)
+        self.assertIn("--expected-isis-version 10.0.0", workflow)
+        self.assertIn(
+            "usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse",
+            workflow,
+        )
+        self.assertIn('PYISIS_MAX_LINUX_RUNTIME_BYTES: "1100000000"', workflow)
+        self.assertIn(
+            'PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES: "550000000"',
+            workflow,
+        )
+        self.assertIn("--vendor-toolchain-runtime", workflow)
+        self.assertIn("--target-glibc 2.35", workflow)
+        self.assertIn('--wheel-pattern "usgs_pyisis_isis10-*.whl"', workflow)
+        self.assertIn("--verify-only", workflow)
+
+    def test_isis10_linux_environment_pins_official_runtime_abi(self):
+        environment = ISIS10_LINUX_ENV.read_text(encoding="utf-8")
+
+        self.assertIn("- python=3.13", environment)
+        self.assertIn("- isis=10.0.0=h1f94ec8_1", environment)
+        self.assertIn("- csm=3.0.3.3", environment)
+
+    def test_workflow_builds_and_tests_isis10_cp313_windows_wheels(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("windows-isis10-cp313:", workflow)
+        self.assertIn("ports/windows/env/pyisis-isis10-win64.yml", workflow)
+        self.assertIn("ports\\windows\\isis\\build_spiceql.ps1", workflow)
+        self.assertIn("-Ref 10.0.0", workflow)
+        self.assertIn("-PatchDir .\\ports\\windows\\isis\\patches\\10.0.0", workflow)
+        self.assertIn("-ExpectedVersion 10.0.0", workflow)
+        self.assertIn("-BindingProjectDir packaging\\bindings-isis10", workflow)
+        self.assertIn("-DistributionName usgs-pyisis-isis10", workflow)
+        self.assertIn(
+            "-RuntimeDistribution usgs-pyisis-runtime-isis10-win64",
+            workflow,
+        )
+        self.assertIn("-PackageVersion 1.4.0rc1", workflow)
+        self.assertIn("--package usgs-pyisis-isis10", workflow)
+        self.assertIn("usgs-pyisis-isis10-windows-cp313-wheels", workflow)
+
     def test_workflow_can_publish_configured_release_after_platform_gates(self):
         workflow = self._workflow_text()
 
@@ -144,8 +207,14 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("github-release:", workflow)
         self.assertIn("github.ref == 'refs/heads/main'", workflow)
         self.assertIn("linux-cp312-clean-install", workflow)
+        self.assertIn("linux-isis10-cp313-clean-install", workflow)
         self.assertIn("windows-cp312", workflow)
-        self.assertIn("packaging/release.toml", workflow)
+        self.assertIn("windows-isis10-cp313", workflow)
+        self.assertIn("release_line:", workflow)
+        self.assertIn('Path("packaging/releases")', workflow)
+        self.assertIn("DISTRIBUTION_NORMALIZED", workflow)
+        self.assertIn("RUNTIME_DISTRIBUTION_NORMALIZED", workflow)
+        self.assertIn("MINIMAL_DATA_VERSION", workflow)
         self.assertIn("THIRD_PARTY_NOTICES.md", workflow)
         self.assertIn("SHA256SUMS.txt", workflow)
         self.assertIn('gh release create "$RELEASE_TAG"', workflow)

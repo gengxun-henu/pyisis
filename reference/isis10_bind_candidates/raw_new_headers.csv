@@ -1,0 +1,14 @@
+Header,Kind,Disposition,Symbols,Reason
+Chandrayaan2OhrcCamera.h,class,complete,Chandrayaan2OhrcCamera,ISIS 10-only mission camera; dual-version compatibility review closed
+Chandrayaan2TmcCamera.h,class,complete,Chandrayaan2TmcCamera,ISIS 10-only mission camera; dual-version compatibility review closed
+DskSegmentBuffer.hpp,internal,excluded,DskSegmentBuffer,Header marks this DSK mesh buffer internal; do not expose it as public API
+GdalIoHandler.h,class,candidate,GdalIoHandler,Public image-I/O class; curated Python facade is complete
+IEndian.h,compatibility,excluded,ByteOrder,Endian.h rename/compatibility surface already covered by the existing binding
+IProj.h,class,complete,IProj,ISIS 10-only projection class; dual-version compatibility review closed
+ImageIoHandler.h,class,candidate,ImageIoHandler,Abstract image-I/O base registered for the completed GdalIoHandler facade
+OsirisRexOcamsOpenCVDistortionMap.h,class,candidate,OsirisRexOcamsOpenCVDistortionMap,Public OCAMS OpenCV distortion model with mission-specific value
+RestfulSpice.h,placeholder,excluded,,Installed header contains no bindable public declaration
+csv2table.h,function,candidate,csv2table,Public application entry point; design a Python-friendly UserInterface facade
+eisstitch.h,function,candidate,eisstitch,Public Europa Clipper application entry point
+ocams2isis.h,function,candidate,ocams2isis,Public OSIRIS-REx ingestion entry point
+restincurl.h,internal,excluded,restincurl implementation types,Third-party HTTP implementation must not become public isis_pybind API

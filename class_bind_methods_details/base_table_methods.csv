@@ -1,22 +1,31 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Table,Low Level Cube I/O,isis/src/base/objs/Table/Table.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,需注意内存生命周期与数据视图映射
+Table,Low Level Cube I/O,isis/src/base/objs/Table/Table.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 9/10兼容闭环；补齐Table/Blob双向转换，引用返回继续使用reference_internal
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Table,isis_pybind.Table,Y,Python class symbol is exported; 需注意内存生命周期与数据视图映射
-Construction/Enum,"Association enum (None, Samples, Lines, Bands)",isis_pybind.Table.Association,N,需注意内存生命周期与数据视图映射
-Construction/Enum,Table(),isis_pybind.Table(),Y,Constructor is explicitly bound
-Read/Write IO,void Write(const QString &file),isis_pybind.Table.write,N,需注意内存生命周期与数据视图映射
-Public API,QString Name() const,isis_pybind.Table.name,N,需注意内存生命周期与数据视图映射
-Public API,PvlObject &Label(),isis_pybind.Table.label,N,需注意内存生命周期与数据视图映射
-Mutation/Configuration,void SetAssociation(const Table::Association assoc),isis_pybind.Table.set_association,N,需注意内存生命周期与数据视图映射
-Query,bool IsSampleAssociated(),isis_pybind.Table.is_sample_associated,N,需注意内存生命周期与数据视图映射
-Query,bool IsLineAssociated(),isis_pybind.Table.is_line_associated,N,需注意内存生命周期与数据视图映射
-Query,bool IsBandAssociated(),isis_pybind.Table.is_band_associated,N,需注意内存生命周期与数据视图映射
-Public API,int Records() const,isis_pybind.Table.records,N,需注意内存生命周期与数据视图映射
-Public API,int RecordFields() const,isis_pybind.Table.record_fields,N,需注意内存生命周期与数据视图映射
-Public API,int RecordSize() const,isis_pybind.Table.record_size,N,需注意内存生命周期与数据视图映射
-Public API,"void Update(const TableRecord &rec, const int index)",isis_pybind.Table.update,N,需注意内存生命周期与数据视图映射
-Mutation/Configuration,void Delete(const int index),isis_pybind.Table.delete,N,需注意内存生命周期与数据视图映射
-Mutation/Configuration,void Clear(),isis_pybind.Table.clear,N,需注意内存生命周期与数据视图映射
-Public API,Blob toBlob() const,isis_pybind.Table.to_blob,N,需注意内存生命周期与数据视图映射
-Static/Factory,"static QString toString(Table table, QString fieldDelimiter="","")",isis_pybind.Table.to_string,N,需注意内存生命周期与数据视图映射
+Construction/Enum,"Association enum (None, Samples, Lines, Bands)",isis_pybind.Table.Association,Y,双版本共有枚举已绑定
+Construction/Enum,Table(),isis_pybind.Table(),N,ISIS 10已移除此构造；为保持双版本一致且避免无形状表状态不直接暴露
+Construction/Enum,Table(Blob &blob),isis_pybind.Table(blob),Y,2026-07-24补齐；与to_blob组成双版本往返
+Construction/Enum,"Table(const QString &tableName, TableRecord &rec)",isis_pybind.Table(table_name; record),Y,已绑定
+Construction/Enum,Table(const QString &tableName),isis_pybind.Table(table_name),Y,已绑定
+Construction/Enum,"Table(const QString &tableName, const QString &file)",isis_pybind.Table(table_name; file_name),Y,已绑定
+Construction/Enum,"Table(const QString &tableName, const QString &file, const Pvl &fileHeader)",isis_pybind.Table(table_name; file_name; file_header),Y,已绑定
+Construction/Enum,Table(const Table &other),isis_pybind.Table(other),Y,已绑定拷贝构造
+Construction/Enum,"Table(const QString &tableName, const std::string &tableString, const char &fieldDelimiter, const std::vector<PvlKeyword> &tableAttrs)",isis_pybind.Table(table_name; table_string; field_delimiter; table_attrs),Y,已绑定Python-friendly字符串构造
+Construction/Enum,Table &operator=(const Isis::Table &other),isis_pybind.Table(other),Y,Python以拷贝构造与名称重新绑定覆盖赋值语义
+Construction/Enum,~Table(),isis_pybind.Table,Y,析构由pybind生命周期管理
+Read/Write IO,void Write(const QString &file),isis_pybind.Table.write,Y,文件写入已绑定
+Public API,QString Name() const,isis_pybind.Table.name,Y,返回Python字符串
+Public API,PvlObject &Label(),isis_pybind.Table.label,Y,按reference_internal返回标签引用
+Mutation/Configuration,void SetAssociation(const Table::Association assoc),isis_pybind.Table.set_association,Y,已绑定
+Query,bool IsSampleAssociated(),isis_pybind.Table.is_sample_associated,Y,已绑定
+Query,bool IsLineAssociated(),isis_pybind.Table.is_line_associated,Y,已绑定
+Query,bool IsBandAssociated(),isis_pybind.Table.is_band_associated,Y,已绑定
+Public API,int Records() const,isis_pybind.Table.records,Y,已绑定
+Public API,int RecordFields() const,isis_pybind.Table.record_fields,Y,已绑定
+Public API,int RecordSize() const,isis_pybind.Table.record_size,Y,已绑定
+Public API,"void Update(const TableRecord &rec, const int index)",isis_pybind.Table.update,Y,已绑定
+Mutation/Configuration,void Delete(const int index),isis_pybind.Table.delete,Y,已绑定
+Mutation/Configuration,void Clear(),isis_pybind.Table.clear,Y,已绑定
+Public API,Blob toBlob() const,isis_pybind.Table.to_blob,Y,2026-07-24补齐稳定值返回
+Static/Factory,"static QString toString(Table table, QString fieldDelimiter="","")",isis_pybind.Table.to_string,Y,返回Python字符串

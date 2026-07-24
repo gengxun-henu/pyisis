@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Calculator,Math,isis/src/base/objs/Calculator/Calculator.h,isis_pybind_standalone/src/base/bind_base_math.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,The main RPN calculator API is exposed; Minimum2/Maximum2 remain unavailable because the upstream implementation is missing.
+Calculator,Math,isis/src/base/objs/Calculator/Calculator.h,isis_pybind_standalone/src/base/bind_base_math.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 10仅删除重复QVector前置声明；RPN公开API稳定；双版本math/cube/low-level 204项及smoke通过；Minimum2/Maximum2仍因上游无实现排除
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Calculator,isis_pybind.Calculator,Y,Exposed via bind_base_math.cpp and re-exported from isis_pybind.__init__

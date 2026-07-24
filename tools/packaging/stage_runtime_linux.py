@@ -12,6 +12,7 @@ from pathlib import Path
 
 
 SHARED_LIBRARY_RE = re.compile(r"^[A-Za-z0-9_.+\-]+\.so(?:\.[A-Za-z0-9_.+\-]+)*$")
+SONAME_RE = re.compile(r"\(SONAME\).*\[([^\]]+)\]")
 PROJECT_NAME_RE = re.compile(r'(?m)^name = "[^"]+"$')
 PROJECT_VERSION_RE = re.compile(r'(?m)^version = "[^"]+"$')
 
@@ -208,6 +209,22 @@ def _ldd_dependencies(binary: Path) -> tuple[str, ...]:
     return tuple(dependencies)
 
 
+def _elf_soname(binary: Path) -> str | None:
+    result = subprocess.run(
+        ["readelf", "-d", str(binary)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return None
+    for line in result.stdout.splitlines():
+        match = SONAME_RE.search(line)
+        if match and SHARED_LIBRARY_RE.match(match.group(1)):
+            return match.group(1)
+    return None
+
+
 def _copy_dependency_closure(
     seed_files: tuple[Path, ...],
     dependency_prefixes: tuple[Path, ...],
@@ -231,12 +248,15 @@ def _copy_dependency_closure(
 
             source, dependency_prefix = resolved
             _copy_file(source, dependency_prefix, vendor_root)
-            if source.name != dependency_name:
+            aliases = {dependency_name, _elf_soname(source)}
+            for alias in sorted(name for name in aliases if name):
+                if source.name == alias:
+                    continue
                 _copy_dependency_alias(
                     source,
                     dependency_prefix,
                     vendor_root,
-                    dependency_name,
+                    alias,
                 )
             if str(source.resolve()) not in visited:
                 queue.append(source)

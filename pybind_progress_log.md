@@ -2581,3 +2581,17 @@ Chandrayaan2TmcCamera
   各70项通过（1项环境依赖跳过），smoke均通过。
 
 **Current 19-header batch:** 6/19 closed.
+
+### I/O and statistics compatibility batch（6 headers closed）
+
+- 当前安装面中的`JP2Decoder.h`、`JP2Encoder.h`和`JP2Error.h`在
+  ISIS 9/10间文本一致；`JP2Error.h`已重新出现在当前`asp370`安装面。
+  既有`PYISIS_HAS_JP2_ERROR`条件编译继续保留，以兼容未安装该头的构建。
+- ISIS 9的`Endian.h`与ISIS 10的`IEndian.h`公开内容一致；
+  `__has_include`选择已覆盖重命名，不改变Python的`ByteOrder`接口。
+- `GroupedStatistics.h`仅以显式`QVector` include替代前置声明，
+  统计接口无需分支。
+- ISIS 9/10的high-level I/O、low-level I/O和statistics组合测试各93项通过
+  （2项既有JP2不稳定行为测试跳过），smoke均通过。
+
+**Current 19-header batch:** 12/19 closed.

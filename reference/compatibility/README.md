@@ -67,10 +67,11 @@ ISIS 9 的 `Endian.h` 在 ISIS 10 中对应 `IEndian.h`。其 `ByteOrder` 等公
 定义仍可在 ISIS 10 源码中找到；当前 binding 已按安装头文件选择 include，
 并在 ISIS 9/10 实际 prefix 中通过编译验证。
 
-此外，`JP2Error.h` 存在于锁定的 ISIS 10 源码树，但没有安装进当前
-`asp370/include/isis`。这说明源码级矩阵不能替代 prefix 级矩阵；
-`src/bind_high_level_cube_io.cpp` 因此按安装面条件编译旧 Kakadu/JP2Error
-接口：ISIS 9 继续导出 `JP2Error`，ISIS 10 不声明不存在的旧类型。
+`JP2Error.h`曾存在于锁定的 ISIS 10 源码树、但未安装进当时的
+`asp370/include/isis`。2026-07-24刷新安装面后，该头文件已经存在且与
+ISIS 9文本一致。这一变化说明源码级矩阵不能替代prefix级矩阵；
+`src/bind_high_level_cube_io.cpp`仍按目标安装面条件编译Kakadu/JP2Error
+接口，使缺少该安装头的ISIS 10构建继续可用。
 
 ## ISIS 10 构建验证
 

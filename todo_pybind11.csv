@@ -50,9 +50,9 @@ Geometry,UniversalGroundMap,已转换,抽象基类/纯虚接口；已导出基�
 High Level Cube I/O,ExportDescription,已转换,已在高层 cube io 绑定中导出
 High Level Cube I/O,ImageExporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；samples/lines/bands/input_minimum/input_maximum/set_output_pixel_range 方法
 High Level Cube I/O,ImageImporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；构造/import/特殊像素范围设置/维度访问/格式查询方法
-High Level Cube I/O,JP2Decoder,已转换,已在高层 cube io 绑定中导出
-High Level Cube I/O,JP2Encoder,已转换,已在高层 cube io 绑定中导出
-High Level Cube I/O,JP2Error,已转换,已在高层 cube io 绑定中导出
+High Level Cube I/O,JP2Decoder,已转换,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；Kakadu helper按JP2Error安装头条件暴露；双版本验证通过
+High Level Cube I/O,JP2Encoder,已转换,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；Kakadu helper按JP2Error安装头条件暴露；双版本验证通过
+High Level Cube I/O,JP2Error,已转换,2026-07-24 当前asp370已安装JP2Error且与ISIS 9头文件一致；条件绑定保持可移植；不稳定flush行为测试继续跳过
 High Level Cube I/O,JP2Exporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数与 write/canWriteFormat 方法；继承 StreamExporter 和 ImageExporter
 High Level Cube I/O,JP2Importer,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露；继承 ImageImporter；构造/格式查询方法
 High Level Cube I/O,Process,已转换,流程/回调接口较多
@@ -289,7 +289,7 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 set_parent/set_detector/exposure_duration
 Statistics,FourierTransform,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露 FourierTransform 构造/transform/inverse/helper 方法；focused 单测在 tests/unitTest/math_unit_test.py；smoke 已补符号
 Statistics,GaussianDistribution,已转换,2026-04-11 全部方法已绑定（StandardDeviation 之前已有只是台账滞后）
-Statistics,GroupedStatistics,已转换,
+Statistics,GroupedStatistics,已转换,2026-07-24 ISIS 10仅调整QVector include；公开统计API不变；双版本验证通过
 Statistics,Histogram,已转换,
 Statistics,ImageHistogram,已转换,2026-04-11 已在 src/bind_statistics.cpp 新增 add_data/remove_data/bin_range 显式绑定，覆盖 ImageHistogram 全部 4 个缺失方法
 Statistics,MultivariateStatistics,已转换,2026-04-11 全部方法已绑定（X/Y 之前已有只是台账滞后）

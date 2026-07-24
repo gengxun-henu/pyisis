@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-JP2Decoder,High Level Cube I/O,isis/src/base/objs/JP2Decoder/JP2Decoder.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+JP2Decoder,High Level Cube I/O,isis/src/base/objs/JP2Decoder/JP2Decoder.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；Kakadu helper按JP2Error安装头条件暴露；双版本I/O与统计组合93项及smoke通过
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,JP2Decoder,isis_pybind.JP2Decoder,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Python class symbol not found in current binding files

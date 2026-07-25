@@ -630,6 +630,12 @@ if(MSVC AND PYISIS_PCL_INCLUDE_DIR)
   target_compile_definitions(_isis_core PRIVATE EIGEN_MAX_ALIGN_BYTES=32)
 endif()
 
+if(MSVC)
+  # Windows SDK headers must be parsed before CSPICE defines its VOID macro.
+  target_compile_options(_isis_core PRIVATE
+    "/FI${CMAKE_CURRENT_SOURCE_DIR}/ports/windows/isis/pybind_msvc_compat.h")
+endif()
+
 if(NOT MSVC)
   set_source_files_properties(
     src/base/bind_base_shape.cpp

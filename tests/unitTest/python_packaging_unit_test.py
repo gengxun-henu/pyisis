@@ -3,7 +3,7 @@ Unit tests for Python packaging metadata.
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-23
+Last Modified: 2026-07-25
 Updated: 2026-06-18  Geng Xun added CMake wheel staging coverage for scikit-build-core.
 Updated: 2026-06-18  Geng Xun added packaging license metadata coverage for wheel builds.
 Updated: 2026-06-18  Geng Xun raised scikit-build-core coverage for PEP 639 license metadata.
@@ -21,6 +21,7 @@ Updated: 2026-07-23  Geng Xun covered the separate ISIS 10 binding distribution 
 Updated: 2026-07-23  Geng Xun required full prerelease versions in generated build metadata.
 Updated: 2026-07-23  Geng Xun required ISIS 10 Bullet float64 ABI selection.
 Updated: 2026-07-23  Geng Xun covered separate ISIS 9 and ISIS 10 release manifests.
+Updated: 2026-07-25  Geng Xun covered Windows PCL, Eigen, CSPICE, and SDK compatibility.
 """
 
 import importlib
@@ -242,6 +243,26 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertIn("PYISIS_ISIS_VERSION_MAJOR GREATER_EQUAL 10", cmake_lists)
         self.assertIn('"${bullet_lib_name}-float64"', cmake_lists)
         self.assertIn("NAMES ${_pyisis_bullet_candidates}", cmake_lists)
+
+    def test_cmake_matches_windows_pcl_and_sdk_compatibility(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn("if(MSVC AND PYISIS_PCL_INCLUDE_DIR)", cmake_lists)
+        self.assertIn(
+            "target_compile_definitions(_isis_core PRIVATE EIGEN_MAX_ALIGN_BYTES=32)",
+            cmake_lists,
+        )
+        self.assertIn("pybind_msvc_compat.h", cmake_lists)
+        self.assertIn(
+            "list(APPEND ISIS_RUNTIME_DEP_LIB_NAMES gdal)",
+            cmake_lists,
+        )
+
+        compatibility_header = (
+            self.repo_root / "ports" / "windows" / "pybind_msvc_compat.h"
+        ).read_text(encoding="utf-8")
+        self.assertIn("#  include <windows.h>", compatibility_header)
+        self.assertIn("#  define Ellipse WindowsSdkEllipse", compatibility_header)
 
     def test_cmake_installs_pyisis_runtime_helper(self):
         cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")

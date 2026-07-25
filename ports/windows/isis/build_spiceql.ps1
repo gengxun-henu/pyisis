@@ -3,7 +3,7 @@ param(
     [string]$BuildDir,
     [string]$Prefix = $env:CONDA_PREFIX,
     [string]$Repository = "https://github.com/DOI-USGS/SpiceQL.git",
-    [string]$Ref = "1.3.0",
+    [string]$Ref = "1.4.1",
     [int]$Jobs = 2,
     [switch]$Force
 )
@@ -13,6 +13,7 @@ param(
 Require-Command git
 Require-Command cmake
 Require-Command ninja
+Require-Command dumpbin
 
 $repoRoot = Get-RepoRoot
 if (-not $SourceDir) {
@@ -87,13 +88,32 @@ $spiceqlBinDir = Join-Path $Prefix "bin"
 $spiceqlLibDir = Join-Path $Prefix "lib"
 New-Item -ItemType Directory -Force -Path $spiceqlBinDir, $spiceqlLibDir | Out-Null
 
-# SpiceQL 1.3.0 only declares a CMake LIBRARY install destination. MSVC
+# SpiceQL only declares a CMake LIBRARY install destination. MSVC
 # classifies the DLL and import library as RUNTIME and ARCHIVE artifacts, so
 # copy those two generated files when the upstream install rule omits them.
 $builtSpiceqlDll = Get-ChildItem -LiteralPath $BuildDir -Recurse -Filter "SpiceQL.dll" -File |
     Select-Object -First 1
 $builtSpiceqlLib = Get-ChildItem -LiteralPath $BuildDir -Recurse -Filter "SpiceQL.lib" -File |
     Select-Object -First 1
+if (-not $builtSpiceqlDll) {
+    Fail "SpiceQL DLL was not produced under $BuildDir"
+}
+if (-not $builtSpiceqlLib) {
+    Fail "SpiceQL import library was not produced under $BuildDir"
+}
+
+$spiceqlExports = & dumpbin /nologo /exports $builtSpiceqlDll.FullName
+if ($LASTEXITCODE -ne 0) {
+    Fail "dumpbin could not inspect SpiceQL exports"
+}
+$matchingExports = @($spiceqlExports | Where-Object { $_ -match "strSclkToEt" })
+if ($matchingExports.Count -eq 0) {
+    Fail "SpiceQL DLL does not export strSclkToEt"
+}
+foreach ($matchingExport in $matchingExports) {
+    Write-Step "SpiceQL export: $($matchingExport.Trim())"
+}
+
 if ($builtSpiceqlDll) {
     Copy-Item -LiteralPath $builtSpiceqlDll.FullName -Destination $spiceqlBinDir -Force
 }
@@ -115,5 +135,49 @@ if (-not (Test-Path $spiceqlHeader)) {
 if (-not $spiceqlLibrary) {
     Fail "SpiceQL import library was not installed under $Prefix"
 }
+
+$linkProbeSource = Join-Path $BuildDir "spiceql-link-probe.cpp"
+$linkProbeObject = Join-Path $BuildDir "spiceql-link-probe.obj"
+$linkProbeExe = Join-Path $BuildDir "spiceql-link-probe.exe"
+$spiceqlIncludeDir = Join-Path $Prefix "include"
+$condaIncludeDir = Join-Path $Prefix "Library\include"
+@'
+#include <SpiceQL/api.h>
+
+#include <string>
+#include <vector>
+
+int main() {
+    const auto result = SpiceQL::strSclkToEt(
+        0,
+        std::string(),
+        std::string(),
+        false,
+        false,
+        false,
+        -1,
+        1,
+        std::vector<std::string>());
+    return result.first == 0.0 ? 0 : 1;
+}
+'@ | Set-Content -LiteralPath $linkProbeSource -Encoding utf8
+
+Write-Step "verifying downstream MSVC linkage against SpiceQL"
+Invoke-CheckedCommand cl `
+    /nologo `
+    /EHsc `
+    /std:c++17 `
+    /MD `
+    "/I$spiceqlIncludeDir" `
+    "/I$condaIncludeDir" `
+    /c `
+    $linkProbeSource `
+    "/Fo$linkProbeObject"
+Invoke-CheckedCommand link `
+    /nologo `
+    $linkProbeObject `
+    "/LIBPATH:$spiceqlLibDir" `
+    SpiceQL.lib `
+    "/OUT:$linkProbeExe"
 
 Write-Step "SpiceQL prefix verified: $Prefix"

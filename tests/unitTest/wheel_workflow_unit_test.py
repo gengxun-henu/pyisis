@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-24
+Last Modified: 2026-07-25
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
@@ -15,6 +15,8 @@ Updated: 2026-07-23  Geng Xun covered measured ISIS 10 runtime size budgets.
 Updated: 2026-07-23  Geng Xun covered the ISIS 10 Windows source-build wheel gate.
 Updated: 2026-07-24  Geng Xun covered ISIS 10 private toolchain verification for Ubuntu 22.04 compatibility.
 Updated: 2026-07-24  Geng Xun pinned the official ISIS 10 build and compatible CSM ABI.
+Updated: 2026-07-25  Geng Xun pinned the Windows ISIS 10 gate to SpiceQL 1.4.1.
+Updated: 2026-07-25  Geng Xun covered ISIS 10-specific Windows wheel metadata checks.
 """
 
 from __future__ import annotations
@@ -187,6 +189,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("windows-isis10-cp313:", workflow)
         self.assertIn("ports/windows/env/pyisis-isis10-win64.yml", workflow)
         self.assertIn("ports\\windows\\isis\\build_spiceql.ps1", workflow)
+        self.assertIn("-Ref 1.4.1", workflow)
         self.assertIn("-Ref 10.0.0", workflow)
         self.assertIn("-PatchDir .\\ports\\windows\\isis\\patches\\10.0.0", workflow)
         self.assertIn("-ExpectedVersion 10.0.0", workflow)
@@ -198,6 +201,9 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         )
         self.assertIn("-PackageVersion 1.4.0rc1", workflow)
         self.assertIn("--package usgs-pyisis-isis10", workflow)
+        self.assertIn("-ExpectedVersion 1.4.0rc1", workflow)
+        self.assertIn("-PythonTag cp313-cp313", workflow)
+        self.assertIn("-IsisDataVersion 1.3.0rc1", workflow)
         self.assertIn("usgs-pyisis-isis10-windows-cp313-wheels", workflow)
 
     def test_workflow_can_publish_configured_release_after_platform_gates(self):

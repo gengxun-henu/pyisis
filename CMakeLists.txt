@@ -389,6 +389,9 @@ set(ISIS_RUNTIME_DEP_LIB_NAMES
     libprotobuf
     libprotobuf-lite
     xerces-c_3)
+if(PYISIS_ISIS_VERSION_MAJOR GREATER_EQUAL 10)
+  list(APPEND ISIS_RUNTIME_DEP_LIB_NAMES gdal)
+endif()
 
 set(ISIS_RUNTIME_DEP_LIBS "")
 foreach(runtime_dep_lib_name IN LISTS ISIS_RUNTIME_DEP_LIB_NAMES)
@@ -622,6 +625,18 @@ endif()
 
 if(PYISIS_HAS_EMBREE_SHAPE_MODEL)
   target_compile_definitions(_isis_core PRIVATE PYISIS_HAS_EMBREE_SHAPE_MODEL=1)
+endif()
+
+if(MSVC AND PYISIS_PCL_INCLUDE_DIR)
+  # Match the 32-byte Eigen alignment used by conda-forge's Windows PCL build
+  # without requiring AVX instructions from every wheel consumer.
+  target_compile_definitions(_isis_core PRIVATE EIGEN_MAX_ALIGN_BYTES=32)
+endif()
+
+if(MSVC)
+  # Windows SDK headers must be parsed before CSPICE defines its VOID macro.
+  target_compile_options(_isis_core PRIVATE
+    "/FI${CMAKE_CURRENT_SOURCE_DIR}/ports/windows/pybind_msvc_compat.h")
 endif()
 
 if(NOT MSVC)

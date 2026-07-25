@@ -4,6 +4,10 @@ param(
     [ValidateSet("testpypi")]
     [string]$Repository = "testpypi",
     [string]$ExpectedVersion = "1.3.0rc1",
+    [string]$DistributionName = "usgs-pyisis",
+    [string]$RuntimeDistribution = "usgs-pyisis-runtime-win64",
+    [string]$PythonTag = "cp312-cp312",
+    [string]$IsisDataVersion = "",
     [switch]$CheckOnly,
     [switch]$Upload
 )
@@ -27,17 +31,22 @@ if (-not $Wheels) {
     throw "No wheel files found in: $Wheelhouse"
 }
 
+$BindingWheelPrefix = $DistributionName.Replace("-", "_")
+$RuntimeWheelPrefix = $RuntimeDistribution.Replace("-", "_")
+if (-not $IsisDataVersion) {
+    $IsisDataVersion = $ExpectedVersion
+}
 $ExpectedWheelNames = @(
-    "usgs_pyisis-$ExpectedVersion-cp312-cp312-win_amd64.whl",
-    "usgs_pyisis_runtime_win64-$ExpectedVersion-py3-none-win_amd64.whl",
-    "usgs_pyisis_isisdata_minimal-$ExpectedVersion-py3-none-any.whl"
+    "$BindingWheelPrefix-$ExpectedVersion-$PythonTag-win_amd64.whl",
+    "$RuntimeWheelPrefix-$ExpectedVersion-py3-none-win_amd64.whl",
+    "usgs_pyisis_isisdata_minimal-$IsisDataVersion-py3-none-any.whl"
 )
 $ActualWheelNames = @($Wheels | ForEach-Object { $_.Name })
 $MissingWheelNames = @($ExpectedWheelNames | Where-Object { $_ -notin $ActualWheelNames })
 $UnexpectedWheelNames = @($ActualWheelNames | Where-Object { $_ -notin $ExpectedWheelNames })
 if ($MissingWheelNames -or $UnexpectedWheelNames) {
     throw (
-        "Wheelhouse does not match expected usgs-pyisis $ExpectedVersion wheel set. " +
+        "Wheelhouse does not match expected $DistributionName $ExpectedVersion wheel set. " +
         "Missing: $($MissingWheelNames -join ', '); " +
         "Unexpected: $($UnexpectedWheelNames -join ', ')"
     )

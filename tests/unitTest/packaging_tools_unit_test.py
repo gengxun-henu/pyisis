@@ -20,6 +20,7 @@ Updated: 2026-07-23  Geng Xun covered parameterized ISIS 9/10 Windows wheel buil
 Updated: 2026-07-24  Geng Xun covered private Linux toolchain runtime packaging and the split ISIS 10 Windows patch queue.
 Updated: 2026-07-24  Geng Xun preserved qisis data objects and exported SpiceQL symbols on Windows.
 Updated: 2026-07-25  Geng Xun covered the ISIS 10 SpiceQL 1.4.1 export and MSVC link gates.
+Updated: 2026-07-25  Geng Xun parameterized Windows wheel-set checks for ISIS 9 and ISIS 10.
 """
 
 from __future__ import annotations
@@ -303,9 +304,10 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("if (-not $Upload)", script)
         self.assertIn("PSBoundParameters.ContainsKey(\"Wheelhouse\")", script)
         self.assertIn("ExpectedWheelNames", script)
-        self.assertIn("usgs_pyisis-$ExpectedVersion-cp312-cp312-win_amd64.whl", script)
-        self.assertIn("usgs_pyisis_runtime_win64-$ExpectedVersion-py3-none-win_amd64.whl", script)
-        self.assertIn("usgs_pyisis_isisdata_minimal-$ExpectedVersion-py3-none-any.whl", script)
+        self.assertIn('$DistributionName.Replace("-", "_")', script)
+        self.assertIn('$RuntimeDistribution.Replace("-", "_")', script)
+        self.assertIn("$PythonTag-win_amd64.whl", script)
+        self.assertIn("$IsisDataVersion-py3-none-any.whl", script)
         self.assertIn("Upload switch was not set", script)
 
     def test_testpypi_publish_script_can_use_testpypi_api_token(self):

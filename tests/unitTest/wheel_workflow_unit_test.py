@@ -16,6 +16,7 @@ Updated: 2026-07-23  Geng Xun covered the ISIS 10 Windows source-build wheel gat
 Updated: 2026-07-24  Geng Xun covered ISIS 10 private toolchain verification for Ubuntu 22.04 compatibility.
 Updated: 2026-07-24  Geng Xun pinned the official ISIS 10 build and compatible CSM ABI.
 Updated: 2026-07-25  Geng Xun pinned the Windows ISIS 10 gate to SpiceQL 1.4.1.
+Updated: 2026-07-25  Geng Xun covered ISIS 10-specific Windows wheel metadata checks.
 """
 
 from __future__ import annotations
@@ -200,6 +201,9 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         )
         self.assertIn("-PackageVersion 1.4.0rc1", workflow)
         self.assertIn("--package usgs-pyisis-isis10", workflow)
+        self.assertIn("-ExpectedVersion 1.4.0rc1", workflow)
+        self.assertIn("-PythonTag cp313-cp313", workflow)
+        self.assertIn("-IsisDataVersion 1.3.0rc1", workflow)
         self.assertIn("usgs-pyisis-isis10-windows-cp313-wheels", workflow)
 
     def test_workflow_can_publish_configured_release_after_platform_gates(self):

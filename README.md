@@ -4,72 +4,178 @@
 
 </div>
 
-Welcome to the USGS ISIS Python Bindings (i.e., PyISIS)!
-This project wraps the powerful USGS ISIS (v9.0.0) photogrammetric software, enabling seamless integration with Python for planetary image processing.
+# PyISIS
 
-🛠️ Installation: You can easily install the USGS ISIS package using Conda or Mamba. For step-by-step instructions, please see the [Environment Setup Guide](https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/installing-isis-via-anaconda/).
+Python bindings for selected, maintainable, non-GUI APIs from
+[USGS ISIS](https://astrogeology.usgs.gov/docs/software/isis/). PyISIS supports
+planetary image metadata, cubes, camera models, geometry, map projections,
+control networks, and related photogrammetric workflows from Python.
 
-📚 Learning Resources: Processing planetary images with ISIS can be complex. We strongly suggest checking out the [Getting Started Guide](https://astrogeology.usgs.gov/docs/how-to-guides/image-processing/) to navigate the learning curve effectively.
+The project has two Python layers:
 
-# pyISIS / `isis_pybind_standalone`
+- `pyisis`: the recommended high-level interface for most users.
+- `isis_pybind`: direct access to the bound ISIS C++ APIs.
 
-This repository provides Python bindings for **USGS ISIS 9.0.0**, built with `pybind11`.
-The low-level binding package is `isis_pybind`; the recommended user-facing
-entrypoint is the lightweight `pyisis` facade.
+Binary releases are provided as downloadable wheelhouse archives. They are not
+currently published to PyPI.
 
-The scope of this repository is intentionally clear:
+## Choose a release
 
-- use an **already installed ISIS environment** as the external SDK / runtime
-- build the Python-importable extension module `isis_pybind._isis_core`
-- provide the higher-level `pyisis` facade for runtime configuration, cube
-  context management, and common cube/camera helpers
-- expose Python access to APIs used in planetary remote sensing, photogrammetry, control networks, camera models, projections, and geometry processing
+Choose the ISIS line first, then download the archive for your operating
+system. ISIS 9 and ISIS 10 use different Python ABIs and must be installed in
+separate virtual environments.
 
-> The primary development model remains conda-backed source builds. The
-> `v1.3.0rc1-isis9.0.0` prerelease also provides validated platform
-> wheelhouses through GitHub Releases. The main
-> Windows uses `usgs-pyisis-runtime-win64`; the published Linux main wheel
-> contains its audited runtime closure. Both platforms include
-> `usgs-pyisis-isisdata-minimal` for smoke-test data.
+| ISIS line | Release status | Python | Linux | Windows |
+| --- | --- | --- | --- | --- |
+| ISIS 9.0.0 | **Available:** [`v1.3.0rc2-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc2-isis9.0.0) | CPython 3.12 | x86_64, `manylinux_2_35` | x64, `win_amd64` |
+| ISIS 10.0.0 | **Available:** [`v1.4.0rc2-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc2-isis10.0.0) | CPython 3.13 | x86_64, `manylinux_2_35` | x64, `win_amd64` |
 
-## Supported scope
+Current platform validation targets:
 
-The canonical development, packaging, and validation boundary is maintained in
-[`docs/platform-support.md`](docs/platform-support.md).
+- Linux: clean installs on Ubuntu 22.04 and Ubuntu 24.04.
+- Windows: Windows Server 2022 / Windows x64.
+- macOS, Linux ARM64, and Windows ARM64 are not currently release targets.
 
-The current recommended and validated compatibility range is:
+## Install ISIS 9.0.0
 
-| Item | Current recommendation / validated range |
+### 1. Download and extract a wheelhouse
+
+Open the
+[`v1.3.0rc2-isis9.0.0` release](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc2-isis9.0.0)
+and download exactly one platform archive:
+
+- [Linux x86_64, CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/pyisis-v1.3.0rc2-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip)
+- [Windows x64, CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/pyisis-v1.3.0rc2-isis9.0.0-windows-x64-cp312-wheelhouse.zip)
+- [SHA256 checksums](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/SHA256SUMS.txt)
+
+Extract the archive. The commands below assume the extracted directory contains
+a `wheelhouse/` subdirectory.
+
+### 2. Install on Linux
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install --no-index --find-links wheelhouse \
+  usgs-pyisis==1.3.0rc2
+```
+
+### 3. Install on Windows
+
+Run in PowerShell:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install --no-index --find-links wheelhouse `
+  usgs-pyisis==1.3.0rc2
+```
+
+If PowerShell activation is disabled by local policy, call the environment's
+Python directly:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install --no-index `
+  --find-links wheelhouse usgs-pyisis==1.3.0rc2
+```
+
+### 4. Verify the installation
+
+```bash
+python -c "import pyisis, isis_pybind as ip; print(ip.__version__, ip.__isis_version__); print(pyisis.data_status().message)"
+```
+
+The version line should report PyISIS `1.3.0rc2` and ISIS `9.0.0`.
+
+Detailed instructions:
+
+- [Linux / ISIS 9 installation](docs/releases/INSTALL-LINUX-ISIS9.0.0.md)
+- [Windows / ISIS 9 installation](docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md)
+- [ISIS 9 release notes](docs/releases/v1.3.0rc2-isis9.0.0.md)
+
+## Install ISIS 10.0.0
+
+ISIS 10 support uses a separate distribution and Python ABI:
+
+| Item | ISIS 10 release |
 | --- | --- |
-| Operating system | Linux x86_64 and Windows x64 |
-| Python | CPython 3.12 |
-| ISIS | USGS ISIS 9.0.0 runtime / development environment |
-| Distribution mode | GitHub Release wheelhouses, source build, or installation into an active conda environment |
-| Binary validation | Windows Server 2022; Linux manylinux build with Ubuntu 22.04/24.04 clean installs |
-| PyPI status | Not published by the GitHub Release workflow; install the downloaded wheelhouse with pip |
+| Release tag | [`v1.4.0rc2-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc2-isis10.0.0) |
+| Top-level distribution | `usgs-pyisis-isis10` |
+| Python | CPython 3.13 |
+| Linux asset | [`pyisis-v1.4.0rc2-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/pyisis-v1.4.0rc2-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip) |
+| Windows asset | [`pyisis-v1.4.0rc2-isis10.0.0-windows-x64-cp313-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/pyisis-v1.4.0rc2-isis10.0.0-windows-x64-cp313-wheelhouse.zip) |
 
-## What this repository builds
+Download and extract the archive for your operating system. Installation from
+the extracted wheelhouse uses the commands below. The release also provides
+[`SHA256SUMS.txt`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/SHA256SUMS.txt).
 
-After a successful build, the core Python package directory is:
+Linux:
 
-- `build/python/isis_pybind/`
-- `build/python/pyisis/`
+```bash
+python3.13 -m venv .venv-isis10
+source .venv-isis10/bin/activate
+python -m pip install --upgrade pip
+python -m pip install --no-index --find-links wheelhouse \
+  usgs-pyisis-isis10==1.4.0rc2
+```
 
-It typically contains:
+Windows PowerShell:
 
-- `build/python/isis_pybind/__init__.py`
-- `build/python/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so`
-- `build/python/isis_pybind/LICENSE`
-- `build/python/pyisis/__init__.py`
-- `build/python/pyisis/LICENSE`
+```powershell
+py -3.13 -m venv .venv-isis10
+.\.venv-isis10\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install --no-index --find-links wheelhouse `
+  usgs-pyisis-isis10==1.4.0rc2
+```
 
-The actual bound shared library is:
+The ISIS 10 package keeps the same import names:
 
-- `_isis_core.cpython-312-x86_64-linux-gnu.so`
+```python
+import pyisis
+import isis_pybind
+```
 
-However, **do not copy and use only the `.so` file by itself**. It should live inside the `isis_pybind/` package directory together with `__init__.py`.
+It includes a runtime-version guard so that an ISIS 10 binding is not silently
+loaded with an ISIS 9 runtime. Do not install both release lines into the same
+environment.
 
-Most application code should import the facade:
+Planning and installation references:
+
+- [ISIS 9/10 compatibility plan](docs/isis9-isis10-binding-compatibility-plan.md)
+- [Linux / ISIS 10 installation](docs/releases/INSTALL-LINUX-ISIS10.0.0.md)
+- [Windows / ISIS 10 installation](docs/releases/INSTALL-WINDOWS-ISIS10.0.0.md)
+- [ISIS 10 release notes](docs/releases/v1.4.0rc2-isis10.0.0.md)
+
+## ISISDATA
+
+Each release wheelhouse includes only a small ISISDATA package for import and
+smoke tests. Real camera, SPICE, radiometric calibration, and mission-specific
+processing require a complete external ISISDATA installation.
+
+Linux:
+
+```bash
+export ISISDATA=/path/to/isisdata
+```
+
+Windows PowerShell:
+
+```powershell
+$env:ISISDATA = "D:\isisdata"
+```
+
+The official ISIS installation and data guides remain the authority for
+obtaining and maintaining a complete ISIS runtime/data environment:
+
+- [Install ISIS](https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/installing-isis-via-anaconda/)
+- [ISIS data area](https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/isis-data-area/)
+
+## Basic use
+
+Use the high-level facade for common work:
 
 ```python
 import pyisis
@@ -79,651 +185,82 @@ with pyisis.open_cube("image.cub") as cube:
     print(pyisis.ground_at_center(cube))
 ```
 
-When you need direct access to the bound ISIS C++ API, import the low-level
-package:
+Use the low-level package when direct access to a bound ISIS class is needed:
 
 ```python
 import isis_pybind as ip
+
+print("PyISIS:", ip.__version__)
+print("Compiled for ISIS:", ip.__isis_version__)
 ```
 
-## Install USGS ISIS first
+Runnable examples are available under [`examples/`](examples/), including
+camera geometry, forward intersection, map projections, control networks, and
+image matching.
 
-For source builds, this binding project does not install ISIS for you. You must
-first prepare a **working ISIS environment**, preferably managed with conda /
-mamba. The GitHub Release wheelhouses carry the required platform runtime, but
-real mission processing still needs a complete external `ISISDATA` tree.
+## What the binary releases contain
 
-### Recommended approach
+The release archive is an offline wheelhouse. Install the top-level
+distribution as shown above; pip resolves the included local dependencies.
 
-Prepare an environment that already contains the ISIS 9.0.0 runtime and development files, for example the locally used environment:
+- Linux: the main binding wheel contains its audited shared-library runtime
+  closure, plus a separate minimal ISISDATA wheel.
+- Windows: the binding wheel, a separate ISIS runtime/dependency wheel, and a
+  minimal ISISDATA wheel.
 
-- `asp360_new`
+You do not need to select or install the dependency wheels individually.
 
-This project assumes only that the environment provides:
+## Scope and limitations
 
-- `${CONDA_PREFIX}/include/isis`
-- `${CONDA_PREFIX}/lib/libisis.so`
-- `${CONDA_PREFIX}/lib/Camera.plugin`
+PyISIS is a curated Python interface, not a complete Python mirror of every
+ISIS C++ class.
 
-In other words, any ISIS environment that provides those pieces can be used to build this binding.
+Included:
 
-### Suggested ISIS installation path
+- Selected stable, non-GUI ISIS APIs.
+- High-level Python helpers and direct low-level bindings.
+- Linux and Windows binary wheelhouses for the release targets listed above.
+- Tests and examples for supported binding workflows.
 
-1. Use the **official USGS ISIS / Astrogeology** installation approach, or a conda recipe already validated by your lab or team.
-2. Activate that environment.
-3. Confirm that the following key paths exist:
-   - `include/isis`
-   - `lib/libisis.so`
-   - `lib/Camera.plugin`
+Not included:
 
-If those three items are missing, this project cannot be configured and linked successfully.
+- A complete ISISDATA archive.
+- Every ISIS C++ class, Qt signal, slot, or GUI subsystem.
+- The full native ISIS application suite on Windows.
+- Native GUI applications such as `qview`, `qnet`, or `qmos`.
 
-### About `ISISDATA`
+Linux users may install official ISIS separately when they need native command
+line applications such as `cam2map`, `spiceinit`, or mission importers. Future
+Windows-native ISIS APP work is a separate development track and is not part of
+the current PyISIS wheel contract.
 
-- Many real camera, time, and geometry workflows still require `ISISDATA` at runtime.
-- The repository tests will try to fall back to `tests/data/isisdata/mockup/` as a minimal mock environment.
-- But if you are processing your own real imagery and camera models, you should prefer a properly configured real `ISISDATA` setup.
+See [`docs/platform-support.md`](docs/platform-support.md) for the maintained
+support boundary.
 
-## Installing this binding: recommended options
+## Build from source
 
-### Option W: GitHub Release platform wheelhouse
+Source builds are intended for developers who already have a matching official
+ISIS development environment. This repository uses conda for compilers and
+dependencies; do not mix system compilers with conda ISIS libraries.
 
-Download the archive for your platform from
-[`v1.3.0rc1-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc1-isis9.0.0),
-extract it, and follow its `INSTALL.md`. The core command is:
+The active ISIS headers and libraries are the source of truth for signatures
+and compile decisions. Start with the repository's
+[`AGENTS.md`](AGENTS.md) build and validation commands, then use the installation
+documents above for the target ISIS line and platform.
 
-```text
-python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc1
-```
+## Getting help
 
-Detailed instructions are also tracked in
-[`docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md`](docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md)
-and
-[`docs/releases/INSTALL-LINUX-ISIS9.0.0.md`](docs/releases/INSTALL-LINUX-ISIS9.0.0.md).
+Open a [GitHub issue](https://github.com/gengxun-henu/pyisis/issues) and include:
 
-The following commands are for maintainers who need to build a wheelhouse
-locally.
-
-The Windows pip packaging path builds three distributions:
-
-- `usgs-pyisis`: the Python facade and `isis_pybind._isis_core` extension
-- `usgs-pyisis-runtime-win64`: the staged Windows ISIS runtime and required DLL dependency closure
-- `usgs-pyisis-isisdata-minimal`: the small ISISDATA tree used for import and smoke tests
-
-Build the local wheelhouse from a Windows shell that can activate MSVC and has
-access to the locally built ISIS prefix:
-
-```powershell
-$env:CONDA_PREFIX = "E:\code\pyisis-win-env"
-$env:PYISIS_DEP_PREFIX = $env:CONDA_PREFIX
-.\tools\packaging\build_wheels.ps1 `
-  -IsisPrefix "$PWD\build\windows\isis-prefix" `
-  -OutputDir "$PWD\wheelhouse" `
-  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
-  -DependencyPrefix "$env:CONDA_PREFIX"
-```
-
-Then verify the wheels in a fresh virtual environment:
-
-```powershell
-python tools\packaging\test_wheel_install.py `
-  --wheelhouse wheelhouse `
-  --venv build\packaging\pip-smoke-venv
-```
-
-For a manual local install from that wheelhouse:
-
-```powershell
-python -m pip install --no-index --find-links wheelhouse usgs-pyisis
-```
-
-The local validation should install `usgs-pyisis` from `wheelhouse`, import
-`pyisis` and `isis_pybind`, and report that the packaged minimal `ISISDATA` is
-usable for smoke tests. Real mission processing should still use a complete
-external `ISISDATA` tree.
-
-Before uploading to TestPyPI, run the protected check-only helper:
-
-```powershell
-.\tools\packaging\publish_testpypi.ps1 `
-  -Wheelhouse wheelhouse `
-  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
-  -CheckOnly
-```
-
-When TestPyPI credentials are configured outside the repository, add `-Upload`.
-For token-based uploads, set `$env:TESTPYPI_API_TOKEN` outside the repository;
-the helper maps it to twine's `__token__` login. After upload, verify the
-published packages from a new venv:
-
-```powershell
-python tools\packaging\test_testpypi_install.py `
-  --venv build\packaging\testpypi-venv
-```
-
-The `wheels` GitHub Actions workflow also has a manual `publish_testpypi`
-input. Keep it disabled for normal PR validation; enable it only after the
-`TESTPYPI_API_TOKEN` repository secret is configured.
-
-On Linux x86_64, `pip install usgs-pyisis` is wired to install
-`usgs-pyisis-runtime-linux-x86_64` automatically through a platform marker once
-both wheels are published to the same index. The local Linux wheel build helper
-is:
-
-```bash
-bash tools/packaging/build_wheels_linux.sh \
-  --isis-prefix "$CONDA_PREFIX" \
-  --output-dir "$PWD/wheelhouse" \
-  --python-executable "$CONDA_PREFIX/bin/python" \
-  --dependency-prefix "$CONDA_PREFIX"
-```
-
-The GitHub Actions workflow builds the Linux wheelhouse in a PyPA manylinux
-container, bundles the runtime into the main wheel, audits its ABI and
-`manylinux_2_35_x86_64` policy, and clean-installs it on Ubuntu 22.04 and
-24.04.
-
-### Option A: build from source and install into the current Python environment
-
-This is the **recommended** and most reliable installation method at the moment.
-
-If you want the shortest repo-native entrypoint for the standard build + test + smoke flow, prefer:
-
-```bash
-scripts/build_test_smoke.sh full
-```
-
-1. Activate the ISIS conda environment you have already prepared.
-2. Use that environment as both:
-   - the Python interpreter source
-   - the ISIS headers / libraries source
-3. Configure and build this repository.
-4. Install it into the current environment's `site-packages` via `cmake --install`.
-
-A standard workflow looks like this:
-
-```bash
-export ISIS_PREFIX="$CONDA_PREFIX"
-cmake -S . -B build \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
-  -DISIS_PREFIX="$ISIS_PREFIX"
-cmake --build build -j"$(nproc)"
-cmake --install build
-```
-
-If you want to exclude ASP / VW camera libraries from the link step during configuration, enable the CMake option below:
-
-```bash
-cmake -S . -B build \
-   -DCMAKE_BUILD_TYPE=Release \
-   -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
-   -DISIS_PREFIX="$ISIS_PREFIX" \
-   -DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON
-```
-
-When `-DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON` is enabled, the build will exclude `libAsp*` and `libVw*` from the extra ISIS camera library link set while keeping the default behavior unchanged when the option is omitted or set to `OFF`.
-
-After installation, `isis_pybind` will be copied into the current Python environment's `site-packages`.
-
-### Option B: temporary use directly from the build tree
-
-If you only want to develop, debug, or do a quick trial run, you can skip installation and use the package directly from the build tree:
-
-```bash
-export PYTHONPATH="$PWD/build/python${PYTHONPATH:+:$PYTHONPATH}"
-python -c "import isis_pybind; print(isis_pybind.__file__)"
-```
-
-This is suitable for:
-
-- local development
-- quick smoke tests
-- temporary validation of examples or unit tests
-
-But it is not the recommended formal installation method for end users.
-
-## Installing the shared library: what actually matters
-
-In this project, the “generated binding shared library” is `isis_pybind/_isis_core*.so`.
-
-### Recommended installation method
-
-Prefer:
-
-```bash
-cmake --install build
-```
-
-Why:
-
-- it installs `__init__.py` and `_isis_core*.so` together in the correct location
-- it also includes `LICENSE`
-- it avoids the easy-to-make situation where “the `.so` exists, but the Python package structure is incomplete”
-
-### Manual installation method
-
-If you download a **prebuilt binary artifact** from a GitHub Release, and that artifact already contains a complete package directory such as:
-
-```text
-isis_pybind/
-  __init__.py
-  _isis_core.cpython-312-x86_64-linux-gnu.so
-  LICENSE
-```
-
-then you can copy the entire `isis_pybind/` directory into the target Python environment's `site-packages` directory.
-If the artifact also contains the `pyisis/` facade directory, copy that
-directory beside `isis_pybind/`.
-
-For a conda environment on Linux, the destination is typically:
-
-```text
-$CONDA_PREFIX/lib/pythonX.Y/site-packages/isis_pybind/
-```
-
-For example, if your target environment is a conda ISIS environment using CPython 3.12, the final path often looks like:
-
-```text
-/home/your_user/miniconda3/envs/your_env_name/lib/python3.12/site-packages/isis_pybind/
-```
-
-If you are copying from a local build of this repository, prefer copying the fully built package directory:
-
-```text
-build/python/isis_pybind/
-```
-
-instead of copying only the source-side directory:
-
-```text
-python/isis_pybind/
-```
-
-because the built package directory includes the compiled extension module `_isis_core*.so` together with `__init__.py`.
-
-You can ask the target environment itself for the correct `site-packages` path with:
-
-```bash
-python -c "import sysconfig; print(sysconfig.get_path('purelib'))"
-```
-
-Then copy the entire built package directory into that location so that the result becomes:
-
-```text
-<site-packages>/isis_pybind/__init__.py
-<site-packages>/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so
-<site-packages>/isis_pybind/LICENSE
-<site-packages>/pyisis/__init__.py
-<site-packages>/pyisis/LICENSE
-```
-
-Make sure the target environment uses a compatible Python ABI. For example, a file named `_isis_core.cpython-312-x86_64-linux-gnu.so` is built for CPython 3.12 and should be installed into a Python 3.12 environment rather than copied into Python 3.11 or 3.13.
-
-> Copying only `_isis_core*.so` by itself is not recommended.
-
-### Shared-library loading requirements
-
-Even if the Python package itself is installed successfully, runtime loading still requires the target machine to resolve external dependencies such as:
-
-- `libisis.so`
-- Qt shared libraries
-- required camera / projection / Bullet-related libraries
-
-Therefore, **prebuilt binary artifacts are currently intended only for Linux users who already have a compatible ISIS environment**.
-
-## How to verify the installation
-
-At minimum, perform these three checks.
-
-For repository-local validation after code changes, you can also start with:
-
-```bash
-scripts/build_test_smoke.sh full
-```
-
-### 1. Verify that Python can import the package
-
-```bash
-python -c "import pyisis; print(pyisis.__file__)"
-```
-
-### 2. Verify that the core extension is loaded
-
-```bash
-python -c "import pyisis; print(pyisis.Cube, pyisis.Camera)"
-```
-
-### 3. Run the minimal smoke flow
-
-```bash
-python tests/smoke_import.py
-```
-
-If all three pass, that generally means:
-
-- the `isis_pybind` package path is correct
-- `_isis_core` can be loaded by Python
-- the basic runtime dependencies are available
-
-## Example: forward intersection
-
-The repository already includes a ready-to-reference example:
-
-- `examples/forward_intersection.py`
-- usage guide: `examples/forward_intersection_usage.md`
-
-This example demonstrates how to:
-
-- open two ISIS cubes
-- provide a left-image point
-- automatically estimate / match the conjugate point in the right image
-- call `Stereo.elevation(...)` to perform forward intersection
-
-Example command using the repository's bundled test data:
-
-```bash
-python examples/forward_intersection.py \
-  tests/data/mosrange/EN0108828322M_iof.cub \
-  tests/data/mosrange/EN0108828327M_iof.cub \
-  64.0 \
-  512.0
-```
-
-If you want to run the example directly from the build tree, make sure Python can see the package under `build/python`, or install it first with `cmake --install build`.
-
-## Example: DOM matching ControlNet workflow
-
-The repository also contains a DOM-to-ControlNet example workflow under:
-
-- `examples/controlnet_construct/`
-- end-to-end usage walkthrough: `examples/controlnet_construct/usage.md`
-- detailed requirements / workflow notes: `examples/controlnet_construct/requirements_dom_matching_controlnet.md`
-- example config: `examples/controlnet_construct/controlnet_config.example.json`
-
-This workflow is intended for the common planetary-photogrammetry pattern:
-
-1. match tie points on orthorectified DOMs,
-2. convert DOM-space keypoints back into original-image coordinates,
-3. write a pairwise ISIS `ControlNet`,
-4. later merge many pairwise `.net` files with `cnetmerge`.
-
-If you want to run the full pipeline step by step as `image_overlap.py` → `examples/image_match/image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`, start with `examples/controlnet_construct/usage.md`.
-
-For the DOM matching stage, it is usually better to set the main `ImageMatch` options explicitly instead of relying on the raw defaults. A practical starting point is:
-
-```json
-"ImageMatch": {
-   "band": 1,
-   "max_image_dimension": 3000,
-   "sub_block_size_x": 1024,
-   "sub_block_size_y": 1024,
-   "overlap_size_x": 128,
-   "overlap_size_y": 128,
-   "minimum_value": null,
-   "maximum_value": null,
-   "lower_percent": 0.5,
-   "upper_percent": 99.5,
-   "invalid_values": [],
-   "special_pixel_abs_threshold": 1e300,
-   "min_valid_pixels": 64,
-   "valid_pixel_percent_threshold": 0.05,
-   "ratio_test": 0.75,
-   "max_features": null,
-   "sift_octave_layers": 3,
-   "sift_contrast_threshold": 0.04,
-   "sift_edge_threshold": 10.0,
-   "sift_sigma": 1.6,
-   "crop_expand_pixels": 100,
-   "min_overlap_size": 16,
-   "use_parallel_cpu": true,
-   "num_worker_parallel_cpu": 8,
-   "write_match_visualization": true,
-   "match_visualization_scale": 0.3333333333333333
-}
-```
-
-Here:
-
-- `valid_pixel_percent_threshold = 0.05` skips any tile whose valid-pixel ratio is below $5\%$;
-- `num_worker_parallel_cpu = 8` starts the CPU process-pool worker cap at a conservative but practical value, while the actual runtime worker count still contracts automatically to the tile count when needed.
-
-The sample config at `examples/controlnet_construct/controlnet_config.example.json` now includes those recommendations, and both `examples/controlnet_construct/run_pipeline_example.sh` and `examples/controlnet_construct/run_image_match_batch_example.sh` will forward the `ImageMatch` section into `examples/image_match/image_match.py` as default matching parameters. The shared `image_match.py` entrypoint itself also supports `--config`, so if you call it directly you can use the same config file instead of spelling every parameter out on the command line.
-
-For example:
-
-```bash
-python examples/image_match/image_match.py \
-  --config examples/controlnet_construct/controlnet_config.example.json \
-  left_dom.cub right_dom.cub left.key right.key
-```
-
-If you also pass an explicit CLI option such as `--ratio-test 0.8` or `--num-worker-parallel-cpu 4`, the CLI value still overrides the config default.
-
-If you want a copy-ready batch template instead of assembling the parameters yourself, `examples/controlnet_construct/usage.md` now includes a more visible “recommended parameter template” section with:
-
-- a ready-to-run `run_pipeline_example.sh` template,
-- a manual batch `examples/image_match/image_match.py` template,
-- quick tuning guidance for `0.05`, `0.03`, and `0.1`.
-
-If you prefer a shorter standalone entry point, you can now also jump directly to:
-
-- `examples/controlnet_construct/recommended_batch_templates.md`
-- `examples/controlnet_construct/run_image_match_batch_example.sh`
-
-From the current workflow revision onward, the example wrapper scripts also document and use these defaults more explicitly:
-
-- CPU tiled matching is enabled by default unless you pass `--no-parallel-cpu`;
-- `run_image_match_batch_example.sh` keeps stdout compact by default and treats `work/match_metadata/` as the primary per-pair diagnostics sink;
-- `run_image_match_batch_example.sh` writes **pre-RANSAC** match previews into `work/match_viz/` by default;
-- `run_pipeline_example.sh` writes both:
-   - **pre-RANSAC** previews into `work/match_viz/`, and
-   - **post-RANSAC** previews into `work/match_viz_post_ransac/`.
-
-If you want to disable the pre-RANSAC previews when calling the batch image-match wrapper, forward `-- --no-write-match-visualization` to `examples/image_match/image_match.py`.
-
-The output-style convention is now intentionally consistent across the example wrappers: keep terminal output compact, and prefer JSON files for detailed diagnostics. In practice that means:
-
-- `run_image_match_batch_example.sh` mainly prints batch progress on stdout, while per-pair diagnostics live in `work/match_metadata/`;
-- `run_pipeline_example.sh` prints step summaries on stdout, while stage JSON summaries live in `work/reports/` and `work/match_results/`;
-- if you need the full `examples/image_match/image_match.py` result payload itself, call it directly or forward its own `--result-output` option through the wrapper.
-
-The current implementation split is now real rather than wrapper-only: `examples/image_match/` is the shared source-of-truth for DOM matching and DOM-preparation logic, while `examples/controlnet_construct/image_match.py` and `examples/controlnet_construct/dom_prepare.py` remain as compatibility wrappers for older scripts and imports.
-
-### Single stereo pair
-
-If you already have DOM-space `.key` files for one stereo pair, you can build a pairwise ControlNet like this:
-
-```bash
-python examples/controlnet_construct/controlnet_stereopair.py from-dom \
-   left_pair_A.key \
-   left_pair_B.key \
-   left_dom.cub \
-   right_dom.cub \
-   left_original.cub \
-   right_original.cub \
-   examples/controlnet_construct/controlnet_config.example.json \
-   pair_outputs/left__right.net \
-   --pair-id S1 \
-   --report-path pair_outputs/left__right.summary.json
-```
-
-Notes:
-
-- `PointIdPrefix` comes from the config JSON.
-- `--pair-id S1` adds a pair-specific namespace such as `P_S1_00000001`, which helps avoid accidental `PointId` collisions when multiple pairwise nets are later merged with `cnetmerge`.
-- If you omit `--pair-id`, the script falls back to the config's optional `PairId`; if neither is set, it keeps the backward-compatible `P00000001`-style behavior.
-
-### Batch mode across `images_overlap.lis`
-
-If you already produced DOM-space key files for every overlap pair listed in `images_overlap.lis`, you can batch-build all pairwise ControlNets with automatic stereo-pair IDs:
-
-```bash
-python examples/controlnet_construct/controlnet_stereopair.py from-dom-batch \
-   work/images_overlap.lis \
-   work/original_images.lis \
-   work/doms_scaled.lis \
-   work/dom_keys \
-   examples/controlnet_construct/controlnet_config.example.json \
-   work/pair_nets \
-   --report-dir work/reports \
-   --pair-id-prefix S \
-   --pair-id-start 1
-```
-
-In this mode:
-
-- the script reads `images_overlap.lis` and processes every stereo pair in order;
-- it expects per-pair DOM key files inside `work/dom_keys/` using names like `A__B_A.key` and `A__B_B.key`;
-- it automatically assigns `S1`, `S2`, `S3`, ... to successive pairs, so users do not need to pass `--pair-id` manually for each pair;
-- pairwise `.net` files are written into `work/pair_nets/`;
-- per-pair JSON sidecars and the batch summary JSON are written into `work/reports/`.
-
-The resulting per-pair reports record the generated `pair_id`, `point_id_namespace`, and a sample point ID so downstream `cnetmerge` debugging is less of a treasure hunt.
-
-### Measure-level DOM RANSAC filtering
-
-After building or refining a control network whose measures are in original image
-coordinates, use `examples/controlnet_construct/filter_controlnet_dom_ransac.py`
-to project measures into DOM pixel space, run pair-parallel RANSAC, and mark
-outlier measures ignored in a new `.net`.
-
-```bash
-python examples/controlnet_construct/filter_controlnet_dom_ransac.py \
-  --input-net ba2_cnet_seedgrid.net \
-  --original-list reduced_original_images.lis \
-  --dom-list dom_images.lis \
-  --output-net ba2_dom_measure_ransac.net \
-  --report ba2_dom_measure_ransac_report.json \
-  --outlier-measures ba2_dom_measure_ransac_outliers.jsonl \
-  --projection-failures ba2_dom_measure_ransac_projection_failures.jsonl \
-  --num-workers 8 \
-  --max-open-cubes-per-worker 16
-```
-
-## Unit tests: also useful as usage references
-
-The tests in this repository are both regression checks and practical API usage references.
-
-Key entry points include:
-
-- `tests/smoke_import.py`: quick smoke validation
-- `tests/unitTest/_unit_test_support.py`: shared test helpers and environment bootstrap logic
-- `tests/unitTest/forward_intersection_example_test.py`: focused regression coverage for the forward-intersection example
-- `tests/unitTest/`: detailed usage examples organized by class / module
-
-### Run the full unit test suite
-
-```bash
-python -m unittest discover -s tests/unitTest -p "*_unit_test.py"
-```
-
-### Run the example-related test
-
-```bash
-python -m unittest tests.unitTest.forward_intersection_example_test
-```
-
-### Run via CTest
-
-If you have already configured the project with CMake, you can also run:
-
-```bash
-ctest --output-on-failure -R python-unit-tests
-```
-
-## Release recommendations
-
-A GitHub Release should ideally contain at least the following assets:
-
-1. **Source package**
-   - The repository source archive (`zip` / `tar.gz`) generated by GitHub is sufficient.
-2. **Validated platform wheelhouses**
-   - Linux x86_64 / CPython 3.12 / manylinux 2.35
-   - Windows x64 / CPython 3.12
-3. **Installation instructions**
-   - These can live in this README, on the Release page, or in a separate `INSTALL.md`.
-4. **Version compatibility notes**
-   - A version matrix for Linux / Python / ISIS.
-5. **Checksum information**
-   - `SHA256SUMS.txt`
-
-### Recommended Release artifact naming
-
-Include the following key information in the asset name:
-
-- platform: `linux-x86_64`
-- Python ABI: `cp312`
-- ISIS version: `isis9.0.0`
-- project version: `v1.3.0rc1`
-
-For example:
-
-```text
-pyisis-v1.3.0rc1-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip
-pyisis-v1.3.0rc1-isis9.0.0-windows-x64-cp312-wheelhouse.zip
-SHA256SUMS.txt
-```
-
-## Checksum recommendations
-
-When publishing binary artifacts, it is recommended to upload a checksum file as well:
-
-```text
-SHA256SUMS.txt
-```
-
-After downloading, users can run:
-
-```bash
-sha256sum -c SHA256SUMS.txt
-```
-
-This helps confirm that:
-
-- the artifact is complete and not corrupted
-- the download was not truncated
-- the user received the exact build artifact you published
-
-## Common issues
-
-### 1. `import isis_pybind` fails, or `_isis_core` is missing
-
-Check these first:
-
-- whether the current Python is **CPython 3.12**
-- whether `isis_pybind` is coming from the intended build or install environment
-- whether an old `build/python` artifact is being picked up accidentally
-
-### 2. `libisis.so` or another shared library cannot be found
-
-This usually means:
-
-- the target machine does not have a compatible ISIS environment installed
-- or the current shell / Python runtime is not pointing to the correct conda environment
-
-### 3. Examples or tests complain about `ISISDATA`
-
-- For real workflows, configure a complete `ISISDATA`
-- Repository tests will usually try `tests/data/isisdata/mockup/` automatically
-- But not every real-world workflow can rely on mock data
-
-### 4. Can this be supported as a normal `pip install` package?
-
-Yes, for the supported CPython 3.12 platforms. Download the matching GitHub
-Release archive and install from its local `wheelhouse` with pip. Windows uses
-a separate runtime wheel; Linux uses a self-contained audited main wheel.
-Neither platform wheelhouse is uploaded to PyPI by the GitHub Release workflow.
-The minimal ISISDATA package remains smoke-test-only.
+- operating system and architecture;
+- Python version;
+- selected ISIS line and PyISIS version;
+- the wheelhouse asset name or source commit;
+- complete error output;
+- whether a full `ISISDATA` tree is configured.
 
 ## License
 
-The binding-layer code and Python entry-point code authored in this repository are distributed under the:
-
-- `MIT License`
-
-See:
-
-- `LICENSE`
-
-Upstream ISIS source code, third-party dependencies, and external shared libraries remain under their respective licenses.
+Binding and Python code authored in this repository are distributed under the
+[MIT License](LICENSE). USGS ISIS, bundled runtime dependencies, and external
+data retain their respective licenses.

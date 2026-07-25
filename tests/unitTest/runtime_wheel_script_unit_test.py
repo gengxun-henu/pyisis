@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-24
+Last Modified: 2026-07-25
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
@@ -10,6 +10,7 @@ Updated: 2026-07-23  Geng Xun limited Linux runtime staging to ISIS-owned bindin
 Updated: 2026-07-23  Geng Xun covered versioned ISIS 10 runtime distribution metadata.
 Updated: 2026-07-23  Geng Xun covered versioned ISIS 10 Windows runtime metadata.
 Updated: 2026-07-24  Geng Xun preserved declared ELF SONAME aliases in Linux dependency closures.
+Updated: 2026-07-25  Geng Xun aligned runtime staging fixtures with the ISIS 10 rc2 identity.
 """
 
 from __future__ import annotations
@@ -87,7 +88,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     "--distribution-name",
                     "usgs-pyisis-runtime-isis10-win64",
                     "--package-version",
-                    "1.4.0rc1",
+                    "1.4.0rc2",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -117,7 +118,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 'name = "usgs-pyisis-runtime-isis10-win64"',
                 runtime_pyproject,
             )
-            self.assertIn('version = "1.4.0rc1"', runtime_pyproject)
+            self.assertIn('version = "1.4.0rc2"', runtime_pyproject)
 
             sys.path.insert(0, str(stage / "src"))
             sys.modules.pop("pyisis_runtime", None)
@@ -227,7 +228,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     "--distribution-name",
                     "usgs-pyisis-runtime-isis10-linux-x86_64",
                     "--package-version",
-                    "1.4.0rc1",
+                    "1.4.0rc2",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -256,7 +257,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 'name = "usgs-pyisis-runtime-isis10-linux-x86_64"',
                 runtime_pyproject,
             )
-            self.assertIn('version = "1.4.0rc1"', runtime_pyproject)
+            self.assertIn('version = "1.4.0rc2"', runtime_pyproject)
 
             sys.path.insert(0, str(stage / "src"))
             sys.modules.pop("pyisis_runtime", None)

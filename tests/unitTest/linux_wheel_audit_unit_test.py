@@ -2,9 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-07-23
-Last Modified: 2026-07-24
+Last Modified: 2026-07-25
 Updated: 2026-07-23  Geng Xun added streaming GLIBC policy audit coverage.
 Updated: 2026-07-24  Geng Xun added versioned ISIS distribution wheel selection.
+Updated: 2026-07-25  Geng Xun aligned wheel selection fixtures with the ISIS 10 rc2 identity.
 """
 
 from __future__ import annotations
@@ -105,7 +106,7 @@ class LinuxWheelAuditUnitTest(unittest.TestCase):
             wheelhouse.mkdir()
             _write_wheel(
                 wheelhouse
-                / "usgs_pyisis_isis10-1.4.0rc1-cp313-cp313-manylinux_2_35_x86_64.whl",
+                / "usgs_pyisis_isis10-1.4.0rc2-cp313-cp313-manylinux_2_35_x86_64.whl",
                 {"isis_pybind/_isis_core.so": b"\x7fELF\x00GLIBC_2.34\x00"},
             )
 

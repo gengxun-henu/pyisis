@@ -1,4 +1,4 @@
-# Install PyISIS v1.3.0rc1 on Linux x86_64
+# Install PyISIS v1.3.0rc2 on Linux x86_64
 
 ## Requirements
 
@@ -16,7 +16,7 @@ Run these commands in the extracted archive directory:
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc1
+python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc2
 ```
 
 ## Verify
@@ -25,7 +25,7 @@ python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc1
 python -c "import pyisis, isis_pybind as ip; print(ip.__version__); print(pyisis.data_status().message)"
 ```
 
-The expected binding version is `1.3.0rc1`.
+The expected binding version is `1.3.0rc2`.
 
 ## Real mission data
 

@@ -4,716 +4,246 @@
 
 </div>
 
-欢迎使用 USGS ISIS Python Bindings（即 PyISIS）！
-本项目为强大的 USGS ISIS（v9.0.0）摄影测量软件提供 Python 绑定，使其能够更顺畅地集成到行星影像处理工作流中。
+# PyISIS
 
-🛠️ 安装说明：你可以通过 Conda 或 Mamba 安装 USGS ISIS。分步安装指南请参见 [Environment Setup Guide](https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/installing-isis-via-anaconda/)。
+PyISIS 为 [USGS ISIS](https://astrogeology.usgs.gov/docs/software/isis/) 中
+经过筛选、可稳定维护的非 GUI API 提供 Python 绑定，主要面向行星影像元数据、
+Cube、相机模型、几何、地图投影、控制网和摄影测量处理。
 
-📚 学习资源：使用 ISIS 处理行星影像有一定学习门槛，建议先阅读 [Getting Started Guide](https://astrogeology.usgs.gov/docs/how-to-guides/image-processing/)，以便更快上手。
+项目提供两个 Python 层次：
 
-# pyISIS / `isis_pybind_standalone`
+- `pyisis`：推荐大多数用户使用的高层接口。
+- `isis_pybind`：直接访问已经绑定的 ISIS C++ API。
 
-本仓库基于 `pybind11` 为 **USGS ISIS 9.0.0** 提供 Python 绑定。低层绑定包是 `isis_pybind`，推荐的用户入口是轻量级 `pyisis` facade。
+二进制版本以 GitHub Release wheelhouse 压缩包发布，目前没有上传到 PyPI。
 
-本仓库的目标范围非常明确：
+## 选择版本
 
-- 使用**已经安装好的 ISIS 环境**作为外部 SDK / 运行时
-- 构建可被 Python 导入的扩展模块 `isis_pybind._isis_core`
-- 提供用于运行时配置、cube 上下文管理和常用 cube/camera helper 的 `pyisis` facade
-- 向 Python 暴露行星遥感、摄影测量、控制网、相机模型、投影与几何处理等相关 API
+请先选择 ISIS 版本，再下载对应操作系统的压缩包。ISIS 9 与 ISIS 10 使用不同的
+Python ABI，必须安装到不同的虚拟环境中。
 
-> 当前主线开发方式仍然是基于 conda 的源码构建。
-> `v1.3.0rc1-isis9.0.0` 预发布版本同时通过 GitHub Releases 提供已验证的平台 wheelhouse。
-> Windows 使用 `usgs-pyisis-runtime-win64`；发布的 Linux 主 wheel 已合并并审计
-> runtime 依赖闭包。两个平台都包含用于 smoke test 的
-> `usgs-pyisis-isisdata-minimal`。
+| ISIS 版本 | 发布状态 | Python | Linux | Windows |
+| --- | --- | --- | --- | --- |
+| ISIS 9.0.0 | **已发布：**[`v1.3.0rc2-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc2-isis9.0.0) | CPython 3.12 | x86_64，`manylinux_2_35` | x64，`win_amd64` |
+| ISIS 10.0.0 | **已发布：**[`v1.4.0rc2-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc2-isis10.0.0) | CPython 3.13 | x86_64，`manylinux_2_35` | x64，`win_amd64` |
 
-## 当前支持范围
+当前平台验证范围：
 
-开发、打包与验证边界以
-[`docs/platform-support.md`](docs/platform-support.md) 为准。
+- Linux：Ubuntu 22.04 和 Ubuntu 24.04 清洁环境安装。
+- Windows：Windows Server 2022 / Windows x64。
+- 当前不发布 macOS、Linux ARM64 或 Windows ARM64 安装包。
 
-目前推荐并已验证的兼容范围如下：
+## 安装 ISIS 9.0.0 版本
 
-| 项目 | 当前推荐 / 已验证范围 |
+### 1. 下载并解压 wheelhouse
+
+打开
+[`v1.3.0rc2-isis9.0.0` Release](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc2-isis9.0.0)，
+根据操作系统下载一个压缩包：
+
+- [Linux x86_64，CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/pyisis-v1.3.0rc2-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip)
+- [Windows x64，CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/pyisis-v1.3.0rc2-isis9.0.0-windows-x64-cp312-wheelhouse.zip)
+- [SHA256 校验和](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/SHA256SUMS.txt)
+
+解压后，以下命令默认当前目录中存在 `wheelhouse/` 子目录。
+
+### 2. Linux 安装
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install --no-index --find-links wheelhouse \
+  usgs-pyisis==1.3.0rc2
+```
+
+### 3. Windows 安装
+
+在 PowerShell 中运行：
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install --no-index --find-links wheelhouse `
+  usgs-pyisis==1.3.0rc2
+```
+
+如果本机策略不允许执行 PowerShell 激活脚本，可以直接调用虚拟环境中的 Python：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install --no-index `
+  --find-links wheelhouse usgs-pyisis==1.3.0rc2
+```
+
+### 4. 验证
+
+```bash
+python -c "import pyisis, isis_pybind as ip; print(ip.__version__, ip.__isis_version__); print(pyisis.data_status().message)"
+```
+
+版本信息应显示 PyISIS `1.3.0rc2` 和 ISIS `9.0.0`。
+
+详细文档：
+
+- [Linux / ISIS 9 安装说明](docs/releases/INSTALL-LINUX-ISIS9.0.0.md)
+- [Windows / ISIS 9 安装说明](docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md)
+- [ISIS 9 发布说明](docs/releases/v1.3.0rc2-isis9.0.0.md)
+
+## 安装 ISIS 10.0.0 版本
+
+ISIS 10 使用独立分发包和 Python ABI：
+
+| 项目 | ISIS 10 版本 |
 | --- | --- |
-| 操作系统 | Linux x86_64 与 Windows x64 |
-| Python | CPython 3.12 |
-| ISIS | USGS ISIS 9.0.0 运行时 / 开发环境 |
-| 分发方式 | GitHub Release wheelhouse、源码构建、安装到已激活的 conda 环境 |
-| 二进制验证 | Windows Server 2022；Linux manylinux 构建并在 Ubuntu 22.04/24.04 全新安装 |
-| PyPI 状态 | GitHub Release 工作流不上传 PyPI；下载 wheelhouse 后使用 pip 安装 |
+| Release | [`v1.4.0rc2-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc2-isis10.0.0) |
+| 顶层分发包 | `usgs-pyisis-isis10` |
+| Python | CPython 3.13 |
+| Linux 安装包 | [`pyisis-v1.4.0rc2-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/pyisis-v1.4.0rc2-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip) |
+| Windows 安装包 | [`pyisis-v1.4.0rc2-isis10.0.0-windows-x64-cp313-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/pyisis-v1.4.0rc2-isis10.0.0-windows-x64-cp313-wheelhouse.zip) |
 
-## 本仓库会构建什么
+下载并解压对应操作系统的压缩包。Release 同时提供
+[`SHA256SUMS.txt`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/SHA256SUMS.txt)。
 
-成功构建后，核心 Python 包目录通常位于：
+Linux：
 
-- `build/python/isis_pybind/`
-
-它一般包含以下内容：
-
-- `build/python/isis_pybind/__init__.py`
-- `build/python/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so`
-- `build/python/isis_pybind/LICENSE`
-
-真正的绑定共享库是：
-
-- `_isis_core.cpython-312-x86_64-linux-gnu.so`
-
-不过，**不要只单独复制这个 `.so` 文件来使用**。它应该和 `__init__.py` 一起保存在 `isis_pybind/` 包目录中。
-
-## 请先安装 USGS ISIS
-
-对于源码构建，这个绑定项目不会替你安装 ISIS。你需要先准备一个**可正常工作的
-ISIS 环境**，最好通过 conda / mamba 管理。GitHub Release wheelhouse 已携带
-平台运行时，但真实任务处理仍需要完整的外部 `ISISDATA`。
-
-### 推荐方式
-
-先准备一个已经包含 ISIS 9.0.0 运行时与开发文件的环境，例如当前本地使用的环境：
-
-- `asp360_new`
-
-本项目假设该环境至少提供：
-
-- `${CONDA_PREFIX}/include/isis`
-- `${CONDA_PREFIX}/lib/libisis.so`
-- `${CONDA_PREFIX}/lib/Camera.plugin`
-
-换句话说，只要某个 ISIS 环境提供了这些关键内容，就可以用于构建本绑定。
-
-### 建议的 ISIS 安装路径
-
-1. 使用 **USGS ISIS / Astrogeology 官方**安装方式，或使用你所在实验室 / 团队已经验证过的 conda 配方。
-2. 激活该环境。
-3. 确认以下关键路径存在：
-	- `include/isis`
-	- `lib/libisis.so`
-	- `lib/Camera.plugin`
-
-如果这三项缺失，本项目就无法顺利完成配置与链接。
-
-### 关于 `ISISDATA`
-
-- 很多真实的相机、时间和几何处理流程在运行时仍然依赖 `ISISDATA`
-- 本仓库测试会尝试回退到 `tests/data/isisdata/mockup/` 这个最小 mock 环境
-- 但如果你要处理自己的真实影像和相机模型，仍然建议配置完整可用的真实 `ISISDATA`
-
-## 安装本绑定：推荐方式
-
-### 方式 W：GitHub Release 平台 wheelhouse
-
-从
-[`v1.3.0rc1-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc1-isis9.0.0)
-下载对应平台的压缩包，解压后阅读其中的 `INSTALL.md`。核心安装命令是：
-
-```text
-python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc1
+```bash
+python3.13 -m venv .venv-isis10
+source .venv-isis10/bin/activate
+python -m pip install --upgrade pip
+python -m pip install --no-index --find-links wheelhouse \
+  usgs-pyisis-isis10==1.4.0rc2
 ```
 
-仓库中也保留了
-[`Windows 安装说明`](docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md)和
-[`Linux 安装说明`](docs/releases/INSTALL-LINUX-ISIS9.0.0.md)。
-
-下面的命令供需要在本地重建 wheelhouse 的维护者使用。
-
-Windows pip 打包路线会生成三个发行包：
-
-- `usgs-pyisis`：Python facade 和 `isis_pybind._isis_core` 扩展
-- `usgs-pyisis-runtime-win64`：打包后的 Windows ISIS runtime 以及必要 DLL 依赖闭包
-- `usgs-pyisis-isisdata-minimal`：用于导入和 smoke test 的小型 ISISDATA 树
-
-在能够激活 MSVC、并且已经有本地 ISIS prefix 的 Windows shell 中构建本地 wheelhouse：
+Windows PowerShell：
 
 ```powershell
-$env:CONDA_PREFIX = "E:\code\pyisis-win-env"
-$env:PYISIS_DEP_PREFIX = $env:CONDA_PREFIX
-.\tools\packaging\build_wheels.ps1 `
-  -IsisPrefix "$PWD\build\windows\isis-prefix" `
-  -OutputDir "$PWD\wheelhouse" `
-  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
-  -DependencyPrefix "$env:CONDA_PREFIX"
+py -3.13 -m venv .venv-isis10
+.\.venv-isis10\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install --no-index --find-links wheelhouse `
+  usgs-pyisis-isis10==1.4.0rc2
 ```
 
-然后在全新的虚拟环境中验证这些 wheel：
+ISIS 10 包继续使用相同的导入名称：
+
+```python
+import pyisis
+import isis_pybind
+```
+
+包内包含运行时版本保护，避免 ISIS 10 绑定错误加载 ISIS 9 运行库。请勿在同一个
+环境中同时安装两个版本线。
+
+详细文档：
+
+- [ISIS 9/10 绑定兼容方案](docs/isis9-isis10-binding-compatibility-plan.md)
+- [Linux / ISIS 10 安装说明](docs/releases/INSTALL-LINUX-ISIS10.0.0.md)
+- [Windows / ISIS 10 安装说明](docs/releases/INSTALL-WINDOWS-ISIS10.0.0.md)
+- [ISIS 10 发布说明](docs/releases/v1.4.0rc2-isis10.0.0.md)
+
+## ISISDATA
+
+每个 Release wheelhouse 只包含用于导入和 smoke test 的最小 ISISDATA。真实相机、
+SPICE、辐射检校和任务数据处理仍然需要完整的外部 ISISDATA。
+
+Linux：
+
+```bash
+export ISISDATA=/path/to/isisdata
+```
+
+Windows PowerShell：
 
 ```powershell
-python tools\packaging\test_wheel_install.py `
-  --wheelhouse wheelhouse `
-  --venv build\packaging\pip-smoke-venv
+$env:ISISDATA = "D:\isisdata"
 ```
 
-也可以从这个 wheelhouse 手动安装：
+完整 ISIS 环境和数据应按照官方说明安装：
 
-```powershell
-python -m pip install --no-index --find-links wheelhouse usgs-pyisis
+- [安装 ISIS](https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/installing-isis-via-anaconda/)
+- [ISIS 数据区](https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/isis-data-area/)
+
+## 基本使用
+
+常见操作优先使用高层接口：
+
+```python
+import pyisis
+
+with pyisis.open_cube("image.cub") as cube:
+    print(pyisis.cube_dimensions(cube))
+    print(pyisis.ground_at_center(cube))
 ```
 
-验证脚本会从 `wheelhouse` 安装 `usgs-pyisis`，导入 `pyisis` 和 `isis_pybind`，并确认打包进去的最小 `ISISDATA` 可用于 smoke test。真实任务处理仍建议配置完整的外部 `ISISDATA`。
+需要直接访问绑定的 ISIS 类时使用低层包：
 
-上传到 TestPyPI 之前，先运行受保护的 check-only 辅助脚本：
+```python
+import isis_pybind as ip
 
-```powershell
-.\tools\packaging\publish_testpypi.ps1 `
-  -Wheelhouse wheelhouse `
-  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
-  -CheckOnly
+print("PyISIS:", ip.__version__)
+print("编译目标 ISIS:", ip.__isis_version__)
 ```
 
-当 TestPyPI 凭据已经在仓库外配置好后，再额外传入 `-Upload`。如果使用
-token 上传，请在仓库外设置 `$env:TESTPYPI_API_TOKEN`；辅助脚本会把它映射为
-twine 的 `__token__` 登录。上传完成后，用全新的 venv 验证真实索引安装：
+[`examples/`](examples/) 中提供了相机几何、前方交会、地图投影、控制网和影像匹配等
+示例。
 
-```powershell
-python tools\packaging\test_testpypi_install.py `
-  --venv build\packaging\testpypi-venv
-```
+## Release 中包含什么
 
-`wheels` GitHub Actions workflow 也提供了手动 `publish_testpypi` 输入。常规
-PR 验证应保持关闭；只有在仓库 secret `TESTPYPI_API_TOKEN` 配好之后才打开。
+每个压缩包都是可离线安装的 wheelhouse。用户只需按照上面的命令安装顶层分发包，
+pip 会在本地解析其余依赖。
 
-在 Linux x86_64 上，只要主包和 runtime 包都已经发布到同一个索引，
-`pip install usgs-pyisis` 会通过平台 marker 自动安装
-`usgs-pyisis-runtime-linux-x86_64`。本地 Linux wheel 构建入口如下：
+- Linux：主绑定 wheel 已包含审核后的共享库运行时闭包，并带有独立的最小
+  ISISDATA wheel。
+- Windows：包含绑定 wheel、独立的 ISIS 运行库/依赖 wheel 和最小 ISISDATA
+  wheel。
 
-```bash
-bash tools/packaging/build_wheels_linux.sh \
-  --isis-prefix "$CONDA_PREFIX" \
-  --output-dir "$PWD/wheelhouse" \
-  --python-executable "$CONDA_PREFIX/bin/python" \
-  --dependency-prefix "$CONDA_PREFIX"
-```
+用户不需要手工逐个选择或安装依赖 wheel。
 
-GitHub Actions 会在 PyPA manylinux 容器中构建 Linux wheelhouse，将 runtime
-合并进主 wheel，检查 ABI 与 `manylinux_2_35_x86_64` 策略，并在 Ubuntu
-22.04 和 24.04 上进行全新安装验证。
+## 功能范围和限制
 
-### 方式 A：从源码构建并安装到当前 Python 环境
+PyISIS 是精选 Python 接口，不是所有 ISIS C++ 类的完整 Python 镜像。
 
-这是目前**最推荐**、也最可靠的安装方式。
+当前包含：
 
-如果你想用仓库里最短、最直接的标准 build + test + smoke 入口，优先使用：
+- 经过筛选的稳定非 GUI ISIS API。
+- Python 高层辅助接口和直接低层绑定。
+- 上述目标平台的 Linux 与 Windows wheelhouse。
+- 对应绑定流程的测试和示例。
 
-```bash
-scripts/build_test_smoke.sh full
-```
+当前不包含：
 
-1. 激活你已经准备好的 ISIS conda 环境。
-2. 将该环境同时作为：
-	- Python 解释器来源
-	- ISIS 头文件与库文件来源
-3. 配置并构建本仓库。
-4. 通过 `cmake --install` 将其安装到当前环境的 `site-packages` 中。
+- 完整 ISISDATA。
+- 所有 ISIS C++ 类、Qt signal、slot 或 GUI 子系统。
+- Windows 上完整的 ISIS 原生 APP 程序套件。
+- `qview`、`qnet`、`qmos` 等原生 GUI 程序。
 
-标准流程示例如下：
+Linux 用户需要 `cam2map`、`spiceinit` 或任务导入程序等原生命令行 APP 时，可以
+另外安装官方 ISIS。Windows 原生 ISIS APP 属于后续独立开发路线，不属于当前
+PyISIS wheel 的交付范围。
 
-```bash
-export ISIS_PREFIX="$CONDA_PREFIX"
-cmake -S . -B build \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
-  -DISIS_PREFIX="$ISIS_PREFIX"
-cmake --build build -j"$(nproc)"
-cmake --install build
-```
+维护中的支持边界见 [`docs/platform-support.md`](docs/platform-support.md)。
 
-如果你希望在配置阶段排除 ASP / VW 相机库参与链接，可以启用下面这个 CMake 选项：
+## 源码构建
 
-```bash
-cmake -S . -B build \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
-	-DISIS_PREFIX="$ISIS_PREFIX" \
-	-DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON
-```
+源码构建适用于已经准备好匹配 ISIS 开发环境的开发人员。本仓库使用 conda 管理
+编译器和依赖，不应混用系统编译器与 conda ISIS 库。
 
-启用 `-DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON` 后，构建时会从额外的 ISIS 相机库链接集合中排除 `libAsp*` 和 `libVw*`；如果省略该选项或设置为 `OFF`，则保持默认行为不变。
+绑定签名和编译判断以当前 ISIS 环境中的头文件与库为准。构建前请阅读
+[`AGENTS.md`](AGENTS.md)，并参考对应 ISIS 版本和操作系统的安装文档。
 
-安装完成后，`isis_pybind` 将被复制到当前 Python 环境的 `site-packages` 中。
+## 问题反馈
 
-### 方式 B：直接从构建目录临时使用
+请在 [GitHub Issues](https://github.com/gengxun-henu/pyisis/issues) 中提供：
 
-如果你只是想开发、调试，或者快速试跑一次，也可以先不安装，直接从构建目录使用该包：
-
-```bash
-export PYTHONPATH="$PWD/build/python${PYTHONPATH:+:$PYTHONPATH}"
-python -c "import isis_pybind; print(isis_pybind.__file__)"
-```
-
-这种方式适合：
-
-- 本地开发
-- 快速 smoke 测试
-- 临时验证示例或单元测试
-
-但对于终端用户来说，这并不是正式安装的推荐方式。
-
-## 关于共享库安装：真正重要的是什么
-
-在本项目中，生成的绑定共享库是 `isis_pybind/_isis_core*.so`。
-
-### 推荐的安装方式
-
-优先使用：
-
-```bash
-cmake --install build
-```
-
-原因如下：
-
-- 它会把 `__init__.py` 和 `_isis_core*.so` 一起安装到正确位置
-- 它也会一并包含 `LICENSE`
-- 能避免“`.so` 文件在，但 Python 包结构不完整”这种很常见的坑
-
-### 手动安装方式
-
-如果你从 GitHub Release 下载的是**预编译二进制产物**，并且该产物已经包含完整的包目录，例如：
-
-```text
-isis_pybind/
-  __init__.py
-  _isis_core.cpython-312-x86_64-linux-gnu.so
-  LICENSE
-```
-
-那么你可以把整个 `isis_pybind/` 目录复制到目标 Python 环境的 `site-packages` 目录下。
-
-对于 Linux 上的 conda 环境，目标路径通常类似于：
-
-```text
-$CONDA_PREFIX/lib/pythonX.Y/site-packages/isis_pybind/
-```
-
-例如，如果目标环境是一个使用 CPython 3.12 的 conda ISIS 环境，那么最终路径通常类似：
-
-```text
-/home/你的用户名/miniconda3/envs/你的环境名/lib/python3.12/site-packages/isis_pybind/
-```
-
-如果你是从本仓库本地构建结果中手动复制，优先复制这个完整的构建后包目录：
-
-```text
-build/python/isis_pybind/
-```
-
-而不是只复制源码侧目录：
-
-```text
-python/isis_pybind/
-```
-
-因为构建后的目录同时包含 `__init__.py` 和编译得到的扩展模块 `_isis_core*.so`。
-
-你也可以直接在目标环境里查询它自己的 `site-packages` 路径：
-
-```bash
-python -c "import sysconfig; print(sysconfig.get_path('purelib'))"
-```
-
-然后把整个构建后的 `isis_pybind/` 目录复制进去，最终应形成类似结构：
-
-```text
-<site-packages>/isis_pybind/__init__.py
-<site-packages>/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so
-<site-packages>/isis_pybind/LICENSE
-```
-
-同时请确认目标环境的 Python ABI 与构建产物匹配。例如，文件名 `_isis_core.cpython-312-x86_64-linux-gnu.so` 表示它是为 CPython 3.12 构建的，不应直接复制到 Python 3.11 或 3.13 环境中使用。
-
-> 不建议只单独复制 `_isis_core*.so`。
-
-### 共享库加载要求
-
-即使 Python 包本身安装成功，运行时仍然需要目标机器能正确解析外部依赖，例如：
-
-- `libisis.so`
-- Qt 共享库
-- 所需的相机 / 投影 / Bullet 等相关库
-
-因此，**当前的预编译二进制产物主要面向已经具备兼容 ISIS 环境的 Linux 用户**。
-
-## 如何验证安装是否成功
-
-至少建议执行以下三项检查。
-
-如果你是在仓库内做代码修改后的本地回归，也可以直接先跑：
-
-```bash
-scripts/build_test_smoke.sh full
-```
-
-### 1. 验证 Python 能导入该包
-
-```bash
-python -c "import isis_pybind as ip; print(ip.__file__)"
-```
-
-### 2. 验证核心扩展是否已加载
-
-```bash
-python -c "import isis_pybind as ip; print(hasattr(ip, 'Cube'), hasattr(ip, 'Camera'))"
-```
-
-### 3. 运行最小 smoke 流程
-
-```bash
-python tests/smoke_import.py
-```
-
-如果这三项都通过，通常说明：
-
-- `isis_pybind` 的包路径正确
-- `_isis_core` 能被 Python 正常加载
-- 基础运行时依赖可用
-
-## 示例：前方交会
-
-仓库中已经提供了可直接参考的示例：
-
-- `examples/forward_intersection.py`
-- 使用说明：`examples/forward_intersection_usage.md`
-
-这个示例演示了如何：
-
-- 打开两幅 ISIS cube
-- 提供左影像点位
-- 自动估计 / 匹配右影像中的同名点
-- 调用 `Stereo.elevation(...)` 执行前方交会
-
-使用仓库自带测试数据的示例命令如下：
-
-```bash
-python examples/forward_intersection.py \
-  tests/data/mosrange/EN0108828322M_iof.cub \
-  tests/data/mosrange/EN0108828327M_iof.cub \
-  64.0 \
-  512.0
-```
-
-如果你想直接从构建目录运行该示例，请确保 Python 能看到 `build/python` 下的包，或者先通过 `cmake --install build` 完成安装。
-
-## 示例：DOM matching ControlNet 工作流
-
-仓库中也提供了一套从 DOM 匹配点生成 ISIS 控制网的示例流程，位于：
-
-- `examples/controlnet_construct/`
-- 端到端使用说明：`examples/controlnet_construct/usage.md`
-- 详细需求 / 工作流说明：`examples/controlnet_construct/requirements_dom_matching_controlnet.md`
-- 示例配置：`examples/controlnet_construct/controlnet_config.example.json`
-
-这套流程面向下面这种常见摄影测量链路：
-
-1. 在正射 DOM 上提取并匹配同名点；
-2. 把 DOM 空间 `.key` 回投到原始影像坐标；
-3. 输出单个立体像对的 ISIS `ControlNet`；
-4. 最后再把多个 pairwise `.net` 用 `cnetmerge` 汇总成整体控制网。
-
-如果你想按“`image_overlap.py` → `examples/image_match/image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`”的顺序一步一步跑完整流水线，优先查看：`examples/controlnet_construct/usage.md`。
-
-对于 DOM 匹配阶段，建议把 `ImageMatch` 里的主要参数明确设出来，而不是完全依赖原始默认值。一个常用起步组合是：
-
-```json
-"ImageMatch": {
-	"band": 1,
-	"max_image_dimension": 3000,
-	"sub_block_size_x": 1024,
-	"sub_block_size_y": 1024,
-	"overlap_size_x": 128,
-	"overlap_size_y": 128,
-	"minimum_value": null,
-	"maximum_value": null,
-	"lower_percent": 0.5,
-	"upper_percent": 99.5,
-	"invalid_values": [],
-	"special_pixel_abs_threshold": 1e300,
-	"min_valid_pixels": 64,
-	"valid_pixel_percent_threshold": 0.05,
-	"ratio_test": 0.75,
-	"max_features": null,
-	"sift_octave_layers": 3,
-	"sift_contrast_threshold": 0.04,
-	"sift_edge_threshold": 10.0,
-	"sift_sigma": 1.6,
-	"crop_expand_pixels": 100,
-	"min_overlap_size": 16,
-	"use_parallel_cpu": true,
-	"num_worker_parallel_cpu": 8,
-	"write_match_visualization": true,
-	"match_visualization_scale": 0.3333333333333333
-}
-```
-
-其中：
-
-- `valid_pixel_percent_threshold = 0.05` 表示某个 tile 的有效像素比例低于 $5\%$ 时直接跳过匹配；
-- `num_worker_parallel_cpu = 8` 表示 CPU 进程池 worker 上限从一个保守但实用的值起步，实际运行时仍会按 tile 数自动收敛。
-
-仓库示例配置 `examples/controlnet_construct/controlnet_config.example.json` 已经给出这组推荐值，而 `examples/controlnet_construct/run_pipeline_example.sh` 与 `examples/controlnet_construct/run_image_match_batch_example.sh` 会把其中的 `ImageMatch` 段作为默认匹配参数继续转发给 `examples/image_match/image_match.py`。共享入口 `image_match.py` 本身现在也支持 `--config`，所以如果你手工调用它，也可以直接复用同一份配置文件，而不是把所有参数都重写一遍。
-
-例如：
-
-```bash
-python examples/image_match/image_match.py \
-	--config examples/controlnet_construct/controlnet_config.example.json \
-	left_dom.cub right_dom.cub left.key right.key
-```
-
-如果你同时又显式传了某个 CLI 参数，例如 `--ratio-test 0.8` 或 `--num-worker-parallel-cpu 4`，那么命令行参数仍然会覆盖配置文件中的默认值。
-
-如果你希望直接复制一段能跑的批处理模板，不想自己拼参数，`examples/controlnet_construct/usage.md` 现在新增了更显眼的“推荐参数模板”小节，包含：
-
-- 示例流水线脚本模板
-- 手工批量 `examples/image_match/image_match.py` 模板
-- `0.05 / 0.03 / 0.1` 的简短调参建议
-
-如果你更希望要一个独立、短小、可复用的 snippet 入口，现在还可以直接使用：
-
-- `examples/controlnet_construct/recommended_batch_templates.md`
-- `examples/controlnet_construct/run_image_match_batch_example.sh`
-
-从当前这一版工作流开始，示例封装脚本对下面这些默认行为也已经明确固定下来：
-
-- CPU 分块并行匹配默认开启；如果你想回退到串行 tile 匹配，可显式传 `--no-parallel-cpu`；
-- `run_image_match_batch_example.sh` 默认保持紧凑 stdout，并把 `work/match_metadata/` 作为每对影像的主要诊断落盘位置；
-- `run_image_match_batch_example.sh` 默认把 **pre-RANSAC** 匹配连线图写到 `work/match_viz/`；
-- `run_pipeline_example.sh` 默认同时写两套图：
-	- `work/match_viz/`：**pre-RANSAC**；
-	- `work/match_viz_post_ransac/`：**post-RANSAC**。
-
-如果你在使用批量匹配封装脚本时想关闭 pre-RANSAC 连线图，可通过 `-- --no-write-match-visualization` 把参数继续转发给 `examples/image_match/image_match.py`。
-
-现在这些示例 wrapper 的输出风格也尽量统一成同一条约定：**终端只看紧凑摘要，详细诊断优先落 JSON 文件**。具体来说：
-
-- `run_image_match_batch_example.sh` 的 stdout 主要用于看批处理进度，而每对影像的详细诊断默认写到 `work/match_metadata/`；
-- `run_pipeline_example.sh` 的 stdout 主要用于看步骤摘要，而各阶段 JSON 汇总默认写到 `work/reports/` 与 `work/match_results/`；
-- 如果你确实需要 `examples/image_match/image_match.py` 的完整结果 JSON 本体，可以直接调用它，或通过 wrapper 继续转发它自己的 `--result-output` 选项。
-
-如果你准备启用深度学习匹配器，当前阶段请把工作流显式理解为三种模式：`direct / export / import`。
-
-- `direct`：在**同一个**已经具备 ISIS 运行时和深度学习依赖（如 `torch` / `kornia` / `lightglue` 或 `superglue-pretrained-network`）的环境里直接运行 wrapper。
-- `export`：在 `asp360_new` 中只负责 overlap / tile 准备与 manifest 导出，不在该环境里真正执行深度模型。
-- `import`：先在深度学习环境里运行 `examples/learning_methods/run_deep_match_manifest.py` 写出结果，再回到 `asp360_new` 用 wrapper 导入结果继续 ControlNet 流程。
-
-推荐命令可直接参考：
-
-```bash
-bash examples/controlnet_construct/run_image_match_batch_example.sh \
-  --work-dir work \
-  --matcher-method lightglue \
-  --deep-match-mode export \
-  --deep-match-config-path examples/controlnet_construct/presets/lightglue_default.json
-
-python examples/learning_methods/run_deep_match_manifest.py \
-  work/deep_match_workspaces/left__right/tasks.json \
-  --device cpu \
-  --summary-output work/deep_match_workspaces/left__right/manifest_run_summary.json
-
-bash examples/controlnet_construct/run_image_match_batch_example.sh \
-  --work-dir work \
-  --matcher-method lightglue \
-  --deep-match-mode import \
-  --deep-match-manifest-dir work/deep_match_workspaces \
-  --deep-match-manifest-summary work/deep_match_manifests.json
-```
-
-其中 `work/deep_match_manifests.json` 是 wrapper 维护的轻量汇总入口，方便 smoke 回归时只检查 manifest 路径、pair 状态和导入/导出计数，而不用打开真实 ISIS cube。各个 preset 的真实支持状态、依赖环境和已知限制请直接看：`examples/controlnet_construct/PRESETS_README.md`。
-
-当前这轮拆分已经不只是 wrapper 式复用：`examples/image_match/` 现在是 DOM 匹配与 DOM 前处理的共享实现主目录；`examples/controlnet_construct/image_match.py` 与 `examples/controlnet_construct/dom_prepare.py` 仅保留为兼容历史脚本/导入的薄封装层。
-
-### 单个立体像对
-
-如果你已经为某个立体像对准备好了 DOM 空间 `.key` 文件，可以这样生成单对控制网：
-
-```bash
-python examples/controlnet_construct/controlnet_stereopair.py from-dom \
-	left_pair_A.key \
-	left_pair_B.key \
-	left_dom.cub \
-	right_dom.cub \
-	left_original.cub \
-	right_original.cub \
-	examples/controlnet_construct/controlnet_config.example.json \
-	pair_outputs/left__right.net \
-	--pair-id S1 \
-	--report-path pair_outputs/left__right.summary.json
-```
-
-说明：
-
-- `PointIdPrefix` 来自配置 JSON；
-- `--pair-id S1` 会把控制点 ID 命名空间扩展成类似 `P_S1_00000001`，这样后续多个 pairwise `.net` 再用 `cnetmerge` 合并时，不同立体像对里的 `PointId` 不会意外撞名；
-- 如果不传 `--pair-id`，脚本会回退到配置中的可选 `PairId`；如果两者都没有，则保持兼容旧行为，继续生成 `P00000001` 这种格式。
-
-### 基于 `images_overlap.lis` 的批处理
-
-如果你已经为 `images_overlap.lis` 中的每个立体像对都生成了 DOM 空间 `.key` 文件，那么可以直接批量构建全部 pairwise ControlNet，并自动分配立体像对 ID：
-
-```bash
-python examples/controlnet_construct/controlnet_stereopair.py from-dom-batch \
-	work/images_overlap.lis \
-	work/original_images.lis \
-	work/doms_scaled.lis \
-	work/dom_keys \
-	examples/controlnet_construct/controlnet_config.example.json \
-	work/pair_nets \
-	--report-dir work/reports \
-	--pair-id-prefix S \
-	--pair-id-start 1
-```
-
-在这个 batch 模式下：
-
-- 脚本会按 `images_overlap.lis` 的顺序逐对处理；
-- 它会在 `work/dom_keys/` 中寻找对应的 DOM `.key` 文件，命名约定为 `A__B_A.key` 和 `A__B_B.key`；
-- 它会自动给每个立体像对分配 `S1`、`S2`、`S3`……，因此用户不需要为每一对手工传 `--pair-id`；
-- pairwise `.net` 会写入 `work/pair_nets/`；
-- per-pair JSON sidecar 与 batch summary JSON 会写入 `work/reports/`。
-
-生成的 per-pair 报告中会记录 `pair_id`、`point_id_namespace` 以及示例控制点 ID，后续如果需要排查 `cnetmerge` 输入来源，会比”盯着一堆 `P00000001` 发呆”轻松很多。
-
-### 量测级 DOM RANSAC 滤波
-
-当控制网的 `ControlMeasure` 坐标为原始影像 sample/line 时，可用
-`examples/controlnet_construct/filter_controlnet_dom_ransac.py`
-将量测投影到 DOM 像素空间，逐像对并行运行 RANSAC，
-并在输出 `.net` 中将离群量测标记为 ignored（而非删除 `ControlPoint`）。
-
-```bash
-python examples/controlnet_construct/filter_controlnet_dom_ransac.py \
-  --input-net ba2_cnet_seedgrid.net \
-  --original-list reduced_original_images.lis \
-  --dom-list dom_images.lis \
-  --output-net ba2_dom_measure_ransac.net \
-  --report ba2_dom_measure_ransac_report.json \
-  --outlier-measures ba2_dom_measure_ransac_outliers.jsonl \
-  --projection-failures ba2_dom_measure_ransac_projection_failures.jsonl \
-  --num-workers 8 \
-  --max-open-cubes-per-worker 16
-```
-
-## 单元测试：也是实用的 API 参考
-
-本仓库中的测试不仅用于回归校验，也可作为实际 API 使用方式的参考。
-
-关键入口包括：
-
-- `tests/smoke_import.py`：快速 smoke 验证
-- `tests/unitTest/_unit_test_support.py`：共享测试辅助函数和环境初始化逻辑
-- `tests/unitTest/forward_intersection_example_test.py`：针对前方交会示例的聚焦回归测试
-- `tests/unitTest/`：按类 / 模块组织的详细用法示例
-
-### 运行完整单元测试套件
-
-```bash
-python -m unittest discover -s tests/unitTest -p "*_unit_test.py"
-```
-
-### 运行示例相关测试
-
-```bash
-python -m unittest tests.unitTest.forward_intersection_example_test
-```
-
-### 通过 CTest 运行
-
-如果你已经用 CMake 配置过项目，也可以执行：
-
-```bash
-ctest --output-on-failure -R python-unit-tests
-```
-
-## Release 发布建议
-
-一个 GitHub Release 理想情况下至少应包含以下内容：
-
-1. **源码包**
-	- GitHub 自动生成的仓库源码归档（`zip` / `tar.gz`）即可。
-2. **已验证的平台 wheelhouse**
-	- Linux x86_64 / CPython 3.12 / manylinux 2.35
-	- Windows x64 / CPython 3.12
-3. **安装说明**
-	- 可以放在本 README、Release 页面，或单独的 `INSTALL.md` 中。
-4. **版本兼容说明**
-	- 提供 Linux / Python / ISIS 版本矩阵。
-5. **校验信息**
-	- `SHA256SUMS.txt`
-
-### 推荐的 Release 产物命名
-
-建议在产物名中包含以下关键信息：
-
-- 平台：`linux-x86_64`
-- Python ABI：`cp312`
-- ISIS 版本：`isis9.0.0`
-- 项目版本：`v1.3.0rc1`
-
-例如：
-
-```text
-pyisis-v1.3.0rc1-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip
-pyisis-v1.3.0rc1-isis9.0.0-windows-x64-cp312-wheelhouse.zip
-SHA256SUMS.txt
-```
-
-## 校验和建议
-
-发布二进制产物时，也建议一并上传校验文件：
-
-```text
-SHA256SUMS.txt
-```
-
-下载后，用户可以执行：
-
-```bash
-sha256sum -c SHA256SUMS.txt
-```
-
-这样可以确认：
-
-- 产物完整且未损坏
-- 下载过程未被截断
-- 用户拿到的就是你发布的确切构建结果
-
-## 常见问题
-
-### 1. `import isis_pybind` 失败，或者 `_isis_core` 缺失
-
-优先检查：
-
-- 当前 Python 是否为 **CPython 3.12**
-- `isis_pybind` 是否来自你期望的构建 / 安装环境
-- 是否意外拾取到了旧的 `build/python` 产物
-
-### 2. 找不到 `libisis.so` 或其他共享库
-
-这通常意味着：
-
-- 目标机器没有安装兼容的 ISIS 环境
-- 或者当前 shell / Python 运行时没有指向正确的 conda 环境
-
-### 3. 示例或测试报 `ISISDATA` 相关错误
-
-- 对真实工作流，请配置完整 `ISISDATA`
-- 仓库测试通常会自动尝试 `tests/data/isisdata/mockup/`
-- 但并不是所有真实场景都能依赖 mock 数据运行
-
-### 4. 这个项目能作为普通 `pip install` 包来支持吗？
-
-可以，但当前限定为已验证的 CPython 3.12 平台。下载对应的 GitHub Release
-压缩包后，用 pip 从本地 `wheelhouse` 安装。Windows 使用独立 runtime wheel；
-Linux 使用已经审计并合并 runtime 的主 wheel。GitHub Release 工作流不会把这些
-wheelhouse 上传到 PyPI，随包提供的最小 ISISDATA 也仍然只用于导入与 smoke test。
+- 操作系统和架构；
+- Python 版本；
+- ISIS 版本线和 PyISIS 版本；
+- wheelhouse 资产名称或源码提交；
+- 完整错误输出；
+- 是否已经配置完整 ISISDATA。
 
 ## 许可证
 
-本仓库中自行编写的绑定层代码和 Python 入口代码基于以下许可证发布：
-
-- `MIT License`
-
-参见：
-
-- `LICENSE`
-
-上游 ISIS 源码、第三方依赖和外部共享库仍遵循其各自许可证。
+本仓库编写的绑定层和 Python 代码使用 [MIT License](LICENSE)。USGS ISIS、打包的
+运行时依赖以及外部数据仍分别遵循其自身许可证。

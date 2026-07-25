@@ -21,10 +21,10 @@ Python package versions and USGS ISIS compatibility versions are separate:
 
 | Identity | ISIS 9 release | ISIS 10 release |
 | --- | --- | --- |
-| Python package version | `1.3.0rc1` | `1.4.0rc1` |
+| Python package version | `1.3.0rc2` | `1.4.0rc2` |
 | Supported USGS ISIS | `9.0.0` | `10.0.0` |
-| Git tag | `v1.3.0rc1-isis9.0.0` | `v1.4.0rc1-isis10.0.0` |
-| Release title | `PyISIS v1.3.0rc1 (USGS ISIS 9.0.0)` | `PyISIS v1.4.0rc1 (USGS ISIS 10.0.0)` |
+| Git tag | `v1.3.0rc2-isis9.0.0` | `v1.4.0rc2-isis10.0.0` |
+| Release title | `PyISIS v1.3.0rc2 (USGS ISIS 9.0.0)` | `PyISIS v1.4.0rc2 (USGS ISIS 10.0.0)` |
 
 The ISIS suffix is deliberately not placed inside the Python package version.
 This keeps package metadata PEP 440 compliant while allowing ISIS 9 and ISIS
@@ -47,17 +47,17 @@ macOS, ARM64, and other Python ABIs are not part of these releases.
 
 ## Release assets
 
-`v1.3.0rc1-isis9.0.0` contains:
+`v1.3.0rc2-isis9.0.0` contains:
 
-- `pyisis-v1.3.0rc1-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip`
-- `pyisis-v1.3.0rc1-isis9.0.0-windows-x64-cp312-wheelhouse.zip`
+- `pyisis-v1.3.0rc2-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip`
+- `pyisis-v1.3.0rc2-isis9.0.0-windows-x64-cp312-wheelhouse.zip`
 - `SHA256SUMS.txt`
 
 Each platform archive contains a `wheelhouse/` directory, its platform
 installation guide, the repository license, and third-party notices. GitHub
 also generates source archives from the release tag.
 
-`v1.4.0rc1-isis10.0.0` contains the corresponding cp313 Linux and Windows
+`v1.4.0rc2-isis10.0.0` contains the corresponding cp313 Linux and Windows
 archives named in `packaging/releases/isis10.toml`, plus `SHA256SUMS.txt`.
 
 ## Publication gate
@@ -84,7 +84,7 @@ TestPyPI/PyPI upload is a separate opt-in path and is not part of this release.
 The downloadable archives support offline-style installation with pip:
 
 ```text
-python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc1
+python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc2
 ```
 
 `usgs-pyisis-isisdata-minimal` contains only enough ISISDATA for import and

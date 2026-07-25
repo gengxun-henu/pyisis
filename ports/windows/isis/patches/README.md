@@ -36,3 +36,8 @@ Current queue:
   in binary mode so table data offsets are byte-accurate on Windows.
 - `0008-windows-cube-close-before-remove.patch`: close `Cube` QFile handles
   before removing cube files so `close(remove=True)` works on Windows.
+
+The ISIS 10.0.0 queue is maintained separately under `patches/10.0.0/`.
+Its `0003-Build-allowlisted-Windows-apps-as-executables.patch` adds independent
+MSVC executable targets selected through `ISIS_WINDOWS_APP_ALLOWLIST`; it does
+not restore all application implementations to the export-all runtime DLL.

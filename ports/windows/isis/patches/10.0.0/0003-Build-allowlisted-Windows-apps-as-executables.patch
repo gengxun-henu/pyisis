@@ -1,0 +1,82 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: gengxun-henu <gengxun@henu.edu.cn>
+Date: Sat, 25 Jul 2026 18:00:00 +0800
+Subject: [PATCH] Build allowlisted Windows apps as executables
+
+Keep Windows application implementations out of the monolithic ISIS DLL and
+compile only explicitly allowlisted apps into their own executable targets.
+Copy each selected app XML with CMake-native commands so configuration does not
+depend on Unix symlink tools.
+---
+ isis/cmake/AddIsisModule.cmake | 62 ++++++++++++++++++++++++++---------
+ 1 file changed, 47 insertions(+), 15 deletions(-)
+
+diff --git a/isis/cmake/AddIsisModule.cmake b/isis/cmake/AddIsisModule.cmake
+index 8da74f5c5..1d175635a 100644
+--- a/isis/cmake/AddIsisModule.cmake
++++ b/isis/cmake/AddIsisModule.cmake
+@@ -6,0 +7,3 @@ include(CodeGeneration)
++set(ISIS_WINDOWS_APP_ALLOWLIST "" CACHE STRING
++    "Semicolon-separated ISIS application names to build as standalone MSVC executables")
++
+@@ -14,2 +17,9 @@ function(add_isis_app folder libDependencies)
+-  # Get the main and xml files
+-  file(GLOB sources "${folder}/main.cpp")
++  # On MSVC, allowlisted app implementations stay out of the monolithic ISIS
++  # DLL and are compiled directly into their standalone executable.
++  if(MSVC)
++    file(GLOB headers "${folder}/*.h" "${folder}/*.hpp")
++    file(GLOB sources "${folder}/*.c" "${folder}/*.cpp")
++    list(REMOVE_ITEM sources "${folder}/unitTest.cpp")
++  else()
++    file(GLOB sources "${folder}/main.cpp")
++  endif()
+@@ -21,3 +31 @@ function(add_isis_app folder libDependencies)
+-  if(NOT EXISTS ${CMAKE_BINARY_DIR}/bin/xml)
+-      execute_process(COMMAND mkdir ${CMAKE_BINARY_DIR}/bin/xml)
+-  endif()
++  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xml)
+@@ -29,2 +37,6 @@ function(add_isis_app folder libDependencies)
+-      execute_process(COMMAND ln -s "${xml}" "${name}.xml"
+-                      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xml)
++      if(MSVC)
++        configure_file("${xml}" "${CMAKE_BINARY_DIR}/bin/xml/${name}.xml" COPYONLY)
++      else()
++        execute_process(COMMAND ln -s "${xml}" "${name}.xml"
++                        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xml)
++      endif()
+@@ -34,8 +46,3 @@ function(add_isis_app folder libDependencies)
+-  # Non-main app sources are already included in the ISIS module library. On
+-  # MSVC, generating app MOC files again in the executable creates direct
+-  # references to QObject staticMetaObject data exported from isis.dll.
+-  if(MSVC)
+-    set(mocFiles)
+-  else()
+-    generate_moc_files(mocFiles ${folder})
+-  endif()
++  # Non-allowlisted app sources remain in the module library on non-MSVC builds.
++  # Allowlisted MSVC apps own their implementation and generated MOC sources.
++  generate_moc_files(mocFiles ${folder})
+@@ -240 +247,12 @@ function(add_isis_module name)
+-    if(MSVC)
++    if(MSVC AND ISIS_WINDOWS_APP_ALLOWLIST)
++      get_subdirectory_list(${appsDir} candidateAppFolders)
++      set(thisAppFolders)
++      foreach(candidateAppFolder ${candidateAppFolders})
++        get_filename_component(candidateAppName ${candidateAppFolder} NAME)
++        list(FIND ISIS_WINDOWS_APP_ALLOWLIST ${candidateAppName} candidateAppIndex)
++        if(NOT candidateAppIndex EQUAL -1)
++          list(APPEND thisAppFolders ${candidateAppFolder})
++          message("Adding allowlisted Windows ISIS app: ${candidateAppName}")
++        endif()
++      endforeach()
++    elseif(MSVC)
+@@ -247 +265,5 @@ function(add_isis_module name)
+-    set(objFolders ${objFolders} ${thisObjFolders} ${thisAppFolders})
++    if(MSVC)
++      set(objFolders ${objFolders} ${thisObjFolders})
++    else()
++      set(objFolders ${objFolders} ${thisObjFolders} ${thisAppFolders})
++    endif()
+--
+2.43.0

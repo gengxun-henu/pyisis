@@ -21,11 +21,13 @@ Updated: 2026-07-24  Geng Xun covered private Linux toolchain runtime packaging 
 Updated: 2026-07-24  Geng Xun preserved qisis data objects and exported SpiceQL symbols on Windows.
 Updated: 2026-07-25  Geng Xun covered the ISIS 10 SpiceQL 1.4.1 export and MSVC link gates.
 Updated: 2026-07-25  Geng Xun parameterized Windows wheel-set checks for ISIS 9 and ISIS 10.
+Updated: 2026-07-25  Geng Xun covered the Windows APP manifest and allowlisted reduce target.
 """
 
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 import unittest
 from unittest import mock
@@ -35,6 +37,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
 LINUX_BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels_linux.sh"
 WINDOWS_ISIS_PATCHES_DIR = PROJECT_ROOT / "ports" / "windows" / "isis" / "patches"
+WINDOWS_ISIS_DIR = PROJECT_ROOT / "ports" / "windows" / "isis"
+WINDOWS_ISIS_APP_MANIFEST = WINDOWS_ISIS_DIR / "windows-app-manifest.json"
+WINDOWS_ISIS_APP_WORKFLOW = (
+    PROJECT_ROOT / ".github" / "workflows" / "windows-isis-apps.yml"
+)
 UNIT_TEST_SUPPORT = PROJECT_ROOT / "tests" / "unitTest" / "_unit_test_support.py"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
@@ -158,7 +165,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("apply --unidiff-zero --check", apply_script)
 
         patch_paths = sorted(patch_dir.glob("*.patch"))
-        self.assertEqual(len(patch_paths), 2)
+        self.assertEqual(len(patch_paths), 3)
         patches = [path.read_text(encoding="utf-8") for path in patch_paths]
         self.assertIn("isis/src/core/src/Pvl.cpp", patches[0])
         self.assertIn("Trim Windows runtime to non-GUI core", patches[1])
@@ -170,6 +177,12 @@ class PackagingToolsUnitTest(unittest.TestCase):
         )
         self.assertIn("BundleSolutionInfo.cpp", patches[1])
         self.assertIn("#if defined(_MSC_VER)", patches[1])
+        self.assertIn("ISIS_WINDOWS_APP_ALLOWLIST", patches[2])
+        self.assertIn("Adding allowlisted Windows ISIS app", patches[2])
+        self.assertIn(
+            "compiled directly into their standalone executable",
+            patches[2],
+        )
 
         spiceql_patch = (
             WINDOWS_ISIS_PATCHES_DIR
@@ -179,6 +192,69 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("WINDOWS_EXPORT_ALL_SYMBOLS ON", spiceql_patch)
         self.assertIn("find_package(nlohmann_json CONFIG REQUIRED)", spiceql_patch)
         self.assertIn('-  add_subdirectory("submodules/json")', spiceql_patch)
+
+    def test_windows_app_manifest_drives_the_reduce_target(self):
+        self.assertTrue(WINDOWS_ISIS_APP_MANIFEST.is_file())
+        manifest = json.loads(
+            WINDOWS_ISIS_APP_MANIFEST.read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["schema_version"], 1)
+
+        for version in ("9.0.0", "10.0.0"):
+            with self.subTest(version=version):
+                lock_path = (
+                    PROJECT_ROOT
+                    / "reference"
+                    / f"upstream_isis-{version.split('.')[0]}.lock.json"
+                )
+                lock = json.loads(lock_path.read_text(encoding="utf-8"))
+                baseline = manifest["source_baselines"][version]
+                self.assertEqual(baseline["ref"], lock["revision"])
+                self.assertEqual(baseline["commit"], lock["commit"])
+
+        apps = {app["name"]: app for app in manifest["apps"]}
+        self.assertEqual(set(apps), {"reduce"})
+        reduce_app = apps["reduce"]
+        self.assertEqual(reduce_app["source_dir"], "isis/src/base/apps/reduce")
+        self.assertEqual(reduce_app["xml"], "isis/src/base/apps/reduce/reduce.xml")
+        self.assertEqual(reduce_app["versions"]["9.0.0"]["status"], "supported")
+        self.assertEqual(
+            reduce_app["versions"]["10.0.0"]["status"],
+            "experimental",
+        )
+        self.assertTrue(
+            (WINDOWS_ISIS_DIR / reduce_app["windows_patch"]).is_file()
+        )
+
+        configure_script = (
+            WINDOWS_ISIS_DIR / "configure_isis.ps1"
+        ).read_text(encoding="utf-8")
+        self.assertIn("[string[]]$WindowsApps", configure_script)
+        self.assertIn("windows-app-manifest.json", configure_script)
+        self.assertIn("ISIS_WINDOWS_APP_ALLOWLIST", configure_script)
+        self.assertIn("source revision mismatch", configure_script)
+
+        build_script = (
+            WINDOWS_ISIS_DIR / "build_isis.ps1"
+        ).read_text(encoding="utf-8")
+        self.assertIn("[string[]]$Targets", build_script)
+        self.assertIn('@("--target") + $Targets', build_script)
+
+        reduce_smoke = (
+            WINDOWS_ISIS_DIR / "test_isis_reduce_smoke.ps1"
+        ).read_text(encoding="utf-8")
+        self.assertIn('Join-Path $Prefix "bin\\reduce.exe"', reduce_smoke)
+        self.assertIn('"sscale=4"', reduce_smoke)
+        self.assertIn('"lscale=4"', reduce_smoke)
+
+        self.assertTrue(WINDOWS_ISIS_APP_WORKFLOW.is_file())
+        workflow = WINDOWS_ISIS_APP_WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn("windows-isis-apps", workflow)
+        self.assertIn("runs-on: windows-2022", workflow)
+        self.assertIn("-IsisVersion 10.0.0", workflow)
+        self.assertIn("-WindowsApps reduce", workflow)
+        self.assertIn("test_isis_reduce_smoke.ps1", workflow)
+        self.assertIn("windows-isis10-reduce-smoke-log", workflow)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

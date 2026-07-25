@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "source_baselines": {
+    "9.0.0": {
+      "repository": "https://github.com/USGS-Astrogeology/ISIS3.git",
+      "ref": "9.0.0",
+      "commit": "950a5606ffeaa13ddb40101fbf25a8737e88902a",
+      "conda_reference": {
+        "channel": "conda-forge",
+        "subdir": "linux-64",
+        "package": "isis",
+        "version": "9.0.0",
+        "build": "h1f94ec8_0"
+      }
+    },
+    "10.0.0": {
+      "repository": "https://github.com/USGS-Astrogeology/ISIS3.git",
+      "ref": "10.0.0",
+      "commit": "524eec10a7b0ffa2c591fb7f8bc82b3223bc6904",
+      "conda_reference": {
+        "channel": "conda-forge",
+        "subdir": "linux-64",
+        "package": "isis",
+        "version": "10.0.0",
+        "build": "h1f94ec8_1"
+      }
+    }
+  },
+  "apps": [
+    {
+      "name": "reduce",
+      "component": "apps-photogrammetry",
+      "source_dir": "isis/src/base/apps/reduce",
+      "xml": "isis/src/base/apps/reduce/reduce.xml",
+      "direct_posix": [],
+      "shell_commands": [],
+      "third_party_dependencies": [],
+      "runtime_plugins": [],
+      "isisdata_requirements": [
+        "base"
+      ],
+      "windows_patch": "patches/10.0.0/0003-Build-allowlisted-Windows-apps-as-executables.patch",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "minimal_passed",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-photogrammetry"
+    }
+  ]
+}

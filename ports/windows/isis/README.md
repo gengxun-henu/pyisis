@@ -98,3 +98,38 @@ Verified so far:
 
 Use `-j 1` with MSVC for now; higher parallelism has exposed intermittent
 object-list and file-lock issues in this porting environment.
+
+## ISIS 10 Allowlisted Application Targets
+
+ISIS 10 keeps application implementations out of the monolithic `isis.dll`.
+Selected Windows applications are instead compiled into independent executable
+targets from `windows-app-manifest.json`. The first experimental target is
+`reduce`.
+
+After fetching ISIS 10.0.0 and applying
+`patches\10.0.0`, configure and build the target with:
+
+```powershell
+.\ports\windows\isis\configure_isis.ps1 `
+  -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
+  -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+  -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+  -IsisVersion 10.0.0 `
+  -WindowsApps reduce
+
+.\ports\windows\isis\build_isis.ps1 `
+  -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+  -Targets reduce_app `
+  -Jobs 1
+
+.\ports\windows\isis\install_isis.ps1 `
+  -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
+
+.\ports\windows\isis\test_isis_reduce_smoke.ps1 `
+  -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+```
+
+The CMake target is named `reduce_app` to avoid case-insensitive target-name
+collisions; the installed executable remains `reduce.exe`. A successful build
+alone is not a support claim. The smoke test and a same-version Linux result
+comparison must also pass before the manifest status can be promoted.

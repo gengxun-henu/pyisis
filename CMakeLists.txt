@@ -633,7 +633,7 @@ endif()
 if(MSVC)
   # Windows SDK headers must be parsed before CSPICE defines its VOID macro.
   target_compile_options(_isis_core PRIVATE
-    "/FI${CMAKE_CURRENT_SOURCE_DIR}/ports/windows/isis/pybind_msvc_compat.h")
+    "/FI${CMAKE_CURRENT_SOURCE_DIR}/ports/windows/pybind_msvc_compat.h")
 endif()
 
 if(NOT MSVC)

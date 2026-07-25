@@ -255,7 +255,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertIn("pybind_msvc_compat.h", cmake_lists)
 
         compatibility_header = (
-            self.repo_root / "ports" / "windows" / "isis" / "pybind_msvc_compat.h"
+            self.repo_root / "ports" / "windows" / "pybind_msvc_compat.h"
         ).read_text(encoding="utf-8")
         self.assertIn("#  include <windows.h>", compatibility_header)
         self.assertIn("#  define Ellipse WindowsSdkEllipse", compatibility_header)

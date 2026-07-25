@@ -17,6 +17,7 @@ Updated: 2026-07-24  Geng Xun covered ISIS 10 private toolchain verification for
 Updated: 2026-07-24  Geng Xun pinned the official ISIS 10 build and compatible CSM ABI.
 Updated: 2026-07-25  Geng Xun pinned the Windows ISIS 10 gate to SpiceQL 1.4.1.
 Updated: 2026-07-25  Geng Xun covered ISIS 10-specific Windows wheel metadata checks.
+Updated: 2026-07-25  Geng Xun isolated versioned Windows prefix cache inputs and trusted saves.
 """
 
 from __future__ import annotations
@@ -84,9 +85,39 @@ class WheelWorkflowUnitTest(unittest.TestCase):
             "windows-2022-isis-9.0.0-prefix-v1-${{ hashFiles(",
             workflow,
         )
+        isis9_cache = workflow.split(
+            "- name: Restore cached ISIS 9.0.0 Windows prefix",
+            maxsplit=1,
+        )[1].split("- name: Build ISIS 9.0.0 Windows prefix", maxsplit=1)[0]
+        isis10_cache = workflow.split(
+            "- name: Restore cached ISIS 10.0.0 Windows prefix",
+            maxsplit=1,
+        )[1].split("- name: Build ISIS 10.0.0 Windows prefix", maxsplit=1)[0]
+
         self.assertIn("'ports/windows/activate_msvc.ps1'", workflow)
         self.assertIn("'ports/windows/env/pyisis-isis-win64.yml'", workflow)
-        self.assertIn("'ports/windows/isis/**'", workflow)
+        self.assertNotIn("'ports/windows/isis/**'", workflow)
+        self.assertIn("'ports/windows/isis/patches/*.patch'", isis9_cache)
+        self.assertNotIn("patches/10.0.0", isis9_cache)
+        self.assertNotIn("build_spiceql.ps1", isis9_cache)
+        self.assertNotIn("patches/spiceql-", isis9_cache)
+        self.assertIn(
+            "'ports/windows/isis/patches/10.0.0/*.patch'",
+            isis10_cache,
+        )
+        self.assertIn(
+            "'ports/windows/isis/patches/spiceql-1.4.1/*.patch'",
+            isis10_cache,
+        )
+        self.assertNotIn("'ports/windows/isis/patches/*.patch'", isis10_cache)
+        self.assertEqual(
+            workflow.count("'ports/windows/isis/common.ps1'"),
+            2,
+        )
+        self.assertEqual(
+            workflow.count("'ports/windows/isis/build_spiceql.ps1'"),
+            1,
+        )
         self.assertIn(
             "steps.windows-isis-prefix-cache.outputs.cache-hit != 'true'",
             workflow,
@@ -98,6 +129,12 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("actions/cache/save@v6", workflow)
         self.assertIn("github.event_name == 'workflow_dispatch'", workflow)
         self.assertIn("github.ref == 'refs/heads/main'", workflow)
+        self.assertEqual(
+            workflow.count(
+                "github.event.pull_request.head.repo.full_name == github.repository"
+            ),
+            2,
+        )
         self.assertIn(
             "steps.windows-isis-prefix-cache.outputs.cache-primary-key",
             workflow,

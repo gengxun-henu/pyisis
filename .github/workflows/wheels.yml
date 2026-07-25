@@ -390,7 +390,8 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: build/windows/isis-prefix
-          key: windows-2022-isis-9.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis-win64.yml', 'ports/windows/isis/**') }}
+          # ISIS 10 and SpiceQL-only changes must not invalidate this prefix.
+          key: windows-2022-isis-9.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/patches/*.patch') }}
 
       - name: Build ISIS 9.0.0 Windows prefix
         if: ${{ steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' }}
@@ -417,7 +418,14 @@ jobs:
             Tee-Object -FilePath $env:GITHUB_STEP_SUMMARY -Append
 
       - name: Save ISIS 9.0.0 Windows prefix cache
-        if: ${{ steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
+        if: >-
+          ${{
+            steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' &&
+            (
+              (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+              github.event.pull_request.head.repo.full_name == github.repository
+            )
+          }}
         uses: actions/cache/save@v6
         with:
           path: build/windows/isis-prefix
@@ -541,7 +549,8 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: build/windows/isis10-prefix
-          key: windows-2022-isis-10.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/**') }}
+          # Keep ISIS 9 root patches out, while tracking the linked SpiceQL ABI.
+          key: windows-2022-isis-10.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/build_spiceql.ps1', 'ports/windows/isis/patches/10.0.0/*.patch', 'ports/windows/isis/patches/spiceql-1.4.1/*.patch') }}
 
       - name: Build ISIS 10.0.0 Windows prefix
         if: ${{ steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' }}
@@ -574,7 +583,7 @@ jobs:
           ${{
             steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' &&
             (
-              github.event_name == 'workflow_dispatch' ||
+              (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
               github.event.pull_request.head.repo.full_name == github.repository
             )
           }}

@@ -1,4 +1,4 @@
-# Install PyISIS v1.3.0rc1 on Windows x64
+# Install PyISIS v1.3.0rc2 on Windows x64
 
 ## Requirements
 
@@ -14,7 +14,7 @@ Open PowerShell in the extracted archive directory:
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc1
+python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc2
 ```
 
 ## Verify
@@ -23,7 +23,7 @@ python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc1
 python -c "import pyisis, isis_pybind as ip; print(ip.__version__); print(pyisis.data_status().message)"
 ```
 
-The expected binding version is `1.3.0rc1`.
+The expected binding version is `1.3.0rc2`.
 
 ## Real mission data
 

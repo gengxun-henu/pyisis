@@ -11,7 +11,7 @@ max_runtime_wheel_bytes="${PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES:-350000000}"
 binding_project_dir="${PYISIS_BINDING_PROJECT_DIR:-.}"
 distribution_name="${PYISIS_DISTRIBUTION_NAME:-usgs-pyisis}"
 runtime_distribution="${PYISIS_RUNTIME_DISTRIBUTION:-usgs-pyisis-runtime-linux-x86_64}"
-package_version="${PYISIS_PACKAGE_VERSION:-1.3.0rc1}"
+package_version="${PYISIS_PACKAGE_VERSION:-1.3.0rc2}"
 vendor_toolchain_runtime="${PYISIS_VENDOR_TOOLCHAIN_RUNTIME:-OFF}"
 
 while [ "$#" -gt 0 ]; do

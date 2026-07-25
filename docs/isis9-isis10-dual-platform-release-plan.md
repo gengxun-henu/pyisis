@@ -509,3 +509,8 @@ Windows ISIS 10 移植适合使用独立 worktree 和功能分支，确认可行
 3. 四条构建和干净安装全部通过后，先选择`release_line=isis9`创建
    ISIS 9 prerelease，再重新运行并选择`release_line=isis10`创建ISIS 10
    prerelease。
+
+本轮公开候选版本固定为：
+
+- ISIS 9：`v1.3.0rc2-isis9.0.0`
+- ISIS 10：`v1.4.0rc2-isis10.0.0`

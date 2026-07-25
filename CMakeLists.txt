@@ -389,6 +389,9 @@ set(ISIS_RUNTIME_DEP_LIB_NAMES
     libprotobuf
     libprotobuf-lite
     xerces-c_3)
+if(PYISIS_ISIS_VERSION_MAJOR GREATER_EQUAL 10)
+  list(APPEND ISIS_RUNTIME_DEP_LIB_NAMES gdal)
+endif()
 
 set(ISIS_RUNTIME_DEP_LIBS "")
 foreach(runtime_dep_lib_name IN LISTS ISIS_RUNTIME_DEP_LIB_NAMES)

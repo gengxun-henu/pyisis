@@ -253,6 +253,10 @@ class PythonPackagingMetadataTest(unittest.TestCase):
             cmake_lists,
         )
         self.assertIn("pybind_msvc_compat.h", cmake_lists)
+        self.assertIn(
+            "list(APPEND ISIS_RUNTIME_DEP_LIB_NAMES gdal)",
+            cmake_lists,
+        )
 
         compatibility_header = (
             self.repo_root / "ports" / "windows" / "pybind_msvc_compat.h"

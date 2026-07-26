@@ -60,6 +60,29 @@
       }
     },
     {
+      "name": "apollocal",
+      "component": "apps-apollo",
+      "source_dir": "isis/src/apollo/apps/apollocal",
+      "xml": "isis/src/apollo/apps/apollocal/apollocal.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-apollo"
+    },
+    {
       "name": "ascii2isis",
       "component": "apps-base",
       "source_dir": "isis/src/base/apps/ascii2isis",
@@ -376,6 +399,29 @@
       }
     },
     {
+      "name": "clemhirescal",
+      "component": "apps-clementine",
+      "source_dir": "isis/src/clementine/apps/clemhirescal",
+      "xml": "isis/src/clementine/apps/clemhirescal/clemhirescal.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-clementine"
+    },
+    {
       "name": "cnetadd",
       "component": "apps-control",
       "source_dir": "isis/src/control/apps/cnetadd",
@@ -583,6 +629,29 @@
       "release_component": "apps-control"
     },
     {
+      "name": "crism2isis",
+      "component": "apps-mro",
+      "source_dir": "isis/src/mro/apps/crism2isis",
+      "xml": "isis/src/mro/apps/crism2isis/crism2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-mro"
+    },
+    {
       "name": "crop",
       "source_dir": "isis/src/base/apps/crop",
       "xml": "isis/src/base/apps/crop/crop.xml",
@@ -753,6 +822,52 @@
           "linux_comparison": "pending"
         }
       }
+    },
+    {
+      "name": "dawnfc2isis",
+      "component": "apps-dawn",
+      "source_dir": "isis/src/dawn/apps/dawnfc2isis",
+      "xml": "isis/src/dawn/apps/dawnfc2isis/dawnfc2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-dawn"
+    },
+    {
+      "name": "dawnvir2isis",
+      "component": "apps-dawn",
+      "source_dir": "isis/src/dawn/apps/dawnvir2isis",
+      "xml": "isis/src/dawn/apps/dawnvir2isis/dawnvir2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-dawn"
     },
     {
       "name": "decorstretch",
@@ -1014,8 +1129,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -1151,6 +1266,29 @@
       "release_component": "apps-base"
     },
     {
+      "name": "hirdr2isis",
+      "component": "apps-mro",
+      "source_dir": "isis/src/mro/apps/hirdr2isis",
+      "xml": "isis/src/mro/apps/hirdr2isis/hirdr2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-mro"
+    },
+    {
       "name": "hist",
       "component": "apps-base",
       "source_dir": "isis/src/base/apps/hist",
@@ -1241,6 +1379,29 @@
         }
       },
       "release_component": "apps-mex"
+    },
+    {
+      "name": "hyb2onc2isis",
+      "component": "apps-hayabusa2",
+      "source_dir": "isis/src/hayabusa2/apps/hyb2onc2isis",
+      "xml": "isis/src/hayabusa2/apps/hyb2onc2isis/hyb2onc2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-hayabusa2"
     },
     {
       "name": "interestcube",
@@ -1373,12 +1534,81 @@
         },
         "10.0.0": {
           "status": "experimental",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "lo2isis",
+      "component": "apps-lo",
+      "source_dir": "isis/src/lo/apps/lo2isis",
+      "xml": "isis/src/lo/apps/lo2isis/lo2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
           "build_status": "implementation_ready",
           "smoke_status": "pending",
           "linux_comparison": "pending"
         }
       },
-      "release_component": "apps-base"
+      "release_component": "apps-lo"
+    },
+    {
+      "name": "lorri2isis",
+      "component": "apps-newhorizons",
+      "source_dir": "isis/src/newhorizons/apps/lorri2isis",
+      "xml": "isis/src/newhorizons/apps/lorri2isis/lorri2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-newhorizons"
+    },
+    {
+      "name": "lrolola2isis",
+      "component": "apps-lro",
+      "source_dir": "isis/src/lro/apps/lrolola2isis",
+      "xml": "isis/src/lro/apps/lrolola2isis/lrolola2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-lro"
     },
     {
       "name": "lronac2isis",
@@ -1672,8 +1902,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -1726,6 +1956,29 @@
       "release_component": "apps-base"
     },
     {
+      "name": "mar10cal",
+      "component": "apps-mariner",
+      "source_dir": "isis/src/mariner/apps/mar10cal",
+      "xml": "isis/src/mariner/apps/mar10cal/mar10cal.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-mariner"
+    },
+    {
       "name": "mask",
       "source_dir": "isis/src/base/apps/mask",
       "xml": "isis/src/base/apps/mask/mask.xml",
@@ -1744,6 +1997,52 @@
           "linux_comparison": "pending"
         }
       }
+    },
+    {
+      "name": "mer2isis",
+      "component": "apps-mer",
+      "source_dir": "isis/src/mer/apps/mer2isis",
+      "xml": "isis/src/mer/apps/mer2isis/mer2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-mer"
+    },
+    {
+      "name": "mimap2isis",
+      "component": "apps-kaguya",
+      "source_dir": "isis/src/kaguya/apps/mimap2isis",
+      "xml": "isis/src/kaguya/apps/mimap2isis/mimap2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-kaguya"
     },
     {
       "name": "mirror",
@@ -1789,6 +2088,29 @@
       "release_component": "apps-base"
     },
     {
+      "name": "mrf2isis",
+      "component": "apps-lro",
+      "source_dir": "isis/src/lro/apps/mrf2isis",
+      "xml": "isis/src/lro/apps/mrf2isis/mrf2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-lro"
+    },
+    {
       "name": "mvstats",
       "component": "apps-base",
       "source_dir": "isis/src/base/apps/mvstats",
@@ -1804,8 +2126,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -1827,8 +2149,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -1855,6 +2177,29 @@
       }
     },
     {
+      "name": "ocams2isis",
+      "component": "apps-osirisrex",
+      "source_dir": "isis/src/osirisrex/apps/ocams2isis",
+      "xml": "isis/src/osirisrex/apps/ocams2isis/ocams2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-osirisrex"
+    },
+    {
       "name": "overlapstats",
       "component": "apps-base",
       "source_dir": "isis/src/base/apps/overlapstats",
@@ -1870,8 +2215,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -1916,8 +2261,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -1939,8 +2284,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -1962,8 +2307,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -1985,8 +2330,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2094,8 +2439,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2117,12 +2462,58 @@
         },
         "10.0.0": {
           "status": "experimental",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "rolo2isis",
+      "component": "apps-rolo",
+      "source_dir": "isis/src/rolo/apps/rolo2isis",
+      "xml": "isis/src/rolo/apps/rolo2isis/rolo2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
           "build_status": "implementation_ready",
           "smoke_status": "pending",
           "linux_comparison": "pending"
         }
       },
-      "release_component": "apps-base"
+      "release_component": "apps-rolo"
+    },
+    {
+      "name": "rososiris2isis",
+      "component": "apps-rosetta",
+      "source_dir": "isis/src/rosetta/apps/rososiris2isis",
+      "xml": "isis/src/rosetta/apps/rososiris2isis/rososiris2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-rosetta"
     },
     {
       "name": "sigmastretch",
@@ -2140,8 +2531,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2163,8 +2554,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2186,8 +2577,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2209,8 +2600,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2278,8 +2669,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2349,6 +2740,29 @@
       }
     },
     {
+      "name": "sumspice",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/sumspice",
+      "xml": "isis/src/control/apps/sumspice/sumspice.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
       "name": "svfilter",
       "component": "apps-base",
       "source_dir": "isis/src/base/apps/svfilter",
@@ -2364,8 +2778,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2418,6 +2832,29 @@
       "release_component": "apps-base"
     },
     {
+      "name": "tagcams2isis",
+      "component": "apps-osirisrex",
+      "source_dir": "isis/src/osirisrex/apps/tagcams2isis",
+      "xml": "isis/src/osirisrex/apps/tagcams2isis/tagcams2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-osirisrex"
+    },
+    {
       "name": "trim",
       "source_dir": "isis/src/base/apps/trim",
       "xml": "isis/src/base/apps/trim/trim.xml",
@@ -2453,8 +2890,8 @@
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
           "linux_comparison": "pending"
         }
       },
@@ -2476,12 +2913,35 @@
         },
         "10.0.0": {
           "status": "experimental",
+          "build_status": "compiled_installed",
+          "smoke_status": "startup_passed",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "warp",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/warp",
+      "xml": "isis/src/control/apps/warp/warp.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W3-general-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
           "build_status": "implementation_ready",
           "smoke_status": "pending",
           "linux_comparison": "pending"
         }
       },
-      "release_component": "apps-base"
+      "release_component": "apps-control"
     }
   ]
 }

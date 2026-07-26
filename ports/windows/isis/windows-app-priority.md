@@ -9,8 +9,8 @@
 
 | 批次 | 数量 |
 |---|---:|
-| W0-current-batch | 109 |
-| W3-general-easy | 57 |
+| W0-current-batch | 129 |
+| W3-general-easy | 37 |
 | W4-medium | 185 |
 | W5-GUI | 6 |
 | W5-blocked-or-specialized | 8 |

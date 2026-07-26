@@ -43,8 +43,8 @@ $appNames = @(
         ForEach-Object { $_.name } |
         Sort-Object -Unique
 )
-if ($appNames.Count -lt 109) {
-    Fail "expected at least 109 allowlisted APPs, found $($appNames.Count)"
+if ($appNames.Count -lt 129) {
+    Fail "expected at least 129 allowlisted APPs, found $($appNames.Count)"
 }
 
 & "$PSScriptRoot\verify_isis_prefix.ps1" `

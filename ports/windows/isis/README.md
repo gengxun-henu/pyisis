@@ -117,8 +117,15 @@ high-value/medium-risk tools `cam2map`, `spiceinit`, and `pointreg`, followed by
 17 general/easy base tools: `bandtrim`, `barscale`, `camtrim`, `cathist`,
 `cropspecial`, `cubeavg`, `cubefunc`, `decorstretch`, `divfilter`, `fakecube`,
 `gaussstretch`, `greyscale`, `handmos`, `hist`, `histeq`, `histmatch`, and
-`interestcube`. These additions remain experimental until the hosted 89-APP
-compile/install and startup gate passes.
+`interestcube`. The hosted 89-APP compile/install and startup gate passed for
+all of these targets.
+
+The following general/easy promotion raises the allowlist to 109 targets:
+`kernfilter`, `mapsize`, `mvstats`, `nocam2map`, `overlapstats`, `phocube`,
+`phoemplocal`, `photrim`, `pixel2map`, `ringsautomos`, `ringsmappt`,
+`sigmastretch`, `skymap`, `slpmap`, `specdivfilter`, `spiceserver`, `svfilter`,
+`trimfilter`, `uncrop`, and `fplanemap`. These additions remain experimental
+until the hosted 109-APP compile/install and startup gate passes.
 
 After fetching ISIS 10.0.0 and applying
 `patches\10.0.0`, configure and build the target with:

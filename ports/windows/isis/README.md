@@ -142,8 +142,18 @@ The following source-size-prioritized mission promotion raises the allowlist to
 `junocam2isis`, `moccal`, `eis2isis`, `mar102isis`, `amica2isis`, and
 `ciss2isis`. Their only ranked blocker is mission runtime data; the build gate
 therefore validates compile, install, and startup rather than data-dependent
-processing. These additions remain experimental until the hosted 149-APP gate
-passes.
+processing. The hosted 149-APP compile/install and startup gate passed for all
+of these targets.
+
+The next promotion completes the remaining W3 queue and raises the allowlist to
+169 targets. It adds `vims2isis`, `vimscal`, `chan1m32isis`, `clem2isis`,
+`gllnims2isis`, `gllssical`, `nirs2isis`, `kaguyami2isis`, `mical`,
+`mdiscal`, `hi2isis`, `hical`, `marci2isis`, `rosvirtis2isis`,
+`tgocassis2isis`, `vikcal`, and `voy2isis`, followed by the compact W4 tools
+`isisui`, `vicar2isis`, and `specadd`. Source review found no new compile-time
+Windows patch requirement. Data-dependent mission behavior and the
+`voy2isis` IMQ `vdcomp` path remain outside startup smoke coverage. These
+additions remain experimental until the hosted 169-APP gate passes.
 
 After fetching ISIS 10.0.0 and applying
 `patches\10.0.0`, configure and build the target with:

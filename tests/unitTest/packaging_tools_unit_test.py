@@ -190,6 +190,11 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("BundleAdjust", patches[3])
         self.assertIn("jigsaw", patches[3])
         self.assertIn("cnethist", patches[3])
+        self.assertIn(
+            "isis/src/control/objs/BundleAdjust/BundleAdjust.cpp",
+            patches[3],
+        )
+        self.assertIn("m_imageLists", patches[3])
         self.assertIn("#if !defined(_MSC_VER)", patches[3])
 
         spiceql_patch = (

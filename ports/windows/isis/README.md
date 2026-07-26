@@ -124,8 +124,16 @@ The following general/easy promotion raises the allowlist to 109 targets:
 `kernfilter`, `mapsize`, `mvstats`, `nocam2map`, `overlapstats`, `phocube`,
 `phoemplocal`, `photrim`, `pixel2map`, `ringsautomos`, `ringsmappt`,
 `sigmastretch`, `skymap`, `slpmap`, `specdivfilter`, `spiceserver`, `svfilter`,
-`trimfilter`, `uncrop`, and `fplanemap`. These additions remain experimental
-until the hosted 109-APP compile/install and startup gate passes.
+`trimfilter`, `uncrop`, and `fplanemap`. The hosted 109-APP compile/install and
+startup gate passed for all of these targets.
+
+The next source-size-prioritized promotion raises the allowlist to 129 targets.
+It adds the control tools `warp` and `sumspice`, plus 18 compact mission tools:
+`rolo2isis`, `hirdr2isis`, `clemhirescal`, `apollocal`, `mer2isis`,
+`ocams2isis`, `dawnvir2isis`, `mrf2isis`, `hyb2onc2isis`, `mimap2isis`,
+`rososiris2isis`, `lrolola2isis`, `lorri2isis`, `crism2isis`, `lo2isis`,
+`dawnfc2isis`, `mar10cal`, and `tagcams2isis`. These additions remain
+experimental until the hosted 129-APP compile/install and startup gate passes.
 
 After fetching ISIS 10.0.0 and applying
 `patches\10.0.0`, configure and build the target with:

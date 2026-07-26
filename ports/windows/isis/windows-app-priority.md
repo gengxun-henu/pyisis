@@ -9,9 +9,8 @@
 
 | 批次 | 数量 |
 |---|---:|
-| W0-current-batch | 69 |
-| W2-high-value-medium | 3 |
-| W3-general-easy | 94 |
+| W0-current-batch | 89 |
+| W3-general-easy | 77 |
 | W4-medium | 185 |
 | W5-GUI | 6 |
 | W5-blocked-or-specialized | 8 |
@@ -33,9 +32,9 @@
 | 11 | mosrange | base | 5 | 5 | W0-current-batch | none |
 | 12 | spicefit | base | 5 | 5 | W0-current-batch | none |
 | 13 | jigsaw | control | 5 | 5 | W0-current-batch | none |
-| 14 | cam2map | base | 3 | 5 | W2-high-value-medium | external_process |
-| 15 | spiceinit | base | 3 | 5 | W2-high-value-medium | posix_api |
-| 16 | pointreg | control | 3 | 5 | W2-high-value-medium | posix_api |
+| 14 | cam2map | base | 3 | 5 | W0-current-batch | external_process |
+| 15 | spiceinit | base | 3 | 5 | W0-current-batch | posix_api |
+| 16 | pointreg | control | 3 | 5 | W0-current-batch | posix_api |
 | 17 | findfeatures | control | 1 | 5 | W5-blocked-or-specialized | external_process;large_source;optional_stack |
 | 18 | ascii2isis | base | 5 | 4 | W0-current-batch | none |
 | 19 | camstats | base | 5 | 4 | W0-current-batch | none |

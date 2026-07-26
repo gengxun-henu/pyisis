@@ -14,18 +14,46 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--priority-csv", type=Path, required=True)
     parser.add_argument("--wave", required=True)
     parser.add_argument("--expected-additions", type=int, required=True)
+    parser.add_argument(
+        "--apps",
+        nargs="+",
+        help="Exact APP subset to promote from the selected wave.",
+    )
     return parser.parse_args()
+
+
+def select_rows(
+    rows: list[dict[str, str]],
+    wave: str,
+    requested_apps: list[str] | None,
+) -> list[dict[str, str]]:
+    wave_rows = [row for row in rows if row["recommended_wave"] == wave]
+    if requested_apps is None:
+        return wave_rows
+
+    if len(requested_apps) != len(set(requested_apps)):
+        raise ValueError("--apps contains duplicate APP names")
+
+    wave_apps = {row["app"] for row in wave_rows}
+    invalid_apps = sorted(set(requested_apps) - wave_apps)
+    if invalid_apps:
+        raise ValueError(
+            f"requested APPs are not members of {wave}: {invalid_apps}"
+        )
+
+    requested = set(requested_apps)
+    return [row for row in wave_rows if row["app"] in requested]
 
 
 def main() -> int:
     args = parse_args()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     with args.priority_csv.open(encoding="utf-8", newline="") as priority_file:
-        selected_rows = [
-            row
-            for row in csv.DictReader(priority_file)
-            if row["recommended_wave"] == args.wave
-        ]
+        selected_rows = select_rows(
+            list(csv.DictReader(priority_file)),
+            args.wave,
+            args.apps,
+        )
 
     if len(selected_rows) != args.expected_additions:
         raise ValueError(

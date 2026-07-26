@@ -41,7 +41,7 @@ The ISIS 10.0.0 queue is maintained separately under `patches/10.0.0/`.
 Its `0003-Build-allowlisted-Windows-apps-as-executables.patch` adds independent
 MSVC executable targets selected through `ISIS_WINDOWS_APP_ALLOWLIST`; it does
 not restore all application implementations to the export-all runtime DLL.
-The tracked manifest currently selects 69 APP targets through the complete W1
-hosted-Windows build and smoke gate. The ISIS 10 `0004` patch restores
+The tracked manifest currently selects 89 APP targets through the complete W1
+promotion plus the next 20-APP W2/W3 batch. The ISIS 10 `0004` patch restores
 `BundleAdjust` only when `jigsaw` is allowlisted and keeps the `cnethist`
 command-line path without restoring qisis plotting objects.

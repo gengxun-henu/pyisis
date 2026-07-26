@@ -112,6 +112,13 @@ The complete W1 promotion adds all 48 high-value/easy-ranked APPs for 69 total
 targets across base, control, LRO, and MEX. Every target receives the hosted
 compile/install and startup gate; mission-data behavior remains a later,
 data-dependent validation layer.
+The next 20-APP promotion raises the allowlist to 89 targets. It adds the three
+high-value/medium-risk tools `cam2map`, `spiceinit`, and `pointreg`, followed by
+17 general/easy base tools: `bandtrim`, `barscale`, `camtrim`, `cathist`,
+`cropspecial`, `cubeavg`, `cubefunc`, `decorstretch`, `divfilter`, `fakecube`,
+`gaussstretch`, `greyscale`, `handmos`, `hist`, `histeq`, `histmatch`, and
+`interestcube`. These additions remain experimental until the hosted 89-APP
+compile/install and startup gate passes.
 
 After fetching ISIS 10.0.0 and applying
 `patches\10.0.0`, configure and build the target with:
@@ -182,4 +189,16 @@ python .\ports\windows\isis\promote_windows_app_wave.py `
   --priority-csv .\ports\windows\isis\windows-app-priority.csv `
   --wave W1-high-value-easy `
   --expected-additions 48
+```
+
+Use `--apps` when one delivery batch intentionally takes an exact subset from a
+larger ranked wave. Every requested APP must belong to the named wave:
+
+```powershell
+python .\ports\windows\isis\promote_windows_app_wave.py `
+  --manifest .\ports\windows\isis\windows-app-manifest.json `
+  --priority-csv .\ports\windows\isis\windows-app-priority.csv `
+  --wave W3-general-easy `
+  --expected-additions 2 `
+  --apps bandtrim barscale
 ```

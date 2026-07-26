@@ -143,3 +143,29 @@ batch smoke first starts every manifest APP with `-HELP`, then runs small real
 Cube operations for the selected base tools. A successful build alone is not a
 support claim. Same-version Linux numerical comparison and data-dependent
 mission workflows must also pass before the manifest status can be promoted.
+
+## Full APP Porting Priority
+
+`windows-app-priority.csv` ranks all 365 APPs found at the pinned ISIS 10
+source revision. `windows-app-priority.md` summarizes the recommended waves and
+the top 40 candidates. The two scores are deliberately separate:
+
+- portability estimates Windows implementation and runtime-test convenience
+  from source-level platform, process, optional-stack, GUI, size, and
+  mission-data signals;
+- importance is calibrated for planetary navigation mapping, geometry,
+  control networks, data conversion, and common image processing.
+
+Regenerate both files after changing the pinned source or scoring policy:
+
+```powershell
+python .\ports\windows\isis\rank_isis_apps.py `
+  --source-root .\reference\upstream_isis\10.0.0 `
+  --manifest .\ports\windows\isis\windows-app-manifest.json `
+  --csv-output .\ports\windows\isis\windows-app-priority.csv `
+  --summary-output .\ports\windows\isis\windows-app-priority.md
+```
+
+The ranking is planning evidence, not a Windows support claim. An APP advances
+only after the manifest, hosted compile/install, focused smoke, and applicable
+cross-platform result checks pass.

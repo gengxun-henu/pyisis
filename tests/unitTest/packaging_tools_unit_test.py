@@ -43,6 +43,8 @@ WINDOWS_ISIS_APP_MANIFEST = WINDOWS_ISIS_DIR / "windows-app-manifest.json"
 WINDOWS_ISIS_APP_WORKFLOW = (
     PROJECT_ROOT / ".github" / "workflows" / "windows-isis-apps.yml"
 )
+WINDOWS_ISIS_APP_PRIORITY = WINDOWS_ISIS_DIR / "windows-app-priority.csv"
+WINDOWS_ISIS_APP_PRIORITY_SUMMARY = WINDOWS_ISIS_DIR / "windows-app-priority.md"
 UNIT_TEST_SUPPORT = PROJECT_ROOT / "tests" / "unitTest" / "_unit_test_support.py"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
@@ -315,6 +317,46 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("-WindowsApps $apps", workflow)
         self.assertIn("test_isis_app_batch_smoke.ps1", workflow)
         self.assertIn("windows-isis10-app-batch-smoke-logs", workflow)
+
+    def test_windows_app_priority_covers_the_pinned_isis10_inventory(self):
+        self.assertTrue(WINDOWS_ISIS_APP_PRIORITY.is_file())
+        self.assertTrue(WINDOWS_ISIS_APP_PRIORITY_SUMMARY.is_file())
+
+        import csv
+
+        with WINDOWS_ISIS_APP_PRIORITY.open(
+            encoding="utf-8",
+            newline="",
+        ) as priority_file:
+            rows = list(csv.DictReader(priority_file))
+
+        self.assertEqual(len(rows), 365)
+        self.assertEqual(len({row["app"] for row in rows}), 365)
+        self.assertEqual(
+            [int(row["overall_rank"]) for row in rows],
+            list(range(1, 366)),
+        )
+        current_batch = {
+            row["app"]
+            for row in rows
+            if row["current_manifest"] == "yes"
+        }
+        manifest = json.loads(
+            WINDOWS_ISIS_APP_MANIFEST.read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            current_batch,
+            {app["name"] for app in manifest["apps"]},
+        )
+        apps = {row["app"]: row for row in rows}
+        self.assertEqual(apps["cam2map"]["importance_score"], "5")
+        self.assertEqual(apps["jigsaw"]["importance_score"], "5")
+        self.assertEqual(apps["qnet"]["recommended_wave"], "W5-GUI")
+        self.assertEqual(apps["hrsc2isis"]["importance_score"], "4")
+
+        summary = WINDOWS_ISIS_APP_PRIORITY_SUMMARY.read_text(encoding="utf-8")
+        self.assertIn("APP 总数：365", summary)
+        self.assertIn("固定源码提交", summary)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

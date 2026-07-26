@@ -255,7 +255,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
             "trim",
         }
         apps = {app["name"]: app for app in manifest["apps"]}
-        self.assertEqual(len(apps), 89)
+        self.assertEqual(len(apps), 109)
         self.assertTrue(behavior_apps.issubset(apps))
         w1_apps = {
             name
@@ -304,6 +304,56 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 "histeq",
                 "histmatch",
                 "interestcube",
+                "fplanemap",
+                "kernfilter",
+                "mapsize",
+                "mvstats",
+                "nocam2map",
+                "overlapstats",
+                "phocube",
+                "phoemplocal",
+                "photrim",
+                "pixel2map",
+                "ringsautomos",
+                "ringsmappt",
+                "sigmastretch",
+                "skymap",
+                "slpmap",
+                "specdivfilter",
+                "spiceserver",
+                "svfilter",
+                "trimfilter",
+                "uncrop",
+            },
+        )
+        pending_apps = {
+            name
+            for name, app in apps.items()
+            if app["versions"]["10.0.0"]["smoke_status"] == "pending"
+        }
+        self.assertEqual(
+            pending_apps,
+            {
+                "fplanemap",
+                "kernfilter",
+                "mapsize",
+                "mvstats",
+                "nocam2map",
+                "overlapstats",
+                "phocube",
+                "phoemplocal",
+                "photrim",
+                "pixel2map",
+                "ringsautomos",
+                "ringsmappt",
+                "sigmastretch",
+                "skymap",
+                "slpmap",
+                "specdivfilter",
+                "spiceserver",
+                "svfilter",
+                "trimfilter",
+                "uncrop",
             },
         )
         self.assertEqual(
@@ -364,7 +414,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         batch_smoke = (
             WINDOWS_ISIS_DIR / "test_isis_app_batch_smoke.ps1"
         ).read_text(encoding="utf-8")
-        self.assertIn("$appNames.Count -lt 89", batch_smoke)
+        self.assertIn("$appNames.Count -lt 109", batch_smoke)
         self.assertIn('Join-Path $Prefix "bin\\$Name.exe"', batch_smoke)
         self.assertIn('Invoke-IsisApp $appName @("-HELP")', batch_smoke)
         for name in behavior_apps:
@@ -377,7 +427,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("runs-on: windows-2022", workflow)
         self.assertIn("-IsisVersion 10.0.0", workflow)
         self.assertIn("-WindowsApps $apps", workflow)
-        self.assertIn("Build and smoke-test 89 ISIS 10 APPs", workflow)
+        self.assertIn("Build and smoke-test 109 ISIS 10 APPs", workflow)
         self.assertIn("test_isis_app_batch_smoke.ps1", workflow)
         self.assertIn("windows-isis10-app-batch-smoke-logs", workflow)
 
@@ -442,13 +492,13 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertEqual(apps["hrsc2isis"]["importance_score"], "4")
         self.assertEqual(
             sum(row["current_manifest"] == "yes" for row in rows),
-            89,
+            109,
         )
 
         summary = WINDOWS_ISIS_APP_PRIORITY_SUMMARY.read_text(encoding="utf-8")
         self.assertIn("APP 总数：365", summary)
         self.assertIn("固定源码提交", summary)
-        self.assertIn("W0-current-batch | 89", summary)
+        self.assertIn("W0-current-batch | 109", summary)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

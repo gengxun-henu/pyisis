@@ -22,6 +22,7 @@ Updated: 2026-07-24  Geng Xun preserved qisis data objects and exported SpiceQL 
 Updated: 2026-07-25  Geng Xun covered the ISIS 10 SpiceQL 1.4.1 export and MSVC link gates.
 Updated: 2026-07-25  Geng Xun parameterized Windows wheel-set checks for ISIS 9 and ISIS 10.
 Updated: 2026-07-25  Geng Xun covered the Windows APP manifest and allowlisted reduce target.
+Updated: 2026-07-26  Geng Xun covered the 21-APP Windows build and smoke batch.
 """
 
 from __future__ import annotations
@@ -193,7 +194,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("find_package(nlohmann_json CONFIG REQUIRED)", spiceql_patch)
         self.assertIn('-  add_subdirectory("submodules/json")', spiceql_patch)
 
-    def test_windows_app_manifest_drives_the_reduce_target(self):
+    def test_windows_app_manifest_drives_the_allowlisted_batch(self):
         self.assertTrue(WINDOWS_ISIS_APP_MANIFEST.is_file())
         manifest = json.loads(
             WINDOWS_ISIS_APP_MANIFEST.read_text(encoding="utf-8")
@@ -212,8 +213,59 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 self.assertEqual(baseline["ref"], lock["revision"])
                 self.assertEqual(baseline["commit"], lock["commit"])
 
+        expected_apps = {
+            "algebra",
+            "bit2bit",
+            "catlab",
+            "crop",
+            "cubeatt",
+            "cubediff",
+            "cubenorm",
+            "enlarge",
+            "fillgap",
+            "flip",
+            "fx",
+            "getkey",
+            "gradient",
+            "mask",
+            "mirror",
+            "noisefilter",
+            "ratio",
+            "reduce",
+            "stats",
+            "stretch",
+            "trim",
+        }
         apps = {app["name"]: app for app in manifest["apps"]}
-        self.assertEqual(set(apps), {"reduce"})
+        self.assertEqual(set(apps), expected_apps)
+        self.assertEqual(len(apps) - 1, 20)
+        self.assertEqual(
+            manifest["app_defaults"]["windows_patch"],
+            "patches/10.0.0/"
+            "0003-Build-allowlisted-Windows-apps-as-executables.patch",
+        )
+        self.assertTrue(
+            (
+                WINDOWS_ISIS_DIR
+                / manifest["app_defaults"]["windows_patch"]
+            ).is_file()
+        )
+        for name, app in apps.items():
+            with self.subTest(app=name):
+                self.assertEqual(
+                    app["source_dir"],
+                    f"isis/src/base/apps/{name}",
+                )
+                self.assertEqual(
+                    app["xml"],
+                    f"isis/src/base/apps/{name}/{name}.xml",
+                )
+                self.assertIn(app["smoke_tier"], {"startup", "cube"})
+                self.assertEqual(
+                    app["versions"]["10.0.0"]["status"],
+                    "experimental",
+                )
+
         reduce_app = apps["reduce"]
         self.assertEqual(reduce_app["source_dir"], "isis/src/base/apps/reduce")
         self.assertEqual(reduce_app["xml"], "isis/src/base/apps/reduce/reduce.xml")
@@ -222,8 +274,13 @@ class PackagingToolsUnitTest(unittest.TestCase):
             reduce_app["versions"]["10.0.0"]["status"],
             "experimental",
         )
-        self.assertTrue(
-            (WINDOWS_ISIS_DIR / reduce_app["windows_patch"]).is_file()
+        self.assertEqual(
+            reduce_app["versions"]["10.0.0"]["build_status"],
+            "compiled_installed",
+        )
+        self.assertEqual(
+            reduce_app["versions"]["10.0.0"]["smoke_status"],
+            "minimal_passed",
         )
 
         configure_script = (
@@ -240,21 +297,24 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("[string[]]$Targets", build_script)
         self.assertIn('@("--target") + $Targets', build_script)
 
-        reduce_smoke = (
-            WINDOWS_ISIS_DIR / "test_isis_reduce_smoke.ps1"
+        batch_smoke = (
+            WINDOWS_ISIS_DIR / "test_isis_app_batch_smoke.ps1"
         ).read_text(encoding="utf-8")
-        self.assertIn('Join-Path $Prefix "bin\\reduce.exe"', reduce_smoke)
-        self.assertIn('"sscale=4"', reduce_smoke)
-        self.assertIn('"lscale=4"', reduce_smoke)
+        self.assertIn("$appNames.Count -lt 21", batch_smoke)
+        self.assertIn('Join-Path $Prefix "bin\\$Name.exe"', batch_smoke)
+        self.assertIn('Invoke-IsisApp $appName @("-HELP")', batch_smoke)
+        for name in expected_apps:
+            with self.subTest(smoke_app=name):
+                self.assertIn(f'"{name}"', batch_smoke)
 
         self.assertTrue(WINDOWS_ISIS_APP_WORKFLOW.is_file())
         workflow = WINDOWS_ISIS_APP_WORKFLOW.read_text(encoding="utf-8")
         self.assertIn("windows-isis-apps", workflow)
         self.assertIn("runs-on: windows-2022", workflow)
         self.assertIn("-IsisVersion 10.0.0", workflow)
-        self.assertIn("-WindowsApps reduce", workflow)
-        self.assertIn("test_isis_reduce_smoke.ps1", workflow)
-        self.assertIn("windows-isis10-reduce-smoke-log", workflow)
+        self.assertIn("-WindowsApps $apps", workflow)
+        self.assertIn("test_isis_app_batch_smoke.ps1", workflow)
+        self.assertIn("windows-isis10-app-batch-smoke-logs", workflow)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

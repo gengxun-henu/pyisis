@@ -26,35 +26,228 @@
       }
     }
   },
+  "app_defaults": {
+    "component": "apps-base",
+    "direct_posix": [],
+    "shell_commands": [],
+    "third_party_dependencies": [],
+    "runtime_plugins": [],
+    "isisdata_requirements": [
+      "base"
+    ],
+    "windows_patch": "patches/10.0.0/0003-Build-allowlisted-Windows-apps-as-executables.patch",
+    "release_component": "apps-base"
+  },
   "apps": [
     {
+      "name": "algebra",
+      "source_dir": "isis/src/base/apps/algebra",
+      "xml": "isis/src/base/apps/algebra/algebra.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "bit2bit",
+      "source_dir": "isis/src/base/apps/bit2bit",
+      "xml": "isis/src/base/apps/bit2bit/bit2bit.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "catlab",
+      "source_dir": "isis/src/base/apps/catlab",
+      "xml": "isis/src/base/apps/catlab/catlab.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "crop",
+      "source_dir": "isis/src/base/apps/crop",
+      "xml": "isis/src/base/apps/crop/crop.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "cubeatt",
+      "source_dir": "isis/src/base/apps/cubeatt",
+      "xml": "isis/src/base/apps/cubeatt/cubeatt.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "cubediff",
+      "source_dir": "isis/src/base/apps/cubediff",
+      "xml": "isis/src/base/apps/cubediff/cubediff.xml",
+      "smoke_tier": "startup",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "cubenorm",
+      "source_dir": "isis/src/base/apps/cubenorm",
+      "xml": "isis/src/base/apps/cubenorm/cubenorm.xml",
+      "smoke_tier": "startup",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "enlarge",
+      "source_dir": "isis/src/base/apps/enlarge",
+      "xml": "isis/src/base/apps/enlarge/enlarge.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "fillgap",
+      "source_dir": "isis/src/base/apps/fillgap",
+      "xml": "isis/src/base/apps/fillgap/fillgap.xml",
+      "smoke_tier": "startup",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "flip",
+      "source_dir": "isis/src/base/apps/flip",
+      "xml": "isis/src/base/apps/flip/flip.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "fx",
+      "source_dir": "isis/src/base/apps/fx",
+      "xml": "isis/src/base/apps/fx/fx.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "getkey",
+      "source_dir": "isis/src/base/apps/getkey",
+      "xml": "isis/src/base/apps/getkey/getkey.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "gradient",
+      "source_dir": "isis/src/base/apps/gradient",
+      "xml": "isis/src/base/apps/gradient/gradient.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "mask",
+      "source_dir": "isis/src/base/apps/mask",
+      "xml": "isis/src/base/apps/mask/mask.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "mirror",
+      "source_dir": "isis/src/base/apps/mirror",
+      "xml": "isis/src/base/apps/mirror/mirror.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "noisefilter",
+      "source_dir": "isis/src/base/apps/noisefilter",
+      "xml": "isis/src/base/apps/noisefilter/noisefilter.xml",
+      "smoke_tier": "startup",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "ratio",
+      "source_dir": "isis/src/base/apps/ratio",
+      "xml": "isis/src/base/apps/ratio/ratio.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
       "name": "reduce",
-      "component": "apps-photogrammetry",
       "source_dir": "isis/src/base/apps/reduce",
       "xml": "isis/src/base/apps/reduce/reduce.xml",
-      "direct_posix": [],
-      "shell_commands": [],
-      "third_party_dependencies": [],
-      "runtime_plugins": [],
-      "isisdata_requirements": [
-        "base"
-      ],
-      "windows_patch": "patches/10.0.0/0003-Build-allowlisted-Windows-apps-as-executables.patch",
+      "smoke_tier": "cube",
       "versions": {
-        "9.0.0": {
-          "status": "supported",
-          "build_status": "compiled_installed",
-          "smoke_status": "minimal_passed",
-          "linux_comparison": "pending"
-        },
-        "10.0.0": {
-          "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
-          "linux_comparison": "pending"
-        }
-      },
-      "release_component": "apps-photogrammetry"
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "minimal_passed", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "compiled_installed", "smoke_status": "minimal_passed", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "stats",
+      "source_dir": "isis/src/base/apps/stats",
+      "xml": "isis/src/base/apps/stats/stats.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "stretch",
+      "source_dir": "isis/src/base/apps/stretch",
+      "xml": "isis/src/base/apps/stretch/stretch.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
+    },
+    {
+      "name": "trim",
+      "source_dir": "isis/src/base/apps/trim",
+      "xml": "isis/src/base/apps/trim/trim.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {"status": "supported", "build_status": "compiled_installed", "smoke_status": "not_individually_recorded", "linux_comparison": "pending"},
+        "10.0.0": {"status": "experimental", "build_status": "implementation_ready", "smoke_status": "pending", "linux_comparison": "pending"}
+      }
     }
   ]
 }

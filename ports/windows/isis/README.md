@@ -103,33 +103,43 @@ object-list and file-lock issues in this porting environment.
 
 ISIS 10 keeps application implementations out of the monolithic `isis.dll`.
 Selected Windows applications are instead compiled into independent executable
-targets from `windows-app-manifest.json`. The first experimental target is
-`reduce`.
+targets from `windows-app-manifest.json`. The initial `reduce` target passed its
+hosted Windows build/install/Cube smoke. Wave 2 expands the allowlist to 21 base
+APPs: `algebra`, `bit2bit`, `catlab`, `crop`, `cubeatt`, `cubediff`,
+`cubenorm`, `enlarge`, `fillgap`, `flip`, `fx`, `getkey`, `gradient`, `mask`,
+`mirror`, `noisefilter`, `ratio`, `reduce`, `stats`, `stretch`, and `trim`.
 
 After fetching ISIS 10.0.0 and applying
 `patches\10.0.0`, configure and build the target with:
 
 ```powershell
+$manifest = Get-Content `
+  .\ports\windows\isis\windows-app-manifest.json `
+  -Raw | ConvertFrom-Json
+$apps = @($manifest.apps | ForEach-Object { $_.name })
+
 .\ports\windows\isis\configure_isis.ps1 `
   -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
   -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
   -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
   -IsisVersion 10.0.0 `
-  -WindowsApps reduce
+  -WindowsApps $apps
 
 .\ports\windows\isis\build_isis.ps1 `
   -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
-  -Targets reduce_app `
   -Jobs 1
 
 .\ports\windows\isis\install_isis.ps1 `
   -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
 
-.\ports\windows\isis\test_isis_reduce_smoke.ps1 `
-  -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+.\ports\windows\isis\test_isis_app_batch_smoke.ps1 `
+  -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+  -IsisVersion 10.0.0
 ```
 
-The CMake target is named `reduce_app` to avoid case-insensitive target-name
-collisions; the installed executable remains `reduce.exe`. A successful build
-alone is not a support claim. The smoke test and a same-version Linux result
-comparison must also pass before the manifest status can be promoted.
+Each CMake target uses the `<name>_app` form to avoid case-insensitive
+target-name collisions; installed executable names remain `<name>.exe`. The
+batch smoke first starts every manifest APP with `-HELP`, then runs small real
+Cube operations for the selected base tools. A successful build alone is not a
+support claim. Same-version Linux numerical comparison and data-dependent
+mission workflows must also pass before the manifest status can be promoted.

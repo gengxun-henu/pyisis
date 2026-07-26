@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  isis10-reduce:
-    name: Build and smoke-test ISIS 10 reduce.exe
+  isis10-app-batch:
+    name: Build and smoke-test 21 ISIS 10 APPs
     runs-on: windows-2022
     timeout-minutes: 360
     permissions:
@@ -69,17 +69,24 @@ jobs:
             -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
             -PatchDir .\ports\windows\isis\patches\10.0.0
 
-      - name: Configure allowlisted reduce target
+      - name: Configure allowlisted APP batch
         run: |
           . .\ports\windows\activate_msvc.ps1
+          $manifest = Get-Content `
+            .\ports\windows\isis\windows-app-manifest.json `
+            -Raw | ConvertFrom-Json
+          $apps = @($manifest.apps | ForEach-Object { $_.name })
+          if ($apps.Count -lt 21) {
+            throw "Expected at least 21 allowlisted APPs, found $($apps.Count)"
+          }
           .\ports\windows\isis\configure_isis.ps1 `
             -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
             -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
             -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
             -IsisVersion 10.0.0 `
-            -WindowsApps reduce
+            -WindowsApps $apps
 
-      - name: Build and install ISIS 10 with reduce
+      - name: Build and install ISIS 10 APP batch
         run: |
           . .\ports\windows\activate_msvc.ps1
           .\ports\windows\isis\build_isis.ps1 `
@@ -88,18 +95,16 @@ jobs:
           .\ports\windows\isis\install_isis.ps1 `
             -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
 
-      - name: Verify prefix and smoke-test reduce
+      - name: Verify and smoke-test APP batch
         run: |
-          .\ports\windows\isis\verify_isis_prefix.ps1 `
+          .\ports\windows\isis\test_isis_app_batch_smoke.ps1 `
             -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
-            -ExpectedVersion 10.0.0
-          .\ports\windows\isis\test_isis_reduce_smoke.ps1 `
-            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+            -IsisVersion 10.0.0
 
-      - name: Upload reduce smoke log
+      - name: Upload APP batch smoke logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-isis10-reduce-smoke-log
+          name: windows-isis10-app-batch-smoke-logs
           if-no-files-found: warn
-          path: build/windows/isis-reduce-smoke/reduce.log
+          path: build/windows/isis-app-batch-smoke/*.log

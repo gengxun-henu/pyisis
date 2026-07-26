@@ -41,3 +41,5 @@ The ISIS 10.0.0 queue is maintained separately under `patches/10.0.0/`.
 Its `0003-Build-allowlisted-Windows-apps-as-executables.patch` adds independent
 MSVC executable targets selected through `ISIS_WINDOWS_APP_ALLOWLIST`; it does
 not restore all application implementations to the export-all runtime DLL.
+The tracked manifest currently selects 21 base APP targets for the Wave 2
+hosted-Windows build and smoke gate.

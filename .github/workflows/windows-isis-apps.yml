@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   isis10-app-batch:
-    name: Build and smoke-test 129 ISIS 10 APPs
+    name: Build and smoke-test 149 ISIS 10 APPs
     runs-on: windows-2022
     timeout-minutes: 360
     permissions:
@@ -76,8 +76,8 @@ jobs:
             .\ports\windows\isis\windows-app-manifest.json `
             -Raw | ConvertFrom-Json
           $apps = @($manifest.apps | ForEach-Object { $_.name })
-          if ($apps.Count -lt 129) {
-            throw "Expected at least 129 allowlisted APPs, found $($apps.Count)"
+          if ($apps.Count -lt 149) {
+            throw "Expected at least 149 allowlisted APPs, found $($apps.Count)"
           }
           .\ports\windows\isis\configure_isis.ps1 `
             -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `

@@ -132,8 +132,18 @@ It adds the control tools `warp` and `sumspice`, plus 18 compact mission tools:
 `rolo2isis`, `hirdr2isis`, `clemhirescal`, `apollocal`, `mer2isis`,
 `ocams2isis`, `dawnvir2isis`, `mrf2isis`, `hyb2onc2isis`, `mimap2isis`,
 `rososiris2isis`, `lrolola2isis`, `lorri2isis`, `crism2isis`, `lo2isis`,
-`dawnfc2isis`, `mar10cal`, and `tagcams2isis`. These additions remain
-experimental until the hosted 129-APP compile/install and startup gate passes.
+`dawnfc2isis`, `mar10cal`, and `tagcams2isis`. The hosted 129-APP
+compile/install and startup gate passed for all of these targets.
+
+The following source-size-prioritized mission promotion raises the allowlist to
+149 targets: `gllssi2isis`, `thm2isis`, `ctxcal`, `kaguyasp2isis`,
+`mroctx2isis`, `clemnircal`, `kaguyatc2isis`, `clemuvviscal`, `leisa2isis`,
+`voycal`, `msi2isis`, `mvic2isis`, `apollo2isis`, `mdis2isis`,
+`junocam2isis`, `moccal`, `eis2isis`, `mar102isis`, `amica2isis`, and
+`ciss2isis`. Their only ranked blocker is mission runtime data; the build gate
+therefore validates compile, install, and startup rather than data-dependent
+processing. These additions remain experimental until the hosted 149-APP gate
+passes.
 
 After fetching ISIS 10.0.0 and applying
 `patches\10.0.0`, configure and build the target with:

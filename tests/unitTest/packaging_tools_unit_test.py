@@ -25,6 +25,7 @@ Updated: 2026-07-25  Geng Xun covered the Windows APP manifest and allowlisted r
 Updated: 2026-07-26  Geng Xun covered the 21-APP Windows build and smoke batch.
 Updated: 2026-07-26  Geng Xun covered the complete 48-APP W1 promotion.
 Updated: 2026-07-26  Geng Xun covered exact-subset Windows APP wave promotion.
+Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
 """
 
 from __future__ import annotations
@@ -171,7 +172,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("apply --unidiff-zero --check", apply_script)
 
         patch_paths = sorted(patch_dir.glob("*.patch"))
-        self.assertEqual(len(patch_paths), 4)
+        self.assertEqual(len(patch_paths), 5)
         patches = [path.read_text(encoding="utf-8") for path in patch_paths]
         self.assertIn("isis/src/core/src/Pvl.cpp", patches[0])
         self.assertIn("Trim Windows runtime to non-GUI core", patches[1])
@@ -198,6 +199,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
         )
         self.assertIn("m_imageLists", patches[3])
         self.assertIn("#if !defined(_MSC_VER)", patches[3])
+        self.assertIn("isis/src/base/apps/hist/hist.cpp", patches[4])
+        self.assertIn("HistogramPlotWindow", patches[4])
+        self.assertIn("#if !defined(_MSC_VER)", patches[4])
 
         spiceql_patch = (
             WINDOWS_ISIS_PATCHES_DIR

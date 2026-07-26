@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: gengxun-henu <gengxun@henu.edu.cn>
+Date: Sun, 26 Jul 2026 19:30:00 +0800
+Subject: [PATCH] Keep hist command-line path on MSVC
+
+The non-GUI Windows runtime intentionally excludes qisis plotting objects.
+Keep hist's report generation available while omitting its interactive plot
+path on MSVC.
+---
+ isis/src/base/apps/hist/hist.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/isis/src/base/apps/hist/hist.cpp b/isis/src/base/apps/hist/hist.cpp
+index ac474fd64..3ce83257f 100644
+--- a/isis/src/base/apps/hist/hist.cpp
++++ b/isis/src/base/apps/hist/hist.cpp
+@@ -1,16 +1,24 @@
+ #include "hist.h"
+ 
++#if !defined(_MSC_VER)
+ #include <QDockWidget>
+ #include <QMenuBar>
++#endif
+ #include <QString>
+ 
++#if !defined(_MSC_VER)
+ #include "CubePlotCurve.h"
++#endif
+ #include "Histogram.h"
+ #include "ImageHistogram.h"
++#if !defined(_MSC_VER)
+ #include "HistogramItem.h"
+ #include "HistogramPlotWindow.h"
++#endif
+ #include "LineManager.h"
+ #include "Process.h"
+ #include "Progress.h"
++#if !defined(_MSC_VER)
+ #include "QHistogram.h"
++#endif
+ #include "UserInterface.h"
+@@ -160,6 +168,7 @@ namespace Isis {
+       fout.close();
+     }
+     // If we are in gui mode, create a histogram plot
++#if !defined(_MSC_VER)
+     if (ui.IsInteractive()) {
+       // Set the title for the dialog
+       QString title;
+@@ -271,6 +280,7 @@ namespace Isis {
+ 
+       plot->showWindow();
+     }
++#endif
+     delete hist;
+     p.EndProcess();
+   }
+-- 
+2.43.0

@@ -45,3 +45,5 @@ The tracked manifest currently selects 89 APP targets through the complete W1
 promotion plus the next 20-APP W2/W3 batch. The ISIS 10 `0004` patch restores
 `BundleAdjust` only when `jigsaw` is allowlisted and keeps the `cnethist`
 command-line path without restoring qisis plotting objects.
+The ISIS 10 `0005` patch likewise keeps `hist` report generation available
+while omitting its qisis-only interactive plotting path on MSVC.

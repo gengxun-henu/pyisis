@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: gengxun-henu <gengxun@henu.edu.cn>
+Date: Sun, 26 Jul 2026 11:00:00 +0800
+Subject: [PATCH] Port W1 control app dependencies to MSVC
+
+Restore the BundleAdjust object when jigsaw is explicitly allowlisted. Keep
+cnethist's command-line report path on Windows without pulling the removed
+qisis plotting module back into the runtime.
+---
+ isis/src/CMakeLists.txt                 |  3 +++
+ isis/src/control/apps/cnethist/main.cpp | 10 ++++++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/isis/src/CMakeLists.txt b/isis/src/CMakeLists.txt
+index 4989f0a85..1ed15effe 100644
+--- a/isis/src/CMakeLists.txt
++++ b/isis/src/CMakeLists.txt
+@@ -6,0 +7,3 @@ if(MSVC)
++  if("jigsaw" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST)
++    list(REMOVE_ITEM ISIS_DISABLED_OBJ_FOLDERS BundleAdjust)
++  endif()
+diff --git a/isis/src/control/apps/cnethist/main.cpp b/isis/src/control/apps/cnethist/main.cpp
+index 7abe07bbc..726e5c1bb 100644
+--- a/isis/src/control/apps/cnethist/main.cpp
++++ b/isis/src/control/apps/cnethist/main.cpp
+@@ -20,0 +21 @@
++#if !defined(_MSC_VER)
+@@ -26,0 +28 @@
++#endif
+@@ -46,0 +49 @@ void IsisMain() {
++#if !defined(_MSC_VER)
+@@ -73,0 +77 @@ void IsisMain() {
++#endif
+@@ -123,0 +128 @@ void IsisMain() {
++#if !defined(_MSC_VER)
+@@ -150,0 +156 @@ void IsisMain() {
++#endif
+@@ -152 +158,3 @@ void IsisMain() {
+-  if (ui.IsInteractive()) plot->showWindow();
++#if !defined(_MSC_VER)
++  if (ui.IsInteractive()) plot->showWindow();
++#endif
+@@ -156,0 +165 @@ void IsisMain() {
++#if !defined(_MSC_VER)
+@@ -205,0 +215 @@ QColor curveColor(int i) {
++#endif
+--
+2.43.0

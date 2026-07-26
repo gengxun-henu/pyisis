@@ -9,8 +9,7 @@
 
 | 批次 | 数量 |
 |---|---:|
-| W0-current-batch | 21 |
-| W1-high-value-easy | 48 |
+| W0-current-batch | 69 |
 | W2-high-value-medium | 3 |
 | W3-general-easy | 94 |
 | W4-medium | 185 |
@@ -21,45 +20,45 @@
 
 | 排名 | APP | 模块 | 便利性 | 重要性 | 建议批次 | 阻塞因素 |
 |---:|---|---|---:|---:|---|---|
-| 1 | automos | base | 5 | 5 | W1-high-value-easy | none |
-| 2 | caminfo | base | 5 | 5 | W1-high-value-easy | none |
-| 3 | campt | base | 5 | 5 | W1-high-value-easy | none |
-| 4 | camrange | base | 5 | 5 | W1-high-value-easy | none |
-| 5 | footprintinit | base | 5 | 5 | W1-high-value-easy | none |
-| 6 | footprintmerge | base | 5 | 5 | W1-high-value-easy | none |
-| 7 | map2map | base | 5 | 5 | W1-high-value-easy | none |
-| 8 | mapmos | base | 5 | 5 | W1-high-value-easy | none |
-| 9 | mappt | base | 5 | 5 | W1-high-value-easy | none |
-| 10 | maptemplate | base | 5 | 5 | W1-high-value-easy | none |
-| 11 | mosrange | base | 5 | 5 | W1-high-value-easy | none |
-| 12 | spicefit | base | 5 | 5 | W1-high-value-easy | none |
-| 13 | jigsaw | control | 5 | 5 | W1-high-value-easy | none |
+| 1 | automos | base | 5 | 5 | W0-current-batch | none |
+| 2 | caminfo | base | 5 | 5 | W0-current-batch | none |
+| 3 | campt | base | 5 | 5 | W0-current-batch | none |
+| 4 | camrange | base | 5 | 5 | W0-current-batch | none |
+| 5 | footprintinit | base | 5 | 5 | W0-current-batch | none |
+| 6 | footprintmerge | base | 5 | 5 | W0-current-batch | none |
+| 7 | map2map | base | 5 | 5 | W0-current-batch | none |
+| 8 | mapmos | base | 5 | 5 | W0-current-batch | none |
+| 9 | mappt | base | 5 | 5 | W0-current-batch | none |
+| 10 | maptemplate | base | 5 | 5 | W0-current-batch | none |
+| 11 | mosrange | base | 5 | 5 | W0-current-batch | none |
+| 12 | spicefit | base | 5 | 5 | W0-current-batch | none |
+| 13 | jigsaw | control | 5 | 5 | W0-current-batch | none |
 | 14 | cam2map | base | 3 | 5 | W2-high-value-medium | external_process |
 | 15 | spiceinit | base | 3 | 5 | W2-high-value-medium | posix_api |
 | 16 | pointreg | control | 3 | 5 | W2-high-value-medium | posix_api |
 | 17 | findfeatures | control | 1 | 5 | W5-blocked-or-specialized | external_process;large_source;optional_stack |
-| 18 | ascii2isis | base | 5 | 4 | W1-high-value-easy | none |
-| 19 | camstats | base | 5 | 4 | W1-high-value-easy | none |
+| 18 | ascii2isis | base | 5 | 4 | W0-current-batch | none |
+| 19 | camstats | base | 5 | 4 | W0-current-batch | none |
 | 20 | catlab | base | 5 | 4 | W0-current-batch | none |
 | 21 | crop | base | 5 | 4 | W0-current-batch | none |
 | 22 | cubeatt | base | 5 | 4 | W0-current-batch | none |
 | 23 | cubediff | base | 5 | 4 | W0-current-batch | none |
-| 24 | cubeit | base | 5 | 4 | W1-high-value-easy | none |
-| 25 | dsk2isis | base | 5 | 4 | W1-high-value-easy | none |
-| 26 | findimageoverlaps | base | 5 | 4 | W1-high-value-easy | none |
-| 27 | fits2isis | base | 5 | 4 | W1-high-value-easy | none |
+| 24 | cubeit | base | 5 | 4 | W0-current-batch | none |
+| 25 | dsk2isis | base | 5 | 4 | W0-current-batch | none |
+| 26 | findimageoverlaps | base | 5 | 4 | W0-current-batch | none |
+| 27 | fits2isis | base | 5 | 4 | W0-current-batch | none |
 | 28 | fx | base | 5 | 4 | W0-current-batch | none |
 | 29 | getkey | base | 5 | 4 | W0-current-batch | none |
-| 30 | isis2fits | base | 5 | 4 | W1-high-value-easy | none |
-| 31 | isis2pds | base | 5 | 4 | W1-high-value-easy | none |
-| 32 | isis2std | base | 5 | 4 | W1-high-value-easy | none |
-| 33 | makecube | base | 5 | 4 | W1-high-value-easy | none |
-| 34 | map2cam | base | 5 | 4 | W1-high-value-easy | none |
-| 35 | mapgrid | base | 5 | 4 | W1-high-value-easy | none |
-| 36 | maplab | base | 5 | 4 | W1-high-value-easy | none |
-| 37 | maptrim | base | 5 | 4 | W1-high-value-easy | none |
-| 38 | pds2isis | base | 5 | 4 | W1-high-value-easy | none |
-| 39 | raw2isis | base | 5 | 4 | W1-high-value-easy | none |
+| 30 | isis2fits | base | 5 | 4 | W0-current-batch | none |
+| 31 | isis2pds | base | 5 | 4 | W0-current-batch | none |
+| 32 | isis2std | base | 5 | 4 | W0-current-batch | none |
+| 33 | makecube | base | 5 | 4 | W0-current-batch | none |
+| 34 | map2cam | base | 5 | 4 | W0-current-batch | none |
+| 35 | mapgrid | base | 5 | 4 | W0-current-batch | none |
+| 36 | maplab | base | 5 | 4 | W0-current-batch | none |
+| 37 | maptrim | base | 5 | 4 | W0-current-batch | none |
+| 38 | pds2isis | base | 5 | 4 | W0-current-batch | none |
+| 39 | raw2isis | base | 5 | 4 | W0-current-batch | none |
 | 40 | reduce | base | 5 | 4 | W0-current-batch | none |
 
 ## 使用说明

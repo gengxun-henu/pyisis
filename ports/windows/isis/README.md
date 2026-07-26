@@ -104,10 +104,14 @@ object-list and file-lock issues in this porting environment.
 ISIS 10 keeps application implementations out of the monolithic `isis.dll`.
 Selected Windows applications are instead compiled into independent executable
 targets from `windows-app-manifest.json`. The initial `reduce` target passed its
-hosted Windows build/install/Cube smoke. Wave 2 expands the allowlist to 21 base
+hosted Windows build/install/Cube smoke. Wave 2 expanded the allowlist to 21 base
 APPs: `algebra`, `bit2bit`, `catlab`, `crop`, `cubeatt`, `cubediff`,
 `cubenorm`, `enlarge`, `fillgap`, `flip`, `fx`, `getkey`, `gradient`, `mask`,
 `mirror`, `noisefilter`, `ratio`, `reduce`, `stats`, `stretch`, and `trim`.
+The complete W1 promotion adds all 48 high-value/easy-ranked APPs for 69 total
+targets across base, control, LRO, and MEX. Every target receives the hosted
+compile/install and startup gate; mission-data behavior remains a later,
+data-dependent validation layer.
 
 After fetching ISIS 10.0.0 and applying
 `patches\10.0.0`, configure and build the target with:
@@ -169,3 +173,13 @@ python .\ports\windows\isis\rank_isis_apps.py `
 The ranking is planning evidence, not a Windows support claim. An APP advances
 only after the manifest, hosted compile/install, focused smoke, and applicable
 cross-platform result checks pass.
+
+Promote a complete ranked wave before regenerating the priority outputs:
+
+```powershell
+python .\ports\windows\isis\promote_windows_app_wave.py `
+  --manifest .\ports\windows\isis\windows-app-manifest.json `
+  --priority-csv .\ports\windows\isis\windows-app-priority.csv `
+  --wave W1-high-value-easy `
+  --expected-additions 48
+```

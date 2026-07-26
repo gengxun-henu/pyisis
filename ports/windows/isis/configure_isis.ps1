@@ -3,6 +3,9 @@ param(
     [string]$BuildDir,
     [string]$Prefix,
     [string]$BuildType = "Release",
+    [string]$IsisVersion,
+    [string[]]$WindowsApps,
+    [string]$WindowsAppManifest,
     [switch]$BuildTests,
     [switch]$BuildPythonBindings,
     [switch]$BuildDocs
@@ -67,6 +70,64 @@ if (-not $env:CONDA_PREFIX) {
     Fail "CONDA_PREFIX is not set; activate the Windows conda environment before configuring ISIS"
 }
 
+$requestedWindowsApps = @(
+    $WindowsApps |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        Sort-Object -Unique
+)
+if ($requestedWindowsApps.Count -gt 0) {
+    if (-not $IsisVersion) {
+        Fail "-IsisVersion is required when -WindowsApps is specified"
+    }
+    if (-not $WindowsAppManifest) {
+        $WindowsAppManifest = Join-Path $PSScriptRoot "windows-app-manifest.json"
+    }
+    $WindowsAppManifest = Resolve-FullPath $WindowsAppManifest
+    if (-not (Test-Path -LiteralPath $WindowsAppManifest)) {
+        Fail "Windows APP manifest not found: $WindowsAppManifest"
+    }
+
+    $manifest = Get-Content -LiteralPath $WindowsAppManifest -Raw |
+        ConvertFrom-Json
+    if ($manifest.schema_version -ne 1) {
+        Fail "unsupported Windows APP manifest schema: $($manifest.schema_version)"
+    }
+
+    $baselineProperty = $manifest.source_baselines.PSObject.Properties[$IsisVersion]
+    if (-not $baselineProperty) {
+        Fail "ISIS version is not present in the Windows APP manifest: $IsisVersion"
+    }
+
+    Require-Command git
+    $sourceCommit = (& git -C $SourceDir rev-parse HEAD).Trim().ToLowerInvariant()
+    if ($LASTEXITCODE -ne 0) {
+        Fail "unable to inspect ISIS source revision: $SourceDir"
+    }
+    $expectedCommit = $baselineProperty.Value.commit.ToLowerInvariant()
+    if ($sourceCommit -ne $expectedCommit) {
+        Fail "ISIS source revision mismatch: expected $expectedCommit, found $sourceCommit"
+    }
+
+    foreach ($appName in $requestedWindowsApps) {
+        $app = @($manifest.apps | Where-Object { $_.name -eq $appName })
+        if ($app.Count -ne 1) {
+            Fail "Windows APP is not uniquely defined in the manifest: $appName"
+        }
+        $versionProperty = $app[0].versions.PSObject.Properties[$IsisVersion]
+        if (-not $versionProperty -or $versionProperty.Value.status -eq "unavailable") {
+            Fail "Windows APP is unavailable for ISIS ${IsisVersion}: $appName"
+        }
+        $sourcePath = Join-Path $SourceDir $app[0].source_dir
+        $xmlPath = Join-Path $SourceDir $app[0].xml
+        if (-not (Test-Path -LiteralPath $sourcePath)) {
+            Fail "Windows APP source directory not found: $sourcePath"
+        }
+        if (-not (Test-Path -LiteralPath $xmlPath)) {
+            Fail "Windows APP XML not found: $xmlPath"
+        }
+    }
+}
+
 $CMakeSourceDir = $SourceDir
 if (-not (Test-Path (Join-Path $CMakeSourceDir "CMakeLists.txt"))) {
     $nestedSourceDir = Join-Path $SourceDir "isis"
@@ -117,6 +178,12 @@ if ((Test-Path $blasLibrary) -and (Test-Path $lapackLibrary)) {
         "-DBLAS_LIBRARIES=$cmakeBlasLibrary",
         "-DLAPACK_LIBRARIES=$cmakeLapackLibrary"
     )
+}
+
+if ($requestedWindowsApps.Count -gt 0) {
+    $windowsAppAllowlist = $requestedWindowsApps -join ";"
+    $cmakeArgs += "-DISIS_WINDOWS_APP_ALLOWLIST=$windowsAppAllowlist"
+    Write-Step "enabling allowlisted Windows ISIS apps: $($requestedWindowsApps -join ', ')"
 }
 
 $originalIsisRoot = $env:ISISROOT

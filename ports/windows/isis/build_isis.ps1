@@ -1,6 +1,7 @@
 param(
     [string]$BuildDir,
     [string]$Config = "Release",
+    [string[]]$Targets,
     [int]$Jobs = 1
 )
 
@@ -16,6 +17,9 @@ if (-not (Test-Path $BuildDir)) {
 }
 
 $cmakeArgs = @("--build", $BuildDir, "--config", $Config)
+if ($Targets -and $Targets.Count -gt 0) {
+    $cmakeArgs += @("--target") + $Targets
+}
 if ($Jobs -gt 0) {
     $cmakeArgs += @("--parallel", $Jobs)
 }

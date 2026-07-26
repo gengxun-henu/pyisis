@@ -1,0 +1,110 @@
+name: windows-isis-apps
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "ports/windows/isis/**"
+      - "ports/windows/env/pyisis-isis10-win64.yml"
+      - "tests/unitTest/packaging_tools_unit_test.py"
+      - ".github/workflows/windows-isis-apps.yml"
+
+concurrency:
+  group: windows-isis-apps-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  isis10-app-batch:
+    name: Build and smoke-test 69 ISIS 10 APPs
+    runs-on: windows-2022
+    timeout-minutes: 360
+    permissions:
+      contents: read
+
+    defaults:
+      run:
+        shell: pwsh
+
+    env:
+      PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis10-app-prefix
+      PYISIS_WINDOWS_ISIS_SOURCE: ${{ github.workspace }}\build\windows\external\isis-10.0.0-src
+      PYISIS_WINDOWS_ISIS_BUILD: ${{ github.workspace }}\build\windows\isis10-app-build
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Windows ISIS 10 build environment
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-file: ports/windows/env/pyisis-isis10-win64.yml
+          cache-environment: true
+          init-shell: powershell
+
+      - name: Resolve Windows dependency prefix
+        run: |
+          $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          $env:CONDA_PREFIX = $prefix
+          "CONDA_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "$prefix" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Build SpiceQL 1.4.1
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.4.1 -Jobs 2
+
+      - name: Fetch and patch ISIS 10.0.0
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          .\ports\windows\isis\fetch_isis.ps1 `
+            -Ref 10.0.0 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE
+          .\ports\windows\isis\apply_patches.ps1 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
+            -PatchDir .\ports\windows\isis\patches\10.0.0
+
+      - name: Configure allowlisted APP batch
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          $manifest = Get-Content `
+            .\ports\windows\isis\windows-app-manifest.json `
+            -Raw | ConvertFrom-Json
+          $apps = @($manifest.apps | ForEach-Object { $_.name })
+          if ($apps.Count -lt 69) {
+            throw "Expected at least 69 allowlisted APPs, found $($apps.Count)"
+          }
+          .\ports\windows\isis\configure_isis.ps1 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+            -IsisVersion 10.0.0 `
+            -WindowsApps $apps
+
+      - name: Build and install ISIS 10 APP batch
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          .\ports\windows\isis\build_isis.ps1 `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+            -Jobs 1
+          .\ports\windows\isis\install_isis.ps1 `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
+
+      - name: Verify and smoke-test APP batch
+        run: |
+          .\ports\windows\isis\test_isis_app_batch_smoke.ps1 `
+            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+            -IsisVersion 10.0.0
+
+      - name: Upload APP batch smoke logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-isis10-app-batch-smoke-logs
+          if-no-files-found: warn
+          path: build/windows/isis-app-batch-smoke/*.log

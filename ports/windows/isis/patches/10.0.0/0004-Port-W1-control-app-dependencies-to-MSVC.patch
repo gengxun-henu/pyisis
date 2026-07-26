@@ -1,0 +1,104 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: gengxun-henu <gengxun@henu.edu.cn>
+Date: Sun, 26 Jul 2026 11:00:00 +0800
+Subject: [PATCH] Port W1 control app dependencies to MSVC
+
+Restore the BundleAdjust object when jigsaw is explicitly allowlisted. Keep
+cnethist's command-line report path on Windows without pulling the removed
+qisis plotting module back into the runtime.
+---
+ isis/src/CMakeLists.txt                            |  3 +++
+ isis/src/control/apps/cnethist/main.cpp            | 24 +++++++++++++++++----
+ isis/src/control/objs/BundleAdjust/BundleAdjust.cpp | 18 +++++++++++++++
+ 3 files changed, 41 insertions(+), 4 deletions(-)
+
+diff --git a/isis/src/CMakeLists.txt b/isis/src/CMakeLists.txt
+index 4989f0a85..1ed15effe 100644
+--- a/isis/src/CMakeLists.txt
++++ b/isis/src/CMakeLists.txt
+@@ -7,0 +8,3 @@ endif()
++if(MSVC AND "jigsaw" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST)
++  list(REMOVE_ITEM ISIS_DISABLED_OBJ_FOLDERS BundleAdjust)
++endif()
+diff --git a/isis/src/control/apps/cnethist/main.cpp b/isis/src/control/apps/cnethist/main.cpp
+index 7abe07bbc..0cc810fb8 100644
+--- a/isis/src/control/apps/cnethist/main.cpp
++++ b/isis/src/control/apps/cnethist/main.cpp
+@@ -11,0 +12 @@
++#if !defined(_MSC_VER)
+@@ -13,0 +15 @@
++#endif
+@@ -23,0 +26 @@
++#if !defined(_MSC_VER)
+@@ -26,0 +30 @@
++#endif
+@@ -27,0 +32 @@
++#if !defined(_MSC_VER)
+@@ -28,0 +34 @@
++#endif
+@@ -32,0 +39 @@
++#if !defined(_MSC_VER)
+@@ -33,0 +41 @@
++#endif
+@@ -48 +56,2 @@ void IsisMain() {
+-  HistogramPlotWindow *plot=NULL;
++#if !defined(_MSC_VER)
++  HistogramPlotWindow *plot = NULL;
+@@ -50,2 +59,2 @@ void IsisMain() {
+-  //setup plot tile and axis labels (if any)
+-  if(ui.IsInteractive()) {
++  //setup plot title and axis labels (if any)
++  if (ui.IsInteractive()) {
+@@ -83,0 +93 @@ void IsisMain() {
++#endif
+@@ -164,0 +175 @@ void IsisMain() {
++#if !defined(_MSC_VER)
+@@ -166 +177 @@ void IsisMain() {
+-    if(ui.IsInteractive()) {
++    if (ui.IsInteractive()) {
+@@ -194,0 +206 @@ void IsisMain() {
++#endif
+@@ -196,0 +209 @@ void IsisMain() {
++#if !defined(_MSC_VER)
+@@ -197,0 +211 @@ void IsisMain() {
++#endif
+@@ -201,0 +216 @@ void IsisMain() {
++#if !defined(_MSC_VER)
+@@ -241,0 +257 @@ QColor curveColor(int i) {
++#endif
+diff --git a/isis/src/control/objs/BundleAdjust/BundleAdjust.cpp b/isis/src/control/objs/BundleAdjust/BundleAdjust.cpp
+index c3d26939f..8fb2b53cd 100644
+--- a/isis/src/control/objs/BundleAdjust/BundleAdjust.cpp
++++ b/isis/src/control/objs/BundleAdjust/BundleAdjust.cpp
+@@ -45,0 +46 @@
++#if !defined(_MSC_VER)
+@@ -46,0 +48 @@
++#endif
+@@ -49,0 +52 @@
++#if !defined(_MSC_VER)
+@@ -50,0 +54 @@
++#endif
+@@ -231,0 +236 @@
++#if !defined(_MSC_VER)
+@@ -256,0 +262 @@
++#endif
+@@ -334,0 +341 @@
++#if !defined(_MSC_VER)
+@@ -372,0 +380 @@
++#endif
+@@ -1171,0 +1180,7 @@ BundleSolutionInfo *BundleAdjust::bundleSolveInformation() {
++#if defined(_MSC_VER)
++    BundleSolutionInfo *bundleSolutionInfo = new BundleSolutionInfo(m_bundleSettings,
++                                                                    FileName(m_cnetFileName),
++                                                                    FileName(m_lidarFileName),
++                                                                    m_bundleResults,
++                                                                    m_imageLists);
++#else
+@@ -1176,0 +1192 @@ BundleSolutionInfo *BundleAdjust::bundleSolveInformation() {
++#endif
+@@ -2479,0 +2496 @@
++#if !defined(_MSC_VER)
+@@ -2506,0 +2524 @@
++#endif
+--
+2.43.0

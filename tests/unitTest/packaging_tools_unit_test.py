@@ -21,11 +21,15 @@ Updated: 2026-07-24  Geng Xun covered private Linux toolchain runtime packaging 
 Updated: 2026-07-24  Geng Xun preserved qisis data objects and exported SpiceQL symbols on Windows.
 Updated: 2026-07-25  Geng Xun covered the ISIS 10 SpiceQL 1.4.1 export and MSVC link gates.
 Updated: 2026-07-25  Geng Xun parameterized Windows wheel-set checks for ISIS 9 and ISIS 10.
+Updated: 2026-07-25  Geng Xun covered the Windows APP manifest and allowlisted reduce target.
+Updated: 2026-07-26  Geng Xun covered the 21-APP Windows build and smoke batch.
+Updated: 2026-07-26  Geng Xun covered the complete 48-APP W1 promotion.
 """
 
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 import unittest
 from unittest import mock
@@ -35,6 +39,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
 LINUX_BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels_linux.sh"
 WINDOWS_ISIS_PATCHES_DIR = PROJECT_ROOT / "ports" / "windows" / "isis" / "patches"
+WINDOWS_ISIS_DIR = PROJECT_ROOT / "ports" / "windows" / "isis"
+WINDOWS_ISIS_APP_MANIFEST = WINDOWS_ISIS_DIR / "windows-app-manifest.json"
+WINDOWS_ISIS_APP_WORKFLOW = (
+    PROJECT_ROOT / ".github" / "workflows" / "windows-isis-apps.yml"
+)
+WINDOWS_ISIS_APP_PRIORITY = WINDOWS_ISIS_DIR / "windows-app-priority.csv"
+WINDOWS_ISIS_APP_PRIORITY_SUMMARY = WINDOWS_ISIS_DIR / "windows-app-priority.md"
 UNIT_TEST_SUPPORT = PROJECT_ROOT / "tests" / "unitTest" / "_unit_test_support.py"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
@@ -158,7 +169,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("apply --unidiff-zero --check", apply_script)
 
         patch_paths = sorted(patch_dir.glob("*.patch"))
-        self.assertEqual(len(patch_paths), 2)
+        self.assertEqual(len(patch_paths), 4)
         patches = [path.read_text(encoding="utf-8") for path in patch_paths]
         self.assertIn("isis/src/core/src/Pvl.cpp", patches[0])
         self.assertIn("Trim Windows runtime to non-GUI core", patches[1])
@@ -170,6 +181,21 @@ class PackagingToolsUnitTest(unittest.TestCase):
         )
         self.assertIn("BundleSolutionInfo.cpp", patches[1])
         self.assertIn("#if defined(_MSC_VER)", patches[1])
+        self.assertIn("ISIS_WINDOWS_APP_ALLOWLIST", patches[2])
+        self.assertIn("Adding allowlisted Windows ISIS app", patches[2])
+        self.assertIn(
+            "compiled directly into their standalone executable",
+            patches[2],
+        )
+        self.assertIn("BundleAdjust", patches[3])
+        self.assertIn("jigsaw", patches[3])
+        self.assertIn("cnethist", patches[3])
+        self.assertIn(
+            "isis/src/control/objs/BundleAdjust/BundleAdjust.cpp",
+            patches[3],
+        )
+        self.assertIn("m_imageLists", patches[3])
+        self.assertIn("#if !defined(_MSC_VER)", patches[3])
 
         spiceql_patch = (
             WINDOWS_ISIS_PATCHES_DIR
@@ -179,6 +205,187 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("WINDOWS_EXPORT_ALL_SYMBOLS ON", spiceql_patch)
         self.assertIn("find_package(nlohmann_json CONFIG REQUIRED)", spiceql_patch)
         self.assertIn('-  add_subdirectory("submodules/json")', spiceql_patch)
+
+    def test_windows_app_manifest_drives_the_allowlisted_batch(self):
+        self.assertTrue(WINDOWS_ISIS_APP_MANIFEST.is_file())
+        manifest = json.loads(
+            WINDOWS_ISIS_APP_MANIFEST.read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["schema_version"], 1)
+
+        for version in ("9.0.0", "10.0.0"):
+            with self.subTest(version=version):
+                lock_path = (
+                    PROJECT_ROOT
+                    / "reference"
+                    / f"upstream_isis-{version.split('.')[0]}.lock.json"
+                )
+                lock = json.loads(lock_path.read_text(encoding="utf-8"))
+                baseline = manifest["source_baselines"][version]
+                self.assertEqual(baseline["ref"], lock["revision"])
+                self.assertEqual(baseline["commit"], lock["commit"])
+
+        behavior_apps = {
+            "algebra",
+            "bit2bit",
+            "catlab",
+            "crop",
+            "cubeatt",
+            "cubediff",
+            "cubenorm",
+            "enlarge",
+            "fillgap",
+            "flip",
+            "fx",
+            "getkey",
+            "gradient",
+            "mask",
+            "mirror",
+            "noisefilter",
+            "ratio",
+            "reduce",
+            "stats",
+            "stretch",
+            "trim",
+        }
+        apps = {app["name"]: app for app in manifest["apps"]}
+        self.assertEqual(len(apps), 69)
+        self.assertTrue(behavior_apps.issubset(apps))
+        w1_apps = {
+            name
+            for name, app in apps.items()
+            if app.get("selection_wave") == "W1-high-value-easy"
+        }
+        self.assertEqual(len(w1_apps), 48)
+        self.assertTrue(
+            {
+                "automos",
+                "campt",
+                "jigsaw",
+                "cnethist",
+                "lronac2isis",
+                "hrsc2isis",
+            }.issubset(w1_apps)
+        )
+        self.assertEqual(
+            manifest["app_defaults"]["windows_patch"],
+            "patches/10.0.0/"
+            "0003-Build-allowlisted-Windows-apps-as-executables.patch",
+        )
+        self.assertTrue(
+            (
+                WINDOWS_ISIS_DIR
+                / manifest["app_defaults"]["windows_patch"]
+            ).is_file()
+        )
+        for name, app in apps.items():
+            with self.subTest(app=name):
+                self.assertEqual(Path(app["source_dir"]).name, name)
+                self.assertEqual(
+                    app["xml"],
+                    f"{app['source_dir']}/{name}.xml",
+                )
+                self.assertIn(app["smoke_tier"], {"startup", "cube"})
+                self.assertEqual(
+                    app["versions"]["10.0.0"]["status"],
+                    "experimental",
+                )
+
+        reduce_app = apps["reduce"]
+        self.assertEqual(reduce_app["source_dir"], "isis/src/base/apps/reduce")
+        self.assertEqual(reduce_app["xml"], "isis/src/base/apps/reduce/reduce.xml")
+        self.assertEqual(reduce_app["versions"]["9.0.0"]["status"], "supported")
+        self.assertEqual(
+            reduce_app["versions"]["10.0.0"]["status"],
+            "experimental",
+        )
+        self.assertEqual(
+            reduce_app["versions"]["10.0.0"]["build_status"],
+            "compiled_installed",
+        )
+        self.assertEqual(
+            reduce_app["versions"]["10.0.0"]["smoke_status"],
+            "minimal_passed",
+        )
+
+        configure_script = (
+            WINDOWS_ISIS_DIR / "configure_isis.ps1"
+        ).read_text(encoding="utf-8")
+        self.assertIn("[string[]]$WindowsApps", configure_script)
+        self.assertIn("windows-app-manifest.json", configure_script)
+        self.assertIn("ISIS_WINDOWS_APP_ALLOWLIST", configure_script)
+        self.assertIn("source revision mismatch", configure_script)
+
+        build_script = (
+            WINDOWS_ISIS_DIR / "build_isis.ps1"
+        ).read_text(encoding="utf-8")
+        self.assertIn("[string[]]$Targets", build_script)
+        self.assertIn('@("--target") + $Targets', build_script)
+
+        batch_smoke = (
+            WINDOWS_ISIS_DIR / "test_isis_app_batch_smoke.ps1"
+        ).read_text(encoding="utf-8")
+        self.assertIn("$appNames.Count -lt 69", batch_smoke)
+        self.assertIn('Join-Path $Prefix "bin\\$Name.exe"', batch_smoke)
+        self.assertIn('Invoke-IsisApp $appName @("-HELP")', batch_smoke)
+        for name in behavior_apps:
+            with self.subTest(smoke_app=name):
+                self.assertIn(f'"{name}"', batch_smoke)
+
+        self.assertTrue(WINDOWS_ISIS_APP_WORKFLOW.is_file())
+        workflow = WINDOWS_ISIS_APP_WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn("windows-isis-apps", workflow)
+        self.assertIn("runs-on: windows-2022", workflow)
+        self.assertIn("-IsisVersion 10.0.0", workflow)
+        self.assertIn("-WindowsApps $apps", workflow)
+        self.assertIn("Build and smoke-test 69 ISIS 10 APPs", workflow)
+        self.assertIn("test_isis_app_batch_smoke.ps1", workflow)
+        self.assertIn("windows-isis10-app-batch-smoke-logs", workflow)
+
+    def test_windows_app_priority_covers_the_pinned_isis10_inventory(self):
+        self.assertTrue(WINDOWS_ISIS_APP_PRIORITY.is_file())
+        self.assertTrue(WINDOWS_ISIS_APP_PRIORITY_SUMMARY.is_file())
+
+        import csv
+
+        with WINDOWS_ISIS_APP_PRIORITY.open(
+            encoding="utf-8",
+            newline="",
+        ) as priority_file:
+            rows = list(csv.DictReader(priority_file))
+
+        self.assertEqual(len(rows), 365)
+        self.assertEqual(len({row["app"] for row in rows}), 365)
+        self.assertEqual(
+            [int(row["overall_rank"]) for row in rows],
+            list(range(1, 366)),
+        )
+        current_batch = {
+            row["app"]
+            for row in rows
+            if row["current_manifest"] == "yes"
+        }
+        manifest = json.loads(
+            WINDOWS_ISIS_APP_MANIFEST.read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            current_batch,
+            {app["name"] for app in manifest["apps"]},
+        )
+        apps = {row["app"]: row for row in rows}
+        self.assertEqual(apps["cam2map"]["importance_score"], "5")
+        self.assertEqual(apps["jigsaw"]["importance_score"], "5")
+        self.assertEqual(apps["qnet"]["recommended_wave"], "W5-GUI")
+        self.assertEqual(apps["hrsc2isis"]["importance_score"], "4")
+        self.assertEqual(
+            sum(row["current_manifest"] == "yes" for row in rows),
+            69,
+        )
+
+        summary = WINDOWS_ISIS_APP_PRIORITY_SUMMARY.read_text(encoding="utf-8")
+        self.assertIn("APP 总数：365", summary)
+        self.assertIn("固定源码提交", summary)
+        self.assertIn("W0-current-batch | 69", summary)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

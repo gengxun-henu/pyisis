@@ -98,3 +98,88 @@ Verified so far:
 
 Use `-j 1` with MSVC for now; higher parallelism has exposed intermittent
 object-list and file-lock issues in this porting environment.
+
+## ISIS 10 Allowlisted Application Targets
+
+ISIS 10 keeps application implementations out of the monolithic `isis.dll`.
+Selected Windows applications are instead compiled into independent executable
+targets from `windows-app-manifest.json`. The initial `reduce` target passed its
+hosted Windows build/install/Cube smoke. Wave 2 expanded the allowlist to 21 base
+APPs: `algebra`, `bit2bit`, `catlab`, `crop`, `cubeatt`, `cubediff`,
+`cubenorm`, `enlarge`, `fillgap`, `flip`, `fx`, `getkey`, `gradient`, `mask`,
+`mirror`, `noisefilter`, `ratio`, `reduce`, `stats`, `stretch`, and `trim`.
+The complete W1 promotion adds all 48 high-value/easy-ranked APPs for 69 total
+targets across base, control, LRO, and MEX. Every target receives the hosted
+compile/install and startup gate; mission-data behavior remains a later,
+data-dependent validation layer.
+
+After fetching ISIS 10.0.0 and applying
+`patches\10.0.0`, configure and build the target with:
+
+```powershell
+$manifest = Get-Content `
+  .\ports\windows\isis\windows-app-manifest.json `
+  -Raw | ConvertFrom-Json
+$apps = @($manifest.apps | ForEach-Object { $_.name })
+
+.\ports\windows\isis\configure_isis.ps1 `
+  -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
+  -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+  -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+  -IsisVersion 10.0.0 `
+  -WindowsApps $apps
+
+.\ports\windows\isis\build_isis.ps1 `
+  -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+  -Jobs 1
+
+.\ports\windows\isis\install_isis.ps1 `
+  -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
+
+.\ports\windows\isis\test_isis_app_batch_smoke.ps1 `
+  -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+  -IsisVersion 10.0.0
+```
+
+Each CMake target uses the `<name>_app` form to avoid case-insensitive
+target-name collisions; installed executable names remain `<name>.exe`. The
+batch smoke first starts every manifest APP with `-HELP`, then runs small real
+Cube operations for the selected base tools. A successful build alone is not a
+support claim. Same-version Linux numerical comparison and data-dependent
+mission workflows must also pass before the manifest status can be promoted.
+
+## Full APP Porting Priority
+
+`windows-app-priority.csv` ranks all 365 APPs found at the pinned ISIS 10
+source revision. `windows-app-priority.md` summarizes the recommended waves and
+the top 40 candidates. The two scores are deliberately separate:
+
+- portability estimates Windows implementation and runtime-test convenience
+  from source-level platform, process, optional-stack, GUI, size, and
+  mission-data signals;
+- importance is calibrated for planetary navigation mapping, geometry,
+  control networks, data conversion, and common image processing.
+
+Regenerate both files after changing the pinned source or scoring policy:
+
+```powershell
+python .\ports\windows\isis\rank_isis_apps.py `
+  --source-root .\reference\upstream_isis\10.0.0 `
+  --manifest .\ports\windows\isis\windows-app-manifest.json `
+  --csv-output .\ports\windows\isis\windows-app-priority.csv `
+  --summary-output .\ports\windows\isis\windows-app-priority.md
+```
+
+The ranking is planning evidence, not a Windows support claim. An APP advances
+only after the manifest, hosted compile/install, focused smoke, and applicable
+cross-platform result checks pass.
+
+Promote a complete ranked wave before regenerating the priority outputs:
+
+```powershell
+python .\ports\windows\isis\promote_windows_app_wave.py `
+  --manifest .\ports\windows\isis\windows-app-manifest.json `
+  --priority-csv .\ports\windows\isis\windows-app-priority.csv `
+  --wave W1-high-value-easy `
+  --expected-additions 48
+```

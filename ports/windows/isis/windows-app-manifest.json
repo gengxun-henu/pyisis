@@ -1,0 +1,1567 @@
+{
+  "schema_version": 1,
+  "source_baselines": {
+    "9.0.0": {
+      "repository": "https://github.com/USGS-Astrogeology/ISIS3.git",
+      "ref": "9.0.0",
+      "commit": "950a5606ffeaa13ddb40101fbf25a8737e88902a",
+      "conda_reference": {
+        "channel": "conda-forge",
+        "subdir": "linux-64",
+        "package": "isis",
+        "version": "9.0.0",
+        "build": "h1f94ec8_0"
+      }
+    },
+    "10.0.0": {
+      "repository": "https://github.com/USGS-Astrogeology/ISIS3.git",
+      "ref": "10.0.0",
+      "commit": "524eec10a7b0ffa2c591fb7f8bc82b3223bc6904",
+      "conda_reference": {
+        "channel": "conda-forge",
+        "subdir": "linux-64",
+        "package": "isis",
+        "version": "10.0.0",
+        "build": "h1f94ec8_1"
+      }
+    }
+  },
+  "app_defaults": {
+    "component": "apps-base",
+    "direct_posix": [],
+    "shell_commands": [],
+    "third_party_dependencies": [],
+    "runtime_plugins": [],
+    "isisdata_requirements": [
+      "base"
+    ],
+    "windows_patch": "patches/10.0.0/0003-Build-allowlisted-Windows-apps-as-executables.patch",
+    "release_component": "apps-base"
+  },
+  "apps": [
+    {
+      "name": "algebra",
+      "source_dir": "isis/src/base/apps/algebra",
+      "xml": "isis/src/base/apps/algebra/algebra.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "ascii2isis",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/ascii2isis",
+      "xml": "isis/src/base/apps/ascii2isis/ascii2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "automos",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/automos",
+      "xml": "isis/src/base/apps/automos/automos.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "autoseed",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/autoseed",
+      "xml": "isis/src/control/apps/autoseed/autoseed.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "bit2bit",
+      "source_dir": "isis/src/base/apps/bit2bit",
+      "xml": "isis/src/base/apps/bit2bit/bit2bit.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "caminfo",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/caminfo",
+      "xml": "isis/src/base/apps/caminfo/caminfo.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "campt",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/campt",
+      "xml": "isis/src/base/apps/campt/campt.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "camrange",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/camrange",
+      "xml": "isis/src/base/apps/camrange/camrange.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "camstats",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/camstats",
+      "xml": "isis/src/base/apps/camstats/camstats.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "catlab",
+      "source_dir": "isis/src/base/apps/catlab",
+      "xml": "isis/src/base/apps/catlab/catlab.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "cnetadd",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnetadd",
+      "xml": "isis/src/control/apps/cnetadd/cnetadd.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "cnetcheck",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnetcheck",
+      "xml": "isis/src/control/apps/cnetcheck/cnetcheck.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "cnetdiff",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnetdiff",
+      "xml": "isis/src/control/apps/cnetdiff/cnetdiff.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "cnetedit",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnetedit",
+      "xml": "isis/src/control/apps/cnetedit/cnetedit.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "cnetextract",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnetextract",
+      "xml": "isis/src/control/apps/cnetextract/cnetextract.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "cnethist",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnethist",
+      "xml": "isis/src/control/apps/cnethist/cnethist.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "cnetmerge",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnetmerge",
+      "xml": "isis/src/control/apps/cnetmerge/cnetmerge.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "cnetref",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnetref",
+      "xml": "isis/src/control/apps/cnetref/cnetref.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "cnetstats",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/cnetstats",
+      "xml": "isis/src/control/apps/cnetstats/cnetstats.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "crop",
+      "source_dir": "isis/src/base/apps/crop",
+      "xml": "isis/src/base/apps/crop/crop.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "cubeatt",
+      "source_dir": "isis/src/base/apps/cubeatt",
+      "xml": "isis/src/base/apps/cubeatt/cubeatt.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "cubediff",
+      "source_dir": "isis/src/base/apps/cubediff",
+      "xml": "isis/src/base/apps/cubediff/cubediff.xml",
+      "smoke_tier": "startup",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "cubeit",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/cubeit",
+      "xml": "isis/src/base/apps/cubeit/cubeit.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "cubenorm",
+      "source_dir": "isis/src/base/apps/cubenorm",
+      "xml": "isis/src/base/apps/cubenorm/cubenorm.xml",
+      "smoke_tier": "startup",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "dsk2isis",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/dsk2isis",
+      "xml": "isis/src/base/apps/dsk2isis/dsk2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "enlarge",
+      "source_dir": "isis/src/base/apps/enlarge",
+      "xml": "isis/src/base/apps/enlarge/enlarge.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "fillgap",
+      "source_dir": "isis/src/base/apps/fillgap",
+      "xml": "isis/src/base/apps/fillgap/fillgap.xml",
+      "smoke_tier": "startup",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "findimageoverlaps",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/findimageoverlaps",
+      "xml": "isis/src/base/apps/findimageoverlaps/findimageoverlaps.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "fits2isis",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/fits2isis",
+      "xml": "isis/src/base/apps/fits2isis/fits2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "flip",
+      "source_dir": "isis/src/base/apps/flip",
+      "xml": "isis/src/base/apps/flip/flip.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "footprintinit",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/footprintinit",
+      "xml": "isis/src/base/apps/footprintinit/footprintinit.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "footprintmerge",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/footprintmerge",
+      "xml": "isis/src/base/apps/footprintmerge/footprintmerge.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "fx",
+      "source_dir": "isis/src/base/apps/fx",
+      "xml": "isis/src/base/apps/fx/fx.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "getkey",
+      "source_dir": "isis/src/base/apps/getkey",
+      "xml": "isis/src/base/apps/getkey/getkey.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "gradient",
+      "source_dir": "isis/src/base/apps/gradient",
+      "xml": "isis/src/base/apps/gradient/gradient.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "hrsc2isis",
+      "component": "apps-mex",
+      "source_dir": "isis/src/mex/apps/hrsc2isis",
+      "xml": "isis/src/mex/apps/hrsc2isis/hrsc2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-mex"
+    },
+    {
+      "name": "isis2fits",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/isis2fits",
+      "xml": "isis/src/base/apps/isis2fits/isis2fits.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "isis2pds",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/isis2pds",
+      "xml": "isis/src/base/apps/isis2pds/isis2pds.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "isis2std",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/isis2std",
+      "xml": "isis/src/base/apps/isis2std/isis2std.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "jigsaw",
+      "component": "apps-control",
+      "source_dir": "isis/src/control/apps/jigsaw",
+      "xml": "isis/src/control/apps/jigsaw/jigsaw.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-control"
+    },
+    {
+      "name": "lronac2isis",
+      "component": "apps-lro",
+      "source_dir": "isis/src/lro/apps/lronac2isis",
+      "xml": "isis/src/lro/apps/lronac2isis/lronac2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-lro"
+    },
+    {
+      "name": "lronaccal",
+      "component": "apps-lro",
+      "source_dir": "isis/src/lro/apps/lronaccal",
+      "xml": "isis/src/lro/apps/lronaccal/lronaccal.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-lro"
+    },
+    {
+      "name": "lronacecho",
+      "component": "apps-lro",
+      "source_dir": "isis/src/lro/apps/lronacecho",
+      "xml": "isis/src/lro/apps/lronacecho/lronacecho.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-lro"
+    },
+    {
+      "name": "lrowac2isis",
+      "component": "apps-lro",
+      "source_dir": "isis/src/lro/apps/lrowac2isis",
+      "xml": "isis/src/lro/apps/lrowac2isis/lrowac2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-lro"
+    },
+    {
+      "name": "lrowaccal",
+      "component": "apps-lro",
+      "source_dir": "isis/src/lro/apps/lrowaccal",
+      "xml": "isis/src/lro/apps/lrowaccal/lrowaccal.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-lro"
+    },
+    {
+      "name": "makecube",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/makecube",
+      "xml": "isis/src/base/apps/makecube/makecube.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "map2cam",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/map2cam",
+      "xml": "isis/src/base/apps/map2cam/map2cam.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "map2map",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/map2map",
+      "xml": "isis/src/base/apps/map2map/map2map.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "mapgrid",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/mapgrid",
+      "xml": "isis/src/base/apps/mapgrid/mapgrid.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "maplab",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/maplab",
+      "xml": "isis/src/base/apps/maplab/maplab.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "mapmos",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/mapmos",
+      "xml": "isis/src/base/apps/mapmos/mapmos.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "mappt",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/mappt",
+      "xml": "isis/src/base/apps/mappt/mappt.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "maptemplate",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/maptemplate",
+      "xml": "isis/src/base/apps/maptemplate/maptemplate.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "maptrim",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/maptrim",
+      "xml": "isis/src/base/apps/maptrim/maptrim.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "mask",
+      "source_dir": "isis/src/base/apps/mask",
+      "xml": "isis/src/base/apps/mask/mask.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "mirror",
+      "source_dir": "isis/src/base/apps/mirror",
+      "xml": "isis/src/base/apps/mirror/mirror.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "mosrange",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/mosrange",
+      "xml": "isis/src/base/apps/mosrange/mosrange.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "noisefilter",
+      "source_dir": "isis/src/base/apps/noisefilter",
+      "xml": "isis/src/base/apps/noisefilter/noisefilter.xml",
+      "smoke_tier": "startup",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "pds2isis",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/pds2isis",
+      "xml": "isis/src/base/apps/pds2isis/pds2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "ratio",
+      "source_dir": "isis/src/base/apps/ratio",
+      "xml": "isis/src/base/apps/ratio/ratio.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "raw2isis",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/raw2isis",
+      "xml": "isis/src/base/apps/raw2isis/raw2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "reduce",
+      "source_dir": "isis/src/base/apps/reduce",
+      "xml": "isis/src/base/apps/reduce/reduce.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "minimal_passed",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "compiled_installed",
+          "smoke_status": "minimal_passed",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "spicefit",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/spicefit",
+      "xml": "isis/src/base/apps/spicefit/spicefit.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "stats",
+      "source_dir": "isis/src/base/apps/stats",
+      "xml": "isis/src/base/apps/stats/stats.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "std2isis",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/std2isis",
+      "xml": "isis/src/base/apps/std2isis/std2isis.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "stretch",
+      "source_dir": "isis/src/base/apps/stretch",
+      "xml": "isis/src/base/apps/stretch/stretch.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    },
+    {
+      "name": "table2cube",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/table2cube",
+      "xml": "isis/src/base/apps/table2cube/table2cube.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "tabledump",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/tabledump",
+      "xml": "isis/src/base/apps/tabledump/tabledump.xml",
+      "smoke_tier": "startup",
+      "selection_wave": "W1-high-value-easy",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
+      "name": "trim",
+      "source_dir": "isis/src/base/apps/trim",
+      "xml": "isis/src/base/apps/trim/trim.xml",
+      "smoke_tier": "cube",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "compiled_installed",
+          "smoke_status": "not_individually_recorded",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      }
+    }
+  ]
+}

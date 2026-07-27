@@ -29,6 +29,7 @@ Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
 Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
 Updated: 2026-07-27  Geng Xun covered the 169-APP Windows promotion.
 Updated: 2026-07-27  Geng Xun covered per-APP startup smoke arguments.
+Updated: 2026-07-27  Geng Xun covered incremental Windows APP build caching.
 """
 
 from __future__ import annotations
@@ -514,6 +515,20 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("-IsisVersion 10.0.0", workflow)
         self.assertIn("-WindowsApps $apps", workflow)
         self.assertIn("Build and smoke-test 169 ISIS 10 APPs", workflow)
+        self.assertIn("actions/cache/restore@v6", workflow)
+        self.assertIn("actions/cache/save@v6", workflow)
+        self.assertIn("build/windows/isis10-app-build", workflow)
+        self.assertIn("build/windows/isis10-app-prefix", workflow)
+        self.assertIn(
+            "steps.windows-isis-app-cache.outputs.cache-hit != 'true'",
+            workflow,
+        )
+        self.assertIn(
+            "steps.windows-isis-app-cache.outputs.cache-primary-key",
+            workflow,
+        )
+        self.assertIn("windows-2022-isis-10.0.0-apps-v1-", workflow)
+        self.assertIn("steps.windows-app-cache-key.outputs.app-hash", workflow)
         self.assertIn("test_isis_app_batch_smoke.ps1", workflow)
         self.assertIn("windows-isis10-app-batch-smoke-logs", workflow)
 

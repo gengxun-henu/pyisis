@@ -54,12 +54,41 @@ jobs:
           "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
           "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
+      - name: Compute APP build cache key
+        id: windows-app-cache-key
+        run: |
+          $manifest = Get-Content `
+            .\ports\windows\isis\windows-app-manifest.json `
+            -Raw | ConvertFrom-Json
+          $appNames = @(
+            $manifest.apps |
+              ForEach-Object { $_.name } |
+              Sort-Object -Unique
+          )
+          $appBytes = [Text.Encoding]::UTF8.GetBytes(($appNames -join "`n"))
+          $appHash = [Convert]::ToHexString(
+            [Security.Cryptography.SHA256]::HashData($appBytes)
+          ).ToLowerInvariant()
+          "app-hash=$appHash" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Restore ISIS 10 APP build cache
+        id: windows-isis-app-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            build/windows/isis10-app-build
+            build/windows/isis10-app-prefix
+          key: windows-2022-isis-10.0.0-apps-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/build_spiceql.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/patches/10.0.0/**', 'ports/windows/isis/patches/spiceql-1.4.1/**') }}-${{ steps.windows-app-cache-key.outputs.app-hash }}
+          restore-keys: |
+            windows-2022-isis-10.0.0-apps-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/build_spiceql.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/patches/10.0.0/**', 'ports/windows/isis/patches/spiceql-1.4.1/**') }}-
+
       - name: Build SpiceQL 1.4.1
         run: |
           . .\ports\windows\activate_msvc.ps1
           .\ports\windows\isis\build_spiceql.ps1 -Ref 1.4.1 -Jobs 2
 
       - name: Fetch and patch ISIS 10.0.0
+        if: ${{ steps.windows-isis-app-cache.outputs.cache-hit != 'true' }}
         run: |
           . .\ports\windows\activate_msvc.ps1
           .\ports\windows\isis\fetch_isis.ps1 `
@@ -70,6 +99,7 @@ jobs:
             -PatchDir .\ports\windows\isis\patches\10.0.0
 
       - name: Configure allowlisted APP batch
+        if: ${{ steps.windows-isis-app-cache.outputs.cache-hit != 'true' }}
         run: |
           . .\ports\windows\activate_msvc.ps1
           $manifest = Get-Content `
@@ -87,6 +117,7 @@ jobs:
             -WindowsApps $apps
 
       - name: Build and install ISIS 10 APP batch
+        if: ${{ steps.windows-isis-app-cache.outputs.cache-hit != 'true' }}
         run: |
           . .\ports\windows\activate_msvc.ps1
           .\ports\windows\isis\build_isis.ps1 `
@@ -94,6 +125,28 @@ jobs:
             -Jobs 1
           .\ports\windows\isis\install_isis.ps1 `
             -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
+
+      - name: Verify built ISIS 10 APP prefix
+        run: |
+          .\ports\windows\isis\verify_isis_prefix.ps1 `
+            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+            -ExpectedVersion 10.0.0
+
+      - name: Save ISIS 10 APP build cache
+        if: >-
+          ${{
+            steps.windows-isis-app-cache.outputs.cache-hit != 'true' &&
+            (
+              (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+              github.event.pull_request.head.repo.full_name == github.repository
+            )
+          }}
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            build/windows/isis10-app-build
+            build/windows/isis10-app-prefix
+          key: ${{ steps.windows-isis-app-cache.outputs.cache-primary-key }}
 
       - name: Verify and smoke-test APP batch
         run: |

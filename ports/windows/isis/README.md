@@ -155,6 +155,14 @@ Windows patch requirement. Data-dependent mission behavior and the
 `voy2isis` IMQ `vdcomp` path remain outside startup smoke coverage. These
 additions remain experimental until the hosted 169-APP gate passes.
 
+The hosted APP gate caches both the CMake build tree and installed ISIS prefix.
+Its exact key includes the Windows/ISIS version, conda environment, porting
+scripts and patches, plus a hash of the sorted APP names. Smoke-only changes
+therefore restore the completed prefix and skip the ISIS rebuild. A later APP
+wave can restore the newest compatible earlier wave through the build-input
+key and incrementally configure and compile only its additions. Cache entries
+are not shared across ISIS versions or incompatible build inputs.
+
 After fetching ISIS 10.0.0 and applying
 `patches\10.0.0`, configure and build the target with:
 

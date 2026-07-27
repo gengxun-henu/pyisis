@@ -494,7 +494,11 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("$appNames.Count -lt 169", batch_smoke)
         self.assertIn('Join-Path $Prefix "bin\\$Name.exe"', batch_smoke)
         self.assertIn('$startupArguments = @("-HELP")', batch_smoke)
-        self.assertIn("if ($null -ne $app.startup_args)", batch_smoke)
+        self.assertIn(
+            '$app.PSObject.Properties["startup_args"]',
+            batch_smoke,
+        )
+        self.assertIn("if ($null -ne $startupArgsProperty)", batch_smoke)
         self.assertIn(
             "Invoke-IsisApp $appName $startupArguments",
             batch_smoke,

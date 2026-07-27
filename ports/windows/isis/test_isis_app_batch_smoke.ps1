@@ -140,9 +140,11 @@ try {
             Where-Object { $_.name -eq $appName } |
             Select-Object -First 1
         $startupArguments = @("-HELP")
-        if ($null -ne $app.startup_args) {
+        $startupArgsProperty = $app.PSObject.Properties["startup_args"]
+        if ($null -ne $startupArgsProperty) {
             $startupArguments = @(
-                $app.startup_args | ForEach-Object { [string]$_ }
+                $startupArgsProperty.Value |
+                    ForEach-Object { [string]$_ }
             )
         }
         Invoke-IsisApp $appName $startupArguments "startup-$appName.log"

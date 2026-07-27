@@ -1823,6 +1823,10 @@
       "source_dir": "isis/src/base/apps/isisui",
       "xml": "isis/src/base/apps/isisui/isisui.xml",
       "smoke_tier": "startup",
+      "startup_args": [
+        "isisui",
+        "-HELP"
+      ],
       "selection_wave": "W4-medium",
       "versions": {
         "9.0.0": {

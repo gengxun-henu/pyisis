@@ -34,12 +34,15 @@ if (-not (Test-Path -LiteralPath $ManifestPath)) {
 }
 
 $manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
-$appNames = @(
+$availableApps = @(
     $manifest.apps |
         Where-Object {
             $version = $_.versions.PSObject.Properties[$IsisVersion]
             $version -and $version.Value.status -ne "unavailable"
-        } |
+        }
+)
+$appNames = @(
+    $availableApps |
         ForEach-Object { $_.name } |
         Sort-Object -Unique
 )
@@ -133,7 +136,16 @@ try {
     }
 
     foreach ($appName in $appNames) {
-        Invoke-IsisApp $appName @("-HELP") "startup-$appName.log"
+        $app = $availableApps |
+            Where-Object { $_.name -eq $appName } |
+            Select-Object -First 1
+        $startupArguments = @("-HELP")
+        if ($null -ne $app.startup_args) {
+            $startupArguments = @(
+                $app.startup_args | ForEach-Object { [string]$_ }
+            )
+        }
+        Invoke-IsisApp $appName $startupArguments "startup-$appName.log"
     }
 
     $seedCube = Join-Path $WorkDir "seed.cub"

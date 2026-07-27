@@ -28,6 +28,7 @@ Updated: 2026-07-26  Geng Xun covered exact-subset Windows APP wave promotion.
 Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
 Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
 Updated: 2026-07-27  Geng Xun covered the 169-APP Windows promotion.
+Updated: 2026-07-27  Geng Xun covered per-APP startup smoke arguments.
 """
 
 from __future__ import annotations
@@ -440,10 +441,21 @@ class PackagingToolsUnitTest(unittest.TestCase):
                     f"{app['source_dir']}/{name}.xml",
                 )
                 self.assertIn(app["smoke_tier"], {"startup", "cube"})
+                if "startup_args" in app:
+                    self.assertIsInstance(app["startup_args"], list)
+                    self.assertTrue(app["startup_args"])
+                    self.assertTrue(
+                        all(
+                            isinstance(argument, str) and argument
+                            for argument in app["startup_args"]
+                        )
+                    )
                 self.assertEqual(
                     app["versions"]["10.0.0"]["status"],
                     "experimental",
                 )
+
+        self.assertEqual(apps["isisui"]["startup_args"], ["isisui", "-HELP"])
 
         reduce_app = apps["reduce"]
         self.assertEqual(reduce_app["source_dir"], "isis/src/base/apps/reduce")
@@ -481,7 +493,12 @@ class PackagingToolsUnitTest(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("$appNames.Count -lt 169", batch_smoke)
         self.assertIn('Join-Path $Prefix "bin\\$Name.exe"', batch_smoke)
-        self.assertIn('Invoke-IsisApp $appName @("-HELP")', batch_smoke)
+        self.assertIn('$startupArguments = @("-HELP")', batch_smoke)
+        self.assertIn("if ($null -ne $app.startup_args)", batch_smoke)
+        self.assertIn(
+            "Invoke-IsisApp $appName $startupArguments",
+            batch_smoke,
+        )
         for name in behavior_apps:
             with self.subTest(smoke_app=name):
                 self.assertIn(f'"{name}"', batch_smoke)

@@ -153,7 +153,8 @@ The next promotion completes the remaining W3 queue and raises the allowlist to
 `isisui`, `vicar2isis`, and `specadd`. Source review found no new compile-time
 Windows patch requirement. Data-dependent mission behavior and the
 `voy2isis` IMQ `vdcomp` path remain outside startup smoke coverage. These
-additions remain experimental until the hosted 169-APP gate passes.
+additions passed the hosted 169-APP compile, install, prefix, and startup gate.
+ISIS 10 APP support remains experimental pending the broader release matrix.
 
 The hosted APP gate caches both the CMake build tree and installed ISIS prefix.
 Its exact key includes the Windows/ISIS version, conda environment, porting

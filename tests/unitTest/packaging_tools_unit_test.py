@@ -30,6 +30,7 @@ Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
 Updated: 2026-07-27  Geng Xun covered the 169-APP Windows promotion.
 Updated: 2026-07-27  Geng Xun covered per-APP startup smoke arguments.
 Updated: 2026-07-27  Geng Xun covered incremental Windows APP build caching.
+Updated: 2026-07-27  Geng Xun recorded the hosted 169-APP startup result.
 """
 
 from __future__ import annotations
@@ -398,31 +399,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
             for name, app in apps.items()
             if app["versions"]["10.0.0"]["smoke_status"] == "pending"
         }
-        self.assertEqual(
-            pending_apps,
-            {
-                "chan1m32isis",
-                "clem2isis",
-                "gllnims2isis",
-                "gllssical",
-                "hical",
-                "hi2isis",
-                "isisui",
-                "kaguyami2isis",
-                "marci2isis",
-                "mdiscal",
-                "mical",
-                "nirs2isis",
-                "rosvirtis2isis",
-                "specadd",
-                "tgocassis2isis",
-                "vicar2isis",
-                "vikcal",
-                "vims2isis",
-                "vimscal",
-                "voy2isis",
-            },
-        )
+        self.assertEqual(pending_apps, set())
         self.assertEqual(
             manifest["app_defaults"]["windows_patch"],
             "patches/10.0.0/"

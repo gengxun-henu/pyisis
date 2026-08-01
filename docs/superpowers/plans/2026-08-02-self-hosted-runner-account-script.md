@@ -282,7 +282,7 @@ sudo setfacl -R -m "u:$RUNNER_USER:rX" "$CONDA_ENV"
 
 printf '\nVerifying runner account and filesystem access...\n'
 getent passwd "$RUNNER_USER"
-stat -c '%U:%G %a %n' "$RUNNER_ROOT" "$RUNNER_HOME" "$RUNNER_CACHE"
+sudo stat -c '%U:%G %a %n' "$RUNNER_ROOT" "$RUNNER_HOME" "$RUNNER_CACHE"
 sudo -u "$RUNNER_USER" "$CONDA_PYTHON" --version
 printf 'Runner account setup completed successfully.\n'
 ```

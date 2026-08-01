@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-08-02
 Updated: 2026-08-02  Geng Xun added syntax and safety-contract coverage.
+Updated: 2026-08-02  Geng Xun covered verification below a private runner home.
 """
 
 import os
@@ -55,7 +56,12 @@ fi
         self.write_command("setfacl", ":")
         self.write_command(
             "stat",
-            "printf 'pyisis-runner:pyisis-runner 755 %s\n' \"$@\"",
+            """if [[ "$FAKE_STAT_DENIED" == "1" ]]; then
+  printf 'stat: Permission denied\n' >&2
+  exit 13
+fi
+printf 'pyisis-runner:pyisis-runner 755 %s\n' "$@"
+""",
         )
 
     def write_command(self, name, body):
@@ -63,7 +69,7 @@ fi
         path.write_text(f"#!/usr/bin/env bash\nset -eu\n{body}\n", encoding="utf-8")
         path.chmod(0o755)
 
-    def run_script(self, account_mode):
+    def run_script(self, account_mode, *, stat_denied=False):
         environment = os.environ.copy()
         environment.update(
             {
@@ -71,6 +77,7 @@ fi
                 "FAKE_ACCOUNT_MODE": account_mode,
                 "FAKE_CREATED": str(self.created_marker),
                 "FAKE_LOG": str(self.call_log),
+                "FAKE_STAT_DENIED": "1" if stat_denied else "0",
             }
         )
         return subprocess.run(
@@ -130,6 +137,18 @@ fi
         self.assertIn("unexpected home: /unexpected", result.stderr)
         self.assertNotIn("install -d", calls)
         self.assertNotIn("setfacl", calls)
+
+    def test_verification_uses_sudo_below_private_runner_home(self):
+        result = self.run_script("existing", stat_denied=True)
+        calls = self.call_log.read_text(encoding="utf-8")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(
+            "stat -c %U:%G\\ %a\\ %n /opt/actions-runner-pyisis "
+            "/var/lib/pyisis-runner "
+            "/var/lib/pyisis-runner/.cache/pyisis-gha",
+            calls,
+        )
 
 
 if __name__ == "__main__":

@@ -1,4 +1,10 @@
-"""Regression checks for GitHub Actions workflow routing policy."""
+"""Regression checks for GitHub Actions workflow routing policy.
+
+Author: Geng Xun
+Created: 2026-08-01
+Last Modified: 2026-08-01
+Updated: 2026-08-01  Geng Xun added the public-repository self-hosted trust boundary.
+"""
 
 from pathlib import Path
 import re
@@ -13,11 +19,16 @@ class AgentPybindPrGatePolicyTest(unittest.TestCase):
     def setUp(self):
         self.workflow = PR_GATE.read_text(encoding="utf-8")
 
-    def test_pr_gate_uses_default_runner_profile(self):
+    def test_pr_gate_routes_only_trusted_same_repo_prs_to_self_hosted(self):
         resolve_runner_block = self._job_block("resolve_runner")
 
-        self.assertNotIn("runner_profile: github-hosted", resolve_runner_block)
-        self.assertNotIn("runner_profile:", resolve_runner_block)
+        self.assertIn(
+            "github.event.pull_request.head.repo.full_name == github.repository",
+            resolve_runner_block,
+        )
+        self.assertIn("github.actor != 'dependabot[bot]'", resolve_runner_block)
+        self.assertIn("'pyisis-ubuntu26-isis9'", resolve_runner_block)
+        self.assertIn("'github-hosted'", resolve_runner_block)
 
     def test_pr_gate_avoids_full_history_checkout_for_change_summary(self):
         self.assertNotIn("fetch-depth: 0", self.workflow)

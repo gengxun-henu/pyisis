@@ -80,7 +80,7 @@ runner 通过出站 HTTPS 长连接访问 GitHub，不需要开放公网入站�
 
 ### `main` 与发布验证
 
-Linux wheel 每个 ISIS 大版本只在受控 `manylinux_2_35_x86_64` 环境构建一次，
+Linux wheel 每个 ISIS 大版本只在受控 `manylinux_2_28_x86_64` 环境构建一次，
 然后分别在 Ubuntu 22.04、24.04、26.04 环境安装并运行验证。Windows Server
 2022 使用 GitHub 托管 runner，分别构建并测试 ISIS 9 和 ISIS 10。
 
@@ -95,7 +95,7 @@ Linux 发布流水线允许将构建与安装验证拆成多个 job：两个 man
 产出 wheelhouse，六个 Ubuntu 目标消费对应 wheelhouse。矩阵的“8 项”指最终
 平台/ISIS 组合的验证结果，不要求在三个 Ubuntu 版本重复完整编译。
 
-`manylinux_2_35` 是 Linux wheel 的 glibc 兼容基线，不是 Ubuntu 发行版。
+`manylinux_2_28` 是 Linux wheel 的 glibc 兼容基线，不是 Ubuntu 发行版。
 它用于限制发布二进制所需的最低 glibc 版本；Ubuntu 容器安装测试仍然保留，
 因为 manylinux 标签本身不能证明 ISIS 数据、动态库打包和运行时行为正确。
 

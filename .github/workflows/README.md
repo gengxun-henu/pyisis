@@ -13,6 +13,7 @@ Supported modes:
 
 Supported named profiles:
 
+- `pyisis-ubuntu26-isis9` — repository-dedicated Ubuntu 26.04 / ISIS 9 runner with 16-way builds and a 20G compiler cache
 - `self-hosted-http` — self-hosted HTTPS path for plain direct network access when unattended GitHub connectivity is stable enough
 - `self-hosted-watt` — current default self-hosted HTTPS path for WATT/Hosts-accelerated GitHub access
 - `self-hosted-ssh` — self-hosted SSH checkout fallback over `ssh.github.com:443`
@@ -25,7 +26,8 @@ In `github-hosted` mode, workflows use the configured GitHub-hosted runner image
 The shared runner resolution pipeline is:
 
 - `.github/runner-config.yml` — top-level switch and mode-specific defaults
-- `.github/actions/resolve-runner-config/action.yml` — normalizes the selected mode into reusable outputs
+- `.github/scripts/resolve_runner_config.py` — parses and validates runner profiles
+- `.github/actions/resolve-runner-config/action.yml` — exposes normalized outputs to workflows
 - `.github/workflows/reusable-runner-config.yml` — bootstrap workflow used by top-level workflows before scheduling mode-dependent jobs
 
 The GitHub-hosted environment spec lives in `.github/conda/pybind-ci-environment.yml`.
@@ -259,15 +261,79 @@ Key fields:
 - `profiles.<name>.environment_strategy`: environment setup hint for that profile
 - `profiles.<name>.network_profile`: human-readable network hint such as `plain-http`, `watt-hosts`, or `ssh-fallback`
 - `profiles.<name>.use_watt`: whether the profile is explicitly marked as using WATT/Hosts routing
+- `profiles.<name>.build_jobs`: positive self-hosted CMake/Ninja parallelism
+- `profiles.<name>.ccache_max_size`: compiler-cache capacity limit
+- `profiles.<name>.isis_major`: selected ISIS major line
+- `profiles.<name>.python_abi`: selected CPython ABI
 - `fallback_conda_prefix`: shared fallback prefix for self-hosted environments
 
 Recommended usage:
 
-1. Keep `active_profile: self-hosted-watt` as the default repository setting while the local network still relies on WATT/Hosts acceleration for stable unattended GitHub access
-2. Switch to `self-hosted-http` only after plain direct HTTPS has been verified stable enough for unattended automation without WATT/Hosts assistance
-3. Switch to `self-hosted-ssh` only when the runner network needs the `ssh.github.com:443` fallback path for git checkout
-4. Use `github-hosted` as the slow-but-stable baseline when self-hosted networking is not trustworthy
-5. Keep the rest of the workflow files unchanged; they read the mode and checkout transport through the shared runner resolver outputs
+1. Keep `active_profile: pyisis-ubuntu26-isis9` for trusted mainline and same-repository PR builds.
+2. Use `github-hosted` for fork and Dependabot PRs; they must not execute on the persistent host.
+3. Switch to `self-hosted-watt` only when WATT/Hosts acceleration is running reliably for unattended automation.
+4. Switch to `self-hosted-ssh` only when checkout needs the `ssh.github.com:443` fallback.
+5. Keep lightweight issue/queue automation on GitHub-hosted runners.
+
+## Repository-dedicated Ubuntu 26 runner operations
+
+Phase 1 uses these fixed values:
+
+```text
+Repository: https://github.com/gengxun-henu/pyisis
+Runner name: pyisis-ubuntu26
+Runner account: pyisis-runner
+Runner application: /opt/actions-runner-pyisis
+Runner HOME/cache root: /var/lib/pyisis-runner
+Conda prefix: /home/gengxun/miniconda3/envs/asp360_new
+Labels: self-hosted,linux,x64,pyisis,ubuntu-26.04,isis9
+Build jobs: 16
+ccache max size: 20G
+Build-cache retention: 7 days
+```
+
+Run the read-only readiness check before registration or after host changes:
+
+```bash
+source /home/gengxun/miniconda3/etc/profile.d/conda.sh
+conda activate asp360_new
+python scripts/check_self_hosted_runner.py \
+  --conda-prefix /home/gengxun/miniconda3/envs/asp360_new \
+  --expected-jobs 16 \
+  --expected-isis-major 9 \
+  --expected-python 3.12 \
+  --require-ccache \
+  --json
+```
+
+The host environment must provide both `ninja` and `ccache`. Install them with
+Conda only after explicit approval because this mutates the shared environment.
+The runner writes its build trees and compiler cache below
+`/var/lib/pyisis-runner/.cache/pyisis-gha`; it treats the Conda environment as
+read-only.
+
+Manage registration under `Settings → Actions → Runners`. The one-hour
+registration token must be entered interactively and must never be stored in
+the repository or logs. The service needs outbound HTTPS access only; no
+inbound SSH port is required.
+
+Useful service diagnostics after registration:
+
+```bash
+cd /opt/actions-runner-pyisis
+sudo ./svc.sh status
+systemctl list-units --type=service | grep actions.runner
+journalctl --unit 'actions.runner.*pyisis*' --since today
+```
+
+If a run fails, inspect the Actions summary and service logs first. A cache
+metadata mismatch should trigger a clean rebuild, not deletion outside the
+runner cache root. Do not delete the checkout, Conda prefix, `.gitignore`, or
+`print.prt` as a recovery step.
+
+The PR gate routes only same-repository, non-Dependabot PRs to this runner.
+Fork and Dependabot PRs resolve to `github-hosted`; never replace this rule with
+`pull_request_target` plus execution of PR code.
 
 ## Migration note for self-hosted HTTPS checkout
 

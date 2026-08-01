@@ -29,6 +29,7 @@
 | Create | `tests/unitTest/self_hosted_actions_workflow_unit_test.py` | Regression checks for dedicated labels, resolver outputs, 16-way builds, 20G cache, and trusted-PR routing. |
 | Modify | `.github/runner-config.yml` | Define and activate the repository-dedicated Ubuntu 26/ISIS 9 profile. |
 | Modify | `.github/actions/resolve-runner-config/action.yml` | Parse and emit build/cache/environment capability outputs. |
+| Create | `.github/scripts/resolve_runner_config.py` | Testable runner profile parser used by the composite action. |
 | Modify | `.github/workflows/reusable-runner-config.yml` | Forward new normalized outputs to callers. |
 | Modify | `.github/workflows/reusable-pybind-build.yml` | Accept and forward self-hosted build/cache settings. |
 | Modify | `.github/workflows/reusable-pybind-build-self-hosted.yml` | Validate explicit build parallelism and use the configured cache limit. |
@@ -48,6 +49,7 @@
 - Create: `tests/unitTest/self_hosted_actions_workflow_unit_test.py`
 - Modify: `.github/runner-config.yml`
 - Modify: `.github/actions/resolve-runner-config/action.yml`
+- Create: `.github/scripts/resolve_runner_config.py`
 - Modify: `.github/workflows/reusable-runner-config.yml`
 
 **Interfaces:**
@@ -740,14 +742,14 @@ git commit -m "docs: add pyisis runner operations guide"
 - Consumes: repository admin access, an ephemeral GitHub registration token, the committed Phase 1 workflows, and the runbook from Task 6.
 - Produces: `pyisis-ubuntu26` systemd service visible as an online repository-level runner.
 
-- [ ] **Step 1: Install `ccache` into the existing Conda environment**
+- [ ] **Step 1: Install `ninja` and `ccache` into the existing Conda environment**
 
 This is an explicit environment mutation and requires user approval before execution:
 
 ```bash
 source /home/gengxun/miniconda3/etc/profile.d/conda.sh
 conda activate asp360_new
-conda install --channel conda-forge ccache
+conda install --channel conda-forge ninja ccache
 ```
 
 Then require it in preflight:
@@ -762,7 +764,7 @@ python scripts/check_self_hosted_runner.py \
   --json
 ```
 
-Expected: exit `0`, ISIS prefix checks pass, and `ccache` is found.
+Expected: exit `0`, ISIS prefix checks pass, and both `ninja` and `ccache` are found.
 
 - [ ] **Step 2: Create the service account and minimal directories**
 

@@ -61,9 +61,9 @@ on:
         default: true
         type: boolean
       build_jobs:
-        description: Build parallelism for self-hosted builds. Use auto to select nproc.
+        description: Positive build parallelism for self-hosted builds.
         required: false
-        default: auto
+        default: "16"
         type: string
       cache_retention_days:
         description: Number of days to keep stale self-hosted persistent build caches before cleanup.
@@ -73,7 +73,7 @@ on:
       ccache_max_size:
         description: Maximum size for the self-hosted ccache directory, for example 5G or 10G.
         required: false
-        default: "10G"
+        default: "20G"
         type: string
       upload_build_artifact:
         description: Compatibility input retained for the shared wrapper; ignored on self-hosted runs.
@@ -485,8 +485,9 @@ jobs:
           set -euo pipefail
           set -o pipefail
           build_jobs="$BUILD_JOBS_INPUT"
-          if [ -z "$build_jobs" ] || [ "$build_jobs" = "auto" ]; then
-            build_jobs="$(nproc)"
+          if ! [[ "$build_jobs" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error::build_jobs must be a positive integer; got: $build_jobs"
+            exit 2
           fi
           echo "Using self-hosted build parallelism: $build_jobs"
           cmake --build "$BUILD_DIR" --parallel "$build_jobs" --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"

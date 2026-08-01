@@ -116,6 +116,49 @@ profiles:
             self.assertIn(f"value: ${{{{ jobs.resolve.outputs.{name} }}}}", workflow)
             self.assertIn(f"{name}: ${{{{ steps.resolve.outputs.{name} }}}}", workflow)
 
+    def test_build_workflows_consume_resolved_resource_limits(self):
+        wrapper = (
+            REPO_ROOT / ".github" / "workflows" / "reusable-pybind-build.yml"
+        ).read_text(encoding="utf-8")
+        child = (
+            REPO_ROOT
+            / ".github"
+            / "workflows"
+            / "reusable-pybind-build-self-hosted.yml"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("build_jobs: ${{ inputs.build_jobs }}", wrapper)
+        self.assertIn("ccache_max_size: ${{ inputs.ccache_max_size }}", wrapper)
+        self.assertIn('default: "16"', child)
+        self.assertIn('default: "20G"', child)
+        self.assertIn('[[ "$build_jobs" =~ ^[1-9][0-9]*$ ]]', child)
+
+        for relative_path in (
+            ".github/workflows/ci-pybind.yml",
+            ".github/workflows/agent-pybind-pr-gate.yml",
+        ):
+            workflow = (REPO_ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn(
+                "build_jobs: ${{ needs.resolve_runner.outputs.build_jobs }}", workflow
+            )
+            self.assertIn(
+                "ccache_max_size: ${{ needs.resolve_runner.outputs.ccache_max_size }}",
+                workflow,
+            )
+
+    def test_manual_task_and_conda_definition_use_the_same_limits(self):
+        task = (
+            REPO_ROOT / ".github" / "workflows" / "agent-pybind-task.yml"
+        ).read_text(encoding="utf-8")
+        conda_environment = (
+            REPO_ROOT / ".github" / "conda" / "pybind-ci-environment.yml"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn('default: "16"', task)
+        self.assertIn('default: "20G"', task)
+        self.assertIn('[[ "$build_jobs" =~ ^[1-9][0-9]*$ ]]', task)
+        self.assertIn("  - ccache\n", conda_environment)
+
 
 if __name__ == "__main__":
     unittest.main()

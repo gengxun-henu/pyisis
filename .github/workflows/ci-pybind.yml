@@ -168,6 +168,8 @@ jobs:
       pybind_dir: .
       build_dir: build
       run_smoke_import: true
+      build_jobs: ${{ needs.resolve_runner.outputs.build_jobs }}
+      ccache_max_size: ${{ needs.resolve_runner.outputs.ccache_max_size }}
       upload_build_artifact: true
 
   run-ctest-self-hosted:

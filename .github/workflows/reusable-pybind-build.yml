@@ -50,10 +50,15 @@ on:
         required: false
         default: true
         type: boolean
-      ccache_max_size:
-        description: Maximum size for the self-hosted ccache directory, for example 5G or 10G.
+      build_jobs:
+        description: Positive CMake build parallelism for self-hosted builds.
         required: false
-        default: 10G
+        default: "16"
+        type: string
+      ccache_max_size:
+        description: Maximum size for the self-hosted ccache directory.
+        required: false
+        default: "20G"
         type: string
       upload_build_artifact:
         description: Whether the github-hosted workflow should upload the configured build tree for downstream jobs.
@@ -106,6 +111,7 @@ jobs:
       build_dir: ${{ inputs.build_dir }}
       build_cache_ref_slug: ${{ inputs.build_cache_ref_slug }}
       run_smoke_import: ${{ inputs.run_smoke_import }}
+      build_jobs: ${{ inputs.build_jobs }}
       ccache_max_size: ${{ inputs.ccache_max_size }}
       upload_build_artifact: ${{ inputs.upload_build_artifact }}
       hosted_environment_file: ${{ inputs.hosted_environment_file }}

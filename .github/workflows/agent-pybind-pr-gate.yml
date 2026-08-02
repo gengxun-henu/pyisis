@@ -35,6 +35,8 @@ jobs:
   resolve_runner:
     name: Resolve runner mode
     uses: ./.github/workflows/reusable-runner-config.yml
+    with:
+      runner_profile: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' && 'pyisis-ubuntu26-isis9' || 'github-hosted' }}
 
   prepare:
     name: Prepare PR context
@@ -110,6 +112,8 @@ jobs:
       build_dir: build
       build_cache_ref_slug: pr-gate-shared
       run_smoke_import: true
+      build_jobs: ${{ needs.resolve_runner.outputs.build_jobs }}
+      ccache_max_size: ${{ needs.resolve_runner.outputs.ccache_max_size }}
       upload_build_artifact: true
 
   unit-tests:

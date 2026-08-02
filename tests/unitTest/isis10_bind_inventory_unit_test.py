@@ -6,6 +6,7 @@ Last Modified: 2026-07-24
 Updated: 2026-07-23  Geng Xun added source-diff and generated-inventory coverage.
 Updated: 2026-07-24  Geng Xun added installed-header discovery and classification-gate coverage.
 Updated: 2026-07-24  Geng Xun covered C++ .hpp discovery for the official ISIS 10 prefix.
+Updated: 2026-08-02  Geng Xun added final ISIS APP disposition coverage.
 """
 
 from __future__ import annotations
@@ -55,6 +56,21 @@ class Isis10BindInventoryUnitTest(unittest.TestCase):
             }.issubset(classes)
         )
         self.assertEqual({"csv2table", "ocams2isis", "eisstitch"}, functions)
+
+    def test_application_headers_have_final_dispositions(self) -> None:
+        classifications = inventory.HEADER_CLASSIFICATIONS
+        self.assertEqual(
+            classifications["csv2table.h"].disposition,
+            "bound",
+        )
+        self.assertEqual(
+            classifications["ocams2isis.h"].disposition,
+            "native-app",
+        )
+        self.assertEqual(
+            classifications["eisstitch.h"].disposition,
+            "native-app",
+        )
 
     def test_installed_header_diff_is_discovered_without_a_curated_seed(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

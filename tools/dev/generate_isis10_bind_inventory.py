@@ -5,6 +5,7 @@ Created: 2026-07-23
 Updated: 2026-07-24  Geng Xun added automatic prefix diff and classification gates.
 Updated: 2026-07-24  Geng Xun aligned discovery with the official USGS ISIS 10 package.
 Updated: 2026-07-24  Geng Xun recorded curated bindings and intentional API exclusions.
+Updated: 2026-08-02  Geng Xun closed ISIS 10 application-entry-point dispositions.
 """
 
 from __future__ import annotations
@@ -87,7 +88,7 @@ CLASS_CANDIDATES = (
         "isis/src/base/objs/IProj/IProj.h",
         "libisis",
         "Medium",
-        "已绑定；复用 TProjection/Pvl 包装并以 tuple 返回 XYRange",
+        "已绑定并完成 ISIS 9 缺席/ISIS 10 行为验证；复用 TProjection/Pvl 包装并以 tuple 返回 XYRange",
         "通过 PROJ 支持通用投影，适用范围比新增任务专用类更广。",
         (
             _api("Construction/Enum", "IProj(Pvl &label, bool allowDefaults = false)", "isis_pybind.IProj()", "Bound with Pvl reference and allow_defaults"),
@@ -107,7 +108,7 @@ CLASS_CANDIDATES = (
         "isis/src/chandrayaan2/objs/Chandrayaan2OhrcCamera/Chandrayaan2OhrcCamera.h",
         "libChandrayaan2OhrcCamera",
         "Low",
-        "已绑定；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式",
+        "已绑定并完成 ISIS 9 缺席/ISIS 10 继承验证；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式",
         "公开面小，可补齐 Chandrayaan-2 OHRC 几何模型。",
         (
             _api("Construction/Enum", "Chandrayaan2OhrcCamera(Cube &cube)", "isis_pybind.Chandrayaan2OhrcCamera()", "Bound with Cube keep_alive"),
@@ -124,7 +125,7 @@ CLASS_CANDIDATES = (
         "isis/src/chandrayaan2/objs/Chandrayaan2TmcCamera/Chandrayaan2TmcCamera.h",
         "libChandrayaan2TmcCamera",
         "Low",
-        "已绑定；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式",
+        "已绑定并完成 ISIS 9 缺席/ISIS 10 继承验证；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式",
         "公开面小，可补齐 Chandrayaan-2 TMC 几何模型。",
         (
             _api("Construction/Enum", "Chandrayaan2TmcCamera(Cube &cube)", "isis_pybind.Chandrayaan2TmcCamera()", "Bound with Cube keep_alive"),
@@ -207,8 +208,8 @@ FUNCTION_CANDIDATES = (
         "libisis",
         "Medium",
         "isis_pybind.csv2table",
-        "优先设计参数字典/argv facade，并返回可选日志；不直接暴露 UserInterface",
-        "CSV 到 ISIS Table 的转换是通用数据工作流，Python 调用价值高。",
+        "已完成跨平台 facade：Linux 进程内调用 libisis，Windows 无 shell 调用 csv2table.exe；不公开 UserInterface",
+        "CSV 到 ISIS Table 的转换具有通用价值；Python 公共入口仅在 ISIS 10 构建中导出。",
     ),
     FunctionCandidate(
         2,
@@ -219,9 +220,9 @@ FUNCTION_CANDIDATES = (
         "void ocams2isis(UserInterface &ui, Pvl *log = nullptr); void ocams2isis(FileName &fitsFileName, UserInterface &ui)",
         "libosirisrex",
         "High",
-        "isis_pybind.ocams2isis",
-        "第二批 facade；优先 path + 参数对象，不暴露 UserInterface 引用",
-        "直接覆盖 OSIRIS-REx OCAMS FITS 入库，具有明确任务价值。",
+        "N/A (native ISIS APP)",
+        "采用原生 ISIS APP 执行边界；不绑定 UserInterface 引用，也不新增逐程序 Python wrapper",
+        "直接覆盖 OSIRIS-REx OCAMS FITS 入库；现有原生 APP 已满足跨平台处理边界。",
     ),
     FunctionCandidate(
         3,
@@ -232,9 +233,9 @@ FUNCTION_CANDIDATES = (
         "void eisstitch(UserInterface &ui)",
         "libclipper",
         "High",
-        "isis_pybind.eisstitch",
-        "第二批 facade；先核实输入产品、外部数据和异常契约",
-        "支持 Europa Clipper EIS 拼接，但任务依赖和测试数据要求较高。",
+        "N/A (native ISIS APP)",
+        "采用原生 ISIS APP 执行边界；不绑定 UserInterface 引用，也不新增逐程序 Python wrapper",
+        "支持 Europa Clipper EIS 拼接；现有原生 APP 已满足跨平台处理边界。",
     ),
 )
 
@@ -253,15 +254,15 @@ EXCLUDED_HEADERS = (
 HEADER_CLASSIFICATIONS = {
     "Chandrayaan2OhrcCamera.h": HeaderClassification(
         "class",
-        "candidate",
+        "complete",
         "Chandrayaan2OhrcCamera",
-        "ISIS 10-only mission camera; first binding batch complete",
+        "ISIS 10-only mission camera; dual-version compatibility review closed",
     ),
     "Chandrayaan2TmcCamera.h": HeaderClassification(
         "class",
-        "candidate",
+        "complete",
         "Chandrayaan2TmcCamera",
-        "ISIS 10-only mission camera; first binding batch complete",
+        "ISIS 10-only mission camera; dual-version compatibility review closed",
     ),
     "DskSegmentBuffer.hpp": HeaderClassification(
         "internal",
@@ -283,9 +284,9 @@ HEADER_CLASSIFICATIONS = {
     ),
     "IProj.h": HeaderClassification(
         "class",
-        "candidate",
+        "complete",
         "IProj",
-        "ISIS 10-only projection class; first binding batch complete",
+        "ISIS 10-only projection class; dual-version compatibility review closed",
     ),
     "ImageIoHandler.h": HeaderClassification(
         "class",
@@ -307,21 +308,21 @@ HEADER_CLASSIFICATIONS = {
     ),
     "csv2table.h": HeaderClassification(
         "function",
-        "candidate",
+        "bound",
         "csv2table",
-        "Public application entry point; design a Python-friendly UserInterface facade",
+        "Cross-platform facade complete: Linux library adapter and Windows executable backend",
     ),
     "eisstitch.h": HeaderClassification(
         "function",
-        "candidate",
+        "native-app",
         "eisstitch",
-        "Public Europa Clipper application entry point",
+        "Use the native ISIS APP; raw UserInterface binding is intentionally excluded",
     ),
     "ocams2isis.h": HeaderClassification(
         "function",
-        "candidate",
+        "native-app",
         "ocams2isis",
-        "Public OSIRIS-REx ingestion entry point",
+        "Use the native ISIS APP; raw UserInterface binding is intentionally excluded",
     ),
     "restincurl.h": HeaderClassification(
         "internal",

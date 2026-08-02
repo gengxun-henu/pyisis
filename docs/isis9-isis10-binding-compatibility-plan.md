@@ -98,8 +98,16 @@ ISIS 10 声明、导出库、分类、代码改动、ISIS 9 测试和 ISIS 10 �
 - `GdalIoHandler`
 - `ImageIoHandler`
 
-上述6个类共完成30个构造/方法入口。`csv2table`、`eisstitch`和
-`ocams2isis`属于后续APP facade范围，不阻塞当前核心绑定发布。
+上述6个类共完成30个构造/方法入口。新增应用函数的审计边界已关闭：
+
+- `csv2table` 已提供 ISIS 10 专属的跨平台 Python facade。Linux 后端在
+  进程内调用 `libisis`，Windows 后端无 shell 调用原生
+  `csv2table.exe`；不公开 `UserInterface` 或通用 APP runner。
+- `ocams2isis` 与 `eisstitch` 采用原生 ISIS APP 执行边界，不再作为独立
+  Python 绑定候选。
+
+Windows 清单和行为烟测已由 GitHub Actions run `30739433903` 验证：
+150 个 APP 完成编译安装，`csv2table -> tabledump` 行为烟测通过。
 
 ### 明确排除
 

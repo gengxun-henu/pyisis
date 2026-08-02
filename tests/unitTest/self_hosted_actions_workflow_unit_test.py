@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-08-01
-Last Modified: 2026-08-01
+Last Modified: 2026-08-02
 Updated: 2026-08-01  Geng Xun added dedicated runner resolution coverage.
+Updated: 2026-08-02  Geng Xun added dual ISIS self-hosted matrix coverage.
 """
 
 from __future__ import annotations
@@ -98,6 +99,26 @@ profiles:
         self.assertEqual(result.outputs["build_jobs"], "16")
         self.assertEqual(result.outputs["ccache_max_size"], "20G")
 
+    def test_repository_isis10_profile_selects_asp370(self):
+        resolver = load_resolver()
+
+        result = resolver.resolve_config(
+            REPO_ROOT / ".github" / "runner-config.yml",
+            profile_override="pyisis-ubuntu26-isis10",
+        )
+
+        self.assertEqual(result.outputs["runner_profile"], "pyisis-ubuntu26-isis10")
+        self.assertEqual(
+            json.loads(result.outputs["runs_on_json"]),
+            ["self-hosted", "linux", "x64", "pyisis", "ubuntu-26.04", "isis10"],
+        )
+        self.assertEqual(
+            result.outputs["fallback_conda_prefix"],
+            "/home/gengxun/miniconda3/envs/asp370",
+        )
+        self.assertEqual(result.outputs["isis_major"], "10")
+        self.assertEqual(result.outputs["python_abi"], "cp313")
+
     def test_composite_action_delegates_to_the_tested_resolver(self):
         action = (
             REPO_ROOT / ".github" / "actions" / "resolve-runner-config" / "action.yml"
@@ -143,6 +164,23 @@ profiles:
             )
             self.assertIn(
                 "ccache_max_size: ${{ needs.resolve_runner.outputs.ccache_max_size }}",
+                workflow,
+            )
+
+    def test_pr_and_main_ci_include_trusted_isis10_self_hosted_lane(self):
+        for relative_path in (
+            ".github/workflows/ci-pybind.yml",
+            ".github/workflows/agent-pybind-pr-gate.yml",
+        ):
+            workflow = (REPO_ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn("resolve_runner_isis10:", workflow)
+            self.assertIn("runner_profile: pyisis-ubuntu26-isis10", workflow)
+            self.assertIn("build_and_smoke_isis10:", workflow)
+            self.assertIn("artifact_prefix: ", workflow)
+            self.assertIn("-isis10", workflow)
+            self.assertIn(
+                "fallback_conda_prefix: "
+                "${{ needs.resolve_runner_isis10.outputs.fallback_conda_prefix }}",
                 workflow,
             )
 

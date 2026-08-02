@@ -2,12 +2,13 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-23
+Last Modified: 2026-08-02
 Updated: 2026-06-18  Geng Xun added runtime package discovery coverage for pip wheels.
 Updated: 2026-06-18  Geng Xun kept packaged runtime discovery behind explicit envs.
 Updated: 2026-06-19  Geng Xun verified packaged runtime environment hooks.
 Updated: 2026-06-19  Geng Xun made Windows DLL directory tests portable under WSL.
 Updated: 2026-07-23  Geng Xun added ISIS runtime version and ABI-major validation coverage.
+Updated: 2026-08-02  Geng Xun isolated optional runtime-discovery import coverage from built extension artifacts.
 """
 
 from __future__ import annotations
@@ -199,8 +200,9 @@ class PyisisRuntimeUnitTest(unittest.TestCase):
         sys.modules["pyisis"] = fake_pyisis
         sys.modules["pyisis._runtime"] = fake_runtime
 
-        with self.assertRaises(ModuleNotFoundError) as context:
-            importlib.import_module("isis_pybind")
+        with mock.patch.dict(sys.modules, {"isis_pybind._isis_core": None}):
+            with self.assertRaises(ModuleNotFoundError) as context:
+                importlib.import_module("isis_pybind")
 
         fake_runtime.configure_runtime.assert_called_once()
         self.assertEqual(context.exception.name, "isis_pybind._isis_core")

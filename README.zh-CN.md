@@ -188,6 +188,18 @@ print("编译目标 ISIS:", ip.__isis_version__)
 [`examples/`](examples/) 中提供了相机几何、前方交会、地图投影、控制网和影像匹配等
 示例。
 
+### 深度匹配工作流
+
+ControlNet 深度匹配支持 `direct / export / import` 三种工作流：依赖齐全时可在当前
+进程中直接运行 `direct`；`asp360_new` 缺少 LightGlue、LoFTR 或 SuperGlue 等依赖
+时，先用 `export` 导出任务，再进入 `deep-learning` conda 环境运行
+[`run_deep_match_manifest.py`](examples/learning_methods/run_deep_match_manifest.py)，最后
+回到 ISIS 环境使用 `import` 继续 ControlNet 流程。
+
+批处理 wrapper 会把导入、导出数量和各影像对状态汇总到
+`deep_match_manifests.json`。各 matcher preset 的依赖环境、运行支持和已知限制见
+[`PRESETS_README.md`](examples/controlnet_construct/PRESETS_README.md)。
+
 ## Release 中包含什么
 
 每个压缩包都是可离线安装的 wheelhouse。用户只需按照上面的命令安装顶层分发包，

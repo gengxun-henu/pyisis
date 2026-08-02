@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-08-01
-Last Modified: 2026-08-01
+Last Modified: 2026-08-02
 Updated: 2026-08-01  Geng Xun added the public-repository self-hosted trust boundary.
+Updated: 2026-08-02  Geng Xun restricted persistent runner access to the repository owner.
 """
 
 from pathlib import Path
@@ -26,13 +27,27 @@ class AgentPybindPrGatePolicyTest(unittest.TestCase):
             "github.event.pull_request.head.repo.full_name == github.repository",
             resolve_runner_block,
         )
-        self.assertIn("github.actor != 'dependabot[bot]'", resolve_runner_block)
+        self.assertIn("github.actor == 'gengxun-henu'", resolve_runner_block)
         self.assertIn("'pyisis-ubuntu26-isis9'", resolve_runner_block)
         self.assertIn("'github-hosted'", resolve_runner_block)
 
+        isis10_block = self._job_block("resolve_runner_isis10")
+        self.assertIn("github.actor == 'gengxun-henu'", isis10_block)
+
+    def test_workflows_use_node24_official_action_majors(self):
+        action_files = list((REPO_ROOT / ".github").rglob("*.yml"))
+        combined = "\n".join(path.read_text(encoding="utf-8") for path in action_files)
+
+        self.assertNotIn("actions/checkout@v4", combined)
+        self.assertNotIn("actions/github-script@v7", combined)
+        self.assertNotIn("actions/setup-python@v5", combined)
+        self.assertIn("actions/checkout@v7", combined)
+        self.assertIn("actions/github-script@v9", combined)
+        self.assertIn("actions/setup-python@v7", combined)
+
     def test_pr_gate_avoids_full_history_checkout_for_change_summary(self):
         self.assertNotIn("fetch-depth: 0", self.workflow)
-        self.assertIn("actions/github-script@v7", self.workflow)
+        self.assertIn("actions/github-script@v9", self.workflow)
         self.assertIn("changed_files:", self.workflow)
 
     def test_unit_tests_support_self_hosted_build_cache(self):
@@ -48,7 +63,7 @@ class AgentPybindPrGatePolicyTest(unittest.TestCase):
         metadata_block = self._job_block("metadata-audit")
 
         self.assertIn("CHANGED_FILES:", metadata_block)
-        self.assertNotIn("actions/checkout@v4", metadata_block)
+        self.assertNotIn("actions/checkout@v7", metadata_block)
         self.assertNotIn("normalized-safe-checkout", metadata_block)
         self.assertNotIn("git diff --name-only", metadata_block)
 

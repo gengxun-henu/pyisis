@@ -5,6 +5,7 @@ Created: 2026-08-01
 Last Modified: 2026-08-02
 Updated: 2026-08-01  Geng Xun added dedicated runner resolution coverage.
 Updated: 2026-08-02  Geng Xun added dual ISIS self-hosted matrix coverage.
+Updated: 2026-08-02  Geng Xun required equivalent ISIS 9 and ISIS 10 test gates.
 """
 
 from __future__ import annotations
@@ -183,6 +184,51 @@ profiles:
                 "${{ needs.resolve_runner_isis10.outputs.fallback_conda_prefix }}",
                 workflow,
             )
+
+    def test_pr_and_main_ci_run_equivalent_isis10_test_gates(self):
+        pr_workflow = (
+            REPO_ROOT / ".github" / "workflows" / "agent-pybind-pr-gate.yml"
+        ).read_text(encoding="utf-8")
+        main_workflow = (
+            REPO_ROOT / ".github" / "workflows" / "ci-pybind.yml"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("unit-tests-isis10:", pr_workflow)
+        self.assertIn("needs.build_and_smoke_isis10.outputs.build_succeeded", pr_workflow)
+        self.assertIn(
+            "needs.build_and_smoke_isis10.outputs.local_build_cache_dir",
+            pr_workflow,
+        )
+        self.assertIn(
+            "needs.resolve_runner_isis10.outputs.fallback_conda_prefix",
+            pr_workflow,
+        )
+        self.assertIn("ctest -R python-unit-tests", pr_workflow)
+
+        self.assertIn("run-ctest-isis10-self-hosted:", main_workflow)
+        self.assertIn("needs.build_and_smoke_isis10.outputs.build_succeeded", main_workflow)
+        self.assertIn(
+            "needs.build_and_smoke_isis10.outputs.local_build_cache_dir",
+            main_workflow,
+        )
+        self.assertIn(
+            "needs.resolve_runner_isis10.outputs.fallback_conda_prefix",
+            main_workflow,
+        )
+        self.assertGreaterEqual(
+            main_workflow.count(
+                'ctest --test-dir "$BUILD_DIR" --output-on-failure -V'
+            ),
+            3,
+        )
+
+    def test_ctest_exports_the_configured_python_build_directory(self):
+        cmake = (REPO_ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn(
+            '"ISIS_PYBIND_BUILD_DIR=${CMAKE_CURRENT_BINARY_DIR}/python"',
+            cmake,
+        )
 
     def test_manual_task_and_conda_definition_use_the_same_limits(self):
         task = (

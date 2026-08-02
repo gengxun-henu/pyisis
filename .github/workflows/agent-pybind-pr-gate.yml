@@ -36,11 +36,11 @@ jobs:
     name: Resolve runner mode
     uses: ./.github/workflows/reusable-runner-config.yml
     with:
-      runner_profile: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' && 'pyisis-ubuntu26-isis9' || 'github-hosted' }}
+      runner_profile: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor == 'gengxun-henu' && 'pyisis-ubuntu26-isis9' || 'github-hosted' }}
 
   resolve_runner_isis10:
     name: Resolve ISIS 10 runner mode
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor == 'gengxun-henu' }}
     uses: ./.github/workflows/reusable-runner-config.yml
     with:
       runner_profile: pyisis-ubuntu26-isis10
@@ -59,7 +59,7 @@ jobs:
     steps:
       - name: Summarize changed files
         id: diff
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const pull = context.payload.pull_request;
@@ -125,7 +125,7 @@ jobs:
 
   build_and_smoke_isis10:
     name: Build and smoke gate (ISIS 10)
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor == 'gengxun-henu' }}
     needs:
       - resolve_runner_isis10
       - prepare
@@ -167,7 +167,7 @@ jobs:
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ github.token }}
           fetch-depth: 1
@@ -247,6 +247,100 @@ jobs:
           if-no-files-found: warn
           path: |
             ${{ env.BUILD_DIR }}/unit.log
+            ${{ env.BUILD_DIR }}/Testing/Temporary/**
+
+  unit-tests-isis10:
+    name: Python unit-test gate (ISIS 10)
+    needs:
+      - resolve_runner_isis10
+      - build_and_smoke_isis10
+      - prepare
+    if: >-
+      ${{
+        always() &&
+        github.event.pull_request.head.repo.full_name == github.repository &&
+        github.actor == 'gengxun-henu' &&
+        needs.build_and_smoke_isis10.outputs.build_succeeded == 'true' &&
+        (
+          needs.prepare.outputs.changed_tests != '' ||
+          needs.prepare.outputs.requires_python_unit_fallback == 'true'
+        )
+      }}
+    runs-on: ${{ fromJSON(needs.resolve_runner_isis10.outputs.runs_on_json) }}
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner_isis10.outputs.fallback_conda_prefix }}
+      CHANGED_TESTS: ${{ needs.prepare.outputs.changed_tests }}
+      LOCAL_BUILD_CACHE_DIR: ${{ needs.build_and_smoke_isis10.outputs.local_build_cache_dir }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 1
+
+      - name: Normalize and verify checkout transport
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          skip-checkout: "true"
+          runner-mode: self-hosted
+          github-token: ${{ github.token }}
+          fetch-depth: "1"
+          summary-context: pr-gate-unit-tests-isis10
+
+      - name: Resolve ISIS 10 conda prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: self-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ""
+
+      - name: Restore ISIS 10 build tree from self-hosted local cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${LOCAL_BUILD_CACHE_DIR:-}" ]; then
+            echo "::error::ISIS 10 self-hosted build cache output was empty."
+            exit 1
+          fi
+          if [ ! -d "$LOCAL_BUILD_CACHE_DIR" ]; then
+            echo "::error::ISIS 10 self-hosted build cache does not exist: $LOCAL_BUILD_CACHE_DIR"
+            exit 1
+          fi
+          rm -rf "$BUILD_DIR"
+          cp -a "$LOCAL_BUILD_CACHE_DIR" "$BUILD_DIR"
+
+      - name: Run changed unit tests or fallback CTest python group against ISIS 10
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          export PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}"
+
+          if [ -n "$CHANGED_TESTS" ]; then
+            : > "$BUILD_DIR/unit-isis10.log"
+            while IFS= read -r test_file; do
+              [ -z "$test_file" ] && continue
+              echo "=== Running $test_file against ISIS 10 ===" | tee -a "$BUILD_DIR/unit-isis10.log"
+              "$PYTHON_BIN" -X faulthandler "$test_file" -v 2>&1 | tee -a "$BUILD_DIR/unit-isis10.log"
+            done <<< "$CHANGED_TESTS"
+          else
+            echo "No changed unit-test files detected; running ctest -R python-unit-tests against ISIS 10" | tee "$BUILD_DIR/unit-isis10.log"
+            ctest --test-dir "$BUILD_DIR" -R python-unit-tests --output-on-failure 2>&1 | tee -a "$BUILD_DIR/unit-isis10.log"
+          fi
+
+      - name: Upload ISIS 10 unit test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-gate-unit-isis10-logs-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            ${{ env.BUILD_DIR }}/unit-isis10.log
             ${{ env.BUILD_DIR }}/Testing/Temporary/**
 
   metadata-audit:

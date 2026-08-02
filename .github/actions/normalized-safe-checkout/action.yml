@@ -175,7 +175,7 @@ runs:
 
     - name: Checkout repository
       if: ${{ inputs.skip-checkout != 'true' }}
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         token: ${{ inputs.github-token }}
         persist-credentials: ${{ inputs.persist-credentials }}

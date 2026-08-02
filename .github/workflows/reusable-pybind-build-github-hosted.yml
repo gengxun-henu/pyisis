@@ -102,7 +102,7 @@ jobs:
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ github.token }}
           fetch-depth: 1
@@ -256,7 +256,7 @@ jobs:
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ github.token }}
           fetch-depth: 1

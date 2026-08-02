@@ -20,6 +20,7 @@ Updated: 2026-07-25  Geng Xun covered ISIS 10-specific Windows wheel metadata ch
 Updated: 2026-07-25  Geng Xun isolated versioned Windows prefix cache inputs and trusted saves.
 Updated: 2026-07-25  Geng Xun aligned the four-matrix workflow with the rc2 releases.
 Updated: 2026-08-02  Geng Xun separated daily PyISIS checks from platform release matrices.
+Updated: 2026-08-02  Geng Xun added Ubuntu 26.04 wheel installation coverage.
 """
 
 from __future__ import annotations
@@ -70,7 +71,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         windows = self._job_block(workflow, "windows-cp312")
         windows10 = self._job_block(workflow, "windows-isis10-cp313")
 
-        self.assertIn("actions/github-script@v7", scope)
+        self.assertIn("actions/github-script@v9", scope)
         self.assertIn("pulls.listFiles", scope)
         self.assertIn("run_linux", scope)
         self.assertIn("run_windows", scope)
@@ -86,8 +87,8 @@ class WheelWorkflowUnitTest(unittest.TestCase):
 
         self.assertIn("runs-on: windows-2022", workflow)
         self.assertIn("shell: pwsh", workflow)
-        self.assertIn("actions/checkout@v4", workflow)
-        self.assertIn("actions/setup-python@v5", workflow)
+        self.assertIn("actions/checkout@v7", workflow)
+        self.assertIn("actions/setup-python@v7", workflow)
         self.assertIn("mamba-org/setup-micromamba@v3", workflow)
         self.assertIn("ports\\windows\\activate_msvc.ps1", workflow)
         self.assertIn("ports\\windows\\isis\\verify_isis_prefix.ps1", workflow)
@@ -211,6 +212,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("actions/download-artifact@v4", workflow)
         self.assertIn("ubuntu-22.04", workflow)
         self.assertIn("ubuntu-24.04", workflow)
+        self.assertEqual(workflow.count("- ubuntu-26.04"), 2)
         self.assertIn("runs-on: ${{ matrix.os }}", workflow)
         self.assertIn("--test-list tools/packaging/basic_tests.txt", workflow)
 

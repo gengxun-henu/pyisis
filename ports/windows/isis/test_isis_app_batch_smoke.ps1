@@ -34,17 +34,20 @@ if (-not (Test-Path -LiteralPath $ManifestPath)) {
 }
 
 $manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
-$appNames = @(
+$availableApps = @(
     $manifest.apps |
         Where-Object {
             $version = $_.versions.PSObject.Properties[$IsisVersion]
             $version -and $version.Value.status -ne "unavailable"
-        } |
+        }
+)
+$appNames = @(
+    $availableApps |
         ForEach-Object { $_.name } |
         Sort-Object -Unique
 )
-if ($appNames.Count -lt 149) {
-    Fail "expected at least 149 allowlisted APPs, found $($appNames.Count)"
+if ($appNames.Count -lt 169) {
+    Fail "expected at least 169 allowlisted APPs, found $($appNames.Count)"
 }
 
 & "$PSScriptRoot\verify_isis_prefix.ps1" `
@@ -133,7 +136,18 @@ try {
     }
 
     foreach ($appName in $appNames) {
-        Invoke-IsisApp $appName @("-HELP") "startup-$appName.log"
+        $app = $availableApps |
+            Where-Object { $_.name -eq $appName } |
+            Select-Object -First 1
+        $startupArguments = @("-HELP")
+        $startupArgsProperty = $app.PSObject.Properties["startup_args"]
+        if ($null -ne $startupArgsProperty) {
+            $startupArguments = @(
+                $startupArgsProperty.Value |
+                    ForEach-Object { [string]$_ }
+            )
+        }
+        Invoke-IsisApp $appName $startupArguments "startup-$appName.log"
     }
 
     $seedCube = Join-Path $WorkDir "seed.cub"

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-26
+Last Modified: 2026-07-27
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -27,6 +27,10 @@ Updated: 2026-07-26  Geng Xun covered the complete 48-APP W1 promotion.
 Updated: 2026-07-26  Geng Xun covered exact-subset Windows APP wave promotion.
 Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
 Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
+Updated: 2026-07-27  Geng Xun covered the 169-APP Windows promotion.
+Updated: 2026-07-27  Geng Xun covered per-APP startup smoke arguments.
+Updated: 2026-07-27  Geng Xun covered incremental Windows APP build caching.
+Updated: 2026-07-27  Geng Xun recorded the hosted 169-APP startup result.
 """
 
 from __future__ import annotations
@@ -256,7 +260,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
             "trim",
         }
         apps = {app["name"]: app for app in manifest["apps"]}
-        self.assertEqual(len(apps), 149)
+        self.assertEqual(len(apps), 169)
         self.assertTrue(behavior_apps.issubset(apps))
         w1_apps = {
             name
@@ -365,38 +369,37 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 "mvic2isis",
                 "thm2isis",
                 "voycal",
+                "chan1m32isis",
+                "clem2isis",
+                "gllnims2isis",
+                "gllssical",
+                "hical",
+                "hi2isis",
+                "kaguyami2isis",
+                "marci2isis",
+                "mdiscal",
+                "mical",
+                "nirs2isis",
+                "rosvirtis2isis",
+                "tgocassis2isis",
+                "vikcal",
+                "vims2isis",
+                "vimscal",
+                "voy2isis",
             },
         )
+        w4_apps = {
+            name
+            for name, app in apps.items()
+            if app.get("selection_wave") == "W4-medium"
+        }
+        self.assertEqual(w4_apps, {"isisui", "specadd", "vicar2isis"})
         pending_apps = {
             name
             for name, app in apps.items()
             if app["versions"]["10.0.0"]["smoke_status"] == "pending"
         }
-        self.assertEqual(
-            pending_apps,
-            {
-                "amica2isis",
-                "apollo2isis",
-                "ciss2isis",
-                "clemnircal",
-                "clemuvviscal",
-                "ctxcal",
-                "eis2isis",
-                "gllssi2isis",
-                "junocam2isis",
-                "kaguyasp2isis",
-                "kaguyatc2isis",
-                "leisa2isis",
-                "mar102isis",
-                "mdis2isis",
-                "moccal",
-                "mroctx2isis",
-                "msi2isis",
-                "mvic2isis",
-                "thm2isis",
-                "voycal",
-            },
-        )
+        self.assertEqual(pending_apps, set())
         self.assertEqual(
             manifest["app_defaults"]["windows_patch"],
             "patches/10.0.0/"
@@ -416,10 +419,21 @@ class PackagingToolsUnitTest(unittest.TestCase):
                     f"{app['source_dir']}/{name}.xml",
                 )
                 self.assertIn(app["smoke_tier"], {"startup", "cube"})
+                if "startup_args" in app:
+                    self.assertIsInstance(app["startup_args"], list)
+                    self.assertTrue(app["startup_args"])
+                    self.assertTrue(
+                        all(
+                            isinstance(argument, str) and argument
+                            for argument in app["startup_args"]
+                        )
+                    )
                 self.assertEqual(
                     app["versions"]["10.0.0"]["status"],
                     "experimental",
                 )
+
+        self.assertEqual(apps["isisui"]["startup_args"], ["isisui", "-HELP"])
 
         reduce_app = apps["reduce"]
         self.assertEqual(reduce_app["source_dir"], "isis/src/base/apps/reduce")
@@ -455,9 +469,18 @@ class PackagingToolsUnitTest(unittest.TestCase):
         batch_smoke = (
             WINDOWS_ISIS_DIR / "test_isis_app_batch_smoke.ps1"
         ).read_text(encoding="utf-8")
-        self.assertIn("$appNames.Count -lt 149", batch_smoke)
+        self.assertIn("$appNames.Count -lt 169", batch_smoke)
         self.assertIn('Join-Path $Prefix "bin\\$Name.exe"', batch_smoke)
-        self.assertIn('Invoke-IsisApp $appName @("-HELP")', batch_smoke)
+        self.assertIn('$startupArguments = @("-HELP")', batch_smoke)
+        self.assertIn(
+            '$app.PSObject.Properties["startup_args"]',
+            batch_smoke,
+        )
+        self.assertIn("if ($null -ne $startupArgsProperty)", batch_smoke)
+        self.assertIn(
+            "Invoke-IsisApp $appName $startupArguments",
+            batch_smoke,
+        )
         for name in behavior_apps:
             with self.subTest(smoke_app=name):
                 self.assertIn(f'"{name}"', batch_smoke)
@@ -468,7 +491,21 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("runs-on: windows-2022", workflow)
         self.assertIn("-IsisVersion 10.0.0", workflow)
         self.assertIn("-WindowsApps $apps", workflow)
-        self.assertIn("Build and smoke-test 149 ISIS 10 APPs", workflow)
+        self.assertIn("Build and smoke-test 169 ISIS 10 APPs", workflow)
+        self.assertIn("actions/cache/restore@v6", workflow)
+        self.assertIn("actions/cache/save@v6", workflow)
+        self.assertIn("build/windows/isis10-app-build", workflow)
+        self.assertIn("build/windows/isis10-app-prefix", workflow)
+        self.assertIn(
+            "steps.windows-isis-app-cache.outputs.cache-hit != 'true'",
+            workflow,
+        )
+        self.assertIn(
+            "steps.windows-isis-app-cache.outputs.cache-primary-key",
+            workflow,
+        )
+        self.assertIn("windows-2022-isis-10.0.0-apps-v1-", workflow)
+        self.assertIn("steps.windows-app-cache-key.outputs.app-hash", workflow)
         self.assertIn("test_isis_app_batch_smoke.ps1", workflow)
         self.assertIn("windows-isis10-app-batch-smoke-logs", workflow)
 
@@ -533,13 +570,13 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertEqual(apps["hrsc2isis"]["importance_score"], "4")
         self.assertEqual(
             sum(row["current_manifest"] == "yes" for row in rows),
-            149,
+            169,
         )
 
         summary = WINDOWS_ISIS_APP_PRIORITY_SUMMARY.read_text(encoding="utf-8")
         self.assertIn("APP 总数：365", summary)
         self.assertIn("固定源码提交", summary)
-        self.assertIn("W0-current-batch | 149", summary)
+        self.assertIn("W0-current-batch | 169", summary)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

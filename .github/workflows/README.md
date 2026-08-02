@@ -87,6 +87,22 @@ Characteristics:
 - when the resolved mode is `self-hosted`, the reusable path now prefers a persistent cross-run local build cache plus incremental reconfigure/build instead of forcing a clean build every time
 - when `ccache` is available on the self-hosted machine or fallback conda prefix, it is configured automatically to accelerate repeated C++/pybind compilations
 
+## `wheels.yml`
+
+Use this as the platform packaging and release matrix, not as the daily PyISIS
+development gate.
+
+Routing policy:
+
+- ordinary changes under `src/`, `python/`, `CMakeLists.txt`, and general tests
+  are handled by `agent-pybind-pr-gate.yml` and do not trigger wheel builds
+- `ports/linux/` changes run only the ISIS 9/10 Linux manylinux lanes
+- `ports/windows/` changes run only the ISIS 9/10 Windows wheel lanes
+- shared packaging changes under `packaging/`, `tools/packaging/`,
+  `pyproject.toml`, and packaging/runtime workflow tests run both platforms
+- manual dispatch runs the complete Linux and Windows release matrix; publishing
+  remains restricted to `main`
+
 ## `agent-pybind-task-draft.yml` (deprecated legacy)
 
 Use this only as a short-term rollback reference while the split workflows stabilize.

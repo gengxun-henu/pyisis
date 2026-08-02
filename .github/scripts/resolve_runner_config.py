@@ -292,6 +292,9 @@ def resolve_config(config_path: Path, profile_override: str = "") -> RunnerResol
             selected_profile.get("use_watt", network_profile == "watt-hosts")
         ) else "false"
         resources = _normalize_resources(selected_profile, diagnostics)
+        fallback_conda_prefix = str(
+            selected_profile.get("fallback_conda_prefix", fallback_conda_prefix)
+        ).strip() or fallback_conda_prefix
     else:
         mode = str(config.get("mode", LEGACY_DEFAULTS["mode"])).strip().lower()
         if mode not in {"self-hosted", "github-hosted"}:

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-25
+Last Modified: 2026-08-02
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
@@ -19,11 +19,13 @@ Updated: 2026-07-25  Geng Xun pinned the Windows ISIS 10 gate to SpiceQL 1.4.1.
 Updated: 2026-07-25  Geng Xun covered ISIS 10-specific Windows wheel metadata checks.
 Updated: 2026-07-25  Geng Xun isolated versioned Windows prefix cache inputs and trusted saves.
 Updated: 2026-07-25  Geng Xun aligned the four-matrix workflow with the rc2 releases.
+Updated: 2026-08-02  Geng Xun separated daily PyISIS checks from platform release matrices.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import unittest
 
 
@@ -51,6 +53,33 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn('"tools/packaging/**"', workflow)
         self.assertIn('"ports/linux/**"', workflow)
         self.assertIn('".github/workflows/wheels.yml"', workflow)
+
+    def test_daily_core_changes_do_not_trigger_release_wheel_matrix(self):
+        workflow = self._workflow_text()
+        trigger_block = workflow.split("concurrency:", maxsplit=1)[0]
+
+        self.assertNotIn('"CMakeLists.txt"', trigger_block)
+        self.assertNotIn('"python/**"', trigger_block)
+        self.assertNotIn('"src/**"', trigger_block)
+
+    def test_workflow_routes_linux_and_windows_packaging_changes_separately(self):
+        workflow = self._workflow_text()
+        scope = self._job_block(workflow, "scope")
+        linux = self._job_block(workflow, "linux-cp312-build")
+        linux10 = self._job_block(workflow, "linux-isis10-cp313-build")
+        windows = self._job_block(workflow, "windows-cp312")
+        windows10 = self._job_block(workflow, "windows-isis10-cp313")
+
+        self.assertIn("actions/github-script@v7", scope)
+        self.assertIn("pulls.listFiles", scope)
+        self.assertIn("run_linux", scope)
+        self.assertIn("run_windows", scope)
+        for job in (linux, linux10):
+            self.assertIn("needs: scope", job)
+            self.assertIn("needs.scope.outputs.run_linux == 'true'", job)
+        for job in (windows, windows10):
+            self.assertIn("needs: scope", job)
+            self.assertIn("needs.scope.outputs.run_windows == 'true'", job)
 
     def test_workflow_uses_windows_runner_and_isis_prefix_resolution(self):
         workflow = self._workflow_text()
@@ -264,6 +293,15 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn('gh release create "$RELEASE_TAG"', workflow)
         self.assertIn("--target \"$GITHUB_SHA\"", workflow)
         self.assertIn("--notes-file \"$RELEASE_NOTES_FILE\"", workflow)
+
+    def _job_block(self, workflow: str, job_name: str) -> str:
+        match = re.search(
+            rf"^  {re.escape(job_name)}:\n(.*?)(?=^  [A-Za-z0-9_-]+:\n|\Z)",
+            workflow,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        self.assertIsNotNone(match, f"job not found: {job_name}")
+        return match.group(0)
 
 
 if __name__ == "__main__":

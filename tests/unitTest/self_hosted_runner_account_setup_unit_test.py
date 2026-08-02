@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-08-02
 Updated: 2026-08-02  Geng Xun added syntax and safety-contract coverage.
 Updated: 2026-08-02  Geng Xun covered verification below a private runner home.
+Updated: 2026-08-02  Geng Xun covered read-only access to both ISIS conda environments.
 """
 
 import os
@@ -117,6 +118,16 @@ printf 'pyisis-runner:pyisis-runner 755 %s\n' "$@"
         self.assertIn(
             "setfacl -R -m u:pyisis-runner:rX "
             "/home/gengxun/miniconda3/envs/asp360_new",
+            calls,
+        )
+        self.assertIn(
+            "setfacl -R -m u:pyisis-runner:rX "
+            "/home/gengxun/miniconda3/envs/asp370",
+            calls,
+        )
+        self.assertIn(
+            "-u pyisis-runner "
+            "/home/gengxun/miniconda3/envs/asp370/bin/python --version",
             calls,
         )
         self.assertIn("Runner account setup completed successfully.", result.stdout)

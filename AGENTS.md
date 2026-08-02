@@ -25,6 +25,8 @@ unless the user explicitly asks for them.
   guidance.
 - Match existing repository style and local helper APIs before introducing new
   abstractions.
+- For small tasks, small code changes, and focused test work, do not enable or
+  invoke Superpowers skills; proceed directly with the repository instructions.
 
 ## Repository Context
 

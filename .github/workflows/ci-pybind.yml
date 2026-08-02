@@ -39,6 +39,12 @@ jobs:
     name: Resolve runner mode
     uses: ./.github/workflows/reusable-runner-config.yml
 
+  resolve_runner_isis10:
+    name: Resolve ISIS 10 runner mode
+    uses: ./.github/workflows/reusable-runner-config.yml
+    with:
+      runner_profile: pyisis-ubuntu26-isis10
+
   report-inventory:
     name: Report binding inventory
     needs: resolve_runner
@@ -153,7 +159,7 @@ jobs:
           PY
 
   build_and_smoke:
-    name: Build and smoke-test isis_pybind_standalone
+    name: Build and smoke-test isis_pybind_standalone (ISIS 9)
     needs:
       - resolve_runner
     uses: ./.github/workflows/reusable-pybind-build.yml
@@ -163,13 +169,34 @@ jobs:
       runs_on_json: ${{ needs.resolve_runner.outputs.runs_on_json }}
       use_ssh_checkout: 'false'
       needs_dynamic_conda_setup: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup }}
-      artifact_prefix: ci-pybind
+      artifact_prefix: ci-pybind-isis9
       fallback_conda_prefix: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
       pybind_dir: .
       build_dir: build
       run_smoke_import: true
       build_jobs: ${{ needs.resolve_runner.outputs.build_jobs }}
       ccache_max_size: ${{ needs.resolve_runner.outputs.ccache_max_size }}
+      upload_build_artifact: true
+
+  build_and_smoke_isis10:
+    name: Build and smoke-test isis_pybind_standalone (ISIS 10)
+    needs:
+      - resolve_runner_isis10
+    uses: ./.github/workflows/reusable-pybind-build.yml
+    secrets: inherit
+    with:
+      runner_mode: ${{ needs.resolve_runner_isis10.outputs.runner_mode }}
+      runs_on_json: ${{ needs.resolve_runner_isis10.outputs.runs_on_json }}
+      use_ssh_checkout: 'false'
+      needs_dynamic_conda_setup: ${{ needs.resolve_runner_isis10.outputs.needs_dynamic_conda_setup }}
+      artifact_prefix: ci-pybind-isis10
+      fallback_conda_prefix: ${{ needs.resolve_runner_isis10.outputs.fallback_conda_prefix }}
+      pybind_dir: .
+      build_dir: build
+      build_cache_ref_slug: ci-pybind-isis10
+      run_smoke_import: true
+      build_jobs: ${{ needs.resolve_runner_isis10.outputs.build_jobs }}
+      ccache_max_size: ${{ needs.resolve_runner_isis10.outputs.ccache_max_size }}
       upload_build_artifact: true
 
   run-ctest-self-hosted:

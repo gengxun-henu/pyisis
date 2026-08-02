@@ -28,10 +28,7 @@ on:
           - isis10
   pull_request:
     paths:
-      - "CMakeLists.txt"
       - "pyproject.toml"
-      - "python/**"
-      - "src/**"
       - "packaging/**"
       - "tools/packaging/**"
       - "ports/linux/**"
@@ -46,8 +43,71 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  scope:
+    name: Resolve wheel platform scope
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      run_linux: ${{ steps.scope.outputs.run_linux }}
+      run_windows: ${{ steps.scope.outputs.run_windows }}
+
+    steps:
+      - name: Resolve changed platform paths
+        id: scope
+        uses: actions/github-script@v7
+        with:
+          script: |
+            if (context.eventName === 'workflow_dispatch') {
+              core.setOutput('run_linux', 'true');
+              core.setOutput('run_windows', 'true');
+              await core.summary
+                .addHeading('Wheel platform scope', 2)
+                .addRaw('Manual dispatch: running the complete Linux and Windows release matrix.\n')
+                .write();
+              return;
+            }
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+            const changedFiles = files.map((file) => file.filename);
+            const commonPackagingPatterns = [
+              /^pyproject\.toml$/,
+              /^packaging\//,
+              /^tools\/packaging\//,
+              /^tests\/unitTest\/.*(?:packaging|runtime).*_unit_test\.py$/,
+              /^tests\/unitTest\/wheel_workflow_unit_test\.py$/,
+              /^\.github\/workflows\/wheels\.yml$/,
+            ];
+            const changesCommonPackaging = changedFiles.some((file) =>
+              commonPackagingPatterns.some((pattern) => pattern.test(file))
+            );
+            const runLinux = changesCommonPackaging || changedFiles.some((file) =>
+              /^ports\/linux\//.test(file)
+            );
+            const runWindows = changesCommonPackaging || changedFiles.some((file) =>
+              /^ports\/windows\//.test(file)
+            );
+
+            core.setOutput('run_linux', String(runLinux));
+            core.setOutput('run_windows', String(runWindows));
+            await core.summary
+              .addHeading('Wheel platform scope', 2)
+              .addRaw(`Linux manylinux matrix: ${runLinux ? 'run' : 'skip'}\n\n`)
+              .addRaw(`Windows wheel matrix: ${runWindows ? 'run' : 'skip'}\n\n`)
+              .addHeading('Changed files', 3)
+              .addCodeBlock(changedFiles.join('\n'), 'text')
+              .write();
+
   linux-cp312-build:
     name: Build Linux cp312 manylinux_2_35 wheels
+    needs: scope
+    if: ${{ needs.scope.outputs.run_linux == 'true' }}
     runs-on: ubuntu-24.04
     container:
       image: quay.io/pypa/manylinux_2_28_x86_64
@@ -191,6 +251,8 @@ jobs:
 
   linux-isis10-cp313-build:
     name: Build ISIS 10 Linux cp313 manylinux_2_35 wheels
+    needs: scope
+    if: ${{ needs.scope.outputs.run_linux == 'true' }}
     runs-on: ubuntu-24.04
     container:
       image: quay.io/pypa/manylinux_2_28_x86_64
@@ -342,6 +404,8 @@ jobs:
 
   windows-cp312:
     name: Build Windows cp312 wheels
+    needs: scope
+    if: ${{ needs.scope.outputs.run_windows == 'true' }}
     runs-on: windows-2022
     timeout-minutes: 360
     permissions:
@@ -494,6 +558,8 @@ jobs:
 
   windows-isis10-cp313:
     name: Build ISIS 10 Windows cp313 wheels
+    needs: scope
+    if: ${{ needs.scope.outputs.run_windows == 'true' }}
     runs-on: windows-2022
     timeout-minutes: 360
     permissions:

@@ -14,6 +14,7 @@ Supported modes:
 Supported named profiles:
 
 - `pyisis-ubuntu26-isis9` — repository-dedicated Ubuntu 26.04 / ISIS 9 runner with 16-way builds and a 20G compiler cache
+- `pyisis-ubuntu26-isis10` — the same Ubuntu 26.04 host using the pre-provisioned `asp370` / ISIS 10 / CPython 3.13 environment
 - `self-hosted-http` — self-hosted HTTPS path for plain direct network access when unattended GitHub connectivity is stable enough
 - `self-hosted-watt` — current default self-hosted HTTPS path for WATT/Hosts-accelerated GitHub access
 - `self-hosted-ssh` — self-hosted SSH checkout fallback over `ssh.github.com:443`
@@ -63,6 +64,7 @@ Purpose:
 Characteristics:
 - triggered by push and workflow_dispatch
 - broad repository coverage
+- builds and smoke-tests both ISIS 9 (`asp360_new`) and ISIS 10 (`asp370`) on the dedicated self-hosted runner
 - binding inventory reporting and build/smoke start in parallel after runner resolution, so inventory logging does not delay the build path
 - not task-budget aware
 - not tied to one specific upstream class or one specific issue
@@ -84,6 +86,22 @@ Characteristics:
 - supports both reused local conda/ISIS environments and workflow-created micromamba environments
 - when the resolved mode is `self-hosted`, the reusable path now prefers a persistent cross-run local build cache plus incremental reconfigure/build instead of forcing a clean build every time
 - when `ccache` is available on the self-hosted machine or fallback conda prefix, it is configured automatically to accelerate repeated C++/pybind compilations
+
+## `wheels.yml`
+
+Use this as the platform packaging and release matrix, not as the daily PyISIS
+development gate.
+
+Routing policy:
+
+- ordinary changes under `src/`, `python/`, `CMakeLists.txt`, and general tests
+  are handled by `agent-pybind-pr-gate.yml` and do not trigger wheel builds
+- `ports/linux/` changes run only the ISIS 9/10 Linux manylinux lanes
+- `ports/windows/` changes run only the ISIS 9/10 Windows wheel lanes
+- shared packaging changes under `packaging/`, `tools/packaging/`,
+  `pyproject.toml`, and packaging/runtime workflow tests run both platforms
+- manual dispatch runs the complete Linux and Windows release matrix; publishing
+  remains restricted to `main`
 
 ## `agent-pybind-task-draft.yml` (deprecated legacy)
 
@@ -144,6 +162,8 @@ Purpose:
 Characteristics:
 - triggered by `pull_request`
 - gate/checker only; it does not dispatch tasks or comment on issues
+- same-repository, non-Dependabot PRs run separate ISIS 9 and ISIS 10 build/smoke lanes; the single physical runner executes them one at a time
+- fork and Dependabot PRs keep the existing GitHub-hosted ISIS 9 path and never execute their code on the persistent self-hosted machine
 - follows `.github/runner-config.yml` instead of pinning a runner profile, so the default PR gate can use the same `self-hosted-watt` profile as heavier build/test workflows
 - avoids full-history checkout for change summaries and metadata audit by reading the PR changed-file list once through the GitHub API
 - uses GitHub artifacts on `github-hosted`, but reuses the local build cache directly on `self-hosted` so the unit-test job does not pay artifact upload/download overhead
@@ -265,7 +285,8 @@ Key fields:
 - `profiles.<name>.ccache_max_size`: compiler-cache capacity limit
 - `profiles.<name>.isis_major`: selected ISIS major line
 - `profiles.<name>.python_abi`: selected CPython ABI
-- `fallback_conda_prefix`: shared fallback prefix for self-hosted environments
+- `profiles.<name>.fallback_conda_prefix`: optional per-profile conda/ISIS prefix, used by the dedicated ISIS 9 and ISIS 10 profiles
+- `fallback_conda_prefix`: shared fallback prefix when the selected profile does not override it
 
 Recommended usage:
 
@@ -286,7 +307,8 @@ Runner account: pyisis-runner
 Runner application: /opt/actions-runner-pyisis
 Runner HOME/cache root: /var/lib/pyisis-runner
 Conda prefix: /home/gengxun/miniconda3/envs/asp360_new
-Labels: self-hosted,linux,x64,pyisis,ubuntu-26.04,isis9
+ISIS 10 prefix: /home/gengxun/miniconda3/envs/asp370
+Labels: self-hosted,linux,x64,pyisis,ubuntu-26.04,isis9,isis10
 Build jobs: 16
 ccache max size: 20G
 Build-cache retention: 7 days
@@ -302,6 +324,15 @@ python scripts/check_self_hosted_runner.py \
   --expected-jobs 16 \
   --expected-isis-major 9 \
   --expected-python 3.12 \
+  --require-ccache \
+  --json
+
+conda activate asp370
+python scripts/check_self_hosted_runner.py \
+  --conda-prefix /home/gengxun/miniconda3/envs/asp370 \
+  --expected-jobs 16 \
+  --expected-isis-major 10 \
+  --expected-python 3.13 \
   --require-ccache \
   --json
 ```

@@ -15,8 +15,10 @@ readonly RUNNER_SHELL="/usr/sbin/nologin"
 readonly RUNNER_ROOT="/opt/actions-runner-pyisis"
 readonly RUNNER_CACHE="/var/lib/pyisis-runner/.cache/pyisis-gha"
 readonly CONDA_ROOT="/home/gengxun/miniconda3"
-readonly CONDA_ENV="/home/gengxun/miniconda3/envs/asp360_new"
-readonly CONDA_PYTHON="$CONDA_ENV/bin/python"
+readonly -a CONDA_ENVS=(
+  "/home/gengxun/miniconda3/envs/asp360_new"
+  "/home/gengxun/miniconda3/envs/asp370"
+)
 
 trap 'printf "Error: setup failed at line %s.\n" "$LINENO" >&2' ERR
 
@@ -32,9 +34,16 @@ for command_name in sudo getent id install setfacl stat; do
   require_command "$command_name"
 done
 
-for executable in /usr/sbin/useradd "$RUNNER_SHELL" "$CONDA_PYTHON"; do
+for executable in /usr/sbin/useradd "$RUNNER_SHELL"; do
   if [[ ! -x "$executable" ]]; then
     printf 'Error: required executable not found: %s\n' "$executable" >&2
+    exit 1
+  fi
+done
+for conda_env in "${CONDA_ENVS[@]}"; do
+  if [[ ! -x "$conda_env/bin/python" ]]; then
+    printf 'Error: required executable not found: %s\n' \
+      "$conda_env/bin/python" >&2
     exit 1
   fi
 done
@@ -78,10 +87,14 @@ sudo install -d -o "$RUNNER_USER" -g "$RUNNER_GROUP" \
 
 sudo setfacl -m "u:$RUNNER_USER:x" \
   /home/gengxun "$CONDA_ROOT" "$CONDA_ROOT/envs"
-sudo setfacl -R -m "u:$RUNNER_USER:rX" "$CONDA_ENV"
+for conda_env in "${CONDA_ENVS[@]}"; do
+  sudo setfacl -R -m "u:$RUNNER_USER:rX" "$conda_env"
+done
 
 printf '\nVerifying runner account and filesystem access...\n'
 getent passwd "$RUNNER_USER"
 sudo stat -c '%U:%G %a %n' "$RUNNER_ROOT" "$RUNNER_HOME" "$RUNNER_CACHE"
-sudo -u "$RUNNER_USER" "$CONDA_PYTHON" --version
+for conda_env in "${CONDA_ENVS[@]}"; do
+  sudo -u "$RUNNER_USER" "$conda_env/bin/python" --version
+done
 printf 'Runner account setup completed successfully.\n'

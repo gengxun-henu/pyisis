@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-07-23
+Last Modified: 2026-08-02
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -59,6 +59,7 @@ Updated: 2026-06-10  Geng Xun aligned classic SIFT preset max_features expectati
 Updated: 2026-06-18  Geng Xun skipped shell wrapper execution when only WSL bash is available on Windows.
 Updated: 2026-06-18  Geng Xun made deep matcher path expectations portable on Windows.
 Updated: 2026-07-23  Geng Xun moved focused image-match preset coverage into a dedicated module.
+Updated: 2026-08-02  Geng Xun aligned the balanced-profile matcher regression with the established BF default.
 """
 
 from __future__ import annotations
@@ -881,7 +882,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("PARAMETER_PROFILE=balanced", result.stdout)
-        self.assertIn("MATCHER_METHOD=flann", result.stdout)
+        self.assertIn("MATCHER_METHOD=bf", result.stdout)
         self.assertIn("NUM_WORKER_PARALLEL_CPU=8", result.stdout)
         self.assertIn("ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION=1", result.stdout)
         self.assertIn("LOW_RESOLUTION_LEVEL=3", result.stdout)

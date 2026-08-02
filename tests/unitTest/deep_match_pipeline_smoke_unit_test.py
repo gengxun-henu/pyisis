@@ -2,9 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-05-20
-Last Modified: 2026-06-18
+Last Modified: 2026-08-02
 Updated: 2026-05-20  Geng Xun added stage-8 smoke coverage for deep-match mode documentation and import-summary wrapper structure.
 Updated: 2026-06-18  Geng Xun skipped shell wrapper execution when only WSL bash is available on Windows.
+Updated: 2026-08-02  Geng Xun restored Chinese README coverage for the recommended deep-match workflows.
 """
 
 from __future__ import annotations

@@ -760,6 +760,7 @@ if(WIN32)
   string(REPLACE ";" "\\;" _test_path_escaped "${_test_path}")
   set(_python_test_environment
       "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python"
+      "ISIS_PYBIND_BUILD_DIR=${CMAKE_CURRENT_BINARY_DIR}/python"
       "PATH=${_test_path_escaped}"
       "ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
 else()
@@ -769,6 +770,7 @@ else()
   endif()
   set(_python_test_environment
       "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python"
+      "ISIS_PYBIND_BUILD_DIR=${CMAKE_CURRENT_BINARY_DIR}/python"
       "LD_LIBRARY_PATH=${_test_ld_library_path}"
       "ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
 endif()

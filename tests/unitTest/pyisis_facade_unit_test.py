@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-18
+Last Modified: 2026-08-02
 Updated: 2026-06-18  Geng Xun added facade API coverage for runtime configuration, cube context management, and camera helpers.
 Updated: 2026-06-18  Geng Xun added ISISDATA status coverage for missing and minimal kernel data roots.
 Updated: 2026-06-18  Geng Xun fixed facade test imports to prefer built extension packages over stale site installs.
+Updated: 2026-08-02  Geng Xun made facade imports honor the active CTest build directory.
 """
 
 from __future__ import annotations
@@ -21,11 +22,16 @@ import unittest
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SOURCE_PYTHON_DIR = PROJECT_ROOT / "python"
 PACKAGE_SEARCH_DIRS = [
+    Path(os.environ["ISIS_PYBIND_BUILD_DIR"])
+    if os.environ.get("ISIS_PYBIND_BUILD_DIR")
+    else None,
     PROJECT_ROOT / "build" / "windows" / "pyisis-build" / "python",
     PROJECT_ROOT / "build" / "python",
     SOURCE_PYTHON_DIR,
 ]
 for package_dir in reversed(PACKAGE_SEARCH_DIRS):
+    if package_dir is None:
+        continue
     package_dir_text = str(package_dir)
     if not package_dir.is_dir():
         continue

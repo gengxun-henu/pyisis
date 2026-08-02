@@ -3,17 +3,24 @@ Unit tests for ISIS LineEquation bindings
 
 Author: Geng Xun
 Created: 2026-03-30
-Last Modified: 2026-04-03
+Last Modified: 2026-08-02
 Updated: 2026-04-03  Geng Xun expanded LineEquation regression coverage for constructors, geometry, and failure paths.
+Updated: 2026-08-02  Geng Xun made imports honor the active CTest build directory.
 """
 
+import os
 import unittest
 import sys
 from pathlib import Path
 
 # Add build directory to path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-BUILD_PYTHON_DIR = PROJECT_ROOT / "build" / "python"
+BUILD_PYTHON_DIR = Path(
+    os.environ.get(
+        "ISIS_PYBIND_BUILD_DIR",
+        str(PROJECT_ROOT / "build" / "python"),
+    )
+)
 if BUILD_PYTHON_DIR.exists():
     sys.path.insert(0, str(BUILD_PYTHON_DIR))
 

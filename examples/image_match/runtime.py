@@ -1,4 +1,9 @@
-"""Runtime bootstrap helpers for standalone example scripts."""
+"""Runtime bootstrap helpers for standalone example scripts.
+
+Author: Geng Xun
+Created: 2026-04-16
+Updated: 2026-08-02  Geng Xun made runtime imports honor the active CTest build directory.
+"""
 
 from __future__ import annotations
 
@@ -8,7 +13,12 @@ import sys
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-BUILD_PYTHON_DIR = PROJECT_ROOT / "build" / "python"
+BUILD_PYTHON_DIR = Path(
+    os.environ.get(
+        "ISIS_PYBIND_BUILD_DIR",
+        str(PROJECT_ROOT / "build" / "python"),
+    )
+)
 WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT / "tests" / "data" / "isisdata" / "mockup"
 
 

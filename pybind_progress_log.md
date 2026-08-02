@@ -10,9 +10,9 @@
   - The executable runner remains private; no public generic `run_app()` or
     per-APP wrapper family was introduced.
 - Added the Windows APP manifest entry and a real
-  `csv2table -> tabledump` batch-smoke round trip. Local JSON, ordering, and
-  script-structure checks pass; hosted Windows compilation and execution remain
-  pending until the branch is published and GitHub Actions actually runs.
+  `csv2table -> tabledump` batch-smoke round trip. GitHub Actions run
+  `30739433903` built and installed all 150 allowlisted APPs and passed the
+  hosted Windows behavior smoke.
 - Closed the ISIS 10 application-function inventory:
   - `csv2table.h`: `bound`.
   - `ocams2isis.h` and `eisstitch.h`: `native-app`; raw `UserInterface`
@@ -25,6 +25,8 @@
     `csv2table` is absent from the ISIS 9 public surface.
   - Windows manifest/script structure: 2 tests passed, 1 skipped because
     PowerShell is unavailable on the Linux host.
+  - Hosted Windows APP batch: 150 executables built and smoke-tested; the
+    `csv2table -> tabledump` behavior round trip passed.
 
 ## 2026-05-03
 

@@ -7,6 +7,7 @@ Updated: 2026-08-02  Geng Xun added private ISIS APP runner contract coverage.
 Updated: 2026-08-02  Geng Xun added csv2table parameter, dispatch, and export coverage.
 Updated: 2026-08-02  Geng Xun added Linux ISIS 10 native table round-trip coverage.
 Updated: 2026-08-02  Geng Xun covered ISIS_PREFIX-based application XML lookup.
+Updated: 2026-08-02  Geng Xun fixed direct-file test support imports used by CI.
 """
 
 from __future__ import annotations
@@ -38,7 +39,7 @@ try:
         open_cube,
         temporary_directory,
     )
-except ModuleNotFoundError:
+except ImportError:
     UNIT_TEST_DIR = Path(__file__).resolve().parent
     if str(UNIT_TEST_DIR) not in sys.path:
         sys.path.insert(0, str(UNIT_TEST_DIR))

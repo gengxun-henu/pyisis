@@ -106,8 +106,8 @@ ISIS 10 声明、导出库、分类、代码改动、ISIS 9 测试和 ISIS 10 �
 - `ocams2isis` 与 `eisstitch` 采用原生 ISIS APP 执行边界，不再作为独立
   Python 绑定候选。
 
-Windows 清单和行为烟测已就绪，但 hosted Windows 编译和运行结果必须等
-GitHub Actions 实际执行后再记录为通过。
+Windows 清单和行为烟测已由 GitHub Actions run `30739433903` 验证：
+150 个 APP 完成编译安装，`csv2table -> tabledump` 行为烟测通过。
 
 ### 明确排除
 

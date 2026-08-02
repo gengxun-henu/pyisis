@@ -1,7 +1,7 @@
 # Cross-Platform `csv2table` Python Facade Design
 
 **Date:** 2026-08-02
-**Status:** Implemented; hosted Windows validation pending
+**Status:** Implemented and verified on hosted Windows
 **Scope:** ISIS 10 only
 
 ## Context

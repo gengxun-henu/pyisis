@@ -4,10 +4,12 @@ Author: Geng Xun
 Created: 2026-06-18
 Last Modified: 2026-06-18
 Updated: 2026-06-18  Geng Xun added guard coverage for the Windows ISIS app smoke-test harness.
+Updated: 2026-08-02  Geng Xun added csv2table manifest and behavior-smoke coverage.
 """
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 import shutil
 import subprocess
@@ -16,9 +18,24 @@ import unittest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SMOKE_SCRIPT = PROJECT_ROOT / "ports" / "windows" / "isis" / "test_isis_apps_smoke.ps1"
+BATCH_SMOKE_SCRIPT = (
+    PROJECT_ROOT / "ports" / "windows" / "isis" / "test_isis_app_batch_smoke.ps1"
+)
+MANIFEST_PATH = (
+    PROJECT_ROOT / "ports" / "windows" / "isis" / "windows-app-manifest.json"
+)
 
 
 class WindowsIsisAppSmokeScriptUnitTest(unittest.TestCase):
+    def test_csv2table_is_allowlisted_and_behavior_smoked(self):
+        manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+        apps = {item["name"]: item for item in manifest["apps"]}
+        self.assertIn("csv2table", apps)
+
+        script_text = BATCH_SMOKE_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn('Invoke-IsisApp "csv2table"', script_text)
+        self.assertIn('Invoke-IsisApp "tabledump"', script_text)
+
     def test_script_exists_and_documents_core_commands(self):
         self.assertTrue(SMOKE_SCRIPT.exists(), f"missing Windows ISIS app smoke script: {SMOKE_SCRIPT}")
 

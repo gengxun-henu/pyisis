@@ -210,6 +210,24 @@ distribution as shown above; pip resolves the included local dependencies.
 
 You do not need to select or install the dependency wheels individually.
 
+ISIS 10 builds expose one targeted application facade for attaching CSV data
+as a typed ISIS table:
+
+```python
+import isis_pybind as ip
+
+ip.csv2table(
+    "measurements.csv",
+    "target.cub",
+    "Measurements",
+    coltypes=["Double", "Text"],
+)
+```
+
+The same Python call uses the ISIS library directly on Linux and the packaged
+`csv2table.exe` on Windows. It is not exported by ISIS 9 builds, and the
+underlying application runner remains private.
+
 ## Scope and limitations
 
 PyISIS is a curated Python interface, not a complete Python mirror of every

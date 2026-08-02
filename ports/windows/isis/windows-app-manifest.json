@@ -810,6 +810,29 @@
       "release_component": "apps-base"
     },
     {
+      "name": "csv2table",
+      "component": "apps-base",
+      "source_dir": "isis/src/base/apps/csv2table",
+      "xml": "isis/src/base/apps/csv2table/csv2table.xml",
+      "smoke_tier": "cube",
+      "selection_wave": "W4-medium",
+      "versions": {
+        "9.0.0": {
+          "status": "supported",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        },
+        "10.0.0": {
+          "status": "experimental",
+          "build_status": "implementation_ready",
+          "smoke_status": "pending",
+          "linux_comparison": "pending"
+        }
+      },
+      "release_component": "apps-base"
+    },
+    {
       "name": "ctxcal",
       "component": "apps-mro",
       "source_dir": "isis/src/mro/apps/ctxcal",

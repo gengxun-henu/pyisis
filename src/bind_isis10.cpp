@@ -8,8 +8,10 @@
 // - reference/upstream_isis/10.0.0/isis/src/osirisrex/objs/OsirisRexOcamsCamera/OsirisRexOcamsOpenCVDistortionMap.h
 // - reference/upstream_isis/10.0.0/isis/src/base/objs/ImageIoHandler/ImageIoHandler.h
 // - reference/upstream_isis/10.0.0/isis/src/base/objs/ImageIoHandler/GdalIoHandler.h
+// - reference/upstream_isis/10.0.0/isis/src/base/apps/csv2table/csv2table.h
 // Source classes: IProj, Chandrayaan2OhrcCamera, Chandrayaan2TmcCamera,
 // OsirisRexOcamsOpenCVDistortionMap, ImageIoHandler, GdalIoHandler
+// Source function: csv2table
 // Source header author(s): Adam Paquette for IProj; Kris Becker for
 // OsirisRexOcamsOpenCVDistortionMap; Jai Rideout and Steven Lambright for
 // ImageIoHandler; Adam Paquette for GdalIoHandler; not explicitly stated for
@@ -19,7 +21,8 @@
 // Updated: 2026-07-23  Geng Xun added the first ISIS 10-only non-GUI binding batch.
 // Updated: 2026-07-24  Geng Xun added the ISIS 10-only OCAMS OpenCV distortion model.
 // Updated: 2026-07-24  Geng Xun added safe ISIS 10 GDAL image-I/O bindings.
-// Purpose: Expose stable ISIS 10-only projection, camera, distortion, and image-I/O APIs.
+// Updated: 2026-08-02  Geng Xun added the Linux ISIS 10 csv2table native adapter.
+// Purpose: Expose stable ISIS 10-only projection, camera, distortion, image-I/O, and table APIs.
 
 #include <filesystem>
 #include <memory>
@@ -32,11 +35,18 @@
 
 #ifdef PYISIS_ISIS10_API
 #include <QList>
+#ifndef _WIN32
+#include <QVector>
+#endif
 
 #include "CameraDistortionMap.h"
 #include "Chandrayaan2OhrcCamera.h"
 #include "Chandrayaan2TmcCamera.h"
 #include "Cube.h"
+#ifndef _WIN32
+#include "csv2table.h"
+#include "FileName.h"
+#endif
 #include "GdalIoHandler.h"
 #include "helpers.h"
 #include "ImageIoHandler.h"
@@ -46,6 +56,9 @@
 #include "PixelType.h"
 #include "Pvl.h"
 #include "TProjection.h"
+#ifndef _WIN32
+#include "UserInterface.h"
+#endif
 #endif
 
 namespace py = pybind11;
@@ -113,11 +126,33 @@ void setImageIoVirtualBands(
   handler.setVirtualBands(bands.empty() ? nullptr : &bands);
 }
 
+#ifndef _WIN32
+void runCsv2TableNative(const std::vector<std::string> &arguments) {
+  QVector<QString> uiArguments;
+  uiArguments.reserve(static_cast<int>(arguments.size()));
+  for (const std::string &argument : arguments) {
+    uiArguments.append(stdStringToQString(argument));
+  }
+
+  const QString xmlPath =
+      Isis::FileName("$ISIS_PREFIX/bin/xml/csv2table.xml").expanded();
+  Isis::UserInterface ui(xmlPath, uiArguments);
+  Isis::csv2table(ui, nullptr);
+}
+#endif
+
 }  // namespace
 #endif
 
 void bind_isis10(py::module_ &m) {
 #ifdef PYISIS_ISIS10_API
+#ifndef _WIN32
+  m.def("_csv2table_native",
+        &runCsv2TableNative,
+        py::arg("arguments"),
+        "Run the ISIS 10 csv2table implementation with normalized UI arguments.");
+#endif
+
   py::class_<Isis::ImageIoHandler>(m, "ImageIoHandler")
       .def("read", &Isis::ImageIoHandler::read, py::arg("buffer"))
       .def("write", &Isis::ImageIoHandler::write, py::arg("buffer"))

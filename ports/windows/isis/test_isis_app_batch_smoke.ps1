@@ -43,8 +43,8 @@ $appNames = @(
         ForEach-Object { $_.name } |
         Sort-Object -Unique
 )
-if ($appNames.Count -lt 149) {
-    Fail "expected at least 149 allowlisted APPs, found $($appNames.Count)"
+if ($appNames.Count -lt 150) {
+    Fail "expected at least 150 allowlisted APPs, found $($appNames.Count)"
 }
 
 & "$PSScriptRoot\verify_isis_prefix.ps1" `
@@ -141,6 +141,21 @@ try {
         "from=$InputCube", "to=$seedCube", "sample=1", "line=1",
         "nsamples=32", "nlines=32", "overhang=shrink"
     ) "cube-crop.log" $seedCube
+
+    $csvInput = Join-Path $WorkDir "csv2table-input.csv"
+    $tableDump = Join-Path $WorkDir "csv2table-output.txt"
+    Set-Content -LiteralPath $csvInput -Encoding Ascii -Value @(
+        "Value,Name",
+        "1.5,M",
+        "2.5,P"
+    )
+    Invoke-IsisApp "csv2table" @(
+        "csv=$csvInput", "to=$seedCube", "tablename=PyisisCsv2Table",
+        "coltypes=(Double,Text)"
+    ) "cube-csv2table.log"
+    Invoke-IsisApp "tabledump" @(
+        "from=$seedCube", "name=PyisisCsv2Table", "to=$tableDump"
+    ) "cube-csv2table-tabledump.log" $tableDump
 
     $labelOutput = Join-Path $WorkDir "label.txt"
     Invoke-IsisApp "catlab" @("from=$seedCube", "to=$labelOutput", "append=false") "cube-catlab.log" $labelOutput

@@ -1,5 +1,31 @@
 # Pybind Progress Log
 
+## 2026-08-02
+
+- Added the ISIS 10-only public `isis_pybind.csv2table(...)` facade:
+  - Linux constructs a private `UserInterface` from normalized arguments and
+    calls the exported `Isis::csv2table(...)` implementation in process.
+  - Windows resolves and invokes `csv2table.exe` with an argument list,
+    `shell=False`, captured diagnostics, and no GUI dependency.
+  - The executable runner remains private; no public generic `run_app()` or
+    per-APP wrapper family was introduced.
+- Added the Windows APP manifest entry and a real
+  `csv2table -> tabledump` batch-smoke round trip. Local JSON, ordering, and
+  script-structure checks pass; hosted Windows compilation and execution remain
+  pending until the branch is published and GitHub Actions actually runs.
+- Closed the ISIS 10 application-function inventory:
+  - `csv2table.h`: `bound`.
+  - `ocams2isis.h` and `eisstitch.h`: `native-app`; raw `UserInterface`
+    bindings are intentionally excluded.
+- Current focused validation:
+  - ISIS 10 facade and Linux table round trip: 11 tests passed.
+  - ISIS 10 smoke import: passed.
+  - ISIS 9 shared-source build and smoke import: passed; the facade module ran
+    9 applicable tests with 2 ISIS 10-only checks skipped, and confirmed
+    `csv2table` is absent from the ISIS 9 public surface.
+  - Windows manifest/script structure: 2 tests passed, 1 skipped because
+    PowerShell is unavailable on the Linux host.
+
 ## 2026-05-03
 
 - `IException` static helper follow-up completed:

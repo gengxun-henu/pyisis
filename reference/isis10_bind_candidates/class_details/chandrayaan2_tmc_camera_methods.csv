@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Chandrayaan2TmcCamera,Chandrayaan-2,isis/src/chandrayaan2/objs/Chandrayaan2TmcCamera/Chandrayaan2TmcCamera.h,src/bind_isis10.cpp,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,已绑定；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式
+Chandrayaan2TmcCamera,Chandrayaan-2,isis/src/chandrayaan2/objs/Chandrayaan2TmcCamera/Chandrayaan2TmcCamera.h,src/bind_isis10.cpp,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,已绑定并完成 ISIS 9 缺席/ISIS 10 继承验证；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Chandrayaan2TmcCamera,isis_pybind.Chandrayaan2TmcCamera,Y,ISIS 10-only binding; tested against the target ISIS 10 environment

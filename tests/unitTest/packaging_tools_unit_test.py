@@ -28,6 +28,7 @@ Updated: 2026-07-26  Geng Xun covered exact-subset Windows APP wave promotion.
 Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
 Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
 Updated: 2026-08-05  Geng Xun covered complete Windows dependency-prefix isolation.
+Updated: 2026-08-05  Geng Xun covered the Windows 11 runner readiness contract.
 """
 
 from __future__ import annotations
@@ -53,6 +54,7 @@ WINDOWS_ISIS_APP_PRIORITY_SUMMARY = WINDOWS_ISIS_DIR / "windows-app-priority.md"
 WINDOWS_ISIS_APP_PROMOTER = WINDOWS_ISIS_DIR / "promote_windows_app_wave.py"
 UNIT_TEST_SUPPORT = PROJECT_ROOT / "tests" / "unitTest" / "_unit_test_support.py"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
+WINDOWS_RUNNER_CHECK = PROJECT_ROOT / "tools" / "packaging" / "check_windows_runner.ps1"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
 TEST_TESTPYPI_INSTALL_SCRIPT = (
     PROJECT_ROOT / "tools" / "packaging" / "test_testpypi_install.py"
@@ -84,6 +86,22 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn('$DistributionName.Replace("-", "_")', script)
         self.assertIn("--distribution-name $RuntimeDistribution", script)
         self.assertIn("--package-version $PackageVersion", script)
+
+    def test_windows_runner_readiness_script_checks_required_host_tools(self):
+        self.assertTrue(WINDOWS_RUNNER_CHECK.is_file())
+
+        script = WINDOWS_RUNNER_CHECK.read_text(encoding="utf-8")
+        for required in (
+            "Windows 11",
+            "pwsh",
+            "conda",
+            "activate_msvc.ps1",
+            "dumpbin",
+            "cmake",
+            "ninja",
+            "git",
+        ):
+            self.assertIn(required, script)
 
     def test_linux_build_wheels_script_runs_runtime_and_main_wheel_steps(self):
         self.assertTrue(LINUX_BUILD_WHEELS_SCRIPT.is_file())

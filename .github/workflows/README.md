@@ -369,6 +369,53 @@ runner. Other collaborators, forks, and Dependabot resolve to `github-hosted`;
 never replace this rule with
 `pull_request_target` plus execution of PR code.
 
+## Repository-dedicated Windows 11 wheel runner operations
+
+The Windows wheel matrix uses this repository-level runner for trusted
+same-repository pull requests opened by `gengxun-henu` and for manual runs
+whose `windows_runner` input remains `windows11-self-hosted`:
+
+```text
+Repository: https://github.com/gengxun-henu/pyisis
+Runner name: pyisis-windows11
+Runner application: D:\actions-runner-pyisis
+PowerShell 7: D:\tools\powershell7\pwsh.exe
+Miniconda: C:\Users\gx\miniconda3
+Micromamba: D:\tools\micromamba\micromamba.exe
+Labels: self-hosted,Windows,X64,pyisis,windows-11
+```
+
+Pull requests from forks, Dependabot, or any actor other than
+`gengxun-henu` are forced onto `windows-2022`. Manual maintainers can also
+select `windows-2022` when the local workstation is offline. Do not weaken the
+repository-and-actor checks or use `pull_request_target` to run PR code.
+
+Run the readiness check from PowerShell 7 after the Conda build environment is
+active:
+
+```powershell
+.\tools\packaging\check_windows_runner.ps1 -ExpectedWindows11
+```
+
+Micromamba remains installed for diagnostics, but the Windows wheel jobs use
+`conda-incubator/setup-miniconda` with Conda's classic solver. On this host,
+the active endpoint-security products allow Conda to install the UCRT package
+but prevent Micromamba from creating `ucrtbase.dll` while extracting that same
+package. Do not disable endpoint protection to work around this host-specific
+restriction.
+
+Inspect the installed runner service with:
+
+```powershell
+Get-Service 'actions.runner.*pyisis*'
+```
+
+Runner registration tokens expire quickly. Obtain one only during
+registration, keep it in process memory, clear the variable afterward, and
+never write it to Git, scripts, console transcripts, workflow logs, or shell
+profiles. The runner service uses machine-level `PATH`; normal workflow jobs
+must not change runner registration or service configuration.
+
 ## Migration note for self-hosted HTTPS checkout
 
 The current migration strategy is intentionally conservative:

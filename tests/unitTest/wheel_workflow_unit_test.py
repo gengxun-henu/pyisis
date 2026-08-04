@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-02
+Last Modified: 2026-08-05
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
@@ -21,6 +21,7 @@ Updated: 2026-07-25  Geng Xun isolated versioned Windows prefix cache inputs and
 Updated: 2026-07-25  Geng Xun aligned the four-matrix workflow with the rc2 releases.
 Updated: 2026-08-02  Geng Xun separated daily PyISIS checks from platform release matrices.
 Updated: 2026-08-02  Geng Xun added Ubuntu 26.04 wheel installation coverage.
+Updated: 2026-08-05  Geng Xun covered trusted Windows 11 runner routing and readiness.
 """
 
 from __future__ import annotations
@@ -84,12 +85,38 @@ class WheelWorkflowUnitTest(unittest.TestCase):
 
     def test_workflow_uses_windows_runner_and_isis_prefix_resolution(self):
         workflow = self._workflow_text()
+        scope = self._job_block(workflow, "scope")
+        windows = self._job_block(workflow, "windows-cp312")
+        windows10 = self._job_block(workflow, "windows-isis10-cp313")
 
-        self.assertIn("runs-on: windows-2022", workflow)
+        self.assertIn("windows_runner:", workflow)
+        self.assertIn("windows11-self-hosted", workflow)
+        self.assertIn("windows-2022", workflow)
+        self.assertIn("windows_runs_on_json", scope)
+        self.assertIn("windows_is_self_hosted", scope)
+        self.assertIn(
+            "context.payload.pull_request.head.repo.full_name ===",
+            scope,
+        )
+        self.assertIn("context.actor === 'gengxun-henu'", scope)
+        self.assertIn(
+            '["self-hosted", "Windows", "X64", "pyisis", "windows-11"]',
+            scope,
+        )
+        self.assertNotIn("pull_request_target:", workflow)
+        for job in (windows, windows10):
+            self.assertIn(
+                "runs-on: ${{ fromJSON(needs.scope.outputs.windows_runs_on_json) }}",
+                job,
+            )
+            self.assertIn("check_windows_runner.ps1", job)
         self.assertIn("shell: pwsh", workflow)
         self.assertIn("actions/checkout@v7", workflow)
         self.assertIn("actions/setup-python@v7", workflow)
-        self.assertIn("mamba-org/setup-micromamba@v3", workflow)
+        for job in (windows, windows10):
+            self.assertIn("conda-incubator/setup-miniconda@v4", job)
+            self.assertIn("conda-solver: classic", job)
+            self.assertNotIn("mamba-org/setup-micromamba", job)
         self.assertIn("ports\\windows\\activate_msvc.ps1", workflow)
         self.assertIn("ports\\windows\\isis\\verify_isis_prefix.ps1", workflow)
         self.assertIn("PYISIS_WINDOWS_ISIS_PREFIX", workflow)
@@ -113,7 +140,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("actions/cache/restore@v6", workflow)
         self.assertIn("id: windows-isis-prefix-cache", workflow)
         self.assertIn(
-            "windows-2022-isis-9.0.0-prefix-v1-${{ hashFiles(",
+            "windows-x64-isis-9.0.0-prefix-v2-${{ hashFiles(",
             workflow,
         )
         isis9_cache = workflow.split(
@@ -160,12 +187,13 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("actions/cache/save@v6", workflow)
         self.assertIn("github.event_name == 'workflow_dispatch'", workflow)
         self.assertIn("github.ref == 'refs/heads/main'", workflow)
-        self.assertEqual(
+        self.assertGreaterEqual(
             workflow.count(
                 "github.event.pull_request.head.repo.full_name == github.repository"
             ),
             2,
         )
+        self.assertGreaterEqual(workflow.count("github.actor == 'gengxun-henu'"), 2)
         self.assertIn(
             "steps.windows-isis-prefix-cache.outputs.cache-primary-key",
             workflow,

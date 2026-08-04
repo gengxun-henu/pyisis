@@ -49,6 +49,10 @@ SYSTEM_DLL_NAMES = {
     "ws2_32.dll",
 }
 DEPENDENCY_NAME_RE = re.compile(r"^[A-Za-z0-9_.+\-]+\.dll$", re.IGNORECASE)
+FORWARDED_DLL_RE = re.compile(
+    r"\b([A-Za-z0-9_.+\-]+\.dll)\.",
+    re.IGNORECASE,
+)
 
 RUNTIME_PATTERNS = (
     "IsisPreferences",
@@ -132,6 +136,29 @@ def _dumpbin_dependencies(binary: Path) -> tuple[str, ...]:
     return tuple(dependencies)
 
 
+def _dumpbin_forwarded_dependencies(binary: Path) -> tuple[str, ...]:
+    result = subprocess.run(
+        ["dumpbin", "/EXPORTS", str(binary)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return ()
+
+    dependencies = []
+    seen = set()
+    for match in FORWARDED_DLL_RE.finditer(result.stdout):
+        name = match.group(1)
+        normalized = name.lower()
+        if normalized.startswith(SYSTEM_DLL_PREFIXES) or normalized in SYSTEM_DLL_NAMES:
+            continue
+        if normalized not in seen:
+            seen.add(normalized)
+            dependencies.append(name)
+    return tuple(dependencies)
+
+
 def _copy_dependency_closure(
     seed_files: tuple[Path, ...],
     dependency_prefixes: tuple[Path, ...],
@@ -148,7 +175,10 @@ def _copy_dependency_closure(
             continue
         visited.add(binary_key)
 
-        for dependency_name in _dumpbin_dependencies(binary):
+        dependencies = dict.fromkeys(
+            (*_dumpbin_dependencies(binary), *_dumpbin_forwarded_dependencies(binary))
+        )
+        for dependency_name in dependencies:
             resolved = index.get(dependency_name.lower())
             if resolved is None:
                 continue

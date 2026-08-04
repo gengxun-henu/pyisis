@@ -12,3 +12,10 @@ import pyisis_runtime
 print(pyisis_runtime.prefix())
 print(pyisis_runtime.dll_directories())
 ```
+
+## Dependency closure
+
+The generated Windows runtime wheel includes the recursive closure of normal PE
+imports and PE export-forwarder targets. Forwarder DLLs such as `libblas.dll`,
+`libcblas.dll`, and `liblapack.dll` therefore also bring in their implementation
+DLL, such as `openblas.dll`.

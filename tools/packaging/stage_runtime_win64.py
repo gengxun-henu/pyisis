@@ -175,7 +175,10 @@ def _copy_dependency_closure(
             continue
         visited.add(binary_key)
 
-        for dependency_name in _dumpbin_dependencies(binary):
+        dependencies = dict.fromkeys(
+            (*_dumpbin_dependencies(binary), *_dumpbin_forwarded_dependencies(binary))
+        )
+        for dependency_name in dependencies:
             resolved = index.get(dependency_name.lower())
             if resolved is None:
                 continue

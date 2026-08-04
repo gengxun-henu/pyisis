@@ -196,7 +196,18 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 return ()
 
             stage = temp / "runtime-stage"
-            with mock.patch.object(stage_module, "_dumpbin_dependencies", fake_dumpbin):
+            with (
+                mock.patch.object(
+                    stage_module,
+                    "_dumpbin_dependencies",
+                    fake_dumpbin,
+                ),
+                mock.patch.object(
+                    stage_module,
+                    "_dumpbin_forwarded_dependencies",
+                    return_value=(),
+                ),
+            ):
                 stage_module.stage_runtime(
                     prefix,
                     stage,
@@ -208,6 +219,88 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             self.assertTrue((vendor / "Library" / "bin" / "needed.dll").is_file())
             self.assertTrue((vendor / "bin" / "cspice.dll").is_file())
             self.assertFalse((vendor / "Library" / "bin" / "unused.dll").exists())
+
+    def test_stage_runtime_closure_copies_forwarded_dependencies_for_both_windows_runtimes(
+        self,
+    ):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_win64_forwarder_closure",
+            WINDOWS_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        with TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            prefix = temp / "isis-prefix"
+            (prefix / "bin").mkdir(parents=True)
+            (prefix / "lib").mkdir(parents=True)
+            (prefix / "IsisPreferences").write_text(
+                "Group = DataDirectory",
+                encoding="utf-8",
+            )
+            (prefix / "lib" / "isis.dll").write_bytes(b"isis")
+            (prefix / "lib" / "Camera.plugin").write_bytes(b"camera")
+
+            dep_prefix = temp / "dep-prefix"
+            dep_bin = dep_prefix / "Library" / "bin"
+            dep_bin.mkdir(parents=True)
+            (dep_bin / "libcblas.dll").write_bytes(b"cblas-forwarder")
+            (dep_bin / "openblas.dll").write_bytes(b"openblas")
+            (dep_bin / "vcruntime140.dll").write_bytes(b"vcruntime")
+
+            def fake_dependencies(binary):
+                if binary.name == "isis.dll":
+                    return ("libcblas.dll",)
+                if binary.name == "openblas.dll":
+                    return ("vcruntime140.dll",)
+                return ()
+
+            def fake_forwarded_dependencies(binary):
+                return ("openblas.dll",) if binary.name == "libcblas.dll" else ()
+
+            releases = (
+                ("usgs-pyisis-runtime-win64", "1.3.0rc2"),
+                ("usgs-pyisis-runtime-isis10-win64", "1.4.0rc2"),
+            )
+            for distribution_name, package_version in releases:
+                with self.subTest(distribution_name=distribution_name):
+                    stage = temp / distribution_name
+                    with (
+                        mock.patch.object(
+                            stage_module,
+                            "_dumpbin_dependencies",
+                            fake_dependencies,
+                        ),
+                        mock.patch.object(
+                            stage_module,
+                            "_dumpbin_forwarded_dependencies",
+                            fake_forwarded_dependencies,
+                        ),
+                    ):
+                        stage_module.stage_runtime(
+                            prefix,
+                            stage,
+                            (dep_prefix,),
+                            dependency_copy_mode="closure",
+                            distribution_name=distribution_name,
+                            package_version=package_version,
+                        )
+
+                    vendor_bin = (
+                        stage
+                        / "src"
+                        / "pyisis_runtime"
+                        / "vendor"
+                        / "isis"
+                        / "Library"
+                        / "bin"
+                    )
+                    self.assertTrue((vendor_bin / "libcblas.dll").is_file())
+                    self.assertTrue((vendor_bin / "openblas.dll").is_file())
+                    self.assertTrue((vendor_bin / "vcruntime140.dll").is_file())
 
     def test_stage_linux_runtime_copies_shared_libraries_plugins_and_resources(self):
         with TemporaryDirectory() as temp_dir:

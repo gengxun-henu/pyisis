@@ -169,6 +169,14 @@ Core requirements:
 
 - Before publish, merge, cleanup, or PR work, start with
   `git status --short --branch`.
+- Agents are authorized to run `git add`, `git commit`, and `git push`
+  autonomously for completed in-scope work without requesting separate user
+  confirmation. Stage only task-related files, use a descriptive commit
+  message, and push the intended current branch after relevant validation.
+- This standing authorization does not permit force-pushing, rewriting shared
+  history, deleting remote branches or tags, bypassing required checks, or
+  including unrelated local changes. Those operations still require explicit
+  user direction.
 - Preserve unrelated local changes. Do not revert, delete, or reformat files
   outside the task scope.
 - For larger features, benchmarks, or design-heavy work, prefer an isolated

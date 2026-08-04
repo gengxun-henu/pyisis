@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-26
+Last Modified: 2026-08-05
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -27,6 +27,7 @@ Updated: 2026-07-26  Geng Xun covered the complete 48-APP W1 promotion.
 Updated: 2026-07-26  Geng Xun covered exact-subset Windows APP wave promotion.
 Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
 Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
+Updated: 2026-08-05  Geng Xun covered complete Windows dependency-prefix isolation.
 """
 
 from __future__ import annotations
@@ -587,12 +588,14 @@ class PackagingToolsUnitTest(unittest.TestCase):
         spec.loader.exec_module(module)
 
         runtime_root = PROJECT_ROOT / "build" / "windows" / "isis-prefix"
-        dependency_root = PROJECT_ROOT / "fake-conda"
+        conda_root = PROJECT_ROOT / "fake-conda"
+        windows_dependency_root = PROJECT_ROOT / "windows-dependencies"
         safe_path = PROJECT_ROOT / "safe-bin"
         path = module.os.pathsep.join(
             [
                 str(runtime_root / "bin"),
-                str(dependency_root / "Library" / "bin"),
+                str(conda_root / "Library" / "bin"),
+                str(windows_dependency_root / "Library" / "bin"),
                 str(safe_path),
             ]
         )
@@ -602,8 +605,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 "ISIS_PREFIX": str(runtime_root),
                 "ISISROOT": str(runtime_root),
                 "ISISDATA": str(PROJECT_ROOT / "tests" / "data" / "isisdata" / "mockup"),
-                "PYISIS_DEP_PREFIX": str(dependency_root),
-                "CONDA_PREFIX": str(dependency_root),
+                "PYISIS_DEP_PREFIX": str(conda_root),
+                "CONDA_PREFIX": str(conda_root),
+                "PYISIS_WINDOWS_DEP_PREFIX": str(windows_dependency_root),
                 "PYTHONPATH": str(PROJECT_ROOT / "build" / "python"),
                 "PATH": path,
             },
@@ -616,6 +620,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertNotIn("ISISDATA", env)
         self.assertNotIn("PYTHONPATH", env)
         self.assertNotIn("CONDA_PREFIX", env)
+        self.assertNotIn("PYISIS_WINDOWS_DEP_PREFIX", env)
         self.assertEqual(env["PATH"], str(safe_path))
 
     def test_clean_venv_unit_test_environment_exposes_only_test_helpers(self):

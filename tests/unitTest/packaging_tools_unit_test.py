@@ -70,6 +70,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("stage_runtime_win64.py", script)
         self.assertIn("--dependency-prefix", script)
         self.assertIn("--dependency-copy-mode closure", script)
+        self.assertIn("--dependency-report", script)
+        self.assertIn("dll-dependencies.json", script)
         self.assertIn("wheel tags --platform-tag win_amd64", script)
         self.assertIn("packaging\\isisdata-minimal", script)
         self.assertIn("build\\packaging\\$RuntimeDistribution", script)

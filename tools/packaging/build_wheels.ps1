@@ -37,12 +37,14 @@ $env:ISISROOT = $env:ISIS_PREFIX
 $env:PYISIS_DEP_PREFIX = (Resolve-Path -LiteralPath $DependencyPrefix).Path
 
 $RuntimeStageDir = Join-Path $PWD "build\packaging\$RuntimeDistribution"
+$DependencyReport = Join-Path $OutputDir "$RuntimeDistribution-dll-dependencies.json"
 & $PythonExecutable tools\packaging\stage_runtime_win64.py `
     --isis-prefix $env:ISIS_PREFIX `
     --dependency-prefix $env:PYISIS_DEP_PREFIX `
     --dependency-copy-mode closure `
     --distribution-name $RuntimeDistribution `
     --package-version $PackageVersion `
+    --dependency-report $DependencyReport `
     --stage-dir $RuntimeStageDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

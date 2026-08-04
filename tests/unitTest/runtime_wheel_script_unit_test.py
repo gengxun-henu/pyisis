@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-25
+Last Modified: 2026-08-05
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
@@ -11,6 +11,7 @@ Updated: 2026-07-23  Geng Xun covered versioned ISIS 10 runtime distribution met
 Updated: 2026-07-23  Geng Xun covered versioned ISIS 10 Windows runtime metadata.
 Updated: 2026-07-24  Geng Xun preserved declared ELF SONAME aliases in Linux dependency closures.
 Updated: 2026-07-25  Geng Xun aligned runtime staging fixtures with the ISIS 10 rc2 identity.
+Updated: 2026-08-05  Geng Xun added Windows PE export-forwarder closure regression coverage.
 """
 
 from __future__ import annotations
@@ -34,6 +35,37 @@ LINUX_STAGING_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "stage_runtime_lin
 
 class RuntimeWheelScriptUnitTest(unittest.TestCase):
     """Test suite for runtime wheel staging. Added: 2026-06-18."""
+
+    def test_dumpbin_forwarded_dependencies_extracts_unique_non_system_dlls(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_win64_forwarder_parser",
+            WINDOWS_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        completed = subprocess.CompletedProcess(
+            ["dumpbin", "/EXPORTS", "libcblas.dll"],
+            0,
+            stdout=(
+                "3 2 00000000 cblas_caxpy = openblas.dll.cblas_caxpy\n"
+                "4 3 00000000 cblas_ccopy = openblas.dll.cblas_ccopy\n"
+                "5 4 00000000 forwarded = KERNEL32.dll.Sleep\n"
+            ),
+            stderr="",
+        )
+        with mock.patch.object(
+            stage_module.subprocess,
+            "run",
+            return_value=completed,
+        ):
+            result = stage_module._dumpbin_forwarded_dependencies(
+                Path("libcblas.dll")
+            )
+
+        self.assertEqual(result, ("openblas.dll",))
 
     def test_stage_runtime_copies_runtime_files_and_excludes_sdk_files(self):
         with TemporaryDirectory() as temp_dir:

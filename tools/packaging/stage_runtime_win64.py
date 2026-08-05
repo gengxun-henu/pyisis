@@ -61,20 +61,15 @@ RUNTIME_PATTERNS = (
     "isis_version.txt",
     "LICENSE.md",
     "bin/**/*.dll",
-    "bin/**/*.exe",
-    "bin/xml/**/*.xml",
     "lib/**/*.dll",
     "lib/**/*.plugin",
     "Library/bin/**/*.dll",
-    "Library/bin/**/*.exe",
-    "Library/bin/xml/**/*.xml",
     "Library/lib/**/*.dll",
     "Library/lib/**/*.plugin",
 )
 
 DEPENDENCY_PATTERN_GLOBS = (
     "Library/bin/**/*.dll",
-    "Library/bin/**/*.exe",
     "bin/**/*.dll",
     "Library/lib/**/*.dll",
     "Library/plugins/**/*.dll",
@@ -306,7 +301,7 @@ def stage_runtime(
         seed_files = tuple(
             path
             for path in vendor_root.rglob("*")
-            if path.is_file() and path.suffix.lower() in {".dll", ".exe", ".plugin"}
+            if path.is_file() and path.suffix.lower() in {".dll", ".plugin"}
         )
         _copy_dependency_closure(
             seed_files,

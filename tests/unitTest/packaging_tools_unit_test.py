@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-26
+Last Modified: 2026-08-05
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -27,6 +27,8 @@ Updated: 2026-07-26  Geng Xun covered the complete 48-APP W1 promotion.
 Updated: 2026-07-26  Geng Xun covered exact-subset Windows APP wave promotion.
 Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
 Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
+Updated: 2026-08-05  Geng Xun covered complete Windows dependency-prefix isolation.
+Updated: 2026-08-05  Geng Xun covered the Windows 11 runner readiness contract.
 """
 
 from __future__ import annotations
@@ -52,6 +54,7 @@ WINDOWS_ISIS_APP_PRIORITY_SUMMARY = WINDOWS_ISIS_DIR / "windows-app-priority.md"
 WINDOWS_ISIS_APP_PROMOTER = WINDOWS_ISIS_DIR / "promote_windows_app_wave.py"
 UNIT_TEST_SUPPORT = PROJECT_ROOT / "tests" / "unitTest" / "_unit_test_support.py"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
+WINDOWS_RUNNER_CHECK = PROJECT_ROOT / "tools" / "packaging" / "check_windows_runner.ps1"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
 TEST_TESTPYPI_INSTALL_SCRIPT = (
     PROJECT_ROOT / "tools" / "packaging" / "test_testpypi_install.py"
@@ -69,6 +72,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("stage_runtime_win64.py", script)
         self.assertIn("--dependency-prefix", script)
         self.assertIn("--dependency-copy-mode closure", script)
+        self.assertIn("--dependency-report", script)
+        self.assertIn("dll-dependencies.json", script)
         self.assertIn("wheel tags --platform-tag win_amd64", script)
         self.assertIn("packaging\\isisdata-minimal", script)
         self.assertIn("build\\packaging\\$RuntimeDistribution", script)
@@ -81,6 +86,22 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn('$DistributionName.Replace("-", "_")', script)
         self.assertIn("--distribution-name $RuntimeDistribution", script)
         self.assertIn("--package-version $PackageVersion", script)
+
+    def test_windows_runner_readiness_script_checks_required_host_tools(self):
+        self.assertTrue(WINDOWS_RUNNER_CHECK.is_file())
+
+        script = WINDOWS_RUNNER_CHECK.read_text(encoding="utf-8")
+        for required in (
+            "Windows 11",
+            "pwsh",
+            "conda",
+            "activate_msvc.ps1",
+            "dumpbin",
+            "cmake",
+            "ninja",
+            "git",
+        ):
+            self.assertIn(required, script)
 
     def test_linux_build_wheels_script_runs_runtime_and_main_wheel_steps(self):
         self.assertTrue(LINUX_BUILD_WHEELS_SCRIPT.is_file())
@@ -587,12 +608,14 @@ class PackagingToolsUnitTest(unittest.TestCase):
         spec.loader.exec_module(module)
 
         runtime_root = PROJECT_ROOT / "build" / "windows" / "isis-prefix"
-        dependency_root = PROJECT_ROOT / "fake-conda"
+        conda_root = PROJECT_ROOT / "fake-conda"
+        windows_dependency_root = PROJECT_ROOT / "windows-dependencies"
         safe_path = PROJECT_ROOT / "safe-bin"
         path = module.os.pathsep.join(
             [
                 str(runtime_root / "bin"),
-                str(dependency_root / "Library" / "bin"),
+                str(conda_root / "Library" / "bin"),
+                str(windows_dependency_root / "Library" / "bin"),
                 str(safe_path),
             ]
         )
@@ -602,8 +625,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 "ISIS_PREFIX": str(runtime_root),
                 "ISISROOT": str(runtime_root),
                 "ISISDATA": str(PROJECT_ROOT / "tests" / "data" / "isisdata" / "mockup"),
-                "PYISIS_DEP_PREFIX": str(dependency_root),
-                "CONDA_PREFIX": str(dependency_root),
+                "PYISIS_DEP_PREFIX": str(conda_root),
+                "CONDA_PREFIX": str(conda_root),
+                "PYISIS_WINDOWS_DEP_PREFIX": str(windows_dependency_root),
                 "PYTHONPATH": str(PROJECT_ROOT / "build" / "python"),
                 "PATH": path,
             },
@@ -616,6 +640,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertNotIn("ISISDATA", env)
         self.assertNotIn("PYTHONPATH", env)
         self.assertNotIn("CONDA_PREFIX", env)
+        self.assertNotIn("PYISIS_WINDOWS_DEP_PREFIX", env)
         self.assertEqual(env["PATH"], str(safe_path))
 
     def test_clean_venv_unit_test_environment_exposes_only_test_helpers(self):

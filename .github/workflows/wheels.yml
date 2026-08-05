@@ -26,6 +26,14 @@ on:
         options:
           - isis9
           - isis10
+      windows_runner:
+        description: "Windows validation runner"
+        required: false
+        default: windows11-self-hosted
+        type: choice
+        options:
+          - windows11-self-hosted
+          - windows-2022
   pull_request:
     paths:
       - "pyproject.toml"
@@ -52,6 +60,8 @@ jobs:
     outputs:
       run_linux: ${{ steps.scope.outputs.run_linux }}
       run_windows: ${{ steps.scope.outputs.run_windows }}
+      windows_runs_on_json: ${{ steps.scope.outputs.windows_runs_on_json }}
+      windows_is_self_hosted: ${{ steps.scope.outputs.windows_is_self_hosted }}
 
     steps:
       - name: Resolve changed platform paths
@@ -59,12 +69,25 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
+            const windows11Labels = ["self-hosted", "Windows", "X64", "pyisis", "windows-11"];
+            const trustedOwnerPr = context.eventName === 'pull_request' &&
+              context.payload.pull_request.head.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
+              context.actor === 'gengxun-henu';
+            const requestedWindowsRunner = context.payload.inputs?.windows_runner || 'windows11-self-hosted';
+            const useWindows11 = context.eventName === 'workflow_dispatch'
+              ? requestedWindowsRunner === 'windows11-self-hosted'
+              : trustedOwnerPr;
+            const selectedWindowsRunner = useWindows11 ? windows11Labels : 'windows-2022';
+            core.setOutput('windows_runs_on_json', JSON.stringify(selectedWindowsRunner));
+            core.setOutput('windows_is_self_hosted', String(useWindows11));
+
             if (context.eventName === 'workflow_dispatch') {
               core.setOutput('run_linux', 'true');
               core.setOutput('run_windows', 'true');
               await core.summary
                 .addHeading('Wheel platform scope', 2)
                 .addRaw('Manual dispatch: running the complete Linux and Windows release matrix.\n')
+                .addRaw(`Windows runner: ${useWindows11 ? 'Windows 11 self-hosted' : 'windows-2022'}\n`)
                 .write();
               return;
             }
@@ -100,6 +123,7 @@ jobs:
               .addHeading('Wheel platform scope', 2)
               .addRaw(`Linux manylinux matrix: ${runLinux ? 'run' : 'skip'}\n\n`)
               .addRaw(`Windows wheel matrix: ${runWindows ? 'run' : 'skip'}\n\n`)
+              .addRaw(`Windows runner: ${useWindows11 ? 'Windows 11 self-hosted' : 'windows-2022'}\n\n`)
               .addHeading('Changed files', 3)
               .addCodeBlock(changedFiles.join('\n'), 'text')
               .write();
@@ -408,7 +432,7 @@ jobs:
     name: Build Windows cp312 wheels
     needs: scope
     if: ${{ needs.scope.outputs.run_windows == 'true' }}
-    runs-on: windows-2022
+    runs-on: ${{ fromJSON(needs.scope.outputs.windows_runs_on_json) }}
     timeout-minutes: 360
     permissions:
       contents: read
@@ -432,11 +456,13 @@ jobs:
           python-version: "3.12"
 
       - name: Set up Windows ISIS build environment
-        uses: mamba-org/setup-micromamba@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
+          miniforge-version: latest
+          activate-environment: pyisis-isis-win64
           environment-file: ports/windows/env/pyisis-isis-win64.yml
-          cache-environment: true
-          init-shell: powershell
+          conda-solver: classic
+          auto-activate: false
 
       - name: Resolve Windows dependency prefix
         run: |
@@ -451,13 +477,17 @@ jobs:
           "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
           "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
+      - name: Verify Windows 11 self-hosted runner readiness
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: .\tools\packaging\check_windows_runner.ps1 -ExpectedWindows11
+
       - name: Restore cached ISIS 9.0.0 Windows prefix
         id: windows-isis-prefix-cache
         uses: actions/cache/restore@v6
         with:
           path: build/windows/isis-prefix
           # ISIS 10 and SpiceQL-only changes must not invalidate this prefix.
-          key: windows-2022-isis-9.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/patches/*.patch') }}
+          key: windows-x64-isis-9.0.0-prefix-v2-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/patches/*.patch') }}
 
       - name: Build ISIS 9.0.0 Windows prefix
         if: ${{ steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' }}
@@ -489,7 +519,10 @@ jobs:
             steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' &&
             (
               (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
-              github.event.pull_request.head.repo.full_name == github.repository
+              (
+                github.event.pull_request.head.repo.full_name == github.repository &&
+                github.actor == 'gengxun-henu'
+              )
             )
           }}
         uses: actions/cache/save@v6
@@ -556,13 +589,15 @@ jobs:
         with:
           name: usgs-pyisis-windows-cp312-wheels
           if-no-files-found: error
-          path: wheelhouse/*.whl
+          path: |
+            wheelhouse/*.whl
+            wheelhouse/*-dll-dependencies.json
 
   windows-isis10-cp313:
     name: Build ISIS 10 Windows cp313 wheels
     needs: scope
     if: ${{ needs.scope.outputs.run_windows == 'true' }}
-    runs-on: windows-2022
+    runs-on: ${{ fromJSON(needs.scope.outputs.windows_runs_on_json) }}
     timeout-minutes: 360
     permissions:
       contents: read
@@ -588,11 +623,13 @@ jobs:
           python-version: "3.13"
 
       - name: Set up Windows ISIS 10 build environment
-        uses: mamba-org/setup-micromamba@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
+          miniforge-version: latest
+          activate-environment: pyisis-isis10-win64
           environment-file: ports/windows/env/pyisis-isis10-win64.yml
-          cache-environment: true
-          init-shell: powershell
+          conda-solver: classic
+          auto-activate: false
 
       - name: Resolve Windows ISIS 10 dependency prefix
         run: |
@@ -607,6 +644,10 @@ jobs:
           "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
           "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
+      - name: Verify Windows 11 self-hosted runner readiness
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: .\tools\packaging\check_windows_runner.ps1 -ExpectedWindows11
+
       - name: Activate MSVC and build SpiceQL 1.4.1
         run: |
           . .\ports\windows\activate_msvc.ps1
@@ -618,7 +659,7 @@ jobs:
         with:
           path: build/windows/isis10-prefix
           # Keep ISIS 9 root patches out, while tracking the linked SpiceQL ABI.
-          key: windows-2022-isis-10.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/build_spiceql.ps1', 'ports/windows/isis/patches/10.0.0/*.patch', 'ports/windows/isis/patches/spiceql-1.4.1/*.patch') }}
+          key: windows-x64-isis-10.0.0-prefix-v2-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/build_spiceql.ps1', 'ports/windows/isis/patches/10.0.0/*.patch', 'ports/windows/isis/patches/spiceql-1.4.1/*.patch') }}
 
       - name: Build ISIS 10.0.0 Windows prefix
         if: ${{ steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' }}
@@ -652,7 +693,10 @@ jobs:
             steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' &&
             (
               (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
-              github.event.pull_request.head.repo.full_name == github.repository
+              (
+                github.event.pull_request.head.repo.full_name == github.repository &&
+                github.actor == 'gengxun-henu'
+              )
             )
           }}
         uses: actions/cache/save@v6
@@ -702,7 +746,9 @@ jobs:
         with:
           name: usgs-pyisis-isis10-windows-cp313-wheels
           if-no-files-found: error
-          path: wheelhouse-isis10-windows/*.whl
+          path: |
+            wheelhouse-isis10-windows/*.whl
+            wheelhouse-isis10-windows/*-dll-dependencies.json
 
   github-release:
     name: Publish configured GitHub Release

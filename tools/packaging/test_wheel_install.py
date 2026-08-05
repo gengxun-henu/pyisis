@@ -30,14 +30,20 @@ def _path_contains(path_text: str, roots: tuple[Path, ...]) -> bool:
 
 def _verification_environment() -> dict[str, str]:
     env = os.environ.copy()
-    root_names = ("ISIS_PREFIX", "ISISROOT", "PYISIS_DEP_PREFIX")
+    root_names = (
+        "ISIS_PREFIX",
+        "ISISROOT",
+        "PYISIS_DEP_PREFIX",
+        "PYISIS_WINDOWS_DEP_PREFIX",
+        "CONDA_PREFIX",
+    )
     roots = tuple(
         Path(env[name]).resolve()
         for name in root_names
         if env.get(name)
     )
 
-    for name in (*root_names, "ISISDATA", "PYTHONPATH", "CONDA_PREFIX"):
+    for name in (*root_names, "ISISDATA", "PYTHONPATH"):
         env.pop(name, None)
 
     path_parts = [

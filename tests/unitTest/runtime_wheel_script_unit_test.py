@@ -12,6 +12,7 @@ Updated: 2026-07-23  Geng Xun covered versioned ISIS 10 Windows runtime metadata
 Updated: 2026-07-24  Geng Xun preserved declared ELF SONAME aliases in Linux dependency closures.
 Updated: 2026-07-25  Geng Xun aligned runtime staging fixtures with the ISIS 10 rc2 identity.
 Updated: 2026-08-05  Geng Xun added Windows PE export-forwarder closure regression coverage.
+Updated: 2026-08-05  Geng Xun required fail-closed Windows DLL audit reports.
 Updated: 2026-08-05  Geng Xun enforced the Windows minimal-runtime boundary against APP executables and XML.
 """
 
@@ -66,7 +67,31 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 Path("libcblas.dll")
             )
 
-        self.assertEqual(result, ("openblas.dll",))
+        self.assertEqual(result, ("openblas.dll", "KERNEL32.dll"))
+
+    def test_dumpbin_dependency_failure_is_fatal(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_win64_dumpbin_failure",
+            WINDOWS_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        completed = subprocess.CompletedProcess(
+            ["dumpbin", "/DEPENDENTS", "isis.dll"],
+            1,
+            stdout="",
+            stderr="fatal error LNK1107",
+        )
+        with mock.patch.object(
+            stage_module.subprocess,
+            "run",
+            return_value=completed,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "dumpbin failed.*isis.dll"):
+                stage_module._dumpbin_dependencies(Path("isis.dll"))
 
     def test_stage_runtime_copies_binding_runtime_and_excludes_apps_and_sdk_files(self):
         with TemporaryDirectory() as temp_dir:
@@ -202,6 +227,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 return ()
 
             stage = temp / "runtime-stage"
+            report = temp / "dependency-report.json"
             with (
                 mock.patch.object(
                     stage_module,
@@ -219,12 +245,74 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     stage,
                     (dep_prefix,),
                     dependency_copy_mode="closure",
+                    dependency_report=report,
                 )
 
             vendor = stage / "src" / "pyisis_runtime" / "vendor" / "isis"
             self.assertTrue((vendor / "Library" / "bin" / "needed.dll").is_file())
             self.assertTrue((vendor / "bin" / "cspice.dll").is_file())
             self.assertFalse((vendor / "Library" / "bin" / "unused.dll").exists())
+            audit = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(audit["schema_version"], 1)
+            self.assertEqual(audit["unresolved"], [])
+            isis_imports = next(
+                item["imports"]
+                for item in audit["binaries"]
+                if item["binary"] == "isis.dll"
+            )
+            classifications = {item["name"]: item["classification"] for item in isis_imports}
+            self.assertEqual(classifications["needed.dll"], "resolved")
+            self.assertEqual(classifications["cspice.dll"], "resolved")
+            self.assertEqual(classifications["KERNEL32.dll"], "system")
+
+    def test_stage_runtime_closure_reports_unresolved_dependency(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_win64_unresolved",
+            WINDOWS_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        with TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            prefix = temp / "isis-prefix"
+            (prefix / "bin").mkdir(parents=True)
+            (prefix / "lib").mkdir(parents=True)
+            (prefix / "IsisPreferences").write_text(
+                "Group = DataDirectory",
+                encoding="utf-8",
+            )
+            (prefix / "bin" / "isis.dll").write_bytes(b"isis")
+            (prefix / "lib" / "Camera.plugin").write_bytes(b"camera")
+            dep_prefix = temp / "dep-prefix"
+            (dep_prefix / "Library" / "bin").mkdir(parents=True)
+            stage = temp / "runtime-stage"
+            report = temp / "dependency-report.json"
+
+            def fake_dumpbin(binary):
+                return ("missing.dll",) if binary.name == "isis.dll" else ()
+
+            with (
+                mock.patch.object(stage_module, "_dumpbin_dependencies", fake_dumpbin),
+                mock.patch.object(
+                    stage_module,
+                    "_dumpbin_forwarded_dependencies",
+                    return_value=(),
+                ),
+            ):
+                with self.assertRaisesRegex(FileNotFoundError, "missing.dll"):
+                    stage_module.stage_runtime(
+                        prefix,
+                        stage,
+                        (dep_prefix,),
+                        dependency_copy_mode="closure",
+                        dependency_report=report,
+                    )
+
+            audit = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(audit["unresolved"], ["missing.dll"])
 
     def test_stage_runtime_closure_copies_forwarded_dependencies_for_both_windows_runtimes(
         self,

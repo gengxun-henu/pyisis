@@ -1,8 +1,14 @@
 # usgs-pyisis-runtime-win64
 
-This package contains the Windows x64 runtime files needed by usgs-pyisis wheels.
-It is generated from a verified ISIS 9.0.0 Windows prefix and intentionally
-excludes SDK headers, import libraries, CMake metadata, and local build files.
+This package contains the minimal Windows x64 native runtime required by the
+PyISIS binding wheel. It is generated from a verified ISIS prefix and includes
+only the DLLs, plugins, configuration, and runtime resources needed to import
+and use `isis_pybind`.
+
+It intentionally excludes ISIS APP executables and APP XML. Native command-line
+and GUI applications are built, tested, and released through the separate ISIS
+Native Windows product line. It also excludes SDK headers, import libraries,
+CMake metadata, and local build files.
 
 The package exposes:
 

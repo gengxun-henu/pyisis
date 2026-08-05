@@ -12,6 +12,7 @@ Updated: 2026-07-23  Geng Xun covered versioned ISIS 10 Windows runtime metadata
 Updated: 2026-07-24  Geng Xun preserved declared ELF SONAME aliases in Linux dependency closures.
 Updated: 2026-07-25  Geng Xun aligned runtime staging fixtures with the ISIS 10 rc2 identity.
 Updated: 2026-08-05  Geng Xun added Windows PE export-forwarder closure regression coverage.
+Updated: 2026-08-05  Geng Xun enforced the Windows minimal-runtime boundary against APP executables and XML.
 """
 
 from __future__ import annotations
@@ -67,7 +68,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
 
         self.assertEqual(result, ("openblas.dll",))
 
-    def test_stage_runtime_copies_runtime_files_and_excludes_sdk_files(self):
+    def test_stage_runtime_copies_binding_runtime_and_excludes_apps_and_sdk_files(self):
         with TemporaryDirectory() as temp_dir:
             temp = Path(temp_dir)
             prefix = temp / "isis-prefix"
@@ -79,6 +80,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             (prefix / "LICENSE.md").write_text("MIT", encoding="utf-8")
             (prefix / "bin" / "isis.dll").write_bytes(b"dll")
             (prefix / "bin" / "isis.exe").write_bytes(b"exe")
+            (prefix / "bin" / "reduce.exe").write_bytes(b"app")
             (prefix / "bin" / "Qt5Core.dll").write_bytes(b"qt")
             (prefix / "bin" / "xml" / "stats.xml").write_text(
                 "<application />",
@@ -96,6 +98,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             (dep_prefix / "Library" / "plugins" / "platforms").mkdir(parents=True)
             (dep_prefix / "Library" / "include").mkdir(parents=True)
             (dep_prefix / "Library" / "bin" / "zlib.dll").write_bytes(b"zlib")
+            (dep_prefix / "Library" / "bin" / "qt-tool.exe").write_bytes(b"tool")
             (dep_prefix / "Library" / "plugins" / "platforms" / "qwindows.dll").write_bytes(
                 b"qt-platform"
             )
@@ -133,14 +136,17 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             self.assertTrue((vendor / "isis_version.txt").is_file())
             self.assertTrue((vendor / "LICENSE.md").is_file())
             self.assertTrue((vendor / "bin" / "isis.dll").is_file())
-            self.assertTrue((vendor / "bin" / "isis.exe").is_file())
             self.assertTrue((vendor / "bin" / "Qt5Core.dll").is_file())
-            self.assertTrue((vendor / "bin" / "xml" / "stats.xml").is_file())
             self.assertTrue((vendor / "lib" / "Camera.plugin").is_file())
             self.assertTrue((vendor / "Library" / "bin" / "zlib.dll").is_file())
             self.assertTrue(
                 (vendor / "Library" / "plugins" / "platforms" / "qwindows.dll").is_file()
             )
+            self.assertFalse((vendor / "bin" / "isis.exe").exists())
+            self.assertFalse((vendor / "bin" / "reduce.exe").exists())
+            self.assertFalse((vendor / "bin" / "xml" / "stats.xml").exists())
+            self.assertFalse((vendor / "Library" / "bin" / "qt-tool.exe").exists())
+            self.assertEqual(list(vendor.rglob("*.exe")), [])
             self.assertFalse((vendor / "lib" / "isis.lib").exists())
             self.assertFalse((vendor / "include" / "isis" / "Cube.h").exists())
             self.assertFalse((vendor / "Library" / "lib" / "zlib.lib").exists())

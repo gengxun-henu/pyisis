@@ -37,6 +37,32 @@ function Update-GitSparseCheckout {
     Invoke-IsisGit -C $CheckoutDir sparse-checkout set @GitSparsePaths
 }
 
+function Test-ArchiveResumeSupport {
+    param([Parameter(Mandatory = $true)][string]$ArchiveUrl)
+
+    $probeArgs = @(
+        "--location",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "--range", "0-0",
+        "--max-time", 15,
+        "--output", "NUL",
+        "--write-out", "%{http_code}",
+        $ArchiveUrl
+    )
+    if ([System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT) {
+        $probeArgs = @("--ssl-no-revoke") + $probeArgs
+    }
+    $probeOutput = & curl.exe @probeArgs
+    $probeExitCode = $LASTEXITCODE
+    if ($probeExitCode -ne 0) {
+        return $false
+    }
+
+    return (($probeOutput -join "").Trim() -eq "206")
+}
+
 if (-not $SourceDir) {
     $SourceDir = Get-DefaultIsisSourceDir -Version $Ref
 }
@@ -86,6 +112,11 @@ if (Test-Path (Join-Path $SourceDir ".git")) {
     Write-Step "downloading ISIS source archive: $archiveUrl"
     $curl = Get-Command curl.exe -ErrorAction SilentlyContinue
     if ($curl) {
+        $resumeArchive = Test-Path $archivePath
+        if ($resumeArchive -and -not (Test-ArchiveResumeSupport -ArchiveUrl $archiveUrl)) {
+            Fail "archive server does not support byte-range resume for $archivePath; preserve it for diagnosis or pass -Force for a clean retry"
+        }
+
         $curlArgs = @(
             "--location",
             "--fail",
@@ -98,10 +129,12 @@ if (Test-Path (Join-Path $SourceDir ".git")) {
             "--speed-time", $LowSpeedTimeoutSeconds,
             "--show-error",
             "--no-progress-meter",
-            "--continue-at", "-",
             "--output", $archivePath,
             $archiveUrl
         )
+        if ($resumeArchive) {
+            $curlArgs = @("--continue-at", "-") + $curlArgs
+        }
         if ([System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT) {
             $curlArgs = @("--ssl-no-revoke") + $curlArgs
         }
@@ -135,7 +168,7 @@ if (Test-Path (Join-Path $SourceDir ".git")) {
 
     Write-Step "initializing local git worktree for patch application"
     Invoke-CheckedCommand git -C $SourceDir init
-    Invoke-CheckedCommand git -C $SourceDir add -A
+    Invoke-CheckedCommand git -C $SourceDir add --all
 }
 
 Write-Step "ISIS source is ready at $SourceDir"

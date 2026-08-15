@@ -27,7 +27,7 @@
 - Consumes: `fetch_isis.ps1` archive mode, `-SourceDir`, `-Method`, `-Ref`, and `-Force`.
 - Produces: a regression test proving an existing partial archive is preserved when a controlled curl range probe returns HTTP 200.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 def test_archive_mode_preserves_partial_file_when_range_resume_is_unsupported(self):
@@ -39,13 +39,13 @@ def test_archive_mode_preserves_partial_file_when_range_resume_is_unsupported(se
     self.assertEqual(self.archive_path.read_bytes(), b"partial")
 ```
 
-- [ ] **Step 2: Run the test and observe the expected failure**
+- [x] **Step 2: Run the test and observe the expected failure**
 
 Run: `D:\pyisis-win-env\python.exe -m unittest tests.unitTest.windows_isis_fetch_script_unit_test.WindowsIsisFetchScriptUnitTest.test_archive_mode_preserves_partial_file_when_range_resume_is_unsupported -v`
 
 Expected: FAIL because the current script unconditionally supplies `--continue-at -`.
 
-- [ ] **Step 3: Add the controlled curl boundary**
+- [x] **Step 3: Add the controlled curl boundary**
 
 ```python
 def run_fetch_with_fake_curl(self, existing_archive: bytes, range_probe_status: int):
@@ -68,7 +68,7 @@ def run_fetch_with_fake_curl(self, existing_archive: bytes, range_probe_status: 
         )
 ```
 
-- [ ] **Step 4: Re-run until the failure is the missing HTTP-200 guard**
+- [x] **Step 4: Re-run until the failure is the missing HTTP-200 guard**
 
 Run: same command as Step 2.
 
@@ -84,7 +84,7 @@ Expected: FAIL assertion that the script did not reject an unsupported resume.
 - Consumes: `$archiveUrl`, `$archivePath`, curl.exe, and existing archive length.
 - Produces: `Test-ArchiveResumeSupport`, true only when the curl range probe reports `206`; archive mode calls `--continue-at -` only then.
 
-- [ ] **Step 1: Write the minimal implementation**
+- [x] **Step 1: Write the minimal implementation**
 
 ```powershell
 function Test-ArchiveResumeSupport {
@@ -97,13 +97,13 @@ if ((Test-Path $archivePath) -and -not (Test-ArchiveResumeSupport $archiveUrl)) 
 }
 ```
 
-- [ ] **Step 2: Run the unsupported-range regression test**
+- [x] **Step 2: Run the unsupported-range regression test**
 
 Run: command from Task 1 Step 2.
 
 Expected: PASS; no archive overwrite and an explicit unsupported-range error.
 
-- [ ] **Step 3: Add and run the range-capable passing case**
+- [x] **Step 3: Add and run the range-capable passing case**
 
 ```python
 def test_archive_mode_uses_continue_at_only_after_206_range_probe(self):
@@ -118,7 +118,7 @@ Run: `D:\pyisis-win-env\python.exe -m unittest tests.unitTest.windows_isis_fetch
 
 Expected: PASS without external network.
 
-- [ ] **Step 4: Commit only the task files**
+- [x] **Step 4: Commit only the task files**
 
 ```powershell
 git add -- ports/windows/isis/fetch_isis.ps1 tests/unitTest/windows_isis_fetch_script_unit_test.py docs/superpowers/plans/2026-08-15-windows-isis-archive-resume.md

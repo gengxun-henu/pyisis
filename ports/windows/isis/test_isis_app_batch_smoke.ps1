@@ -137,22 +137,36 @@ try {
     }
 
     $seedCube = Join-Path $WorkDir "seed.cub"
-    Invoke-IsisApp "crop" @(
+    $cropArguments = @(
         "from=$InputCube", "to=$seedCube", "sample=1", "line=1",
-        "nsamples=32", "nlines=32", "overhang=shrink"
-    ) "cube-crop.log" $seedCube
+        "nsamples=32", "nlines=32"
+    )
+    if (Test-IsisAppParameter -Prefix $Prefix -AppName "crop" -ParameterName "overhang") {
+        $cropArguments += "overhang=shrink"
+    }
+    Invoke-IsisApp "crop" $cropArguments "cube-crop.log" $seedCube
 
     $csvInput = Join-Path $WorkDir "csv2table-input.csv"
     $tableDump = Join-Path $WorkDir "csv2table-output.txt"
-    Set-Content -LiteralPath $csvInput -Encoding Ascii -Value @(
-        "Value,Name",
-        "1.5,M",
-        "2.5,P"
+    $csvArguments = @(
+        "csv=$csvInput", "to=$seedCube", "tablename=PyisisCsv2Table"
     )
-    Invoke-IsisApp "csv2table" @(
-        "csv=$csvInput", "to=$seedCube", "tablename=PyisisCsv2Table",
-        "coltypes=(Double,Text)"
-    ) "cube-csv2table.log"
+    if (Test-IsisAppParameter -Prefix $Prefix -AppName "csv2table" -ParameterName "coltypes") {
+        Set-Content -LiteralPath $csvInput -Encoding Ascii -Value @(
+            "Value,Name",
+            "1.5,M",
+            "2.5,P"
+        )
+        $csvArguments += "coltypes=(Double,Text)"
+    }
+    else {
+        Set-Content -LiteralPath $csvInput -Encoding Ascii -Value @(
+            "Value,Weight",
+            "1.5,3.5",
+            "2.5,4.5"
+        )
+    }
+    Invoke-IsisApp "csv2table" $csvArguments "cube-csv2table.log"
     Invoke-IsisApp "tabledump" @(
         "from=$seedCube", "name=PyisisCsv2Table", "to=$tableDump"
     ) "cube-csv2table-tabledump.log" $tableDump

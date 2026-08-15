@@ -26,7 +26,7 @@ The short-path conda environment and Visual Studio 2022 x64 toolchain are reprod
 
 ## Next Step
 
-Close M1 with fresh structured evidence from the passing prerequisite check, readiness report, verified prerequisite binaries, and classified post-close Git state.
+None — milestone complete.
 
 ## Current Phase
 

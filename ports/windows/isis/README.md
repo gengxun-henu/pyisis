@@ -96,8 +96,9 @@ Verified so far:
   `stats`, `getkey`, `catlab`, `campt`, `reduce`, `cam2map`, `isis2std`,
   `cubeit`, and `fx`.
 
-Use `-j 1` with MSVC for now; higher parallelism has exposed intermittent
-object-list and file-lock issues in this porting environment.
+Windows C++/Ninja builds default to the smaller of 24 jobs or the machine's
+available logical processor count. Pass `-Jobs` explicitly to override this
+repository default when diagnosing resource or file-lock issues.
 
 ## ISIS 10 Allowlisted Application Targets
 

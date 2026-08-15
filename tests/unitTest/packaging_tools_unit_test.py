@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-05
+Last Modified: 2026-08-15
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -29,6 +29,7 @@ Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
 Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
 Updated: 2026-08-05  Geng Xun covered complete Windows dependency-prefix isolation.
 Updated: 2026-08-05  Geng Xun covered the Windows 11 runner readiness contract.
+Updated: 2026-08-15  Geng Xun required CRLF-safe context handling for Windows ISIS patches.
 """
 
 from __future__ import annotations
@@ -102,6 +103,24 @@ class PackagingToolsUnitTest(unittest.TestCase):
             "git",
         ):
             self.assertIn(required, script)
+
+    def test_windows_cpp_builds_cap_default_parallelism_at_24(self):
+        """Ninja defaults must use all CPUs up to the repository cap."""
+        build_scripts = (
+            WINDOWS_ISIS_DIR / "build_isis.ps1",
+            WINDOWS_ISIS_DIR / "build_spiceql.ps1",
+            PROJECT_ROOT / "ports" / "windows" / "pyisis" / "build_pyisis.ps1",
+        )
+
+        for build_script in build_scripts:
+            with self.subTest(script=build_script.name):
+                script = build_script.read_text(encoding="utf-8")
+                self.assertIn(
+                    "[Math]::Min(24, [Environment]::ProcessorCount)", script
+                )
+
+        agents = (PROJECT_ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        self.assertIn("min(24, available logical processors)", agents)
 
     def test_linux_build_wheels_script_runs_runtime_and_main_wheel_steps(self):
         self.assertTrue(LINUX_BUILD_WHEELS_SCRIPT.is_file())
@@ -191,7 +210,13 @@ class PackagingToolsUnitTest(unittest.TestCase):
         apply_script = (
             PROJECT_ROOT / "ports" / "windows" / "isis" / "apply_patches.ps1"
         ).read_text(encoding="utf-8")
-        self.assertIn("apply --unidiff-zero --check", apply_script)
+        self.assertIn(
+            "apply --ignore-space-change --unidiff-zero --check", apply_script
+        )
+        self.assertIn(
+            "apply --ignore-space-change --unidiff-zero $patch.FullName",
+            apply_script,
+        )
 
         patch_paths = sorted(patch_dir.glob("*.patch"))
         self.assertEqual(len(patch_paths), 5)

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "milestone_id": "windows-isis9-m02-isis-prefix",
+  "verified_at": "2026-08-15T10:20:00.1074251Z",
+  "git": {
+    "status": "classified: M2 planning and Windows ISIS build/test changes; preserved pre-existing M1 planning changes; print.prt is an unstaged ISIS side effect; no guardrail file is staged",
+    "porcelain_v1_sha256": "ab38f380efda1acfc63517d1b469c352209f76cc71b2a64a63c08785af001fa9",
+    "commit": "ce569a009141c730802879ca7d1ccc5b7ec810d8"
+  },
+  "tests": [
+    {
+      "id": "isis-prefix-verification",
+      "command": "ports/windows/isis/verify_isis_prefix.ps1 -Prefix build/windows/isis-prefix -ExpectedVersion 9.0.0",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "id": "isis-app-smoke",
+      "command": "ports/windows/isis/test_isis_apps_smoke.ps1 -Prefix build/windows/isis-prefix -WorkDir build/windows/isis-command-smoke",
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "id": "isis-app-batch-smoke",
+      "command": "ports/windows/isis/test_isis_app_batch_smoke.ps1 -Prefix build/windows/isis-prefix -WorkDir build/windows/isis-app-batch-smoke -IsisVersion 9.0.0",
+      "passed": 173,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "id": "windows-isis-script-regressions",
+      "command": "D:/pyisis-win-env/python.exe -m unittest tests.unitTest.windows_isis_app_smoke_script_unit_test plus two focused PackagingToolsUnitTest methods -v",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/windows/isis-prefix/lib/isis.dll",
+      "sha256": "7291ff4ae9683bdae8c758ae9e615eb9f5cfb23da9253ad15d45a69583044420"
+    },
+    {
+      "path": "build/windows/isis-prefix/lib/isis.lib",
+      "sha256": "1582d80acd2d5d9b479cee1b24ee88065b37399be712cc92ab119051e2216a3d"
+    }
+  ],
+  "prerequisites": [
+    {
+      "id": "isis-upstream-tag-9-0-0",
+      "path": "build/windows/external/ISIS3-9.0.0-iwr2.tar.gz",
+      "status": "verified",
+      "sha256": "cb35421f078d91bef932e4ba365a3a4ac788ba46b90143ab9995d5dfd14984b4"
+    },
+    {
+      "id": "windows-patch-queue",
+      "path": "ports/windows/isis/apply_patches.ps1",
+      "status": "verified",
+      "sha256": "77c3311bd78ff445a5d99a9f99db299c62cbe2800f98f6ca6c6949c5f9caccb2"
+    },
+    {
+      "id": "windows-build-environment",
+      "path": "build/windows/reports/environment-readiness.json",
+      "status": "verified",
+      "sha256": "68fb27ba98faa908456cb1a11d379991bc43282f93fb5013eaffc1a190209489"
+    }
+  ]
+}

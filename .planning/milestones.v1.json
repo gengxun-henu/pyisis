@@ -11,7 +11,7 @@
     {
       "id": "windows-isis9-m01-environment",
       "title": "Prepare the Windows native build environment",
-      "status": "in_progress",
+      "status": "complete",
       "dependencies": [],
       "plan_dir": ".planning/windows-isis9-m01-environment",
       "source_plans": [
@@ -33,14 +33,59 @@
         ]
       },
       "last_session_date": "2026-08-15",
-      "last_close_outcome": null,
+      "last_close_outcome": "complete",
       "blocker": null,
-      "completion_evidence": null
+      "completion_evidence": {
+        "schema_version": 1,
+        "milestone_id": "windows-isis9-m01-environment",
+        "verified_at": "2026-08-15T04:28:33.2198359Z",
+        "git": {
+          "status": "clean",
+          "porcelain_v1_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "commit": "0c6269e7787a12d9c00d85173861a47563b15d0e"
+        },
+        "tests": [
+          {
+            "id": "windows-prerequisite-check",
+            "command": "$env:CONDA_PREFIX=D:\\pyisis-win-env; activate_msvc.ps1; ports\\windows\\check_prereqs.ps1",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          }
+        ],
+        "artifacts": [
+          {
+            "path": "build/windows/reports/environment-readiness.json",
+            "sha256": "68fb27ba98faa908456cb1a11d379991bc43282f93fb5013eaffc1a190209489"
+          }
+        ],
+        "prerequisites": [
+          {
+            "id": "windows-11-x64",
+            "path": "C:\\Windows\\System32\\kernel32.dll",
+            "status": "verified",
+            "sha256": "0ab61f2e0d412a585233f1b308c120cba74f800c1030bffe0aabd20df8c6d907"
+          },
+          {
+            "id": "visual-studio-2022-msvc",
+            "path": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\cl.exe",
+            "status": "verified",
+            "sha256": "dc1ef4e36c7044ae9bd0ce24d27de45f8fe26dc1210897b8717e8ef0232360e8"
+          },
+          {
+            "id": "micromamba",
+            "path": "D:\\tools\\micromamba\\micromamba.exe",
+            "status": "verified",
+            "sha256": "b645a5259cb92b5869b0e60943390dd0d362cae45bc7e2f5ba8c7e4a4b06c7aa"
+          }
+        ]
+      }
     },
     {
       "id": "windows-isis9-m02-isis-prefix",
       "title": "Build and verify the ISIS 9.0.0 native prefix",
-      "status": "pending",
+      "status": "complete",
       "dependencies": [
         "windows-isis9-m01-environment"
       ],
@@ -65,10 +110,83 @@
           "windows-build-environment"
         ]
       },
-      "last_session_date": null,
-      "last_close_outcome": null,
+      "last_session_date": "2026-08-15",
+      "last_close_outcome": "complete",
       "blocker": null,
-      "completion_evidence": null
+      "completion_evidence": {
+        "schema_version": 1,
+        "milestone_id": "windows-isis9-m02-isis-prefix",
+        "verified_at": "2026-08-15T10:20:00.1074251Z",
+        "git": {
+          "status": "classified: M2 planning and Windows ISIS build/test changes; preserved pre-existing M1 planning changes; print.prt is an unstaged ISIS side effect; no guardrail file is staged",
+          "porcelain_v1_sha256": "ab38f380efda1acfc63517d1b469c352209f76cc71b2a64a63c08785af001fa9",
+          "commit": "ce569a009141c730802879ca7d1ccc5b7ec810d8"
+        },
+        "tests": [
+          {
+            "id": "isis-prefix-verification",
+            "command": "ports/windows/isis/verify_isis_prefix.ps1 -Prefix build/windows/isis-prefix -ExpectedVersion 9.0.0",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          },
+          {
+            "id": "isis-app-smoke",
+            "command": "ports/windows/isis/test_isis_apps_smoke.ps1 -Prefix build/windows/isis-prefix -WorkDir build/windows/isis-command-smoke",
+            "passed": 9,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          },
+          {
+            "id": "isis-app-batch-smoke",
+            "command": "ports/windows/isis/test_isis_app_batch_smoke.ps1 -Prefix build/windows/isis-prefix -WorkDir build/windows/isis-app-batch-smoke -IsisVersion 9.0.0",
+            "passed": 173,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          },
+          {
+            "id": "windows-isis-script-regressions",
+            "command": "D:/pyisis-win-env/python.exe -m unittest tests.unitTest.windows_isis_app_smoke_script_unit_test plus two focused PackagingToolsUnitTest methods -v",
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          }
+        ],
+        "artifacts": [
+          {
+            "path": "build/windows/isis-prefix/lib/isis.dll",
+            "sha256": "7291ff4ae9683bdae8c758ae9e615eb9f5cfb23da9253ad15d45a69583044420"
+          },
+          {
+            "path": "build/windows/isis-prefix/lib/isis.lib",
+            "sha256": "1582d80acd2d5d9b479cee1b24ee88065b37399be712cc92ab119051e2216a3d"
+          }
+        ],
+        "prerequisites": [
+          {
+            "id": "isis-upstream-tag-9-0-0",
+            "path": "build/windows/external/ISIS3-9.0.0-iwr2.tar.gz",
+            "status": "verified",
+            "sha256": "cb35421f078d91bef932e4ba365a3a4ac788ba46b90143ab9995d5dfd14984b4"
+          },
+          {
+            "id": "windows-patch-queue",
+            "path": "ports/windows/isis/apply_patches.ps1",
+            "status": "verified",
+            "sha256": "77c3311bd78ff445a5d99a9f99db299c62cbe2800f98f6ca6c6949c5f9caccb2"
+          },
+          {
+            "id": "windows-build-environment",
+            "path": "build/windows/reports/environment-readiness.json",
+            "status": "verified",
+            "sha256": "68fb27ba98faa908456cb1a11d379991bc43282f93fb5013eaffc1a190209489"
+          }
+        ]
+      }
     },
     {
       "id": "windows-isis9-m03-pyisis-core",

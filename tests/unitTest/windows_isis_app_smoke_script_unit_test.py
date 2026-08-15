@@ -2,9 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-18
+Last Modified: 2026-08-15
 Updated: 2026-06-18  Geng Xun added guard coverage for the Windows ISIS app smoke-test harness.
 Updated: 2026-08-02  Geng Xun added csv2table manifest and behavior-smoke coverage.
+Updated: 2026-08-15  Geng Xun added installed-XML coverage for version-specific APP parameters.
 """
 
 from __future__ import annotations
@@ -13,6 +14,7 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
+import tempfile
 import unittest
 
 
@@ -27,6 +29,50 @@ MANIFEST_PATH = (
 
 
 class WindowsIsisAppSmokeScriptUnitTest(unittest.TestCase):
+    def test_installed_app_xml_controls_optional_parameter_support(self):
+        powershell = shutil.which("powershell") or shutil.which("pwsh")
+        if powershell is None:
+            self.skipTest("PowerShell is unavailable.")
+
+        common_script = PROJECT_ROOT / "ports" / "windows" / "isis" / "common.ps1"
+        with tempfile.TemporaryDirectory() as temp_dir:
+            prefix = Path(temp_dir)
+            xml_dir = prefix / "bin" / "xml"
+            xml_dir.mkdir(parents=True)
+            crop_xml = xml_dir / "crop.xml"
+
+            for parameter_names, expected in (
+                (("FROM", "TO", "NSAMPLES"), "False"),
+                (("FROM", "TO", "NSAMPLES", "OVERHANG"), "True"),
+            ):
+                parameters = "".join(
+                    f'<parameter name="{name}" />' for name in parameter_names
+                )
+                crop_xml.write_text(
+                    f"<application><group>{parameters}</group></application>",
+                    encoding="utf-8",
+                )
+                command = (
+                    f'. "{common_script}"; '
+                    f'Test-IsisAppParameter -Prefix "{prefix}" '
+                    '-AppName crop -ParameterName overhang'
+                )
+                completed = subprocess.run(
+                    [
+                        powershell,
+                        "-NoProfile",
+                        "-ExecutionPolicy",
+                        "Bypass",
+                        "-Command",
+                        command,
+                    ],
+                    cwd=str(PROJECT_ROOT),
+                    text=True,
+                    capture_output=True,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr)
+                self.assertEqual(completed.stdout.strip(), expected)
+
     def test_csv2table_is_allowlisted_and_behavior_smoked(self):
         manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
         apps = {item["name"]: item for item in manifest["apps"]}
@@ -64,7 +110,15 @@ class WindowsIsisAppSmokeScriptUnitTest(unittest.TestCase):
             self.fail(f"missing Windows ISIS app smoke script: {SMOKE_SCRIPT}")
 
         completed = subprocess.run(
-            [powershell, "-NoProfile", "-File", str(SMOKE_SCRIPT), "-ListCommands"],
+            [
+                powershell,
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                str(SMOKE_SCRIPT),
+                "-ListCommands",
+            ],
             cwd=str(PROJECT_ROOT),
             check=True,
             text=True,

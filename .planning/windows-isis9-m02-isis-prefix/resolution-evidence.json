@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "milestone_id": "windows-isis9-m02-isis-prefix",
+  "blocker": "A local third-party antivirus product removes the locally built catlab.exe during every launch; it must allow the ISIS build and prefix executables before the representative and 150-APP execution gates can run.",
+  "resolved_at": "2026-08-15T10:08:46.9333205Z",
+  "evidence": "The 360 Security Trojan Scan trusted-area UI contains directory D:\\code\\pyisis, added at 2026-08-15 18:07:41 and covering the ISIS prefix. A fresh reinstall returned exit 0; build/windows/isis-prefix/bin/catlab.exe existed before launch, catlab -help returned exit 0, and the executable remained present afterward with SHA-256 3AC1600EBFC32C55FB565ADBEF95AE41B399195C6EE0BD210C41685943A69AFF."
+}

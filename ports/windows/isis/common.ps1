@@ -35,6 +35,30 @@ function Invoke-CheckedCommand {
     }
 }
 
+function Test-IsisAppParameter {
+    param(
+        [Parameter(Mandatory = $true)][string]$Prefix,
+        [Parameter(Mandatory = $true)][string]$AppName,
+        [Parameter(Mandatory = $true)][string]$ParameterName
+    )
+
+    $xmlDir = Join-Path $Prefix "bin\xml"
+    $xmlPath = @(
+        (Join-Path $xmlDir "$AppName.xml")
+        (Join-Path $xmlDir "$AppName.exe.xml")
+    ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+    if (-not $xmlPath) {
+        Fail "ISIS APP XML not found for ${AppName}: $xmlDir"
+    }
+
+    [xml]$applicationXml = Get-Content -LiteralPath $xmlPath -Raw
+    $matches = @(
+        $applicationXml.SelectNodes("//parameter") |
+            Where-Object { $_.name -ieq $ParameterName }
+    )
+    return $matches.Count -gt 0
+}
+
 function Get-DefaultIsisSourceDir {
     param([string]$Version = "9.0.0")
     $repoRoot = Get-RepoRoot

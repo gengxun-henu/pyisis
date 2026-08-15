@@ -4,7 +4,7 @@ param(
     [string]$Prefix = $env:CONDA_PREFIX,
     [string]$Repository = "https://github.com/DOI-USGS/SpiceQL.git",
     [string]$Ref = "1.4.1",
-    [int]$Jobs = 2,
+    [int]$Jobs = [Math]::Min(24, [Environment]::ProcessorCount),
     [switch]$Force
 )
 

@@ -2,7 +2,7 @@ param(
     [string]$BuildDir,
     [string]$Config = "Release",
     [string[]]$Targets,
-    [int]$Jobs = 1
+    [int]$Jobs = [Math]::Min(24, [Environment]::ProcessorCount)
 )
 
 . "$PSScriptRoot\common.ps1"

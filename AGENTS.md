@@ -64,6 +64,11 @@ lacks the required packages.
 Configure only when needed, such as after changing `CMakeLists.txt` or build
 settings.
 
+For C++ builds driven by Ninja, default to `min(24, available logical processors)`
+parallel jobs. Use all logical processors when the machine exposes fewer than
+24, and cap the default at 24 on larger machines unless the user explicitly
+requests another value.
+
 ```bash
 source $HOME/miniconda3/etc/profile.d/conda.sh
 conda activate asp360_new
@@ -77,7 +82,9 @@ cmake -S . -B build \
   -DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON \
   -DCMAKE_CXX_COMPILER="$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-c++"
 
-cmake --build build -j$(nproc)
+jobs=$(nproc)
+[ "$jobs" -gt 24 ] && jobs=24
+cmake --build build -j"$jobs"
 ```
 
 ## Running Tests

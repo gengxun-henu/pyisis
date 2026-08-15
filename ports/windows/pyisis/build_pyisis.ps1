@@ -1,6 +1,6 @@
 param(
     [string]$BuildDir,
-    [int]$Jobs = 0
+    [int]$Jobs = [Math]::Min(24, [Environment]::ProcessorCount)
 )
 
 . "$PSScriptRoot\common.ps1"

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "milestone_id": "windows-isis9-m03-pyisis-core",
+  "verified_at": "2026-08-15T11:58:13.6753058Z",
+  "git": {
+    "status": "classified: M3 planning and lifecycle changes; print.prt is an unstaged ISIS side effect; ignored Windows build artifacts are retained for reuse",
+    "porcelain_v1_sha256": "27d1ab8700a4d9411dd8093d6b06f8d1268010d18e12d1684b3abe6caae66099",
+    "commit": "9eb48c6a3a737251997eb779c410c60e1a237c17"
+  },
+  "tests": [
+    {
+      "id": "pyisis-smoke-import",
+      "command": "ports/windows/pyisis/test_pyisis_smoke.ps1 -BuildDir build/windows/pyisis-build -IsisPrefix build/windows/isis-prefix -PythonExecutable D:/pyisis-win-env/python.exe",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "id": "pyisis-basic-tests",
+      "command": "ports/windows/pyisis/test_pyisis_basic.ps1 -BuildDir build/windows/pyisis-build -IsisPrefix build/windows/isis-prefix -PythonExecutable D:/pyisis-win-env/python.exe",
+      "passed": 329,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/windows/pyisis-build/python/isis_pybind/_isis_core.cp312-win_amd64.pyd",
+      "sha256": "66465d02a0a365eb2a821b63505f14fe4e856c5a1ad18024a461dd1a2ad3536b"
+    }
+  ],
+  "prerequisites": [
+    {
+      "id": "verified-isis9-prefix",
+      "path": "build/windows/isis-prefix/lib/isis.dll",
+      "status": "verified",
+      "sha256": "7291ff4ae9683bdae8c758ae9e615eb9f5cfb23da9253ad15d45a69583044420"
+    },
+    {
+      "id": "cpython-3-12",
+      "path": "D:/pyisis-win-env/python.exe",
+      "status": "verified",
+      "sha256": "32733c1f0c531b2a259a7003c9af5de6771427c4d7d90797a41d11d0ed708c90"
+    },
+    {
+      "id": "mock-isisdata",
+      "path": "tests/data/isisdata/mockup/base/kernels/lsk/naif0012.tls",
+      "status": "verified",
+      "sha256": "f15293b0747e5fb01a865596281cb0534f7c77274e78184bd64260cc92be3706"
+    }
+  ]
+}

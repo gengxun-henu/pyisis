@@ -9,6 +9,6 @@
 |---:|---|---|---|---|---|---|
 | 1 | `windows-isis9-m01-environment` | Prepare the Windows native build environment | `complete` | — | `.planning/windows-isis9-m01-environment` | complete |
 | 2 | `windows-isis9-m02-isis-prefix` | Build and verify the ISIS 9.0.0 native prefix | `complete` | `windows-isis9-m01-environment` | `.planning/windows-isis9-m02-isis-prefix` | complete |
-| 3 | `windows-isis9-m03-pyisis-core` | Build and test isis_pybind._isis_core | `pending` | `windows-isis9-m02-isis-prefix` | `.planning/windows-isis9-m03-pyisis-core` | — |
+| 3 | `windows-isis9-m03-pyisis-core` | Build and test isis_pybind._isis_core | `complete` | `windows-isis9-m02-isis-prefix` | `.planning/windows-isis9-m03-pyisis-core` | complete |
 
 This file is generated from `.planning/milestones.v1.json`; do not edit it directly.

@@ -27,7 +27,7 @@ The CPython 3.12 Windows extension builds against the verified ISIS 9.0.0 prefix
 
 ## Next Step
 
-Review the source plans and begin the first uncompleted valid-input task.
+None — milestone complete.
 
 ## Current Phase
 
@@ -37,8 +37,8 @@ Phase 1
 
 ### Phase 1: Milestone execution
 
-- [ ] Produce and verify the declared milestone evidence
-- **Status:** pending
+- [x] Produce and verify the declared milestone evidence
+- **Status:** complete
 
 ## Decisions Made
 
@@ -49,3 +49,6 @@ Phase 1
 
 | Error | Attempt | Resolution |
 |---|---|---|
+| Prerequisite check reported `conda or mamba` missing | 1 | Added the verified base Conda Scripts path; the second preflight passed. |
+| Planning-file patch context was stale after configure | 1 | Re-read all three M3 planning files and applied an exact-context update; no partial write occurred. |
+| Milestone verification rejected a multiline Next Step while registry status was `in_progress` | 1 | Collapsed the completion-close action to one plain-text line before rerunning verification. |

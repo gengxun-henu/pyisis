@@ -4,7 +4,7 @@
 
 **Goal:** Create and verify the short-path Windows x64 conda/MSVC build environment required to compile ISIS 9.0.0 and PyISIS.
 
-**Architecture:** Use the repository's pinned conda environment file with the existing `D:\tools\micromamba\micromamba.exe`, storing the environment at `D:\pyisis-win-env` and micromamba state at `D:\mamba\pyisis-isis9`. Load the Visual Studio 2022 x64 environment through `ports/windows/activate_msvc.ps1`, run the repository prerequisite checker, and persist a machine-readable readiness report under `build/windows/reports/`.
+**Architecture:** Use the repository's pinned conda environment file with `C:\Users\gx\miniconda3\Scripts\conda.exe --solver classic`, storing the environment at `D:\pyisis-win-env` and its package cache at `D:\conda-pkgs\pyisis-isis9`. Load the Visual Studio 2022 x64 environment through `ports/windows/activate_msvc.ps1`, run the repository prerequisite checker, and persist a machine-readable readiness report under `build/windows/reports/`.
 
 **Tech Stack:** Windows 11 x64, PowerShell 7, micromamba, conda-forge, CPython 3.12, CMake, Ninja, Visual Studio 2022 MSVC.
 
@@ -15,7 +15,9 @@
 - Preserve `.gitignore`, `print.prt`, unrelated local changes, and prior `.planning` directories.
 - Work only on milestone `windows-isis9-m01-environment` in this session.
 - The exact environment prefix is `D:\pyisis-win-env`.
-- The exact micromamba root prefix is `D:\mamba\pyisis-isis9`.
+- The exact Conda package cache is `D:\conda-pkgs\pyisis-isis9`.
+- Do not disable endpoint protection; this host must use Conda classic instead
+  of Micromamba for UCRT extraction.
 
 ---
 
@@ -26,7 +28,7 @@
 - Create: `D:\pyisis-win-env\conda-meta\history`
 
 **Interfaces:**
-- Consumes: `D:\tools\micromamba\micromamba.exe` and the conda-forge channels declared in the environment file.
+- Consumes: `C:\Users\gx\miniconda3\Scripts\conda.exe` and the conda-forge channel declared in the environment file.
 - Produces: a CPython 3.12 Windows x64 prefix used by every later native build command.
 
 - [ ] **Step 1: Confirm that the target paths do not already contain an unrelated environment**
@@ -34,7 +36,7 @@
 Run:
 
 ```powershell
-@('D:\pyisis-win-env', 'D:\mamba\pyisis-isis9') |
+@('D:\pyisis-win-env', 'D:\conda-pkgs\pyisis-isis9') |
   ForEach-Object { [pscustomobject]@{ Path = $_; Exists = Test-Path -LiteralPath $_ } }
 ```
 
@@ -45,22 +47,28 @@ Expected: both paths are absent before the first creation attempt, or an existin
 Run:
 
 ```powershell
-& 'D:\tools\micromamba\micromamba.exe' `
-  --root-prefix 'D:\mamba\pyisis-isis9' `
-  create -y -p 'D:\pyisis-win-env' `
-  -f 'ports\windows\env\pyisis-isis-win64.yml'
+$env:CONDA_PKGS_DIRS = 'D:\conda-pkgs\pyisis-isis9'
+$env:CONDARC = (Resolve-Path 'build\windows\conda\condarc').Path
+& 'C:\Users\gx\miniconda3\Scripts\conda.exe' env create `
+  --yes --solver classic `
+  --prefix 'D:\pyisis-win-env' `
+  --file 'ports\windows\env\pyisis-isis-win64.yml'
 ```
 
 Expected: exit code 0 and `D:\pyisis-win-env\conda-meta\history` exists.
+
+The command-scoped condarc contains only `channels: [conda-forge]` and an empty
+`default_channels` list. It prevents the user's global `defaults` channel from
+introducing unrelated Anaconda ToS requirements.
 
 - [ ] **Step 3: Verify the key package versions and native build tools**
 
 Run:
 
 ```powershell
-& 'D:\tools\micromamba\micromamba.exe' `
-  --root-prefix 'D:\mamba\pyisis-isis9' `
-  list -p 'D:\pyisis-win-env' python cmake ninja pybind11 csm
+& 'C:\Users\gx\miniconda3\Scripts\conda.exe' list `
+  --prefix 'D:\pyisis-win-env' | `
+  Select-String '^(python|cmake|ninja|pybind11|csm)\s'
 ```
 
 Expected: Python 3.12, CMake, Ninja, pybind11, and CSM 3.0.3.3 are installed from conda-forge.
@@ -128,6 +136,8 @@ $report = [ordered]@{
   cl_executable = (Get-Command cl).Source
   dumpbin_executable = (Get-Command dumpbin).Source
   micromamba_executable = 'D:\tools\micromamba\micromamba.exe'
+  environment_creator = 'conda-classic'
+  conda_package_cache = 'D:\conda-pkgs\pyisis-isis9'
   environment_file = 'ports/windows/env/pyisis-isis-win64.yml'
   prerequisite_check = 'passed'
 }
@@ -168,15 +178,15 @@ Expected: the report hash is 64 lowercase hexadecimal characters after normaliza
 
 - [ ] **Step 3: Close the milestone with schema-1 evidence**
 
-Write fresh schema-1 evidence matching the manifest IDs to
-`.planning/windows-isis9-m01-environment/completion-evidence.json`, then run:
+Write fresh schema-1 evidence matching the manifest IDs to the ignored path
+`build/windows/reports/windows-isis9-m01-completion-evidence.json`, then run:
 
 ```powershell
 & 'C:\Users\gx\miniconda3\python.exe' `
   'C:\Users\gx\.codex\skills\milestone-session-manager\scripts\close_session.py' `
   --repo 'D:\code\pyisis\pyisis' `
   --outcome complete `
-  --evidence 'D:\code\pyisis\pyisis\.planning\windows-isis9-m01-environment\completion-evidence.json'
+  --evidence 'D:\code\pyisis\pyisis\build\windows\reports\windows-isis9-m01-completion-evidence.json'
 ```
 
 Expected: M1 becomes `complete`, M2 remains `pending`, verification passes, and the command prints the exact prompt for starting M2.

@@ -80,6 +80,37 @@ outputs under `build/windows/isis-command-smoke` by default. Pass
 `lronac2isis`, `spiceinit`, `lronaccal`, and `lronacecho` when a raw NAC image
 is available.
 
+### Launching installed ISIS applications
+
+Directly launched CLI or GUI applications must inherit both the installed ISIS
+prefix and the complete conda runtime search path. Do not add only
+`Library\bin`: `isis.dll` loads `cspice.dll` from `%CONDA_PREFIX%\bin`.
+
+```powershell
+$env:CONDA_PREFIX = "D:\pyisis-win-env"
+$env:ISISROOT = "$PWD\build\windows\isis-prefix"
+$env:ISIS_PREFIX = $env:ISISROOT
+$env:ISISDATA = "$PWD\tests\data\isisdata\mockup"
+$runtimePaths = @(
+    "$env:ISISROOT\bin",
+    "$env:ISISROOT\lib",
+    "$env:CONDA_PREFIX\Library\bin",
+    "$env:CONDA_PREFIX\Library\usr\bin",
+    "$env:CONDA_PREFIX\Library\mingw-w64\bin",
+    "$env:CONDA_PREFIX\Scripts",
+    "$env:CONDA_PREFIX\bin",
+    $env:CONDA_PREFIX
+)
+$env:PATH = (($runtimePaths | Where-Object { Test-Path $_ }) + @($env:PATH)) -join ";"
+
+& "$env:ISISROOT\bin\reduce.exe" -gui
+```
+
+Use the same environment for other installed applications such as `jigsaw`.
+For a loader error, use MSVC `dumpbin /DEPENDENTS` on the application and then
+on `isis.dll` to identify the missing transitive DLL before modifying the build
+or copying libraries.
+
 ## Stage 2: pyisis
 
 ```powershell

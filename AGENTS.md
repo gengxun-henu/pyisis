@@ -287,3 +287,11 @@ instead of expanding this file.
   test modules for quick validation.
 - After rebuilding, no server restart is needed. The `.so` is loaded fresh each
   time Python imports `isis_pybind`.
+- When launching Windows ISIS applications directly, set `CONDA_PREFIX`,
+  `ISISROOT`, `ISIS_PREFIX`, and `ISISDATA`, then prepend the installed ISIS
+  `bin`/`lib` directories and all conda runtime directories used by
+  `ports/windows/isis/test_isis_apps_smoke.ps1` to `PATH`. In particular,
+  include both `%CONDA_PREFIX%\bin` and `%CONDA_PREFIX%\Library\bin`:
+  `isis.dll` depends on `cspice.dll` from the former, while Qt and other conda
+  DLLs commonly come from the latter. Diagnose similar loader failures with
+  MSVC `dumpbin /DEPENDENTS` before changing the build or copying DLLs.

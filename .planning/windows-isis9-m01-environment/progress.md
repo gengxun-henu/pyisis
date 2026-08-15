@@ -65,6 +65,10 @@
 - Initial pre-close milestone structure verification found a multiline
   `Next Step`; normalized it to the required single plain-text line before
   completion evidence generation.
+- First close attempt used a predicted post-close Git porcelain hash; the tool
+  rejected it against the actual clean pre-transaction hash and made no
+  lifecycle changes. Evidence generation was corrected to the observed clean
+  state.
 
 ## Test Results
 

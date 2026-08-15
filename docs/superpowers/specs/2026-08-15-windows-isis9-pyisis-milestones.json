@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "project_id": "windows-isis9-pyisis-native-build",
+  "title": "Windows ISIS 9.0.0 and PyISIS native build",
+  "document_header": "# Windows ISIS 9.0.0 and PyISIS Native Build Milestones",
+  "milestones": [
+    {
+      "id": "windows-isis9-m01-environment",
+      "title": "Prepare the Windows native build environment",
+      "dependencies": [],
+      "source_plans": [
+        "docs/superpowers/specs/2026-08-15-windows-isis9-pyisis-build-design.md#milestones",
+        "ports/windows/README.md#prerequisites"
+      ],
+      "completion_gate": "The short-path conda environment and Visual Studio 2022 x64 toolchain are reproducible and all repository Windows prerequisite checks pass.",
+      "completion_requirements": {
+        "tests": [
+          "windows-prerequisite-check"
+        ],
+        "artifacts": [
+          "build/windows/reports/environment-readiness.json"
+        ],
+        "prerequisites": [
+          "windows-11-x64",
+          "visual-studio-2022-msvc",
+          "micromamba"
+        ]
+      }
+    },
+    {
+      "id": "windows-isis9-m02-isis-prefix",
+      "title": "Build and verify the ISIS 9.0.0 native prefix",
+      "dependencies": [
+        "windows-isis9-m01-environment"
+      ],
+      "source_plans": [
+        "docs/superpowers/specs/2026-08-15-windows-isis9-pyisis-build-design.md#milestones",
+        "ports/windows/isis/README.md"
+      ],
+      "completion_gate": "The patched upstream ISIS 9.0.0 source builds and installs with MSVC, the prefix verification passes, and representative ISIS applications pass their smoke tests.",
+      "completion_requirements": {
+        "tests": [
+          "isis-prefix-verification",
+          "isis-app-smoke"
+        ],
+        "artifacts": [
+          "build/windows/isis-prefix/lib/isis.dll",
+          "build/windows/isis-prefix/lib/isis.lib"
+        ],
+        "prerequisites": [
+          "isis-upstream-tag-9-0-0",
+          "windows-patch-queue",
+          "windows-build-environment"
+        ]
+      }
+    },
+    {
+      "id": "windows-isis9-m03-pyisis-core",
+      "title": "Build and test isis_pybind._isis_core",
+      "dependencies": [
+        "windows-isis9-m02-isis-prefix"
+      ],
+      "source_plans": [
+        "docs/superpowers/specs/2026-08-15-windows-isis9-pyisis-build-design.md#milestones",
+        "ports/windows/README.md#stage-2-pyisis",
+        "ports/windows/pyisis/README.md"
+      ],
+      "completion_gate": "The CPython 3.12 Windows extension builds against the verified ISIS 9.0.0 prefix, imports in a fresh process, and passes the Windows basic test set.",
+      "completion_requirements": {
+        "tests": [
+          "pyisis-smoke-import",
+          "pyisis-basic-tests"
+        ],
+        "artifacts": [
+          "build/windows/pyisis-build/python/isis_pybind/_isis_core.cp312-win_amd64.pyd"
+        ],
+        "prerequisites": [
+          "verified-isis9-prefix",
+          "cpython-3-12",
+          "mock-isisdata"
+        ]
+      }
+    }
+  ]
+}

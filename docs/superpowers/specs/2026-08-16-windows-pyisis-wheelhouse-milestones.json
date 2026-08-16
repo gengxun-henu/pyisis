@@ -2,18 +2,12 @@
   "schema_version": 1,
   "project_id": "windows-pyisis-isis9-wheelhouse",
   "title": "Windows PyISIS ISIS 9 wheelhouse",
-  "created_date": "2026-08-16",
   "document_header": "# Windows PyISIS ISIS 9 Wheelhouse Milestone",
-  "branch": "main",
-  "worktree": ".",
-  "initial_commit": "d9e5b3e0015e124b691ba522c2ec6bb5467f8bb2",
   "milestones": [
     {
       "id": "windows-isis9-m04-wheelhouse",
       "title": "Build and release-validate the Windows PyISIS wheelhouse",
-      "status": "pending",
       "dependencies": [],
-      "plan_dir": ".planning/windows-isis9-m04-wheelhouse",
       "source_plans": [
         "docs/superpowers/specs/2026-08-16-windows-pyisis-wheelhouse-design.md",
         "docs/superpowers/plans/2026-08-16-windows-pyisis-wheelhouse.md"
@@ -36,11 +30,7 @@
           "cpython-3-12",
           "mock-isisdata"
         ]
-      },
-      "last_session_date": null,
-      "last_close_outcome": null,
-      "blocker": null,
-      "completion_evidence": null
+      }
     }
   ]
 }

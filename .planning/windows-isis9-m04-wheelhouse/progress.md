@@ -24,6 +24,13 @@
 - Commit: `7c269533 feat: report clean Windows wheel installs`.
 - Independent task review: spec compliant, quality approved, no findings.
 
+### Task 2 completed 2026-08-16
+
+- Added the strict Windows wheelhouse validator and six focused validator tests.
+- Changed: `tools/packaging/validate_windows_wheelhouse.py`, `tests/unitTest/windows_wheelhouse_validation_unit_test.py`.
+- Commits: `ac43513b feat: validate Windows PyISIS wheelhouses`; `0919af97 fix: require passed Windows clean-install checks`.
+- Review fix round 1 closed the fail-closed clean-install evidence gap; scoped re-review found no new breakage.
+
 ## Test Results
 
 | Test | Passed | Failed | Skipped | Status |
@@ -31,6 +38,7 @@
 | `D:/pyisis-win-env/python.exe -m unittest tests.unitTest.packaging_tools_unit_test.PackagingToolsUnitTest.test_clean_venv_install_script_installs_from_wheelhouse -v` | 1 | 0 | 0 | baseline passed |
 | Task 1 four focused `PackagingToolsUnitTest` tests | 4 | 0 | 0 | passed |
 | `D:/pyisis-win-env/python.exe -m py_compile tools/packaging/test_wheel_install.py` | 1 | 0 | 0 | passed |
+| Task 2 validator plus two adjacent runtime tests | 8 | 0 | 0 | passed after fix round 1 |
 
 ## External Prerequisites
 
@@ -54,5 +62,5 @@
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
 | What have I learned? | See `findings.md` |
-| What have I done? | Archived M01-M03, activated M04, and completed/reviewed Task 1 |
-| What am I about to do? | Dispatch and review Task 2: strict Windows wheelhouse validator |
+| What have I done? | Archived M01-M03, activated M04, and completed/reviewed Tasks 1-2 |
+| What am I about to do? | Verify prerequisites and build the exact Task 3 wheelhouse |

@@ -10,6 +10,8 @@
 - The verified ISIS 9 prefix is available at `build/windows/isis-prefix` through an ignored junction to the repository-root artifact.
 - `D:/pyisis-win-env/python.exe` and the mock LSK prerequisite are present.
 - Task 1 added a passed-only JSON evidence contract to `tools/packaging/test_wheel_install.py`; subprocess failures remain uncaught and cannot write a new passed report.
+- Task 2 added strict exact-wheel, payload-boundary, dependency-closure, clean-install-check, and SHA-256 validation in `tools/packaging/validate_windows_wheelhouse.py`.
+- The existing adjacent unresolved-runtime regression is named `test_stage_runtime_closure_reports_unresolved_dependency`; the implementation plan's alternative name does not exist.
 
 ## Evidence-Based Inference
 
@@ -19,6 +21,7 @@
 
 - Completion evidence has not yet been produced.
 - The Task 1 source-contract tests do not replace the real clean-wheel installation scheduled for Task 4.
+- Task 3 must freshly verify the exact prerequisite hashes before building retained artifacts.
 
 ## Decisions
 

@@ -37,3 +37,46 @@ Current local validation:
 .\ports\windows\pyisis\test_pyisis_smoke.ps1
 .\ports\windows\pyisis\test_pyisis_basic.ps1
 ```
+
+## Windows wheelhouse
+
+Build the ISIS 9 Windows wheelhouse from the verified local ISIS prefix:
+
+```powershell
+$env:CONDA_PREFIX = "D:\pyisis-win-env"
+$env:PATH = "D:\pyisis-win-env;D:\pyisis-win-env\Scripts;D:\pyisis-win-env\Library\bin;D:\pyisis-win-env\Library\usr\bin;D:\pyisis-win-env\Library\mingw-w64\bin;D:\pyisis-win-env\bin;C:\Users\gx\miniconda3\Scripts;$env:PATH"
+.\ports\windows\activate_msvc.ps1
+& "D:\pyisis-win-env\python.exe" -c "import build, pybind11, scikit_build_core, wheel"
+.\tools\packaging\build_wheels.ps1 `
+  -IsisPrefix "$PWD\build\windows\isis-prefix" `
+  -OutputDir "$PWD\build\windows\wheelhouse-isis9" `
+  -PythonExecutable "D:\pyisis-win-env\python.exe" `
+  -DependencyPrefix "D:\pyisis-win-env" `
+  -BindingProjectDir "$PWD" `
+  -PackageVersion "1.3.0rc2"
+```
+
+The wheelhouse contains these three wheels:
+
+- `usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl`
+- `usgs_pyisis_runtime_win64-1.3.0rc2-py3-none-win_amd64.whl`
+- `usgs_pyisis_isisdata_minimal-1.3.0rc2-py3-none-any.whl`
+
+Verify a clean offline installation with:
+
+```powershell
+& "D:\pyisis-win-env\python.exe" tools\packaging\test_wheel_install.py `
+  --wheelhouse "$PWD\build\windows\wheelhouse-isis9" `
+  --venv "$PWD\build\windows\pyisis-wheel-install-venv-20260816" `
+  --package "usgs-pyisis==1.3.0rc2" `
+  --expected-isis-version "9.0.0" `
+  --test-list tools\packaging\basic_tests.txt `
+  --report "$PWD\build\windows\reports\pyisis-wheel-install-isis9.json"
+```
+
+The clean-install and final wheelhouse reports are:
+
+- `build\windows\reports\pyisis-wheel-install-isis9.json`
+- `build\windows\reports\pyisis-wheelhouse-isis9-validation.json`
+
+The PyISIS wheelhouse does not contain standalone ISIS APP executables or APP XML. Native applications such as reduce, jigsaw, and qnet are distributed separately.

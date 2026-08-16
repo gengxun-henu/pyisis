@@ -26,7 +26,7 @@ The exact CPython 3.12 Windows three-wheel wheelhouse builds against the verifie
 
 ## Next Step
 
-Dispatch and review implementation-plan Task 1: structured clean-install evidence.
+Dispatch and review implementation-plan Task 2: strict Windows wheelhouse validator.
 
 ## Current Phase
 

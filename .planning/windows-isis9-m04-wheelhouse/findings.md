@@ -9,6 +9,7 @@
 - Active implementation worktree: `.worktrees/m04-windows-pyisis-wheelhouse` on branch `feature/m04-windows-pyisis-wheelhouse`.
 - The verified ISIS 9 prefix is available at `build/windows/isis-prefix` through an ignored junction to the repository-root artifact.
 - `D:/pyisis-win-env/python.exe` and the mock LSK prerequisite are present.
+- Task 1 added a passed-only JSON evidence contract to `tools/packaging/test_wheel_install.py`; subprocess failures remain uncaught and cannot write a new passed report.
 
 ## Evidence-Based Inference
 
@@ -17,6 +18,7 @@
 ## Unresolved Items
 
 - Completion evidence has not yet been produced.
+- The Task 1 source-contract tests do not replace the real clean-wheel installation scheduled for Task 4.
 
 ## Decisions
 

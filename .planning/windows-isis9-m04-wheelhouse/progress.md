@@ -17,11 +17,20 @@
 - Next action is implementation-plan Task 1: structured clean-install evidence.
 - Generated the Task 1 SDD brief at `.superpowers/sdd/2026-08-16-windows-pyisis-wheelhouse/task-1-brief.md` from base commit `3a713b74`.
 
+### Task 1 completed 2026-08-16
+
+- Added successful clean-install JSON evidence generation and source-contract coverage.
+- Changed: `tools/packaging/test_wheel_install.py`, `tests/unitTest/packaging_tools_unit_test.py`.
+- Commit: `7c269533 feat: report clean Windows wheel installs`.
+- Independent task review: spec compliant, quality approved, no findings.
+
 ## Test Results
 
 | Test | Passed | Failed | Skipped | Status |
 |---|---:|---:|---:|---|
 | `D:/pyisis-win-env/python.exe -m unittest tests.unitTest.packaging_tools_unit_test.PackagingToolsUnitTest.test_clean_venv_install_script_installs_from_wheelhouse -v` | 1 | 0 | 0 | baseline passed |
+| Task 1 four focused `PackagingToolsUnitTest` tests | 4 | 0 | 0 | passed |
+| `D:/pyisis-win-env/python.exe -m py_compile tools/packaging/test_wheel_install.py` | 1 | 0 | 0 | passed |
 
 ## External Prerequisites
 
@@ -45,5 +54,5 @@
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
 | What have I learned? | See `findings.md` |
-| What have I done? | Archived M01-M03, initialized and activated M04, and verified prerequisite paths |
-| What am I about to do? | Dispatch and review Task 1: structured clean-install evidence |
+| What have I done? | Archived M01-M03, activated M04, and completed/reviewed Task 1 |
+| What am I about to do? | Dispatch and review Task 2: strict Windows wheelhouse validator |

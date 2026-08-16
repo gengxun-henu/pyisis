@@ -11,7 +11,7 @@
     {
       "id": "windows-isis9-m05-native-app-design",
       "title": "Design the native Windows ISIS APP release",
-      "status": "in_progress",
+      "status": "complete",
       "dependencies": [],
       "plan_dir": ".planning/windows-isis9-m05-native-app-design",
       "source_plans": [
@@ -30,9 +30,42 @@
         ]
       },
       "last_session_date": "2026-08-16",
-      "last_close_outcome": null,
+      "last_close_outcome": "complete",
       "blocker": null,
-      "completion_evidence": null
+      "completion_evidence": {
+        "schema_version": 1,
+        "milestone_id": "windows-isis9-m05-native-app-design",
+        "verified_at": "2026-08-16T11:59:09.8138495Z",
+        "git": {
+          "status": "clean",
+          "porcelain_v1_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "commit": "7c466c32cc45769424f83f1633f71fd1421a47da"
+        },
+        "tests": [
+          {
+            "id": "windows-native-app-design-validation",
+            "command": "D:/pyisis-win-env/python.exe - <M05 SPEC inventory, approved-requirement, implementation-plan, and M04 prerequisite validator recorded in progress.md>",
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          }
+        ],
+        "artifacts": [
+          {
+            "path": "docs/superpowers/specs/2026-08-16-windows-isis-native-app-distribution-design.md",
+            "sha256": "8df8ae4d01fe1b0f4fae7e1bedb8744eb15182d695438d2ace94b15e1c67d942"
+          }
+        ],
+        "prerequisites": [
+          {
+            "id": "windows-isis9-m04-wheelhouse-complete",
+            "path": ".planning/archive/windows-pyisis-isis9-wheelhouse-m04/windows-isis9-m04-wheelhouse/completion-evidence.json",
+            "status": "verified",
+            "sha256": "af236412dd17d35b05716d70ff735297e8d67aa4df87421aee258930de83e573"
+          }
+        ]
+      }
     }
   ]
 }

@@ -15,6 +15,10 @@
 - Windows `dumpbin` returned success and parseable DLL names, but Python's default GBK text decoding failed first on byte `0xA5`; dependency scanning therefore needs an explicit tolerant decoding policy at both dumpbin call sites.
 - Task 3 produced the exact three-wheel CPython 3.12/Windows artifact set; the runtime dependency report has `unresolved=0`.
 - Final Task 3 retained-input hashes: binding `8f1a923e62c12e98041bd7a5eebdffaaf00858597747cd9d4d690393451dcc00`; runtime `1d51ad225a238d70b6accc56989023ca9dbe7401e74f6dd62153c5c55e0556bf`; minimal data `43009899a9586e90bb2cbc042233f37c77c4f68fbf0d6036a5179bd1549388b5`; dependency JSON `fceb4b3b943530a53df3ef9fea684170ac9df1e3452e148f3703f5b79108a842`.
+- The canonical runtime member is `pyisis_runtime/vendor/isis/lib/isis.dll`; the stager preserves prefix-relative layout and the runtime package explicitly registers `vendor/isis/lib` as a DLL directory.
+- Task 4's isolated offline install passed all 11 recorded checks and reported package `1.3.0rc2` with ISIS `9.0.0` before final validator correction.
+- Task 4 final validation passed with four retained-input hashes, exact three-wheel set, canonical runtime payload, no APP payload, and `unresolved=0`.
+- The clean-install venv, runtime staging directory, and generated minimal-data egg-info were removed after evidence verification; wheelhouse and reports were retained.
 
 ## Evidence-Based Inference
 
@@ -26,6 +30,7 @@
 - The Task 1 source-contract tests do not replace the real clean-wheel installation scheduled for Task 4.
 - Task 3 must freshly verify the exact prerequisite hashes before building retained artifacts.
 - Task 4 must prove the wheels install and run without repository/build-time Python or DLL paths before M04 can close.
+- Task 5 still must document the commands and product boundary, rerun final focused source tests, and prepare structured milestone-close evidence.
 
 ## Decisions
 

@@ -39,6 +39,14 @@
 - Final exact build retry exited 0 in 270.7 seconds and produced three wheels plus dependency JSON with `unresolved=0`.
 - Retained hashes: binding `8f1a923e62c12e98041bd7a5eebdffaaf00858597747cd9d4d690393451dcc00`; runtime `1d51ad225a238d70b6accc56989023ca9dbe7401e74f6dd62153c5c55e0556bf`; minimal `43009899a9586e90bb2cbc042233f37c77c4f68fbf0d6036a5179bd1549388b5`; dependency JSON `fceb4b3b943530a53df3ef9fea684170ac9df1e3452e148f3703f5b79108a842`.
 
+### Task 4 completed 2026-08-16
+
+- Fresh offline wheelhouse installation passed all 11 checks; package version `1.3.0rc2` and ISIS version `9.0.0` loaded from the clean venv.
+- Corrected the validator's canonical runtime member to `vendor/isis/lib/isis.dll` in commit `cbb34d70 fix: validate canonical Windows ISIS runtime layout`.
+- Final validator report passed with four retained artifacts and `unresolved=0`; independent hashes matched.
+- Removed and verified absent only the disposable clean venv, runtime staging, and generated minimal-data egg-info; retained the wheelhouse and both reports.
+- Independent Task 4 review approved with no findings.
+
 ## Test Results
 
 | Test | Passed | Failed | Skipped | Status |
@@ -50,6 +58,8 @@
 | Task 3 original cross-platform pre-build selector | 52 | 0 | 4 | Linux-only staging cases errored on Windows; classified platform-inapplicable |
 | Task 3 Windows-focused pre-build selector | 49 | 0 | 0 | passed |
 | Task 3 Windows-focused selector after dumpbin regression tests | 51 | 0 | 0 | passed |
+| Task 4 isolated wheel install checks | 11 | 0 | 0 | passed |
+| Task 4 validator plus adjacent runtime tests after layout correction | 8 | 0 | 0 | passed |
 
 ## External Prerequisites
 
@@ -75,5 +85,5 @@
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
 | What have I learned? | See `findings.md` |
-| What have I done? | Archived M01-M03, activated M04, and completed/reviewed Tasks 1-3 including the exact wheelhouse build |
-| What am I about to do? | Perform the isolated wheel install, generate final reports, and narrowly clean disposable outputs |
+| What have I done? | Archived M01-M03, activated M04, and completed/reviewed Tasks 1-4 through release-grade wheelhouse evidence |
+| What am I about to do? | Document M04 usage, run final verification, and prepare structured close evidence |

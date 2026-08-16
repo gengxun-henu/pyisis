@@ -11,7 +11,7 @@
     {
       "id": "windows-isis9-m05-native-app-design",
       "title": "Design the native Windows ISIS APP release",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "plan_dir": ".planning/windows-isis9-m05-native-app-design",
       "source_plans": [
@@ -29,7 +29,7 @@
           "windows-isis9-m04-wheelhouse-complete"
         ]
       },
-      "last_session_date": null,
+      "last_session_date": "2026-08-16",
       "last_close_outcome": null,
       "blocker": null,
       "completion_evidence": null

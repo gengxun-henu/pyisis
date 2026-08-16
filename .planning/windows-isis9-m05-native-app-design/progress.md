@@ -4,6 +4,26 @@
 
 ## Session Log
 
+### Activated 2026-08-16
+
+- **Status:** in progress
+- Ran planning session catch-up; no unsynced context was reported.
+- Ran milestone verification successfully, inspected the branch, clean Git state, recent commits, M04 archived completion evidence, M05 source plan, and all three M05 planning files.
+- Activated `windows-isis9-m05-native-app-design` with the milestone manager.
+- Began the unique Next Step by separating the existing command-line APP manifest path from the required `qnet` GUI packaging question.
+- Inspected the 150-entry tracked APP manifest and the actual 364-executable ISIS 9 prefix; confirmed all three mandatory executables exist while only `reduce` and `jigsaw` belong to the tracked CLI manifest.
+- Brainstorming decision: user selected a portable ZIP for scientific/developer users as the first-release format.
+- Brainstorming decision: user selected the tracked 150 CLI APPs plus `qnet` as the exact 151-APP public inventory.
+- Brainstorming decision: user selected bundled minimal bootstrap/test ISISDATA plus an external complete-ISISDATA override.
+- Brainstorming decision: user selected a prepared ISIS shell, one generic APP launcher, and a dedicated double-clickable `qnet` launcher.
+- Brainstorming decision: user selected Windows 11 x64 as the only first-release clean-machine platform.
+- Architecture approval: user selected approach A, a single curated portable ZIP staged from explicit APP and runtime dependency manifests.
+- Design section 1 approved: prefix-like runtime layout, centralized launchers, explicit APP/file manifests, bundled minimal data, and exclusion of development/PyISIS-wheel content.
+- Design section 2 approved: manifest-driven staging, recursive dependency closure, fixed retained artifact names, reproducible hashes, and fail-closed contamination/missing-file checks.
+- Design section 3 approved: clean Windows 11 x64 CLI/GUI/data validation matrix and verified-artifact-first cleanup rules.
+- Wrote `docs/superpowers/specs/2026-08-16-windows-isis-native-app-distribution-design.md`.
+- Completed the brainstorming SPEC self-review: no placeholders were found, the explicit 150-name CLI inventory exactly matched the tracked manifest, the mandatory APP contract was present, and `git diff --check` passed.
+
 ### Initialized 2026-08-16
 
 - **Status:** pending
@@ -16,6 +36,7 @@
 
 | Test | Passed | Failed | Skipped | Status |
 |---|---:|---:|---:|---|
+| M05 SPEC self-review inventory/consistency check | 1 | 0 | 0 | passed |
 
 ## External Prerequisites
 

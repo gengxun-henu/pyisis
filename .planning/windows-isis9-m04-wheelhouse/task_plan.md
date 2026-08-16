@@ -26,7 +26,7 @@ The exact CPython 3.12 Windows three-wheel wheelhouse builds against the verifie
 
 ## Next Step
 
-Review the source plans and begin the first uncompleted valid-input task.
+Dispatch and review implementation-plan Task 1: structured clean-install evidence.
 
 ## Current Phase
 
@@ -37,14 +37,19 @@ Phase 1
 ### Phase 1: Milestone execution
 
 - [ ] Produce and verify the declared milestone evidence
-- **Status:** pending
+- **Status:** in_progress
 
 ## Decisions Made
 
 | Decision | Rationale |
 |---|---|
+| Archive the verified M01-M03 registry before initializing M04 | Preserves all prior lifecycle evidence while giving M04 a clean canonical registry compatible with the milestone manager. |
+| Execute M04 in `.worktrees/m04-windows-pyisis-wheelhouse` | Isolates release work from unrelated repository-root state. |
+| Reuse the verified ISIS 9 prefix through an ignored directory junction | Avoids duplicating a large build artifact while keeping its original verified bytes authoritative. |
 
 ## Errors Encountered
 
 | Error | Attempt | Resolution |
 |---|---|---|
+| Old-milestone verification from the isolated worktree could not resolve ignored root artifacts and rejected paths escaping through the prefix junction | 1 | Verified and archived M01-M03 from the repository root, initialized the new M04 registry there, then cherry-picked the lifecycle commit into this worktree. |
+| A combined PowerShell cleanup command was rejected by the command safety policy | 1 | Performed no deletion; moved the temporary pre-manager planning draft into the ignored SDD workspace as a recoverable backup. |

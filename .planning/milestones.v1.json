@@ -11,7 +11,7 @@
     {
       "id": "windows-isis9-m04-wheelhouse",
       "title": "Build and release-validate the Windows PyISIS wheelhouse",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "plan_dir": ".planning/windows-isis9-m04-wheelhouse",
       "source_plans": [
@@ -37,7 +37,7 @@
           "mock-isisdata"
         ]
       },
-      "last_session_date": null,
+      "last_session_date": "2026-08-16",
       "last_close_outcome": null,
       "blocker": null,
       "completion_evidence": null

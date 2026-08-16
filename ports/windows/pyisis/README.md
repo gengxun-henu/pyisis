@@ -74,6 +74,20 @@ Verify a clean offline installation with:
   --report "$PWD\build\windows\reports\pyisis-wheel-install-isis9.json"
 ```
 
+Generate the final release-validation report from the fresh clean-install
+evidence and the current wheel bytes:
+
+```powershell
+& "D:\pyisis-win-env\python.exe" tools\packaging\validate_windows_wheelhouse.py `
+  --wheelhouse "$PWD\build\windows\wheelhouse-isis9" `
+  --clean-install-report "$PWD\build\windows\reports\pyisis-wheel-install-isis9.json" `
+  --report "$PWD\build\windows\reports\pyisis-wheelhouse-isis9-validation.json" `
+  --package-version "1.3.0rc2" `
+  --python-abi "cp312" `
+  --platform-tag "win_amd64" `
+  --expected-isis-version "9.0.0"
+```
+
 The clean-install and final wheelhouse reports are:
 
 - `build\windows\reports\pyisis-wheel-install-isis9.json`

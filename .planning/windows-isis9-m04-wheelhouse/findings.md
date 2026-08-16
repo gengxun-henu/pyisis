@@ -29,9 +29,9 @@
 ## Unresolved Items
 
 - Completion evidence has not yet been produced.
-- The Task 1 source-contract tests do not replace the real clean-wheel installation scheduled for Task 4.
-- Task 3 must freshly verify the exact prerequisite hashes before building retained artifacts.
-- Task 4 must prove the wheels install and run without repository/build-time Python or DLL paths before M04 can close.
+- Task 1 source-contract coverage was followed by the real Task 4 clean-wheel installation and its hardened final-review rerun.
+- Task 3 freshly verified the exact prerequisite hashes before producing the retained artifacts.
+- Task 4 proved the wheels install and run with all three distribution origins inside the clean venv, without build-time Python or DLL paths.
 - Broad whole-branch review and structured milestone-close evidence remain before M04 can close.
 
 ## Decisions

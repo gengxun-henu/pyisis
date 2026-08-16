@@ -31,6 +31,7 @@ Updated: 2026-08-05  Geng Xun covered complete Windows dependency-prefix isolati
 Updated: 2026-08-05  Geng Xun covered the Windows 11 runner readiness contract.
 Updated: 2026-08-15  Geng Xun required CRLF-safe context handling for Windows ISIS patches.
 Updated: 2026-08-16  Geng Xun added structured Windows wheel clean-install evidence coverage.
+Updated: 2026-08-16  Geng Xun added isolated-install, stale-report, unittest-count, and command-serialization coverage.
 """
 
 from __future__ import annotations
@@ -38,6 +39,9 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import sys
+from tempfile import TemporaryDirectory
 import unittest
 from unittest import mock
 
@@ -593,6 +597,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
 
         script = TEST_WHEEL_INSTALL_SCRIPT.read_text(encoding="utf-8")
         self.assertIn("--no-index", script)
+        self.assertIn("--isolated", script)
+        self.assertIn("--no-cache-dir", script)
         self.assertIn("--find-links", script)
         self.assertIn("usgs-pyisis", script)
         self.assertIn("pyisis", script)
@@ -610,6 +616,81 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("--expected-isis-version", script)
         self.assertIn("__isis_version__", script)
         self.assertIn('"-m", "unittest"', script)
+
+    def test_clean_venv_install_invalidates_stale_report_before_venv_check(self):
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            venv_dir = root / "existing-venv"
+            venv_dir.mkdir()
+            report = root / "clean-install-report.json"
+            report.write_text('{"status": "passed"}\n', encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(TEST_WHEEL_INSTALL_SCRIPT),
+                    "--wheelhouse",
+                    str(root / "wheelhouse"),
+                    "--venv",
+                    str(venv_dir),
+                    "--report",
+                    str(report),
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertFalse(report.exists())
+
+    def test_unittest_summary_parser_reports_truthful_counts(self):
+        spec = importlib.util.spec_from_file_location(
+            "test_wheel_install_counts",
+            TEST_WHEEL_INSTALL_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        cases = (
+            ("Ran 1 test in 0.001s\n\nOK\n", (1, 0, 0, 0)),
+            ("Ran 4 tests in 0.002s\n\nOK (skipped=1)\n", (3, 0, 1, 0)),
+            (
+                "Ran 5 tests in 0.003s\n\nFAILED (failures=1, errors=1, skipped=1)\n",
+                (2, 2, 1, 0),
+            ),
+            ("Ran 3 tests in 0.004s\n\nOK (expected failures=1)\n", (2, 0, 0, 1)),
+        )
+        for output, expected in cases:
+            with self.subTest(output=output):
+                self.assertEqual(module._parse_unittest_summary(output), expected)
+
+    def test_clean_venv_windows_command_serialization_quotes_paths(self):
+        spec = importlib.util.spec_from_file_location(
+            "test_wheel_install_command",
+            TEST_WHEEL_INSTALL_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        command = [
+            r"C:\Program Files\Python 3.12\python.exe",
+            "-c",
+            'print("quoted value")',
+            r"C:\wheel house\quoted path",
+        ]
+        with mock.patch.object(module.sys, "platform", "win32"):
+            serialized = module._command_text(command)
+
+        self.assertEqual(
+            serialized,
+            '"C:\\Program Files\\Python 3.12\\python.exe" -c '
+            '"print(\\\"quoted value\\\")" "C:\\wheel house\\quoted path"',
+        )
 
     def test_clean_venv_install_script_selects_platform_python_path(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
@@ -660,6 +741,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 "CONDA_PREFIX": str(conda_root),
                 "PYISIS_WINDOWS_DEP_PREFIX": str(windows_dependency_root),
                 "PYTHONPATH": str(PROJECT_ROOT / "build" / "python"),
+                "PIP_CONFIG_FILE": str(PROJECT_ROOT / "pip.ini"),
+                "PIP_INDEX_URL": "https://example.invalid/simple",
+                "PIP_EXTRA_INDEX_URL": "https://example.invalid/extra",
                 "PATH": path,
             },
             clear=True,
@@ -672,6 +756,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertNotIn("PYTHONPATH", env)
         self.assertNotIn("CONDA_PREFIX", env)
         self.assertNotIn("PYISIS_WINDOWS_DEP_PREFIX", env)
+        self.assertNotIn("PIP_CONFIG_FILE", env)
+        self.assertNotIn("PIP_INDEX_URL", env)
+        self.assertNotIn("PIP_EXTRA_INDEX_URL", env)
         self.assertEqual(env["PATH"], str(safe_path))
 
     def test_clean_venv_unit_test_environment_exposes_only_test_helpers(self):

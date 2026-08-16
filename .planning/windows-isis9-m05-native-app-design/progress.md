@@ -10,6 +10,7 @@
 - Created the durable milestone plan from the reviewed manifest.
 - Archived the completed M04 registry and evidence without deleting history.
 - Established M05 as a pending design milestone; it has not been activated in this M04 session.
+- Saved the requested new-session entry prompt at `new-session-prompt.md`; M05 remains pending and unactivated for the new session.
 
 ## Test Results
 

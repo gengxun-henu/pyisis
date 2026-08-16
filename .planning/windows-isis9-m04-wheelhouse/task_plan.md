@@ -26,7 +26,7 @@ The exact CPython 3.12 Windows three-wheel wheelhouse builds against the verifie
 
 ## Next Step
 
-Execute and review implementation-plan Task 5: document usage and run final M04 verification.
+Run the broad whole-branch review, prepare fresh structured completion evidence, and close M04.
 
 ## Current Phase
 

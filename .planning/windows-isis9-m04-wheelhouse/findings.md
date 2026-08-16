@@ -19,6 +19,8 @@
 - Task 4's isolated offline install passed all 11 recorded checks and reported package `1.3.0rc2` with ISIS `9.0.0` before final validator correction.
 - Task 4 final validation passed with four retained-input hashes, exact three-wheel set, canonical runtime payload, no APP payload, and `unresolved=0`.
 - The clean-install venv, runtime staging directory, and generated minimal-data egg-info were removed after evidence verification; wheelhouse and reports were retained.
+- Task 5 documented the exact build/install commands, three wheel names, report paths, and the boundary excluding standalone ISIS APP executables/XML.
+- Final Windows-focused source gate passed 51/51 with no warnings; both retained reports remain passed.
 
 ## Evidence-Based Inference
 
@@ -30,7 +32,7 @@
 - The Task 1 source-contract tests do not replace the real clean-wheel installation scheduled for Task 4.
 - Task 3 must freshly verify the exact prerequisite hashes before building retained artifacts.
 - Task 4 must prove the wheels install and run without repository/build-time Python or DLL paths before M04 can close.
-- Task 5 still must document the commands and product boundary, rerun final focused source tests, and prepare structured milestone-close evidence.
+- Broad whole-branch review and structured milestone-close evidence remain before M04 can close.
 
 ## Decisions
 

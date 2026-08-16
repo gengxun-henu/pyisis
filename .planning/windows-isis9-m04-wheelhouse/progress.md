@@ -47,6 +47,13 @@
 - Removed and verified absent only the disposable clean venv, runtime staging, and generated minimal-data egg-info; retained the wheelhouse and both reports.
 - Independent Task 4 review approved with no findings.
 
+### Task 5 completed 2026-08-16
+
+- Added the reproducible Windows wheelhouse section to `ports/windows/pyisis/README.md` in commit `c766b6d2 docs: document Windows PyISIS wheelhouse validation`.
+- Final Windows-focused source gate passed 51/51 with no warnings; `git diff --check` passed.
+- Both reports remained passed, the dependency closure remained empty, exact artifact/prerequisite hashes matched, and Git status was clean.
+- Independent Task 5 review approved with no findings.
+
 ## Test Results
 
 | Test | Passed | Failed | Skipped | Status |
@@ -60,6 +67,7 @@
 | Task 3 Windows-focused selector after dumpbin regression tests | 51 | 0 | 0 | passed |
 | Task 4 isolated wheel install checks | 11 | 0 | 0 | passed |
 | Task 4 validator plus adjacent runtime tests after layout correction | 8 | 0 | 0 | passed |
+| Task 5 final Windows-focused source gate | 51 | 0 | 0 | passed |
 
 ## External Prerequisites
 
@@ -85,5 +93,5 @@
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
 | What have I learned? | See `findings.md` |
-| What have I done? | Archived M01-M03, activated M04, and completed/reviewed Tasks 1-4 through release-grade wheelhouse evidence |
-| What am I about to do? | Document M04 usage, run final verification, and prepare structured close evidence |
+| What have I done? | Archived M01-M03, activated M04, and completed/reviewed all five M04 tasks |
+| What am I about to do? | Run broad branch review, prepare fresh structured close evidence, and close M04 |

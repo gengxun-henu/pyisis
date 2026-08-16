@@ -31,6 +31,14 @@
 - Commits: `ac43513b feat: validate Windows PyISIS wheelhouses`; `0919af97 fix: require passed Windows clean-install checks`.
 - Review fix round 1 closed the fail-closed clean-install evidence gap; scoped re-review found no new breakage.
 
+### Task 3 completed 2026-08-16
+
+- Verified CPython 3.12.13, exact Python/ISIS DLL hashes, and mock LSK prerequisite.
+- Windows-focused pre-build gate passed 49/49; after the dumpbin regression fix it passed 51/51.
+- Fixed Windows dumpbin output decoding in commit `627fcb3b fix: decode Windows dumpbin output robustly`; independent task review approved with no findings.
+- Final exact build retry exited 0 in 270.7 seconds and produced three wheels plus dependency JSON with `unresolved=0`.
+- Retained hashes: binding `8f1a923e62c12e98041bd7a5eebdffaaf00858597747cd9d4d690393451dcc00`; runtime `1d51ad225a238d70b6accc56989023ca9dbe7401e74f6dd62153c5c55e0556bf`; minimal `43009899a9586e90bb2cbc042233f37c77c4f68fbf0d6036a5179bd1549388b5`; dependency JSON `fceb4b3b943530a53df3ef9fea684170ac9df1e3452e148f3703f5b79108a842`.
+
 ## Test Results
 
 | Test | Passed | Failed | Skipped | Status |
@@ -39,6 +47,9 @@
 | Task 1 four focused `PackagingToolsUnitTest` tests | 4 | 0 | 0 | passed |
 | `D:/pyisis-win-env/python.exe -m py_compile tools/packaging/test_wheel_install.py` | 1 | 0 | 0 | passed |
 | Task 2 validator plus two adjacent runtime tests | 8 | 0 | 0 | passed after fix round 1 |
+| Task 3 original cross-platform pre-build selector | 52 | 0 | 4 | Linux-only staging cases errored on Windows; classified platform-inapplicable |
+| Task 3 Windows-focused pre-build selector | 49 | 0 | 0 | passed |
+| Task 3 Windows-focused selector after dumpbin regression tests | 51 | 0 | 0 | passed |
 
 ## External Prerequisites
 
@@ -47,6 +58,8 @@
 | `build/windows/isis-prefix/lib/isis.dll` | present | Verified path resolves through the ignored prefix junction. |
 | `D:/pyisis-win-env/python.exe` | present | CPython executable exists; exact version/hash verification is scheduled in Task 3. |
 | `tests/data/isisdata/mockup/base/kernels/lsk/naif0012.tls` | present | Required minimal ISISDATA input exists. |
+| `build/windows/isis-prefix/lib/isis.dll` | verified | SHA-256 `7291ff4ae9683bdae8c758ae9e615eb9f5cfb23da9253ad15d45a69583044420`. |
+| `D:/pyisis-win-env/python.exe` | verified | CPython 3.12.13; SHA-256 `32733c1f0c531b2a259a7003c9af5de6771427c4d7d90797a41d11d0ed708c90`. |
 
 ## Git Evidence
 
@@ -62,5 +75,5 @@
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
 | What have I learned? | See `findings.md` |
-| What have I done? | Archived M01-M03, activated M04, and completed/reviewed Tasks 1-2 |
-| What am I about to do? | Verify prerequisites and build the exact Task 3 wheelhouse |
+| What have I done? | Archived M01-M03, activated M04, and completed/reviewed Tasks 1-3 including the exact wheelhouse build |
+| What am I about to do? | Perform the isolated wheel install, generate final reports, and narrowly clean disposable outputs |

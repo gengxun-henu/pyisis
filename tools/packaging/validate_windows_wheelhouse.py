@@ -73,6 +73,32 @@ def _load_json(path: Path) -> dict[str, object]:
     return payload
 
 
+def _validate_clean_install_checks(clean_install_evidence: dict[str, object]) -> None:
+    checks = clean_install_evidence.get("checks")
+    if not isinstance(checks, list):
+        raise ValueError("Clean-install report checks are missing or malformed")
+
+    checks_by_id: dict[str, dict[str, object]] = {}
+    for check in checks:
+        if not isinstance(check, dict) or not isinstance(check.get("id"), str):
+            raise ValueError("Clean-install report contains a malformed check")
+        check_id = check["id"]
+        if check_id in checks_by_id:
+            raise ValueError(f"Clean-install report contains duplicate check: {check_id}")
+        checks_by_id[check_id] = check
+        if (
+            check.get("passed") != 1
+            or check.get("failed", 0) != 0
+            or check.get("skipped", 0) != 0
+            or check.get("exit_code", 0) != 0
+        ):
+            raise ValueError(f"Clean-install check {check_id} did not pass")
+
+    for check_id in ("wheel-install", "fresh-import"):
+        if check_id not in checks_by_id:
+            raise ValueError(f"Required clean-install check {check_id} is missing")
+
+
 def validate_wheelhouse(
     wheelhouse: Path,
     clean_install_report: Path,
@@ -143,6 +169,7 @@ def validate_wheelhouse(
             "Clean-install report ISIS version does not match expected "
             f"{expected_isis_version}: {clean_install_report}"
         )
+    _validate_clean_install_checks(clean_install_evidence)
 
     retained_inputs = (binding, runtime, minimal, dependency)
     artifacts = [

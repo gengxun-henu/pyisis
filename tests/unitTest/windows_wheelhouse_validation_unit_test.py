@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-08-16
 Last Modified: 2026-08-16
 Updated: 2026-08-16  Geng Xun added exact wheel, DLL closure, payload-boundary, and hash-report coverage.
+Updated: 2026-08-16  Geng Xun added fail-closed clean-install check evidence coverage.
 """
 
 from __future__ import annotations
@@ -115,6 +116,24 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
             with zipfile.ZipFile(runtime, "a") as archive:
                 archive.writestr("pyisis_runtime/vendor/isis/bin/reduce.exe", b"app")
             with self.assertRaisesRegex(ValueError, "forbidden ISIS APP payload"):
+                self.validator.validate_wheelhouse(wheelhouse, clean_report)
+
+    def test_validate_wheelhouse_rejects_failed_clean_install_check(self):
+        with TemporaryDirectory() as temp_dir:
+            wheelhouse, clean_report = self._write_valid_fixture(Path(temp_dir))
+            report = json.loads(clean_report.read_text(encoding="utf-8"))
+            report["checks"][1]["passed"] = 0
+            clean_report.write_text(json.dumps(report), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "fresh-import.*did not pass"):
+                self.validator.validate_wheelhouse(wheelhouse, clean_report)
+
+    def test_validate_wheelhouse_rejects_missing_clean_install_check(self):
+        with TemporaryDirectory() as temp_dir:
+            wheelhouse, clean_report = self._write_valid_fixture(Path(temp_dir))
+            report = json.loads(clean_report.read_text(encoding="utf-8"))
+            report["checks"] = [report["checks"][0]]
+            clean_report.write_text(json.dumps(report), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "fresh-import.*missing"):
                 self.validator.validate_wheelhouse(wheelhouse, clean_report)
 
 

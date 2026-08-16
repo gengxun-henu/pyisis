@@ -126,6 +126,8 @@ def _dumpbin_dependencies(binary: Path) -> tuple[str, ...]:
         check=False,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     if result.returncode != 0:
         details = (result.stderr or result.stdout).strip()
@@ -148,6 +150,8 @@ def _dumpbin_forwarded_dependencies(binary: Path) -> tuple[str, ...]:
         check=False,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     if result.returncode != 0:
         details = (result.stderr or result.stdout).strip()

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-05
+Last Modified: 2026-08-16
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
@@ -14,6 +14,7 @@ Updated: 2026-07-25  Geng Xun aligned runtime staging fixtures with the ISIS 10 
 Updated: 2026-08-05  Geng Xun added Windows PE export-forwarder closure regression coverage.
 Updated: 2026-08-05  Geng Xun required fail-closed Windows DLL audit reports.
 Updated: 2026-08-05  Geng Xun enforced the Windows minimal-runtime boundary against APP executables and XML.
+Updated: 2026-08-16  Geng Xun covered tolerant UTF-8 decoding of Windows dumpbin output.
 """
 
 from __future__ import annotations
@@ -68,6 +69,60 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             )
 
         self.assertEqual(result, ("openblas.dll", "KERNEL32.dll"))
+
+    def test_dumpbin_dependencies_uses_tolerant_utf8_decoding(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_win64_dependency_decoding",
+            WINDOWS_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        def fake_run(command, **kwargs):
+            self.assertEqual(command[1], "/DEPENDENTS")
+            self.assertTrue(kwargs.get("text"))
+            self.assertEqual(kwargs.get("encoding"), "utf-8")
+            self.assertEqual(kwargs.get("errors"), "replace")
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                stdout="\ufffd diagnostic text\nale.dll\n",
+                stderr="",
+            )
+
+        with mock.patch.object(stage_module.subprocess, "run", side_effect=fake_run):
+            result = stage_module._dumpbin_dependencies(Path("isis.dll"))
+
+        self.assertEqual(result, ("ale.dll",))
+
+    def test_dumpbin_forwarded_dependencies_uses_tolerant_utf8_decoding(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_win64_forwarder_decoding",
+            WINDOWS_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        def fake_run(command, **kwargs):
+            self.assertEqual(command[1], "/EXPORTS")
+            self.assertTrue(kwargs.get("text"))
+            self.assertEqual(kwargs.get("encoding"), "utf-8")
+            self.assertEqual(kwargs.get("errors"), "replace")
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                stdout="\ufffd diagnostic text\nforwarded = openblas.dll.cblas_saxpy\n",
+                stderr="",
+            )
+
+        with mock.patch.object(stage_module.subprocess, "run", side_effect=fake_run):
+            result = stage_module._dumpbin_forwarded_dependencies(Path("libcblas.dll"))
+
+        self.assertEqual(result, ("openblas.dll",))
 
     def test_dumpbin_dependency_failure_is_fatal(self):
         spec = importlib.util.spec_from_file_location(

@@ -126,7 +126,7 @@ def validate_wheelhouse(
 
     runtime_members = _wheel_members(runtime)
     required_runtime_members = {
-        "pyisis_runtime/vendor/isis/bin/isis.dll",
+        "pyisis_runtime/vendor/isis/lib/isis.dll",
         "pyisis_runtime/vendor/isis/lib/Camera.plugin",
     }
     missing_runtime_members = sorted(set(required_runtime_members) - set(runtime_members))

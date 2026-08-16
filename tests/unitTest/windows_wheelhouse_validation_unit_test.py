@@ -5,6 +5,7 @@ Created: 2026-08-16
 Last Modified: 2026-08-16
 Updated: 2026-08-16  Geng Xun added exact wheel, DLL closure, payload-boundary, and hash-report coverage.
 Updated: 2026-08-16  Geng Xun added fail-closed clean-install check evidence coverage.
+Updated: 2026-08-16  Geng Xun aligned the valid runtime fixture with the canonical ISIS library layout.
 """
 
 from __future__ import annotations
@@ -41,7 +42,7 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
         wheelhouse.mkdir()
         main_members = ["isis_pybind/_isis_core.cp312-win_amd64.pyd"]
         runtime_members = [
-            "pyisis_runtime/vendor/isis/bin/isis.dll",
+            "pyisis_runtime/vendor/isis/lib/isis.dll",
             "pyisis_runtime/vendor/isis/lib/Camera.plugin",
         ]
         data_members = [

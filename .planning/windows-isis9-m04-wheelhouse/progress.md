@@ -54,6 +54,16 @@
 - Both reports remained passed, the dependency closure remained empty, exact artifact/prerequisite hashes matched, and Git status was clean.
 - Independent Task 5 review approved with no findings.
 
+### Final hardening and completion verification 2026-08-16
+
+- Broad review found five Important and three Minor issues; one consolidated fix wave committed `9083f186 fix: harden Windows wheelhouse release evidence`.
+- Scoped re-review marked seven findings addressed with no new breakage; its sole residual planning-document minor was resolved in completion maintenance.
+- Controller freshly reran the complete Windows-focused gate: 65 passed, 0 failed, 0 skipped.
+- Controller freshly recreated the isolated venv and clean-installed only from the wheelhouse: 11 checks, 330 passed, 0 failed, 0 skipped, 1 expected failure; all three distribution origins were inside the venv.
+- Controller freshly regenerated final validation: status passed, four artifact hashes matched, dependency `unresolved=0`.
+- Controller resolved and removed the disposable venv; wheelhouse and both reports remain retained.
+- First lifecycle close attempt failed closed on the ISIS-prefix junction path; completion evidence now names the verified physical repository-root prerequisite path.
+
 ## Test Results
 
 | Test | Passed | Failed | Skipped | Status |
@@ -68,6 +78,9 @@
 | Task 4 isolated wheel install checks | 11 | 0 | 0 | passed |
 | Task 4 validator plus adjacent runtime tests after layout correction | 8 | 0 | 0 | passed |
 | Task 5 final Windows-focused source gate | 51 | 0 | 0 | passed |
+| Final hardened Windows-focused source gate | 65 | 0 | 0 | freshly passed by controller |
+| Final hardened isolated wheel test outcomes | 330 | 0 | 0 | freshly passed by controller; 1 expected failure |
+| Final hardened wheelhouse validation | 1 | 0 | 0 | freshly passed by controller; 4 hashes matched, unresolved=0 |
 
 ## External Prerequisites
 
@@ -84,14 +97,22 @@
 - Branch: `feature/m04-windows-pyisis-wheelhouse`
 - Worktree: `.worktrees/m04-windows-pyisis-wheelhouse`
 - Activation baseline commit: `9370577d`
+- Reviewed source head: `9083f186`
+- Final completion evidence is classified against the live M04-only planning/evidence changes before lifecycle close.
 
 ## 5-Question Reboot Check
 
 | Question | Answer |
 |---|---|
-| Where am I? | Milestone `windows-isis9-m04-wheelhouse` is active in its isolated worktree |
+| Where am I? | Milestone `windows-isis9-m04-wheelhouse` is `complete` |
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
 | What have I learned? | See `findings.md` |
-| What have I done? | Archived M01-M03, activated M04, and completed/reviewed all five M04 tasks |
-| What am I about to do? | Run broad branch review, prepare fresh structured close evidence, and close M04 |
+| What have I done? | Verified completion evidence with 396 passed, 0 failed, and 0 skipped tests |
+| What am I about to do? | No further action; milestone complete. |
+
+## Session Close: 2026-08-16
+
+- Outcome: `complete`
+- Fresh test totals: 396 passed, 0 failed, 0 skipped
+- Evidence verified at: `2026-08-16T05:26:25.568059Z`

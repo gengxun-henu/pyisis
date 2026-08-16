@@ -26,7 +26,7 @@ The exact CPython 3.12 Windows three-wheel wheelhouse builds against the verifie
 
 ## Next Step
 
-Run the broad whole-branch review, prepare fresh structured completion evidence, and close M04.
+None — milestone complete.
 
 ## Current Phase
 
@@ -36,8 +36,8 @@ Phase 1
 
 ### Phase 1: Milestone execution
 
-- [ ] Produce and verify the declared milestone evidence
-- **Status:** in_progress
+- [x] Produce and verify the declared milestone evidence
+- **Status:** complete
 
 ## Decisions Made
 
@@ -60,3 +60,6 @@ Phase 1
 | First Task 4 final validation required `pyisis_runtime/vendor/isis/bin/isis.dll`, but the canonical staged and successfully loaded wheel layout is `vendor/isis/lib/isis.dll` | 1 | Confirmed the wheel member, prefix-preserving stager, runtime loader search paths, and 11/11 clean-install success; authorized a focused TDD correction to the validator/fixture rather than changing the valid wheel layout. |
 | Recursive `Remove-Item` cleanup was rejected by execution policy before launch | 1 | Re-verified all three exact absolute targets inside the worktree, removed them individually using .NET directory deletion, then verified all were absent and retained artifacts/reports remained valid. |
 | First attempt to append controller cleanup evidence to the ignored Task 4 report used an overly broad patch context and did not apply | 1 | Retried with the exact final report line as context; only the intended evidence paragraph was appended. |
+| Broad final review found five Important and three Minor fail-open/reproducibility issues | 1 | One consolidated TDD fix wave bound evidence to current wheel bytes, hardened schemas/ZIP/pip isolation/counts/origins, completed README coverage, and passed a scoped re-review for seven findings. |
+| Scoped final re-review found completed Task 3/4 facts still listed under `Unresolved Items` | 1 | Classified as a real lifecycle-documentation minor and resolved during mandatory completion planning maintenance by moving completion state to verified facts and clearing unresolved items. |
+| First completion close rejected the repository-relative ISIS DLL prerequisite because the worktree path resolves through a junction outside the physical worktree | 1 | Replaced only that prerequisite evidence path with the verified machine-absolute repository-root path permitted by the milestone contract; retained the exact hash. |

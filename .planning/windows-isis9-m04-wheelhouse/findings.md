@@ -21,6 +21,9 @@
 - The clean-install venv, runtime staging directory, and generated minimal-data egg-info were removed after evidence verification; wheelhouse and reports were retained.
 - Task 5 documented the exact build/install commands, three wheel names, report paths, and the boundary excluding standalone ISIS APP executables/XML.
 - Final Windows-focused source gate passed 51/51 with no warnings; both retained reports remain passed.
+- Final hardening commit `9083f186` binds evidence to exact wheel bytes, enforces isolated pip/origins, truthful strict checks, canonical ZIP members/all-wheel APP exclusion, and dependency-report schema.
+- Fresh controller verification passed 65/65 focused source tests, then a clean offline install recorded 330 passed, 0 failed, 0 skipped, and 1 expected failure across 11 checks.
+- Fresh final validation passed with four matching retained hashes and `unresolved=0`; the disposable verification venv was removed again.
 
 ## Evidence-Based Inference
 
@@ -28,11 +31,7 @@
 
 ## Unresolved Items
 
-- Completion evidence has not yet been produced.
-- Task 1 source-contract coverage was followed by the real Task 4 clean-wheel installation and its hardened final-review rerun.
-- Task 3 freshly verified the exact prerequisite hashes before producing the retained artifacts.
-- Task 4 proved the wheels install and run with all three distribution origins inside the clean venv, without build-time Python or DLL paths.
-- Broad whole-branch review and structured milestone-close evidence remain before M04 can close.
+- None.
 
 ## Decisions
 

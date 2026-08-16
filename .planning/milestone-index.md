@@ -7,6 +7,6 @@
 
 | Order | ID | Title | Status | Dependencies | Plan | Last close |
 |---:|---|---|---|---|---|---|
-| 1 | `windows-isis9-m04-wheelhouse` | Build and release-validate the Windows PyISIS wheelhouse | `in_progress` | — | `.planning/windows-isis9-m04-wheelhouse` | — |
+| 1 | `windows-isis9-m04-wheelhouse` | Build and release-validate the Windows PyISIS wheelhouse | `complete` | — | `.planning/windows-isis9-m04-wheelhouse` | complete |
 
 This file is generated from `.planning/milestones.v1.json`; do not edit it directly.

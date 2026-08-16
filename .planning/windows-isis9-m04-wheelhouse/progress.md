@@ -15,6 +15,7 @@
 - Activated M04 as the sole current milestone.
 - Restored the approved design and five-task implementation plan in an isolated worktree.
 - Next action is implementation-plan Task 1: structured clean-install evidence.
+- Generated the Task 1 SDD brief at `.superpowers/sdd/2026-08-16-windows-pyisis-wheelhouse/task-1-brief.md` from base commit `3a713b74`.
 
 ## Test Results
 

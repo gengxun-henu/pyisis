@@ -53,3 +53,4 @@ Phase 1
 |---|---|---|
 | Old-milestone verification from the isolated worktree could not resolve ignored root artifacts and rejected paths escaping through the prefix junction | 1 | Verified and archived M01-M03 from the repository root, initialized the new M04 registry there, then cherry-picked the lifecycle commit into this worktree. |
 | A combined PowerShell cleanup command was rejected by the command safety policy | 1 | Performed no deletion; moved the temporary pre-manager planning draft into the ignored SDD workspace as a recoverable backup. |
+| Initial SDD implementer-template lookup used the nonexistent name `task-implementer-prompt.md` | 1 | Listed the skill directory and resolved the correct template as `implementer-prompt.md`; task brief generation still succeeded. |

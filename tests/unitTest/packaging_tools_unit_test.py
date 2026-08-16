@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-15
+Last Modified: 2026-08-16
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -30,6 +30,7 @@ Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
 Updated: 2026-08-05  Geng Xun covered complete Windows dependency-prefix isolation.
 Updated: 2026-08-05  Geng Xun covered the Windows 11 runner readiness contract.
 Updated: 2026-08-15  Geng Xun required CRLF-safe context handling for Windows ISIS patches.
+Updated: 2026-08-16  Geng Xun added structured Windows wheel clean-install evidence coverage.
 """
 
 from __future__ import annotations
@@ -596,6 +597,11 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("usgs-pyisis", script)
         self.assertIn("pyisis", script)
         self.assertIn("status.usable_for_smoke_tests", script)
+        self.assertIn('parser.add_argument("--report", type=Path)', script)
+        self.assertIn('"schema_version": 1', script)
+        self.assertIn('"status": "passed"', script)
+        self.assertIn('"checks": checks', script)
+        self.assertIn("args.report.write_text(", script)
         self.assertIn("_verification_environment", script)
         self.assertIn("ISIS_PREFIX", script)
         self.assertIn("CONDA_PREFIX", script)

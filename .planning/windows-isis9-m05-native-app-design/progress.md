@@ -26,6 +26,9 @@
 - User reviewed and approved the committed written SPEC.
 - Used `superpowers:writing-plans` to create `docs/superpowers/plans/2026-08-16-windows-isis-native-app-distribution.md` with seven TDD-oriented tasks.
 - Completed plan self-review: all required design tokens were covered, placeholder scan passed, seven tasks and 82 balanced code fences were present, and `git diff --check` passed. Two checker findings were logged and resolved in `task_plan.md`.
+- Fresh completion validation passed after correcting one overly literal checker phrase: 1 passed, 0 failed, 0 skipped.
+- Verified SPEC SHA-256: `8df8ae4d01fe1b0f4fae7e1bedb8744eb15182d695438d2ace94b15e1c67d942`.
+- Verified M04 prerequisite evidence SHA-256: `af236412dd17d35b05716d70ff735297e8d67aa4df87421aee258930de83e573`.
 
 ### Initialized 2026-08-16
 
@@ -41,6 +44,7 @@
 |---|---:|---:|---:|---|
 | M05 SPEC self-review inventory/consistency check | 1 | 0 | 0 | passed |
 | M05 implementation-plan coverage/structure check | 1 | 0 | 0 | passed |
+| `windows-native-app-design-validation` fresh completion gate | 1 | 0 | 0 | passed |
 
 ## External Prerequisites
 
@@ -59,9 +63,9 @@
 
 | Question | Answer |
 |---|---|
-| Where am I? | Milestone `windows-isis9-m05-native-app-design` is pending |
+| Where am I? | Milestone `windows-isis9-m05-native-app-design` is ready for completion close |
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
-| What have I learned? | M05 owns a separate native APP product and still needs explicit packaging decisions |
-| What have I done? | Archived completed M04 and initialized M05 as pending |
-| What am I about to do? | In a new session, activate M05 and brainstorm package format plus APP inventory |
+| What have I learned? | The approved first release is one curated 151-APP Windows 11 x64 portable ZIP with centralized launchers and minimal data |
+| What have I done? | Approved and committed the implementation-ready SPEC and seven-task implementation plan, then freshly validated the M05 gate |
+| What am I about to do? | Close M05 with structured completion evidence; implementation starts only in a subsequent milestone |

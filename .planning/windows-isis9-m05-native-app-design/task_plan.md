@@ -25,7 +25,7 @@ An approved implementation-ready design fixes the Windows package format, explic
 
 ## Next Step
 
-Activate M05 in a new milestone session and brainstorm the package format and explicit first-release APP inventory.
+None — milestone complete.
 
 ## Current Phase
 
@@ -35,8 +35,8 @@ Phase 1
 
 ### Phase 1: Milestone execution
 
-- [ ] Produce and verify the declared milestone evidence
-- **Status:** in_progress
+- [x] Produce and verify the declared milestone evidence
+- **Status:** complete
 
 ## Decisions Made
 
@@ -57,3 +57,4 @@ Phase 1
 |---|---|---|
 | Implementation-plan coverage checker searched for literal `export` while the plan consistently used `forwarder` | 1 | Treat the terminology as equivalent and rerun the checker against the actual `forwarder` interface name. |
 | Second coverage run found that the payload hash behavior was described but the required filename `manifest/files.sha256` was not explicit | 2 | Add the exact `apps.json`, `files.sha256`, and `build-metadata.json` outputs to Task 4, then rerun the full coverage check. |
+| First fresh completion validator searched for summary phrase `three GUI launch passes`, while the SPEC names the three probes explicitly | 1 | Replace the brittle summary-token assertion with exact checks for `reduce -gui`, `jigsaw -gui`, and `qnet`; keep the SPEC unchanged. |

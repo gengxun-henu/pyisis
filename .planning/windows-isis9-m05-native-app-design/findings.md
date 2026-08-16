@@ -22,9 +22,7 @@
 
 ## Unresolved Items
 
-- Completion evidence has not yet been produced.
-- Release artifact and validation-report filenames will be fixed in the approved design after the packaging architecture is selected.
-- No design question remains open. The user reviewed the committed SPEC, and the implementation plan is ready for a later implementation milestone.
+- None for M05. Building the approved distribution belongs to the subsequent implementation milestone.
 
 ## Decisions
 

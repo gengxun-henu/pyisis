@@ -55,3 +55,5 @@ Phase 1
 
 | Error | Attempt | Resolution |
 |---|---|---|
+| Implementation-plan coverage checker searched for literal `export` while the plan consistently used `forwarder` | 1 | Treat the terminology as equivalent and rerun the checker against the actual `forwarder` interface name. |
+| Second coverage run found that the payload hash behavior was described but the required filename `manifest/files.sha256` was not explicit | 2 | Add the exact `apps.json`, `files.sha256`, and `build-metadata.json` outputs to Task 4, then rerun the full coverage check. |

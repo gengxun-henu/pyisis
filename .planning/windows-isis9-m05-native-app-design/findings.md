@@ -24,7 +24,7 @@
 
 - Completion evidence has not yet been produced.
 - Release artifact and validation-report filenames will be fixed in the approved design after the packaging architecture is selected.
-- The approved written SPEC awaits the required user review before implementation planning.
+- No design question remains open. The user reviewed the committed SPEC, and the implementation plan is ready for a later implementation milestone.
 
 ## Decisions
 
@@ -47,3 +47,5 @@
 - M04 archive: `.planning/archive/windows-pyisis-isis9-wheelhouse-m04/`
 - M04 completion evidence: `.planning/archive/windows-pyisis-isis9-wheelhouse-m04/windows-isis9-m04-wheelhouse/completion-evidence.json`
 - Product roadmap: `docs/superpowers/specs/2026-08-16-windows-pyisis-wheelhouse-design.md`
+- Approved M05 SPEC: `docs/superpowers/specs/2026-08-16-windows-isis-native-app-distribution-design.md`
+- Implementation plan: `docs/superpowers/plans/2026-08-16-windows-isis-native-app-distribution.md`

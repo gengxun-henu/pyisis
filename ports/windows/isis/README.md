@@ -30,6 +30,52 @@ metadata, label export, geometry, reprojection, image export, cube stacking, and
 expression-generated cube output. Use `-ListCommands` to print the command set
 without running it.
 
+## Standalone ISIS 9 Native APP Product
+
+The verified prefix is also the build input for the Windows 11 x64 standalone
+native APP archive. The public product is one ZIP containing exactly 151 APPs:
+the 150 CLI names locked by `windows-app-manifest.json` plus `qnet`. `isisui` is
+included only as a runtime helper and is not a public APP. The ZIP is not an SDK
+and deliberately excludes headers, import/static libraries, CMake files,
+wheels, development prefixes, and the full upstream ISIS application set.
+
+From the repository root in an MSVC x64 environment with `dumpbin`, run:
+
+```powershell
+.\tools\packaging\build_windows_native_apps.ps1 `
+  -PythonExecutable D:\pyisis-win-env\python.exe `
+  -IsisPrefix build\windows\isis-prefix `
+  -MinimalDataRoot packaging\isisdata-minimal\src\pyisis_isisdata_minimal\data `
+  -OutputDir build\windows\native-apps-isis9 `
+  -ReportDir build\windows\reports `
+  -WorkDir build\windows\native-apps-isis9-work `
+  -DependencyPrefix D:\pyisis-win-env
+```
+
+Successful validation leaves the ZIP and DLL dependency JSON together under
+`build/windows/native-apps-isis9/`, plus the hash-bound validation JSON under
+`build/windows/reports/`. It requires an empty unresolved-dependency set and a
+Windows 11 x64 runtime matrix with 150 CLI startups, nine real operations,
+three real GUI windows, external-ISISDATA and negative-launcher checks, totaling
+166 passes with no failures or skips. The build work directory is retained on
+failure and removed after success by a path-bound cleanup guard.
+
+To use the product without the build prefix or conda environment:
+
+```powershell
+Expand-Archive .\usgs-isis-native-apps-9.0.0-win64.zip -DestinationPath "C:\ISIS Apps"
+& "C:\ISIS Apps\usgs-isis-native-apps-9.0.0-win64\launch\isis-app.cmd" reduce -HELP
+& "C:\ISIS Apps\usgs-isis-native-apps-9.0.0-win64\launch\qnet.cmd"
+$env:ISISDATA = "D:\isisdata"
+& "C:\ISIS Apps\usgs-isis-native-apps-9.0.0-win64\launch\isis-shell.cmd"
+```
+
+The launchers derive all runtime paths from the extracted package and require
+no manual `PATH` edits. Their bundled minimal ISISDATA supports startup and the
+release validation fixtures. For normal mission processing, set `ISISDATA` to
+a complete external data tree; if set, that external path takes precedence and
+must exist.
+
 ## Current Windows Configure/Build Status
 
 The Windows environment should be created under a short prefix, for example

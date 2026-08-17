@@ -7,6 +7,7 @@ Updated: 2026-08-18  Geng Xun added fail-closed archive and evidence validation 
 Updated: 2026-08-18  Geng Xun hardened Windows paths and closed dependency/runtime schemas after review.
 Updated: 2026-08-18  Geng Xun bound dependency graphs and canonical runtime command identities.
 Updated: 2026-08-18  Geng Xun added authoritative-seed reachability coverage for closure cycles.
+Updated: 2026-08-18  Geng Xun bound XML inventory to Windows executable names.
 """
 
 from __future__ import annotations
@@ -145,7 +146,7 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
         for name in contract.public_apps + contract.runtime_helpers:
             payload[f"bin/{name}.exe"] = f"exe:{name}".encode()
         for name in contract.public_cli_apps:
-            payload[f"bin/xml/{name}.xml"] = f"<app name=\"{name}\"/>\n".encode()
+            payload[f"bin/xml/{name}.exe.xml"] = f"<app name=\"{name}\"/>\n".encode()
         self._write_archive(archive, contract.root_name, payload)
 
         dependency_payload = {

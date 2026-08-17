@@ -381,10 +381,10 @@ def stage_native_apps(
             seeds.append(source)
         for app in release_contract.public_cli_apps:
             _copy_file(
-                bin_source / "xml" / f"{app}.xml",
+                bin_source / "xml" / f"{app}.exe.xml",
                 isis_prefix,
                 root,
-                Path("bin") / "xml" / f"{app}.xml",
+                Path("bin") / "xml" / f"{app}.exe.xml",
             )
 
         isis_dll = isis_prefix / "lib" / "isis.dll"

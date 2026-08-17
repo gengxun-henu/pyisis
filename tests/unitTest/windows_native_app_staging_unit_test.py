@@ -11,6 +11,7 @@ Updated: 2026-08-18  Geng Xun added curated staging and deterministic archive co
 Updated: 2026-08-18  Geng Xun hardened transactional publication and reparse-point coverage.
 Updated: 2026-08-18  Geng Xun covered authoritative PE seed identity for strict validation.
 Updated: 2026-08-18  Geng Xun covered bundled clean-host camera validation data.
+Updated: 2026-08-18  Geng Xun covered the Windows executable-name XML lookup.
 """
 
 from __future__ import annotations
@@ -83,7 +84,7 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             (isis_prefix / relative).mkdir(parents=True, exist_ok=True)
         for name in ("reduce", "qnet", "isisui", "unlisted"):
             (isis_prefix / "bin" / f"{name}.exe").write_bytes(name.encode("ascii"))
-        (isis_prefix / "bin" / "xml" / "reduce.xml").write_text(
+        (isis_prefix / "bin" / "xml" / "reduce.exe.xml").write_text(
             "<application />\n", encoding="utf-8"
         )
         (isis_prefix / "lib" / "isis.dll").write_bytes(b"isis")
@@ -388,7 +389,8 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertTrue((result.root / "bin" / "reduce.exe").is_file())
             self.assertTrue((result.root / "bin" / "qnet.exe").is_file())
             self.assertTrue((result.root / "bin" / "isisui.exe").is_file())
-            self.assertTrue((result.root / "bin" / "xml" / "reduce.xml").is_file())
+            self.assertTrue((result.root / "bin" / "xml" / "reduce.exe.xml").is_file())
+            self.assertFalse((result.root / "bin" / "xml" / "reduce.xml").exists())
             self.assertFalse((result.root / "bin" / "unlisted.exe").exists())
             self.assertFalse((result.root / "include").exists())
             self.assertFalse((result.root / "plugins" / "bearer").exists())

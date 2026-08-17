@@ -284,7 +284,9 @@ def _validate_payload_inventory(
     if missing:
         raise ValueError(f"public APP executable inventory mismatch: missing={missing}")
 
-    expected_xml = {f"bin/xml/{name}.xml" for name in contract.public_cli_apps}
+    # ISIS derives its application-definition filename from argv[0]. On
+    # Windows that executable identity includes the .exe suffix.
+    expected_xml = {f"bin/xml/{name}.exe.xml" for name in contract.public_cli_apps}
     actual_xml = {
         name for name in members if name.casefold().startswith("bin/xml/") and name.casefold().endswith(".xml")
     }

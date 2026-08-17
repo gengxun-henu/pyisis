@@ -16,6 +16,7 @@ Updated: 2026-08-05  Geng Xun required fail-closed Windows DLL audit reports.
 Updated: 2026-08-05  Geng Xun enforced the Windows minimal-runtime boundary against APP executables and XML.
 Updated: 2026-08-16  Geng Xun covered tolerant UTF-8 decoding of Windows dumpbin output.
 Updated: 2026-08-18  Geng Xun covered shared Windows PE closure provenance.
+Updated: 2026-08-18  Geng Xun made PE closure evidence order and case deterministic.
 """
 
 from __future__ import annotations
@@ -86,6 +87,101 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             )
             self.assertEqual(openblas["import_kind"], "forwarder")
             self.assertEqual(openblas["parents"], ["reduce.exe"])
+
+    def test_shared_pe_closure_is_seed_order_and_case_deterministic(self):
+        module = self._load_module(
+            "windows_pe_dependencies_determinism",
+            WINDOWS_PE_SCRIPT,
+        )
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            prefix = root / "deps"
+            (prefix / "bin").mkdir(parents=True)
+            (prefix / "bin" / "Isis.DLL").write_bytes(b"isis")
+            upper_seed = root / "A.exe"
+            lower_seed = root / "b.exe"
+            upper_seed.write_bytes(b"upper")
+            lower_seed.write_bytes(b"lower")
+            direct = {"A.exe": ("ISIS.dll",)}
+            forwarded = {"b.exe": ("isis.DLL",)}
+
+            def build_report(seed_files, target_name):
+                target = root / target_name
+                target.mkdir()
+                with (
+                    mock.patch.object(
+                        module,
+                        "dumpbin_dependencies",
+                        side_effect=lambda path: direct.get(path.name, ()),
+                    ),
+                    mock.patch.object(
+                        module,
+                        "dumpbin_forwarded_dependencies",
+                        side_effect=lambda path: forwarded.get(path.name, ()),
+                    ),
+                ):
+                    return module.copy_dependency_closure(
+                        seed_files,
+                        (prefix,),
+                        target,
+                    )
+
+            forward = build_report((upper_seed, lower_seed), "forward")
+            reverse = build_report((lower_seed, upper_seed), "reverse")
+
+            self.assertEqual(forward, reverse)
+            dependency = self.assert_single_dependency_file(forward)
+            self.assertEqual(dependency["name"], "isis.dll")
+            self.assertEqual(dependency["import_kind"], "direct")
+            self.assertEqual(dependency["parents"], ["A.exe", "b.exe"])
+            classifications = {
+                binary["binary"]: binary["imports"][0]["classification"]
+                for binary in forward["binaries"]
+                if binary["imports"]
+            }
+            self.assertEqual(
+                classifications,
+                {"A.exe": "resolved", "b.exe": "packaged"},
+            )
+
+    def assert_single_dependency_file(self, report):
+        self.assertEqual(len(report["files"]), 1)
+        return report["files"][0]
+
+    def test_stage_runtime_preserves_shared_pe_compatibility_aliases(self):
+        stage_module = self._load_module(
+            "stage_runtime_win64_compatibility_aliases",
+            WINDOWS_STAGING_SCRIPT,
+        )
+        self.assertIs(
+            stage_module._copy_dependency_closure,
+            stage_module._pe_dependencies.copy_dependency_closure,
+        )
+        self.assertIs(
+            stage_module._dumpbin_dependencies,
+            stage_module._pe_dependencies.dumpbin_dependencies,
+        )
+        self.assertIs(
+            stage_module._dumpbin_forwarded_dependencies,
+            stage_module._pe_dependencies.dumpbin_forwarded_dependencies,
+        )
+
+    def test_stage_runtime_direct_script_loads_shared_pe_sibling(self):
+        with TemporaryDirectory() as temp_dir:
+            environment = dict(os.environ)
+            environment.pop("PYTHONPATH", None)
+            result = subprocess.run(
+                [sys.executable, str(WINDOWS_STAGING_SCRIPT), "--help"],
+                cwd=temp_dir,
+                env=environment,
+                check=False,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--dependency-copy-mode", result.stdout)
 
     def test_dumpbin_forwarded_dependencies_extracts_unique_non_system_dlls(self):
         pe_module = self._load_module(
@@ -348,7 +444,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             classifications = {item["name"]: item["classification"] for item in isis_imports}
             self.assertEqual(classifications["needed.dll"], "resolved")
             self.assertEqual(classifications["cspice.dll"], "resolved")
-            self.assertEqual(classifications["KERNEL32.dll"], "system")
+            self.assertEqual(classifications["kernel32.dll"], "system")
 
     def test_stage_runtime_closure_reports_unresolved_dependency(self):
         spec = importlib.util.spec_from_file_location(

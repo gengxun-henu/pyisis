@@ -78,7 +78,10 @@ def _dependency_index(
         for root in _dependency_search_roots(dependency_prefix):
             if not root.exists():
                 continue
-            for source in sorted(root.rglob("*.dll"), key=lambda path: str(path).lower()):
+            for source in sorted(
+                root.rglob("*.dll"),
+                key=lambda path: (str(path).lower(), str(path)),
+            ):
                 if source.is_file():
                     index.setdefault(source.name.lower(), (source, dependency_prefix))
     return index
@@ -157,7 +160,15 @@ def copy_dependency_closure(
     packaged = {
         path.name.lower() for path in target_root.rglob("*.dll") if path.is_file()
     }
-    queue = list(seed_files)
+    queue = sorted(
+        seed_files,
+        key=lambda path: (
+            path.name.lower(),
+            path.name,
+            str(path.resolve()).lower(),
+            str(path.resolve()),
+        ),
+    )
     visited: set[str] = set()
     binaries: list[dict[str, object]] = []
     files: dict[str, dict[str, object]] = {}
@@ -170,15 +181,16 @@ def copy_dependency_closure(
             continue
         visited.add(binary_key)
 
-        dependencies: dict[str, tuple[str, str]] = {}
+        dependencies: dict[str, str] = {}
         for name in dumpbin_dependencies(binary):
-            dependencies.setdefault(name.lower(), (name, "direct"))
+            dependencies[name.lower()] = "direct"
         for name in dumpbin_forwarded_dependencies(binary):
-            dependencies.setdefault(name.lower(), (name, "forwarder"))
+            dependencies.setdefault(name.lower(), "forwarder")
 
         imports: list[dict[str, object]] = []
         for normalized in sorted(dependencies):
-            dependency_name, import_kind = dependencies[normalized]
+            dependency_name = normalized
+            import_kind = dependencies[normalized]
             import_entry: dict[str, object] = {
                 "name": dependency_name,
                 "import_kind": import_kind,
@@ -230,7 +242,14 @@ def copy_dependency_closure(
 
     report: dict[str, object] = {
         "schema_version": 1,
-        "binaries": sorted(binaries, key=lambda item: item["binary"].lower()),
+        "binaries": sorted(
+            binaries,
+            key=lambda item: (
+                item["binary"].lower(),
+                item["binary"],
+                json.dumps(item["imports"], sort_keys=True),
+            ),
+        ),
         "files": sorted(files.values(), key=lambda item: item["name"].lower()),
         "unresolved": sorted(unresolved, key=str.lower),
     }

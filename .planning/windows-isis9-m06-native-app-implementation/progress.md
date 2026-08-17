@@ -15,6 +15,9 @@
 - Task 3 implementation passed 29 focused tests and real Windows ISIS 9 150-APP smoke; its independent review must be repeated because the prior reviewer session ended without a report.
 - Repeated Task 3 review with a fresh agent after one reviewer environment failed. Specification compliance and task quality both passed; one non-blocking raw-`ValueError` CLI diagnostic Minor is deferred to final review.
 - Task 4 commit `d9bdc82a` added the cross-platform native-process validator. RED observed seven missing-module errors; GREEN passed 7/7 tests, py_compile, help, and diff checks. Independent specification and quality review passed with no findings.
+- Task 5 commits `318c173b` and `aaee08b0` collected and bound genuine ISIS 9/10 x Windows/Linux evidence; every native validator cell passed 3/0/0. Independent Task 5 review passed cleanly.
+- Final csv2table review found one missing high-level absence regression and one stale metadata entry. The single fix wave `d8409ad2` closed both; re-review is Ready. The raw rank CLI `ValueError` remains an approved deferred Minor.
+- Phase 1 is complete. Phase 2 begins with the shared Windows PE dependency engine.
 
 ### Initialized 2026-08-17
 
@@ -32,6 +35,12 @@
 | Windows ISIS 9 APP batch startup | 150 | 0 | 0 | passed |
 | Windows ISIS 9 csv2table-to-tabledump behavior | 2 | 0 | 0 | passed |
 | Task 4 native validator unit tests | 7 | 0 | 0 | passed |
+| Task 5 focused matrix regression | 47 | 0 | 1 | passed with pre-existing upstream-source absence skip |
+| ISIS 9 / Windows native validator | 3 | 0 | 0 | passed |
+| ISIS 9 / Linux native validator | 3 | 0 | 0 | passed |
+| ISIS 10 / Windows native validator | 3 | 0 | 0 | passed |
+| ISIS 10 / Linux native validator | 3 | 0 | 0 | passed |
+| Final csv2table boundary contract | 6 | 0 | 0 | passed |
 
 ## External Prerequisites
 
@@ -52,9 +61,9 @@
 
 | Question | Answer |
 |---|---|
-| Where am I? | M06 Phase 1, after reviewed csv2table Task 4 and before four-cell runtime evidence |
+| Where am I? | M06 Phase 2, after complete and reviewed csv2table native APP unification |
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
 | What have I learned? | See `findings.md` |
-| What have I done? | Completed and reviewed csv2table Tasks 1-4 with Windows ISIS 9 batch evidence |
-| What am I about to do? | Run and bind the ISIS 9/10 × Windows/Linux native csv2table matrix |
+| What have I done? | Completed and reviewed csv2table Tasks 1-5 with four-cell native evidence |
+| What am I about to do? | Extract the shared Windows PE dependency engine |

@@ -26,7 +26,7 @@ The csv2table Python and in-process binding exception is removed; native csv2tab
 
 ## Next Step
 
-Collect and independently verify csv2table Task 5 evidence for ISIS 9/10 on Windows/Linux; do not claim or skip an unavailable cell.
+Extract the shared Windows PE dependency engine for the portable native APP distribution.
 
 ## Current Phase
 
@@ -40,8 +40,8 @@ Phase 1: csv2table native APP unification
 - [x] Classify csv2table as native-app in generated ISIS 10 inventories and current documentation
 - [x] Complete independent review of the synchronized 150-APP Windows baseline
 - [x] Add the cross-platform native-process behavior validator
-- [ ] Collect ISIS 9/10 × Windows/Linux native csv2table evidence
-- **Status:** in_progress
+- [x] Collect ISIS 9/10 × Windows/Linux native csv2table evidence
+- **Status:** complete
 
 ### Phase 2: Windows native APP portable distribution
 
@@ -51,7 +51,7 @@ Phase 1: csv2table native APP unification
 - [ ] Stage the curated payload and create a deterministic archive
 - [ ] Add strict archive and evidence validation
 - [ ] Implement the clean-extraction runtime matrix and orchestrator
-- **Status:** pending
+- **Status:** in_progress
 
 ### Phase 3: Release artifact and milestone closure
 
@@ -67,6 +67,7 @@ Phase 1: csv2table native APP unification
 | Treat csv2table only as a native APP | ISIS 9/10 and Windows/Linux share the executable/XML boundary; PyISIS publishes no special facade or runner. |
 | Preserve M05 as an immutable archived prerequisite | Completed milestone state cannot be reopened; M06 owns implementation. |
 | Permit deterministic manifest-only priority refresh | Fixed upstream source downloads repeatedly truncated; the approved mode updates only membership fields while preserving all source-derived fields and ranking policy. |
+| Accept the ISIS 10 PROJ full-suite error as an unrelated environment concern | Both ISIS 10 extension build/import and the focused csv2table validator passed; the sole broad-suite error is IProj failing to open the missing `asp370/share/proj` data directory. |
 
 ## Errors Encountered
 

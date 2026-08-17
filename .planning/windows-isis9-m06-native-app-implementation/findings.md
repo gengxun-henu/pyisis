@@ -12,18 +12,19 @@
 - A real Windows ISIS 9 batch smoke passed all 150 executable startup probes; native `csv2table` and `tabledump` both exited 0 and produced a nonempty table dump.
 - Task 3 specification and quality review passed; the reviewer recorded one deferred CLI-diagnostic Minor and no Critical/Important issue.
 - Task 4 added and cleanly reviewed a native-process validator with seven passing unit tests; it publishes atomic schema-1 JSON and treats every prerequisite/behavior check as required.
+- Task 5 recorded genuine 3/0/0 native validator results for all four ISIS 9/10 x Windows/Linux cells in `docs/superpowers/evidence/2026-08-17-csv2table-native-app-matrix.json`; raw-report hashes and GitHub run provenance were independently verified.
+- The csv2table final review is Ready after `d8409ad2` added the explicit high-level API absence gate and corrected the ISIS 10 binding metadata.
 - The working tree contains an unstaged ISIS-generated `print.prt`; repository guardrails prohibit modifying, restoring, deleting, or staging it.
 
 ## Evidence-Based Inference
 
-- Task 3 implementation has suitable direct test evidence, but it is not complete until its interrupted independent review is repeated and any findings are resolved.
-- Linux and Windows ISIS 10 runtime claims remain unverified; inventory headers and Windows ISIS 9 behavior do not substitute for those cells.
+- The single ISIS 10 broad CTest error is isolated to missing PROJ data for IProj and does not invalidate the successful extension build/import or csv2table validator evidence.
 
 ## Unresolved Items
 
-- csv2table Task 5 four-cell evidence is pending.
 - All seven Windows portable-distribution implementation tasks remain pending.
 - M06 completion evidence has not yet been produced.
+- `rank_isis_apps.py` still exposes a raw `ValueError` when normal ranking omits `--source-root`; final csv2table review accepted this as a deferred non-blocking Minor.
 
 ## Decisions
 

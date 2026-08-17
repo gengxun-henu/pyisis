@@ -91,8 +91,10 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
         )
         (isis_prefix / "lib" / "isis.dll").write_bytes(b"isis")
         (isis_prefix / "lib" / "Camera.plugin").write_text(
-            "camera metadata\n", encoding="utf-8"
+            "Group = Plugin\n  Library = CameraModel\nEnd_Group\nEnd\n",
+            encoding="utf-8",
         )
+        (isis_prefix / "lib" / "CameraModel.dll").write_bytes(b"camera-model")
         (isis_prefix / "appdata" / "templates" / "maps" / "map.tpl").write_text(
             "map\n", encoding="utf-8"
         )
@@ -157,7 +159,9 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
         *,
         bundle_python_runtime=False,
     ):
-        del seed_files
+        seed_names = {Path(path).name for path in seed_files}
+        if "CameraModel.dll" not in seed_names:
+            raise AssertionError("plugin libraries must be dependency seeds")
         if not bundle_python_runtime:
             raise AssertionError("native APP closure must bundle the Python runtime")
         source = dependency_prefixes[-1] / "Library" / "bin" / "runtime.dll"
@@ -416,6 +420,10 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertFalse((result.root / "plugins" / "bearer").exists())
             self.assertTrue((result.root / "plugins" / "platforms" / "qwindows.dll").is_file())
             self.assertTrue((result.root / "lib" / "Camera.plugin").is_file())
+            self.assertEqual(
+                (result.root / "lib" / "CameraModel.dll").read_bytes(),
+                b"camera-model",
+            )
             self.assertTrue((result.root / "data" / "base" / "base.test").is_file())
             self.assertEqual(
                 (result.root / "isis_version.txt").read_text(encoding="utf-8"),

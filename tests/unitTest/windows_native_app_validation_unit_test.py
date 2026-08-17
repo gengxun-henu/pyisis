@@ -8,6 +8,7 @@ Updated: 2026-08-18  Geng Xun hardened Windows paths and closed dependency/runti
 Updated: 2026-08-18  Geng Xun bound dependency graphs and canonical runtime command identities.
 Updated: 2026-08-18  Geng Xun added authoritative-seed reachability coverage for closure cycles.
 Updated: 2026-08-18  Geng Xun bound XML inventory to Windows executable names.
+Updated: 2026-08-18  Geng Xun covered runtime-loaded ISIS plugin libraries.
 """
 
 from __future__ import annotations
@@ -137,6 +138,8 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
         }
         payload = {
             "README.md": b"portable package\n",
+            "lib/Camera.plugin": b"Group = Plugin\n  Library = CameraModel\nEnd_Group\nEnd\n",
+            "lib/CameraModel.dll": b"camera-model",
             "lib/isis.dll": b"isis-runtime",
             "lib/runtime.dll": b"closure-runtime",
             "plugins/platforms/qwindows.dll": b"qt-plugin",
@@ -156,6 +159,7 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
                 for name in contract.public_apps + contract.runtime_helpers
             ] + [
                 {"binary": "isis.dll", "imports": []},
+                {"binary": "CameraModel.dll", "imports": []},
                 {"binary": "qwindows.dll", "imports": []},
                 {"binary": "runtime.dll", "imports": []},
             ],
@@ -315,6 +319,13 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             hashlib.sha256(fixture.dependency_report.read_bytes()).hexdigest(),
         )
         self.assertEqual(json.loads(fixture.output_report.read_text()), report)
+
+    def test_runtime_plugin_manifest_requires_its_library_dll(self):
+        fixture = self._write_valid_fixture()
+        self._rewrite_without(fixture, "lib/CameraModel.dll")
+
+        with self.assertRaisesRegex(ValueError, "runtime plugin library is missing"):
+            self.module.validate_release(**fixture.arguments)
 
     def test_unsafe_zip_member_spellings_are_rejected(self):
         root = "usgs-isis-native-apps-9.0.0-win64"

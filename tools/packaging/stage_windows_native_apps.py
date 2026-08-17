@@ -42,6 +42,9 @@ FORBIDDEN_ABSOLUTE_RE = re.compile(
     rb"(?:build|conda|miniconda|pyisis-win-env)"
     rb"(?=[\\/ \t\r\n\"',;}\]]|$)"
 )
+PLUGIN_LIBRARY_RE = re.compile(
+    r"(?im)^\s*Library\s*=\s*([A-Za-z0-9_.+\-]+)\s*$"
+)
 
 
 @dataclass(frozen=True)
@@ -395,11 +398,19 @@ def stage_native_apps(
             Path("lib") / "isis.dll",
         )
         seeds.append(isis_dll)
+        plugin_libraries: set[str] = set()
         for plugin in sorted(
             (isis_prefix / "lib").glob("*.plugin"),
             key=lambda path: path.name.lower(),
         ):
             _copy_file(plugin, isis_prefix, root, Path("lib") / plugin.name)
+            plugin_libraries.update(
+                PLUGIN_LIBRARY_RE.findall(plugin.read_text(encoding="utf-8"))
+            )
+        for library in sorted(plugin_libraries, key=str.lower):
+            source = isis_prefix / "lib" / f"{library}.dll"
+            _copy_file(source, isis_prefix, root, Path("lib") / source.name)
+            seeds.append(source)
 
         _copy_file(
             isis_prefix / "IsisPreferences",

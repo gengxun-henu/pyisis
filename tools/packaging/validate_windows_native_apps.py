@@ -42,6 +42,9 @@ FORBIDDEN_ABSOLUTE_RE = re.compile(
 )
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 DRIVE_COMPONENT_RE = re.compile(r"^[A-Za-z]:")
+PLUGIN_LIBRARY_RE = re.compile(
+    r"(?im)^\s*Library\s*=\s*([A-Za-z0-9_.+\-]+)\s*$"
+)
 WINDOWS_FORBIDDEN_CHARACTERS = frozenset('<>:"|?*')
 WINDOWS_RESERVED_BASENAMES = frozenset(
     {"con", "prn", "aux", "nul"}
@@ -551,6 +554,29 @@ def _validate_dependencies(
         actual = _sha256(members[target])
         if digest != actual:
             raise ValueError(f"dependency hash mismatch for {target}")
+    archive_members_by_folded_name = {
+        name.casefold(): name for name in members
+    }
+    runtime_plugin_dlls: set[str] = set()
+    for member_name, content in members.items():
+        if not (
+            member_name.casefold().startswith("lib/")
+            and member_name.casefold().endswith(".plugin")
+        ):
+            continue
+        try:
+            plugin_text = content.decode("utf-8")
+        except UnicodeError as error:
+            raise ValueError(f"plugin manifest is not UTF-8: {member_name}") from error
+        for library in PLUGIN_LIBRARY_RE.findall(plugin_text):
+            dll_name = f"{library}.dll".casefold()
+            target = f"lib/{dll_name}"
+            if target not in archive_members_by_folded_name:
+                raise ValueError(
+                    f"runtime plugin library is missing from archive: {target}"
+                )
+            runtime_plugin_dlls.add(dll_name)
+
     authoritative_seeds = {
         f"{name}.exe".casefold()
         for name in (*contract.public_apps, *contract.runtime_helpers)
@@ -562,6 +588,7 @@ def _validate_dependencies(
         if name.casefold().startswith("plugins/") and name.casefold().endswith(".dll")
     }
     authoritative_seeds.update(plugin_dll_names)
+    authoritative_seeds.update(runtime_plugin_dlls)
     expected_binaries = set(authoritative_seeds)
     expected_binaries.update(closure_names)
     actual_binaries = set(binary_names)
@@ -572,7 +599,12 @@ def _validate_dependencies(
             f"extra={sorted(actual_binaries - expected_binaries)}"
         )
 
-    known_packaged_dlls = {"isis.dll", *plugin_dll_names, *closure_names}
+    known_packaged_dlls = {
+        "isis.dll",
+        *plugin_dll_names,
+        *runtime_plugin_dlls,
+        *closure_names,
+    }
     resolved_edges_by_name: dict[str, set[str]] = {
         name: set() for name in closure_names
     }
@@ -638,6 +670,7 @@ def _validate_dependencies(
         if PurePosixPath(name).suffix.casefold() == ".dll"
     }
     expected_archive_dlls = {"lib/isis.dll", *closure_targets}
+    expected_archive_dlls.update(f"lib/{name}" for name in runtime_plugin_dlls)
     expected_archive_dlls.update(
         name.casefold()
         for name in members

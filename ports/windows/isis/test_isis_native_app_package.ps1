@@ -56,23 +56,39 @@ function Invoke-PackageLauncher {
         [Parameter(Mandatory = $true)][string]$LogName
     )
     $logPath = Join-Path $resolvedWorkDir $LogName
-    $previousPreference = $ErrorActionPreference
-    try {
-        $ErrorActionPreference = "Continue"
-        & $IsisAppLauncher $Name @Arguments *> $logPath
-        $exitCode = $LASTEXITCODE
-    }
-    finally {
-        $ErrorActionPreference = $previousPreference
-    }
-    if ($exitCode -ne $ExpectedExitCode) {
-        $tail = ""
+    $maximumAttempts = 4
+    $tail = ""
+    for ($attempt = 1; $attempt -le $maximumAttempts; $attempt++) {
+        $previousPreference = $ErrorActionPreference
+        try {
+            $ErrorActionPreference = "Continue"
+            & $IsisAppLauncher $Name @Arguments *> $logPath
+            $exitCode = $LASTEXITCODE
+        }
+        finally {
+            $ErrorActionPreference = $previousPreference
+        }
+        if ($exitCode -eq $ExpectedExitCode) {
+            return [int]$exitCode
+        }
         if (Test-Path -LiteralPath $logPath) {
             $tail = (Get-Content -LiteralPath $logPath -Tail 40) -join [Environment]::NewLine
         }
-        throw "package launcher exit mismatch for $Name (expected $ExpectedExitCode, found $exitCode)`n$tail"
+        # Windows security scanning can briefly hold a freshly extracted,
+        # unsigned executable. Retry only that exact transient result; every
+        # other mismatch remains immediately fatal and the final attempt must
+        # still produce the declared exit code.
+        if (
+            $exitCode -eq 5 -and
+            $tail.Trim() -ceq "Access is denied." -and
+            $attempt -lt $maximumAttempts
+        ) {
+            Start-Sleep -Seconds $attempt
+            continue
+        }
+        break
     }
-    return [int]$exitCode
+    throw "package launcher exit mismatch for $Name (expected $ExpectedExitCode, found $exitCode)`n$tail"
 }
 
 function Invoke-GuiProbe {

@@ -2,7 +2,28 @@ $ErrorActionPreference = "Stop"
 $PackageRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
 $ManifestPath = Join-Path $PackageRoot "manifest\apps.json"
 
-[object[]] $InvocationArguments = @($args)
+$ArgumentCount = 0
+$ArgumentCountText = [Environment]::GetEnvironmentVariable(
+    "ISIS_LAUNCH_ARG_COUNT",
+    "Process"
+)
+if (-not [int]::TryParse($ArgumentCountText, [ref] $ArgumentCount)) {
+    [Console]::Error.WriteLine("Missing APP name; not a public ISIS APP.")
+    exit 2
+}
+
+[object[]] $InvocationArguments = @()
+for ($ArgumentIndex = 0; $ArgumentIndex -lt $ArgumentCount; $ArgumentIndex++) {
+    $ArgumentValue = [Environment]::GetEnvironmentVariable(
+        "ISIS_LAUNCH_ARG_$ArgumentIndex",
+        "Process"
+    )
+    if ($null -eq $ArgumentValue) {
+        $ArgumentValue = ""
+    }
+    $InvocationArguments += [string] $ArgumentValue
+}
+
 if ($InvocationArguments.Count -eq 0) {
     [Console]::Error.WriteLine("Missing APP name; not a public ISIS APP.")
     exit 2
@@ -16,12 +37,42 @@ if ($InvocationArguments.Count -gt 1) {
     )
 }
 
-# Windows PowerShell 5 drops an empty string at its native-process boundary.
-# A quoted-empty command-line token preserves that argv element for the APP.
-for ($ArgumentIndex = 0; $ArgumentIndex -lt $AppArguments.Count; $ArgumentIndex++) {
-    if ($AppArguments[$ArgumentIndex].Length -eq 0) {
-        $AppArguments[$ArgumentIndex] = '""'
+function ConvertTo-WindowsNativeArgument([string] $Value) {
+    if ($Value.Length -eq 0) {
+        return '""'
     }
+    if ($Value -notmatch '[\s"]') {
+        return $Value
+    }
+
+    $Builder = New-Object System.Text.StringBuilder
+    [void] $Builder.Append('"')
+    $BackslashCount = 0
+    foreach ($Item in $Value.ToCharArray()) {
+        if ($Item -eq '\') {
+            $BackslashCount++
+            continue
+        }
+        if ($Item -eq '"') {
+            [void] $Builder.Append(('\' * (2 * $BackslashCount + 1)))
+            [void] $Builder.Append('"')
+        }
+        else {
+            [void] $Builder.Append(('\' * $BackslashCount))
+            [void] $Builder.Append($Item)
+        }
+        $BackslashCount = 0
+    }
+    [void] $Builder.Append(('\' * (2 * $BackslashCount)))
+    [void] $Builder.Append('"')
+    return $Builder.ToString()
+}
+
+# Windows PowerShell 5 needs each native argv element encoded separately.
+for ($ArgumentIndex = 0; $ArgumentIndex -lt $AppArguments.Count; $ArgumentIndex++) {
+    $AppArguments[$ArgumentIndex] = ConvertTo-WindowsNativeArgument(
+        $AppArguments[$ArgumentIndex]
+    )
 }
 
 if ([string]::IsNullOrEmpty($AppName)) {

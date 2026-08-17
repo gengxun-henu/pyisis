@@ -40,6 +40,7 @@ if BUILD_PYTHON_DIR.exists():
     sys.path.insert(0, str(BUILD_PYTHON_DIR))
 
 import isis_pybind as ip
+import pyisis as high_level_pyisis
 
 HAS_CONTROL_BINDINGS = all(
     hasattr(ip, name)
@@ -108,6 +109,8 @@ def temporary_raw_input_file(name="example.raw"):
 
 
 def test_basic_symbols_present():
+    assert not hasattr(high_level_pyisis, "csv2table")
+    assert "csv2table" not in high_level_pyisis.__all__
     assert not hasattr(ip, "csv2table")
     assert "csv2table" not in ip.__all__
     assert not hasattr(ip._isis_core, "_csv2table_native")

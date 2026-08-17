@@ -19,7 +19,8 @@
 // Updated: 2026-07-23  Geng Xun added the first ISIS 10-only non-GUI binding batch.
 // Updated: 2026-07-24  Geng Xun added the ISIS 10-only OCAMS OpenCV distortion model.
 // Updated: 2026-07-24  Geng Xun added safe ISIS 10 GDAL image-I/O bindings.
-// Purpose: Expose stable ISIS 10-only projection, camera, distortion, image-I/O, and table APIs.
+// Updated: 2026-08-18  Geng Xun removed the csv2table in-process binding.
+// Purpose: Expose stable ISIS 10-only projection, camera, distortion, and image-I/O APIs.
 
 #include <filesystem>
 #include <memory>

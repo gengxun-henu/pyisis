@@ -14,6 +14,7 @@
 - Task 2 specification and quality review passed cleanly.
 - Task 3 implementation passed 29 focused tests and real Windows ISIS 9 150-APP smoke; its independent review must be repeated because the prior reviewer session ended without a report.
 - Repeated Task 3 review with a fresh agent after one reviewer environment failed. Specification compliance and task quality both passed; one non-blocking raw-`ValueError` CLI diagnostic Minor is deferred to final review.
+- Task 4 commit `d9bdc82a` added the cross-platform native-process validator. RED observed seven missing-module errors; GREEN passed 7/7 tests, py_compile, help, and diff checks. Independent specification and quality review passed with no findings.
 
 ### Initialized 2026-08-17
 
@@ -30,6 +31,7 @@
 | Task 3 focused packaging/native APP contracts | 29 | 0 | 0 | passed |
 | Windows ISIS 9 APP batch startup | 150 | 0 | 0 | passed |
 | Windows ISIS 9 csv2table-to-tabledump behavior | 2 | 0 | 0 | passed |
+| Task 4 native validator unit tests | 7 | 0 | 0 | passed |
 
 ## External Prerequisites
 
@@ -50,9 +52,9 @@
 
 | Question | Answer |
 |---|---|
-| Where am I? | M06 Phase 1, after reviewed csv2table Task 3 and before Task 4 implementation |
+| Where am I? | M06 Phase 1, after reviewed csv2table Task 4 and before four-cell runtime evidence |
 | Where am I going? | Its declared completion gate |
 | What's the goal? | See `task_plan.md` Goal |
 | What have I learned? | See `findings.md` |
-| What have I done? | Completed and reviewed csv2table Tasks 1-3 with Windows ISIS 9 runtime evidence |
-| What am I about to do? | Implement and review the cross-platform native-process validator |
+| What have I done? | Completed and reviewed csv2table Tasks 1-4 with Windows ISIS 9 batch evidence |
+| What am I about to do? | Run and bind the ISIS 9/10 × Windows/Linux native csv2table matrix |

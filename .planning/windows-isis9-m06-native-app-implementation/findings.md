@@ -11,6 +11,7 @@
 - `251d0fb5` synchronizes the tracked Windows manifest and priority outputs at 150 CLI APPs.
 - A real Windows ISIS 9 batch smoke passed all 150 executable startup probes; native `csv2table` and `tabledump` both exited 0 and produced a nonempty table dump.
 - Task 3 specification and quality review passed; the reviewer recorded one deferred CLI-diagnostic Minor and no Critical/Important issue.
+- Task 4 added and cleanly reviewed a native-process validator with seven passing unit tests; it publishes atomic schema-1 JSON and treats every prerequisite/behavior check as required.
 - The working tree contains an unstaged ISIS-generated `print.prt`; repository guardrails prohibit modifying, restoring, deleting, or staging it.
 
 ## Evidence-Based Inference
@@ -20,7 +21,7 @@
 
 ## Unresolved Items
 
-- csv2table Task 4 validator and Task 5 four-cell evidence are pending.
+- csv2table Task 5 four-cell evidence is pending.
 - All seven Windows portable-distribution implementation tasks remain pending.
 - M06 completion evidence has not yet been produced.
 

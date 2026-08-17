@@ -525,3 +525,144 @@ jobs:
           path: |
             ${{ env.BUILD_DIR }}/ctest.log
             ${{ env.BUILD_DIR }}/Testing/Temporary/**
+
+  csv2table-native-app-isis9:
+    name: Validate csv2table native APP (ISIS 9 Linux)
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: resolve_runner
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    env:
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      EXPECTED_ISIS_VERSION: 9.0.0
+      EXPECTED_ISIS_BUILD: h1f94ec8_0
+      REPORT_PATH: build/csv2table-matrix/isis9-linux.json
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Resolve ISIS 9 conda prefix
+        env:
+          CONDA_PREFIX: ""
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: self-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ""
+
+      - name: Run ISIS 9 native validator
+        run: |
+          set -euo pipefail
+          work_dir="$GITHUB_WORKSPACE/build/csv2table-matrix/isis9-linux"
+          report_path="$GITHUB_WORKSPACE/$REPORT_PATH"
+          mkdir -p "$work_dir"
+          (
+            cd "$work_dir"
+            "$PYTHON_BIN" "$GITHUB_WORKSPACE/tools/dev/test_csv2table_native_app.py" \
+              --isis-version 9.0.0 \
+              --bin-dir "$CONDA_PREFIX/bin" \
+              --input-cube "$GITHUB_WORKSPACE/tests/data/hidtmgen/ortho/PSP_002118_1510_1m_o_forPDS_cropped.cub" \
+              --work-dir "$work_dir" \
+              --report "$report_path"
+          )
+          "$PYTHON_BIN" - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path(os.environ["REPORT_PATH"]).read_text())
+          assert report["summary"] == {"passed": 3, "failed": 0, "skipped": 0}
+          assert report["platform"]["os"] == "Linux"
+          packages = report["runtime_packages"]
+          assert packages["isis"]["version"] == os.environ["EXPECTED_ISIS_VERSION"]
+          assert packages["isis"]["build"] == os.environ["EXPECTED_ISIS_BUILD"]
+          assert packages["isis"]["channel"]
+          assert packages["isis"]["subdir"] == "linux-64"
+          PY
+
+      - name: Upload ISIS 9 Linux native report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: csv2table-native-app-isis9-linux
+          if-no-files-found: error
+          path: ${{ env.REPORT_PATH }}
+
+  csv2table-native-app-isis10:
+    name: Validate csv2table native APP (ISIS 10 Linux)
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: resolve_runner_isis10
+    runs-on: ${{ fromJSON(needs.resolve_runner_isis10.outputs.runs_on_json) }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    env:
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner_isis10.outputs.fallback_conda_prefix }}
+      EXPECTED_ISIS_VERSION: 10.0.0
+      EXPECTED_ISIS_BUILD: h1f94ec8_1
+      REPORT_PATH: build/csv2table-matrix/isis10-linux.json
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Resolve ISIS 10 conda prefix
+        env:
+          CONDA_PREFIX: ""
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: self-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ""
+
+      - name: Run ISIS 10 native validator
+        run: |
+          set -euo pipefail
+          work_dir="$GITHUB_WORKSPACE/build/csv2table-matrix/isis10-linux"
+          report_path="$GITHUB_WORKSPACE/$REPORT_PATH"
+          mkdir -p "$work_dir"
+          (
+            cd "$work_dir"
+            "$PYTHON_BIN" "$GITHUB_WORKSPACE/tools/dev/test_csv2table_native_app.py" \
+              --isis-version 10.0.0 \
+              --bin-dir "$CONDA_PREFIX/bin" \
+              --input-cube "$GITHUB_WORKSPACE/tests/data/hidtmgen/ortho/PSP_002118_1510_1m_o_forPDS_cropped.cub" \
+              --work-dir "$work_dir" \
+              --report "$report_path"
+          )
+          "$PYTHON_BIN" - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path(os.environ["REPORT_PATH"]).read_text())
+          assert report["summary"] == {"passed": 3, "failed": 0, "skipped": 0}
+          assert report["platform"]["os"] == "Linux"
+          packages = report["runtime_packages"]
+          assert packages["isis"]["version"] == os.environ["EXPECTED_ISIS_VERSION"]
+          assert packages["isis"]["build"] == os.environ["EXPECTED_ISIS_BUILD"]
+          assert packages["isis"]["channel"]
+          assert packages["isis"]["subdir"] == "linux-64"
+          assert packages["csm"]["version"] == "3.0.3.3"
+          PY
+
+      - name: Upload ISIS 10 Linux native report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: csv2table-native-app-isis10-linux
+          if-no-files-found: error
+          path: ${{ env.REPORT_PATH }}

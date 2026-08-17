@@ -4,6 +4,8 @@ Author: Geng Xun
 Created: 2026-08-17
 Last Modified: 2026-08-17
 Updated: 2026-08-17  Geng Xun added cross-platform native csv2table validator coverage.
+Updated: 2026-08-17  Geng Xun covered ISIS 9-compatible numeric probe data.
+Updated: 2026-08-17  Geng Xun covered native artifact and conda package identity.
 """
 
 from __future__ import annotations
@@ -50,6 +52,34 @@ class Csv2TableNativeAppSmokeUnitTest(unittest.TestCase):
         )
         for executable in ("csv2table", "tabledump"):
             (self.bin_dir / executable).write_text("fixture", encoding="utf-8")
+        conda_meta = self.root / "conda-meta"
+        conda_meta.mkdir()
+        (conda_meta / "isis-10.0.0-h1f94ec8_1.json").write_text(
+            json.dumps(
+                {
+                    "name": "isis",
+                    "version": "10.0.0",
+                    "build": "h1f94ec8_1",
+                    "build_number": 1,
+                    "channel": "https://conda.anaconda.org/conda-forge/linux-64",
+                    "subdir": "linux-64",
+                }
+            ),
+            encoding="utf-8",
+        )
+        (conda_meta / "csm-3.0.3.3-h123_0.json").write_text(
+            json.dumps(
+                {
+                    "name": "csm",
+                    "version": "3.0.3.3",
+                    "build": "h123_0",
+                    "build_number": 0,
+                    "channel": "https://conda.anaconda.org/conda-forge/linux-64",
+                    "subdir": "linux-64",
+                }
+            ),
+            encoding="utf-8",
+        )
         self.input_cube = self.root / "source cube.cub"
         self.input_cube.write_bytes(b"native cube source\n")
         self.work_dir = self.root / "working directory"
@@ -76,7 +106,8 @@ class Csv2TableNativeAppSmokeUnitTest(unittest.TestCase):
                 return completed(arguments, 0, "ISIS 10.0.0 help", "")
             if arguments[0] == str(config.tabledump_executable):
                 config.table_dump_path.write_text(
-                    "Table = PyIsisNativeAppProbe\n", encoding="utf-8"
+                    "Sample,Line,Value\n1.0,2.0,10.5\n3.5,4.0,20.5\n",
+                    encoding="utf-8",
                 )
                 return completed(arguments, 0, "dumped", "")
             return completed(arguments, 0, "attached", "")
@@ -107,6 +138,49 @@ class Csv2TableNativeAppSmokeUnitTest(unittest.TestCase):
         self.assertTrue(report["files"]["csv"]["sha256"])
         self.assertTrue(report["files"]["tabledump"]["sha256"])
         self.assertEqual(json.loads(self.report_path.read_text(encoding="utf-8")), report)
+
+    def test_validator_emits_cross_version_numeric_probe_csv(self):
+        """A text column must not break ISIS 9, which infers every field as double."""
+        config = self.make_config()
+        with mock.patch.object(
+            self.module.subprocess,
+            "run",
+            side_effect=self.successful_run_side_effect(config),
+        ):
+            self.module.validate_csv2table(config)
+
+        rows = config.csv_path.read_text(encoding="utf-8").splitlines()
+        for row in rows[1:]:
+            for value in row.split(","):
+                self.assertTrue(value.replace(".", "", 1).isdigit(), value)
+
+    def test_validator_records_native_artifact_hashes_and_conda_identity(self):
+        """Evidence must identify exact native files and installed package builds."""
+        config = self.make_config()
+        with mock.patch.object(
+            self.module.subprocess,
+            "run",
+            side_effect=self.successful_run_side_effect(config),
+        ):
+            report = self.module.validate_csv2table(config)
+
+        self.assertIn("native_artifacts", report)
+        self.assertIn("runtime_packages", report)
+        self.assertTrue(report["native_artifacts"]["csv2table"]["sha256"])
+        self.assertTrue(report["native_artifacts"]["tabledump"]["sha256"])
+        self.assertTrue(report["native_artifacts"]["csv2table_xml"]["sha256"])
+        self.assertEqual(
+            report["runtime_packages"]["isis"],
+            {
+                "name": "isis",
+                "version": "10.0.0",
+                "build": "h1f94ec8_1",
+                "build_number": 1,
+                "channel": "https://conda.anaconda.org/conda-forge/linux-64",
+                "subdir": "linux-64",
+            },
+        )
+        self.assertEqual(report["runtime_packages"]["csm"]["version"], "3.0.3.3")
 
     def test_validator_records_nonzero_native_exit_as_failure(self):
         """Removing native return-code handling must fail this result test."""
@@ -142,8 +216,8 @@ class Csv2TableNativeAppSmokeUnitTest(unittest.TestCase):
         self.assertEqual(report["summary"], {"passed": 0, "failed": 1, "skipped": 0})
         self.assertIn("csv2table executable", report["failures"][0])
 
-    def test_validator_rejects_tabledump_without_expected_table_name(self):
-        """Removing table-name verification must fail this native dump test."""
+    def test_validator_rejects_tabledump_without_expected_probe_rows(self):
+        """A successful tabledump process must still reproduce the probe values."""
         config = self.make_config()
         completed = subprocess.CompletedProcess
 
@@ -151,7 +225,9 @@ class Csv2TableNativeAppSmokeUnitTest(unittest.TestCase):
             if arguments[1:] == ["-HELP"]:
                 return completed(arguments, 0, "ISIS 10.0.0 help", "")
             if arguments[0] == str(config.tabledump_executable):
-                config.table_dump_path.write_text("Table = WrongName\n", encoding="utf-8")
+                config.table_dump_path.write_text(
+                    "Sample,Line,Value\n9.0,9.0,9.0\n", encoding="utf-8"
+                )
                 return completed(arguments, 0, "dumped", "")
             return completed(arguments, 0, "attached", "")
 
@@ -159,7 +235,7 @@ class Csv2TableNativeAppSmokeUnitTest(unittest.TestCase):
             report = self.module.validate_csv2table(config)
 
         self.assertEqual(report["summary"], {"passed": 2, "failed": 1, "skipped": 0})
-        self.assertIn("PyIsisNativeAppProbe", report["failures"][0])
+        self.assertIn("probe data", report["failures"][0])
 
     def test_validator_preserves_paths_containing_spaces_in_argument_arrays(self):
         """Joining argument arrays must fail this space-containing path test."""

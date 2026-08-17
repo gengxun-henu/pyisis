@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 from dataclasses import dataclass
 import hashlib
 import json
@@ -84,6 +85,36 @@ def _file_record(path: Path) -> dict[str, str | None]:
     return {"path": str(path), "sha256": _sha256(path)}
 
 
+def _optional_file_record(path: Path | None) -> dict[str, str | None]:
+    return {
+        "path": str(path) if path is not None else None,
+        "sha256": _sha256(path) if path is not None else None,
+    }
+
+
+def _conda_package_record(prefix: Path | None, name: str) -> dict[str, Any] | None:
+    if prefix is None:
+        return None
+    for metadata_path in sorted((prefix / "conda-meta").glob(f"{name}-*.json")):
+        try:
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if metadata.get("name") == name:
+            return {
+                key: metadata.get(key)
+                for key in (
+                    "name",
+                    "version",
+                    "build",
+                    "build_number",
+                    "channel",
+                    "subdir",
+                )
+            }
+    return None
+
+
 def _reported_isis_version(help_output: str) -> str | None:
     match = re.search(r"\bISIS\s+(\d+(?:\.\d+){1,3})\b", help_output, re.IGNORECASE)
     return match.group(1) if match else None
@@ -112,9 +143,23 @@ def validate_csv2table(config: ValidationConfig) -> dict[str, Any]:
         )
     )
     xml_path = xml_directory / "csv2table.xml" if xml_directory is not None else None
+    runtime_prefix = (
+        config.bin_dir.parent
+        if config.bin_dir is not None
+        else (
+            csv2table_executable.parent.parent
+            if csv2table_executable is not None
+            else None
+        )
+    )
     report: dict[str, Any] = {
         "schema": 1,
-        "platform": {"os": platform.system(), "architecture": platform.machine()},
+        "platform": {
+            "os": platform.system(),
+            "release": platform.release(),
+            "version": platform.version(),
+            "architecture": platform.machine(),
+        },
         "isis_version": {"requested": config.isis_version, "reported": None},
         "paths": {
             "csv2table_executable": (
@@ -124,6 +169,15 @@ def validate_csv2table(config: ValidationConfig) -> dict[str, Any]:
                 str(tabledump_executable) if tabledump_executable is not None else None
             ),
             "csv2table_xml": str(xml_path) if xml_path is not None else None,
+        },
+        "native_artifacts": {
+            "csv2table": _optional_file_record(csv2table_executable),
+            "tabledump": _optional_file_record(tabledump_executable),
+            "csv2table_xml": _optional_file_record(xml_path),
+        },
+        "runtime_packages": {
+            "isis": _conda_package_record(runtime_prefix, "isis"),
+            "csm": _conda_package_record(runtime_prefix, "csm"),
         },
         "commands": [],
         "files": {},
@@ -155,7 +209,7 @@ def validate_csv2table(config: ValidationConfig) -> dict[str, Any]:
         config.work_dir.mkdir(parents=True, exist_ok=True)
         shutil.copy2(config.input_cube_path, config.cube_path)
         config.csv_path.write_text(
-            "Sample,Line,Name\n1.0,2,alpha\n3.5,4,beta\n", encoding="utf-8"
+            "Sample,Line,Value\n1.0,2,10.5\n3.5,4,20.5\n", encoding="utf-8"
         )
     except OSError as error:
         fail(f"failed to prepare probe inputs: {error}")
@@ -230,9 +284,17 @@ def validate_csv2table(config: ValidationConfig) -> dict[str, Any]:
                 report["summary"]["passed"] -= 1
                 fail(f"tabledump output could not be read: {error}")
             else:
-                if TABLE_NAME not in dump_text:
+                dump_rows = list(csv.reader(dump_text.splitlines()))
+                try:
+                    values = [[float(value) for value in row] for row in dump_rows[1:]]
+                except ValueError:
+                    values = []
+                if dump_rows[:1] != [["Sample", "Line", "Value"]] or values != [
+                    [1.0, 2.0, 10.5],
+                    [3.5, 4.0, 20.5],
+                ]:
                     report["summary"]["passed"] -= 1
-                    fail(f"tabledump output does not contain {TABLE_NAME}")
+                    fail("tabledump output does not match probe data")
 
     report["files"] = {
         "source_cube": _file_record(config.input_cube_path),

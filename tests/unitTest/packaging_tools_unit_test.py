@@ -34,6 +34,7 @@ Updated: 2026-08-16  Geng Xun added structured Windows wheel clean-install evide
 Updated: 2026-08-16  Geng Xun added isolated-install, stale-report, unittest-count, and command-serialization coverage.
 Updated: 2026-08-17  Geng Xun aligned Windows APP inventory coverage with the csv2table 150-APP manifest.
 Updated: 2026-08-17  Geng Xun covered manifest-only Windows APP priority refresh integrity.
+Updated: 2026-08-18  Geng Xun recorded csv2table's verified four-cell native APP status.
 """
 
 from __future__ import annotations
@@ -433,7 +434,6 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 "ciss2isis",
                 "clemnircal",
                 "clemuvviscal",
-                "csv2table",
                 "ctxcal",
                 "eis2isis",
                 "gllssi2isis",
@@ -491,6 +491,22 @@ class PackagingToolsUnitTest(unittest.TestCase):
             reduce_app["versions"]["10.0.0"]["smoke_status"],
             "minimal_passed",
         )
+
+        csv2table = apps["csv2table"]
+        for version in ("9.0.0", "10.0.0"):
+            with self.subTest(app="csv2table", version=version):
+                self.assertEqual(
+                    csv2table["versions"][version]["build_status"],
+                    "compiled_installed",
+                )
+                self.assertEqual(
+                    csv2table["versions"][version]["smoke_status"],
+                    "minimal_passed",
+                )
+                self.assertEqual(
+                    csv2table["versions"][version]["linux_comparison"],
+                    "cross_platform_passed",
+                )
 
         configure_script = (
             WINDOWS_ISIS_DIR / "configure_isis.ps1"

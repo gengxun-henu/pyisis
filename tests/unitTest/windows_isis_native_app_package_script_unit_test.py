@@ -4,13 +4,17 @@ Author: Geng Xun
 Created: 2026-08-18
 Last Modified: 2026-08-18
 Updated: 2026-08-18  Geng Xun added runtime-matrix and guarded-orchestration coverage.
+Updated: 2026-08-18  Geng Xun added repeated-prefix and descendant GUI-process fixtures.
 """
 
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import tempfile
+import time
 import unittest
+import uuid
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -103,6 +107,170 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
             script,
             re.compile(r"if \(\$completed\)[\s\S]*Remove-Item -LiteralPath \$resolvedWorkDir"),
         )
+
+    def test_orchestrator_accepts_repeated_dependency_prefixes_and_forwards_both(self):
+        build_windows_root = REPOSITORY_ROOT / "build/windows"
+        build_windows_root.mkdir(parents=True, exist_ok=True)
+        sandbox = build_windows_root / f"task6 package & spaces-{uuid.uuid4().hex}"
+        sandbox.mkdir()
+        try:
+            capture = sandbox / "stage-arguments.txt"
+            fake_python = sandbox / "fake python.cmd"
+            fake_python.write_text(
+                '@echo off\r\necho %* > "%TASK6_ARGS_CAPTURE%"\r\nexit /b 91\r\n',
+                encoding="utf-8",
+            )
+            isis_prefix = sandbox / "isis prefix"
+            dependency_one = sandbox / "dependency one"
+            dependency_two = sandbox / "dependency & two"
+            minimal_data = sandbox / "minimal data"
+            output_dir = sandbox / "output"
+            report_dir = sandbox / "reports"
+            work_dir = sandbox / "work"
+            for directory in (
+                isis_prefix,
+                dependency_one,
+                dependency_two,
+                minimal_data,
+            ):
+                directory.mkdir()
+            environment = dict(**__import__("os").environ)
+            environment["TASK6_ARGS_CAPTURE"] = str(capture)
+            completed = subprocess.run(
+                [
+                    "powershell.exe",
+                    "-NoLogo",
+                    "-NoProfile",
+                    "-NonInteractive",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(BUILD_SCRIPT),
+                    "-PythonExecutable",
+                    str(fake_python),
+                    "-IsisPrefix",
+                    str(isis_prefix),
+                    "-DependencyPrefix",
+                    str(dependency_one),
+                    "-DependencyPrefix",
+                    str(dependency_two),
+                    "-MinimalDataRoot",
+                    str(minimal_data),
+                    "-OutputDir",
+                    str(output_dir),
+                    "-ReportDir",
+                    str(report_dir),
+                    "-WorkDir",
+                    str(work_dir),
+                ],
+                capture_output=True,
+                text=True,
+                env=environment,
+            )
+            self.assertNotIn("specified more than once", completed.stderr)
+            self.assertTrue(capture.is_file(), completed.stderr)
+            arguments = capture.read_text(encoding="utf-8")
+            self.assertEqual(arguments.count("--dependency-prefix"), 2)
+            self.assertIn(str(dependency_one), arguments)
+            self.assertIn(str(dependency_two), arguments)
+        finally:
+            shutil.rmtree(sandbox)
+
+    def test_gui_probe_tracks_real_descendant_windows_and_cleans_every_target(self):
+        compiler = Path(r"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe")
+        self.assertTrue(compiler.is_file(), "WinForms fixture compiler is required")
+        with tempfile.TemporaryDirectory(prefix="native package & spaces-") as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "gui fixture.cs"
+            source.write_text(
+                "using System; using System.Windows.Forms; "
+                "class Fixture { [STAThread] static void Main(string[] args) { "
+                "Application.EnableVisualStyles(); var form = new Form(); "
+                'form.Text = args.Length == 0 ? "fixture" : args[0]; '
+                "Application.Run(form); } }\n",
+                encoding="utf-8",
+            )
+            fixture_executable = root / "fixture.exe"
+            compile_result = subprocess.run(
+                [
+                    str(compiler),
+                    "/nologo",
+                    "/target:winexe",
+                    "/reference:System.Windows.Forms.dll",
+                    f"/out:{fixture_executable}",
+                    str(source),
+                ],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(compile_result.returncode, 0, compile_result.stderr)
+            worker = root / "worker.ps1"
+            worker.write_text(
+                "param([string]$Target, [string]$Title)\n"
+                "& $Target $Title\n"
+                "exit $LASTEXITCODE\n",
+                encoding="utf-8",
+            )
+            targets = []
+            for name in ("reduce", "jigsaw", "qnet"):
+                target = root / f"{name}.exe"
+                shutil.copy2(fixture_executable, target)
+                targets.append(target)
+                (root / f"{name}.cmd").write_text(
+                    "@echo off\r\n"
+                    f'powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%~dp0worker.ps1" "%~dp0{name}.exe" "{name} fixture window"\r\n',
+                    encoding="utf-8",
+                )
+            old_reduce = subprocess.Popen([str(targets[0]), "old reduce window"])
+            try:
+                time.sleep(0.5)
+                completed = subprocess.run(
+                    [
+                        "powershell.exe",
+                        "-NoLogo",
+                        "-NoProfile",
+                        "-NonInteractive",
+                        "-ExecutionPolicy",
+                        "Bypass",
+                        "-File",
+                        str(RUNTIME_SCRIPT),
+                        "-GuiProbeFixtureRoot",
+                        str(root),
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=45,
+                )
+                diagnostics = completed.stderr + "\n" + "\n".join(
+                    f"{path.name}: {path.read_text(encoding='utf-8', errors='replace')}"
+                    for path in root.glob("*-std*.log")
+                )
+                self.assertEqual(completed.returncode, 0, diagnostics)
+                self.assertIsNone(old_reduce.poll(), "pre-existing reduce process was killed")
+                for target in targets:
+                    query = subprocess.run(
+                        [
+                            "powershell.exe",
+                            "-NoProfile",
+                            "-Command",
+                            f"@(Get-CimInstance Win32_Process | Where-Object {{ $_.ExecutablePath -eq '{target}' }} | Select-Object -ExpandProperty ProcessId) -join ','",
+                        ],
+                        capture_output=True,
+                        text=True,
+                    )
+                    expected = str(old_reduce.pid) if target.name == "reduce.exe" else ""
+                    self.assertEqual(query.stdout.strip(), expected, target.name)
+                for name in ("reduce", "jigsaw", "qnet"):
+                    self.assertTrue((root / f"{name}-stdout.log").is_file())
+                    self.assertTrue((root / f"{name}-stderr.log").is_file())
+            finally:
+                if old_reduce.poll() is None:
+                    old_reduce.terminate()
+                    try:
+                        old_reduce.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        old_reduce.kill()
+                        old_reduce.wait(timeout=5)
 
     def test_powershell_scripts_parse(self):
         shell = "powershell.exe"

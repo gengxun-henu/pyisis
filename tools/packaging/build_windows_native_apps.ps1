@@ -1,15 +1,28 @@
 param(
     [Parameter(Mandatory = $true)][string]$PythonExecutable,
     [Parameter(Mandatory = $true)][string]$IsisPrefix,
-    [Parameter(Mandatory = $true)][string[]]$DependencyPrefix,
     [Parameter(Mandatory = $true)][string]$MinimalDataRoot,
     [Parameter(Mandatory = $true)][string]$OutputDir,
     [Parameter(Mandatory = $true)][string]$ReportDir,
-    [Parameter(Mandatory = $true)][string]$WorkDir
+    [Parameter(Mandatory = $true)][string]$WorkDir,
+    [Parameter(ValueFromRemainingArguments = $true)][object[]]$BuildArguments = @()
 )
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+
+# Windows PowerShell rejects repeated declared array parameters before the
+# script runs, so parse the documented repeated form explicitly.
+$DependencyPrefix = New-Object System.Collections.Generic.List[string]
+for ($argumentIndex = 0; $argumentIndex -lt $BuildArguments.Count; $argumentIndex += 2) {
+    if ([string]$BuildArguments[$argumentIndex] -cne "-DependencyPrefix" -or $argumentIndex + 1 -ge $BuildArguments.Count) {
+        throw "unknown build argument; expected repeatable -DependencyPrefix <path> pairs"
+    }
+    $DependencyPrefix.Add([string]$BuildArguments[$argumentIndex + 1])
+}
+if ($DependencyPrefix.Count -eq 0) {
+    throw "at least one -DependencyPrefix <path> is required"
+}
 
 function Resolve-FullPath {
     param([Parameter(Mandatory = $true)][string]$Path)

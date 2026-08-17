@@ -1,8 +1,9 @@
 param(
-    [Parameter(Mandatory = $true)][string]$Archive,
-    [Parameter(Mandatory = $true)][string]$ReleaseConfig,
-    [Parameter(Mandatory = $true)][string]$WorkDir,
-    [Parameter(Mandatory = $true)][string]$Report,
+    [string]$Archive,
+    [string]$ReleaseConfig,
+    [string]$WorkDir,
+    [string]$Report,
+    [string]$GuiProbeFixtureRoot,
     [Parameter(ValueFromRemainingArguments = $true)][object[]]$RuntimeArguments = @()
 )
 
@@ -50,7 +51,7 @@ function New-CheckResult {
 function Invoke-PackageLauncher {
     param(
         [Parameter(Mandatory = $true)][string]$Name,
-        [Parameter(Mandatory = $true)][string[]]$Arguments,
+        [string[]]$Arguments = @(),
         [Parameter(Mandatory = $true)][int]$ExpectedExitCode,
         [Parameter(Mandatory = $true)][string]$LogName
     )
@@ -77,34 +78,118 @@ function Invoke-PackageLauncher {
 function Invoke-GuiProbe {
     param(
         [Parameter(Mandatory = $true)][string]$Name,
-        [Parameter(Mandatory = $true)][string[]]$Arguments,
-        [string]$Launcher = $IsisAppLauncher
+        [string[]]$Arguments = @(),
+        [Parameter(Mandatory = $true)][string]$Launcher,
+        [Parameter(Mandatory = $true)][string]$ExpectedExecutable,
+        [Parameter(Mandatory = $true)][string]$StandardOutputLog,
+        [Parameter(Mandatory = $true)][string]$StandardErrorLog
     )
-    $argumentList = if ($Launcher -eq $IsisAppLauncher) { @($Name) + $Arguments } else { $Arguments }
-    $process = Start-Process -FilePath $Launcher -ArgumentList $argumentList -PassThru
+
+    $expectedPath = Resolve-FullPath $ExpectedExecutable
+    $beforePids = @{}
+    foreach ($item in @(Get-CimInstance Win32_Process)) {
+        if ($item.ExecutablePath -and $item.ExecutablePath.Equals($expectedPath, [System.StringComparison]::OrdinalIgnoreCase)) {
+            $beforePids[[int]$item.ProcessId] = $true
+        }
+    }
+    New-Item -ItemType Directory -Force -Path ([System.IO.Path]::GetDirectoryName((Resolve-FullPath $StandardOutputLog))) | Out-Null
+    if ($Launcher.Contains('"') -or @($Arguments | Where-Object { $_.Contains('"') }).Count) {
+        throw "GUI probe launcher and arguments must not contain quotes"
+    }
+    $launcherCommand = '"' + $Launcher + '"'
+    foreach ($argument in $Arguments) { $launcherCommand += ' "' + $argument + '"' }
+    $commandLine = '/d /s /c "' + $launcherCommand + '"'
+    $startArguments = @{
+        FilePath = $env:ComSpec
+        ArgumentList = $commandLine
+        PassThru = $true
+        RedirectStandardOutput = $StandardOutputLog
+        RedirectStandardError = $StandardErrorLog
+    }
+    $wrapper = Start-Process @startArguments
+    $ownedPids = New-Object System.Collections.Generic.HashSet[int]
+    $null = $ownedPids.Add([int]$wrapper.Id)
+    $candidatePids = New-Object System.Collections.Generic.HashSet[int]
+    $target = $null
+    $probeError = $null
     try {
         $deadline = [DateTime]::UtcNow.AddSeconds(30)
         do {
             Start-Sleep -Milliseconds 250
-            $process.Refresh()
-            if ($process.HasExited) { break }
-        } while (($process.MainWindowHandle -eq 0 -or -not $process.MainWindowTitle) -and [DateTime]::UtcNow -lt $deadline)
-        if ($process.HasExited -or $process.MainWindowHandle -eq 0 -or -not $process.MainWindowTitle) {
+            $processRows = @(Get-CimInstance Win32_Process)
+            do {
+                $addedDescendant = $false
+                foreach ($row in $processRows) {
+                    $pidValue = [int]$row.ProcessId
+                    if (-not $ownedPids.Contains($pidValue) -and $ownedPids.Contains([int]$row.ParentProcessId)) {
+                        $null = $ownedPids.Add($pidValue)
+                        $addedDescendant = $true
+                    }
+                }
+            } while ($addedDescendant)
+            foreach ($row in $processRows) {
+                if (-not $row.ExecutablePath -or -not $row.ExecutablePath.Equals($expectedPath, [System.StringComparison]::OrdinalIgnoreCase)) { continue }
+                $pidValue = [int]$row.ProcessId
+                if ($beforePids.ContainsKey($pidValue) -or -not $ownedPids.Contains($pidValue)) { continue }
+                $null = $candidatePids.Add($pidValue)
+                $candidate = Get-Process -Id $pidValue -ErrorAction SilentlyContinue
+                if ($null -eq $candidate) { continue }
+                $candidate.Refresh()
+                if ($candidate.MainWindowHandle -ne 0 -and $candidate.MainWindowTitle) {
+                    $target = $candidate
+                    break
+                }
+                $candidate.Dispose()
+            }
+            if ($null -ne $target) { break }
+            $wrapper.Refresh()
+            if ($wrapper.HasExited) { throw "GUI launcher exited before the target window appeared for $Name" }
+        } while ([DateTime]::UtcNow -lt $deadline)
+        if ($null -eq $target -or $target.MainWindowHandle -eq 0 -or -not $target.MainWindowTitle) {
             throw "GUI launch probe failed for $Name"
         }
-        $null = $process.CloseMainWindow()
-        if (-not $process.WaitForExit(10000)) {
-            Stop-Process -Id $process.Id
-            $process.WaitForExit()
-        }
+        $null = $target.CloseMainWindow()
     }
+    catch { $probeError = $_ }
     finally {
-        if (-not $process.HasExited) {
-            Stop-Process -Id $process.Id -ErrorAction SilentlyContinue
-            $process.WaitForExit()
+        $cleanupPreference = $ErrorActionPreference
+        try {
+            $ErrorActionPreference = "Continue"
+            foreach ($processId in @($candidatePids)) {
+                & taskkill.exe /PID $processId /T /F *> $null
+            }
+            & taskkill.exe /PID $wrapper.Id /T /F *> $null
         }
-        $process.Dispose()
+        finally {
+            $ErrorActionPreference = $cleanupPreference
+        }
+        if (-not $wrapper.HasExited) { $null = $wrapper.WaitForExit(10000) }
+        $cleanupDeadline = [DateTime]::UtcNow.AddSeconds(10)
+        do {
+            foreach ($row in @(Get-CimInstance Win32_Process)) {
+                if ($row.ExecutablePath -and $row.ExecutablePath.Equals($expectedPath, [System.StringComparison]::OrdinalIgnoreCase) -and -not $beforePids.ContainsKey([int]$row.ProcessId)) {
+                    $null = $candidatePids.Add([int]$row.ProcessId)
+                }
+            }
+            $cleanupPreference = $ErrorActionPreference
+            try {
+                $ErrorActionPreference = "Continue"
+                foreach ($processId in @($candidatePids)) {
+                    & taskkill.exe /PID $processId /T /F *> $null
+                }
+            }
+            finally { $ErrorActionPreference = $cleanupPreference }
+            $remaining = @($candidatePids | Where-Object { Get-Process -Id $_ -ErrorAction SilentlyContinue })
+            if (-not $remaining) { break }
+            Start-Sleep -Milliseconds 100
+        } while ([DateTime]::UtcNow -lt $cleanupDeadline)
+        if ($remaining -and $null -eq $probeError) {
+            $probeError = "GUI cleanup left target process IDs for ${Name}: $($remaining -join ', ')"
+        }
+        if ($null -ne $target) { $target.Dispose() }
+        $wrapper.Dispose()
     }
+    if ($null -ne $probeError) { throw $probeError }
 }
 
 function Assert-OutputFile {
@@ -114,6 +199,27 @@ function Assert-OutputFile {
     }
     if ((Get-Item -LiteralPath $Path).Length -le 0) {
         throw "expected output file is empty: $Path"
+    }
+}
+
+if ($GuiProbeFixtureRoot) {
+    $fixtureRoot = Resolve-FullPath $GuiProbeFixtureRoot
+    foreach ($fixtureName in @("reduce", "jigsaw", "qnet")) {
+        Invoke-GuiProbe `
+            -Name $fixtureName `
+            -Arguments @() `
+            -Launcher (Join-Path $fixtureRoot "$fixtureName.cmd") `
+            -ExpectedExecutable (Join-Path $fixtureRoot "$fixtureName.exe") `
+            -StandardOutputLog (Join-Path $fixtureRoot "$fixtureName-stdout.log") `
+            -StandardErrorLog (Join-Path $fixtureRoot "$fixtureName-stderr.log")
+    }
+    $global:LASTEXITCODE = 0
+    return
+}
+
+foreach ($requiredInput in @($Archive, $ReleaseConfig, $WorkDir, $Report)) {
+    if ([string]::IsNullOrWhiteSpace($requiredInput)) {
+        throw "Archive, ReleaseConfig, WorkDir, and Report are required for the production runtime matrix"
     }
 }
 
@@ -228,8 +334,8 @@ try {
     [void](Invoke-PackageLauncher -Name "fx" -Arguments @("to=$sourceCube", "equation=sample+line", "mode=outputonly", "lines=64", "samples=64", "bands=1") -ExpectedExitCode 0 -LogName "setup-fx.log")
 
     $realExitCodes = New-Object System.Collections.Generic.List[int]
-    $realExitCodes.Add((Invoke-PackageLauncher "stats" @("from=$sourceCube") 0 "stats.log"))
-    $realExitCodes.Add((Invoke-PackageLauncher "getkey" @("from=$sourceCube", "grpname=Dimensions", "keyword=Samples", "recursive=true") 0 "getkey.log"))
+    $realExitCodes.Add((Invoke-PackageLauncher "stats" @("from=$sourceCube") 0 "stats.log")); Assert-OutputFile (Join-Path $resolvedWorkDir "stats.log")
+    $realExitCodes.Add((Invoke-PackageLauncher "getkey" @("from=$sourceCube", "grpname=Dimensions", "keyword=Samples", "recursive=true") 0 "getkey.log")); Assert-OutputFile (Join-Path $resolvedWorkDir "getkey.log")
     $realExitCodes.Add((Invoke-PackageLauncher "catlab" @("from=$sourceCube", "to=$labelOutput") 0 "catlab.log")); Assert-OutputFile $labelOutput
     $realExitCodes.Add((Invoke-PackageLauncher "campt" @("from=$cameraCube", "sample=64", "line=512", "type=image", "to=$camptOutput") 0 "campt.log")); Assert-OutputFile $camptOutput
     $realExitCodes.Add((Invoke-PackageLauncher "reduce" @("from=$sourceCube", "to=$reducedCube", "sscale=2", "lscale=2") 0 "reduce.log")); Assert-OutputFile $reducedCube
@@ -240,9 +346,9 @@ try {
     $realExitCodes.Add((Invoke-PackageLauncher "fx" @("to=$fxOutput", "equation=sample+line", "mode=outputonly", "lines=16", "samples=16", "bands=1") 0 "fx.log")); Assert-OutputFile $fxOutput
     $realCommands = @("stats", "getkey", "catlab", "campt", "reduce", "cam2map", "isis2std", "cubeit", "fx") | ForEach-Object { "launch/isis-app.cmd $_ mode=real-operation" }
 
-    Invoke-GuiProbe -Name "reduce" -Arguments @("-gui")
-    Invoke-GuiProbe -Name "jigsaw" -Arguments @("-gui")
-    Invoke-GuiProbe -Name "qnet" -Arguments @() -Launcher $QnetLauncher
+    Invoke-GuiProbe -Name "reduce" -Arguments @("reduce", "-gui") -Launcher $IsisAppLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\reduce.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-reduce-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-reduce-stderr.log")
+    Invoke-GuiProbe -Name "jigsaw" -Arguments @("jigsaw", "-gui") -Launcher $IsisAppLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\jigsaw.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-jigsaw-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-jigsaw-stderr.log")
+    Invoke-GuiProbe -Name "qnet" -Arguments @() -Launcher $QnetLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\qnet.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-qnet-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-qnet-stderr.log")
 
     $externalData = Join-Path $cleanParent "external isisdata"
     New-Item -ItemType Directory -Path $externalData | Out-Null

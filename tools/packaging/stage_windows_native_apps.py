@@ -357,23 +357,23 @@ def stage_native_apps(
         bin_source = isis_prefix / "bin"
         seeds: list[Path] = []
         for app in release_contract.public_apps:
-            seeds.append(
-                _copy_file(
-                    bin_source / f"{app}.exe",
-                    isis_prefix,
-                    root,
-                    Path("bin") / f"{app}.exe",
-                )
+            source = bin_source / f"{app}.exe"
+            _copy_file(
+                source,
+                isis_prefix,
+                root,
+                Path("bin") / f"{app}.exe",
             )
+            seeds.append(source)
         for helper in release_contract.runtime_helpers:
-            seeds.append(
-                _copy_file(
-                    bin_source / f"{helper}.exe",
-                    isis_prefix,
-                    root,
-                    Path("bin") / f"{helper}.exe",
-                )
+            source = bin_source / f"{helper}.exe"
+            _copy_file(
+                source,
+                isis_prefix,
+                root,
+                Path("bin") / f"{helper}.exe",
             )
+            seeds.append(source)
         for app in release_contract.public_cli_apps:
             _copy_file(
                 bin_source / "xml" / f"{app}.xml",
@@ -382,8 +382,9 @@ def stage_native_apps(
                 Path("bin") / "xml" / f"{app}.xml",
             )
 
-        isis_dll = _copy_file(
-            isis_prefix / "lib" / "isis.dll",
+        isis_dll = isis_prefix / "lib" / "isis.dll"
+        _copy_file(
+            isis_dll,
             isis_prefix,
             root,
             Path("lib") / "isis.dll",
@@ -430,10 +431,8 @@ def stage_native_apps(
                 key=lambda item: (item[0].name.lower(), str(item[0]).lower()),
             ):
                 relative = source.relative_to(prefix / "Library" / "plugins")
-                staged = _copy_file(
-                    source, prefix, root, Path("plugins") / relative
-                )
-                seeds.append(staged)
+                _copy_file(source, prefix, root, Path("plugins") / relative)
+                seeds.append(source)
 
         with TemporaryDirectory(
             prefix="native-app-deps-", dir=stage_parent

@@ -9,6 +9,7 @@ Updated: 2026-08-18  Geng Xun covered binder-shaped and empty APP arguments.
 Updated: 2026-08-18  Geng Xun added JSON argv coverage for slot transport and native quoting.
 Updated: 2026-08-18  Geng Xun added curated staging and deterministic archive coverage.
 Updated: 2026-08-18  Geng Xun hardened transactional publication and reparse-point coverage.
+Updated: 2026-08-18  Geng Xun covered authoritative PE seed identity for strict validation.
 """
 
 from __future__ import annotations
@@ -40,6 +41,7 @@ PUBLIC_LAUNCHER_NAMES = (
 STAGE_SCRIPT = REPOSITORY_ROOT / "tools" / "packaging" / "stage_windows_native_apps.py"
 ARCHIVE_SCRIPT = REPOSITORY_ROOT / "tools" / "packaging" / "archive_windows_native_apps.py"
 MANIFEST_SCRIPT = REPOSITORY_ROOT / "tools" / "packaging" / "windows_native_app_manifest.py"
+VALIDATOR_SCRIPT = REPOSITORY_ROOT / "tools" / "packaging" / "validate_windows_native_apps.py"
 
 
 def _load_module(name: str, path: Path):
@@ -60,6 +62,9 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
         cls.manifest_module = _load_module("native_app_manifest_fixture", MANIFEST_SCRIPT)
         cls.stage_module = _load_module("native_app_stage_fixture", STAGE_SCRIPT)
         cls.archive_module = _load_module("native_app_archive_fixture", ARCHIVE_SCRIPT)
+        cls.validator_module = _load_module(
+            "native_app_validator_fixture", VALIDATOR_SCRIPT
+        )
 
     def _write_stage_fixture(self, root: Path) -> SimpleNamespace:
         isis_prefix = root / "isis-prefix"
@@ -401,6 +406,94 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertEqual(
                 dependency["files"][0]["sha256"],
                 hashlib.sha256(b"runtime").hexdigest(),
+            )
+
+    def test_real_shared_closure_uses_unique_authoritative_seed_identities(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            pe_module = sys.modules[
+                self.stage_module.copy_dependency_closure.__module__
+            ]
+            direct = {
+                "reduce.exe": ("isis.dll",),
+                "isis.dll": ("runtime.dll",),
+            }
+            with mock.patch.object(
+                pe_module,
+                "dumpbin_dependencies",
+                side_effect=lambda path: direct.get(path.name.lower(), ()),
+            ), mock.patch.object(
+                pe_module,
+                "dumpbin_forwarded_dependencies",
+                return_value=(),
+            ):
+                result = self.stage_module.stage_native_apps(
+                    fixture.isis_prefix,
+                    (fixture.dependency_prefix,),
+                    fixture.minimal_data,
+                    fixture.contract,
+                    fixture.output,
+                    fixture.dependency_report,
+                )
+
+            dependency = json.loads(
+                result.dependency_report.read_text(encoding="utf-8")
+            )
+            binary_names = [item["binary"] for item in dependency["binaries"]]
+            expected_binaries = {
+                "isis.dll",
+                "isisui.exe",
+                "qjpeg.dll",
+                "qnet.exe",
+                "qwindows.dll",
+                "qwindowsvistastyle.dll",
+                "reduce.exe",
+                "runtime.dll",
+            }
+            self.assertEqual(len(binary_names), len({name.casefold() for name in binary_names}))
+            self.assertEqual(set(binary_names), expected_binaries)
+
+            source_bindings = {
+                "bin/reduce.exe": fixture.isis_prefix / "bin" / "reduce.exe",
+                "bin/qnet.exe": fixture.isis_prefix / "bin" / "qnet.exe",
+                "bin/isisui.exe": fixture.isis_prefix / "bin" / "isisui.exe",
+                "lib/isis.dll": fixture.isis_prefix / "lib" / "isis.dll",
+                "lib/runtime.dll": (
+                    fixture.dependency_prefix / "Library" / "bin" / "runtime.dll"
+                ),
+                "plugins/platforms/qwindows.dll": (
+                    fixture.dependency_prefix
+                    / "Library"
+                    / "plugins"
+                    / "platforms"
+                    / "qwindows.dll"
+                ),
+            }
+            for relative, source in source_bindings.items():
+                self.assertEqual((result.root / relative).read_bytes(), source.read_bytes())
+
+            files = {item["name"].casefold(): item for item in dependency["files"]}
+            self.assertEqual(set(files), {"isis.dll", "runtime.dll"})
+            for name, item in files.items():
+                self.assertEqual(item["target"].casefold(), f"lib/{name}")
+                self.assertEqual(
+                    item["sha256"],
+                    hashlib.sha256((result.root / item["target"]).read_bytes()).hexdigest(),
+                )
+            serialized = result.dependency_report.read_text(encoding="utf-8")
+            self.assertNotIn(str(fixture.isis_prefix), serialized)
+            self.assertNotIn(str(fixture.dependency_prefix), serialized)
+
+            members = {
+                path.relative_to(result.root).as_posix(): path.read_bytes()
+                for path in result.root.rglob("*")
+                if path.is_file()
+            }
+            self.assertEqual(
+                self.validator_module._validate_dependencies(
+                    dependency, members, fixture.contract
+                ),
+                2,
             )
 
     def test_stage_rejects_contract_root_escape(self):

@@ -350,7 +350,7 @@ try {
     $realExitCodes.Add((Invoke-PackageLauncher "catlab" @("from=$sourceCube", "to=$labelOutput") 0 "catlab.log")); Assert-OutputFile $labelOutput
     $realExitCodes.Add((Invoke-PackageLauncher "campt" @("from=$cameraCube", "sample=64", "line=512", "type=image", "to=$camptOutput") 0 "campt.log")); Assert-OutputFile $camptOutput
     $realExitCodes.Add((Invoke-PackageLauncher "reduce" @("from=$sourceCube", "to=$reducedCube", "sscale=2", "lscale=2") 0 "reduce.log")); Assert-OutputFile $reducedCube
-    $realExitCodes.Add((Invoke-PackageLauncher "cam2map" @("from=$cameraCube", "map=$mapFile", "to=$remappedCube", "pixres=mpp", "resolution=1000", "interp=bilinear") 0 "cam2map.log")); Assert-OutputFile $remappedCube
+    $realExitCodes.Add((Invoke-PackageLauncher "cam2map" @("from=$cameraCube", "to=$remappedCube", "pixres=mpp", "resolution=1000", "interp=bilinear") 0 "cam2map.log")); Assert-OutputFile $remappedCube
     $realExitCodes.Add((Invoke-PackageLauncher "isis2std" @("from=$reducedCube", "to=$pngOutput", "mode=grayscale", "format=png", "stretch=linear") 0 "isis2std.log")); Assert-OutputFile $pngOutput
     Set-Content -LiteralPath $cubeList -Value @($reducedCube, $reducedCube) -Encoding ASCII
     $realExitCodes.Add((Invoke-PackageLauncher "cubeit" @("fromlist=$cubeList", "to=$cubeitOutput") 0 "cubeit.log")); Assert-OutputFile $cubeitOutput

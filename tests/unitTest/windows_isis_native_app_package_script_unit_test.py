@@ -93,6 +93,16 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
         self.assertIn("$env:ComSpec /d /c", function)
         self.assertNotIn("& $IsisAppLauncher", function)
 
+    def test_cam2map_uses_the_camera_cube_target_instead_of_the_mars_map_target(self):
+        script = RUNTIME_SCRIPT.read_text(encoding="utf-8")
+        invocation = next(
+            line
+            for line in script.splitlines()
+            if 'Invoke-PackageLauncher "cam2map"' in line
+        )
+        self.assertIn('"from=$cameraCube"', invocation)
+        self.assertNotIn('"map=$mapFile"', invocation)
+
     def test_orchestrator_guards_recursive_cleanup(self):
         script = BUILD_SCRIPT.read_text(encoding="utf-8")
         self.assertIn("Resolve-FullPath $WorkDir", script)

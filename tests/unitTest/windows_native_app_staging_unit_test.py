@@ -5,6 +5,7 @@ Created: 2026-08-18
 Last Modified: 2026-08-18
 Updated: 2026-08-18  Geng Xun added package-relative launcher safety and execution coverage.
 Updated: 2026-08-18  Geng Xun added unlimited argv and metacharacter regression coverage.
+Updated: 2026-08-18  Geng Xun covered binder-shaped and empty APP arguments.
 """
 
 from __future__ import annotations
@@ -53,8 +54,14 @@ class WindowsNativeAppStagingTests(unittest.TestCase):
         shutil.copy2(powershell, package / "bin" / "reduce.exe")
         shutil.copy2(powershell, package / "bin" / "qnet.exe")
         (package / "bin" / "argument-probe.ps1").write_text(
-            "param([int] $Code, "
-            "[Parameter(ValueFromRemainingArguments=$true)] [string[]] $Values)\n"
+            "[object[]] $InvocationArguments = @($args)\n"
+            "$Code = [int] $InvocationArguments[0]\n"
+            "[string[]] $Values = @()\n"
+            "if ($InvocationArguments.Count -gt 1) {\n"
+            "    $Values = [string[]] @(\n"
+            "        $InvocationArguments[1..($InvocationArguments.Count - 1)]\n"
+            "    )\n"
+            "}\n"
             "Write-Output ('ARGS=[' + ($Values -join '|') + ']')\n"
             "exit $Code\n",
             encoding="utf-8",
@@ -228,6 +235,35 @@ class WindowsNativeAppStagingTests(unittest.TestCase):
         with TemporaryDirectory() as temp_dir:
             package = self._write_launcher_fixture(Path(temp_dir))
             payload = [f"arg-{index}" for index in range(1, 13)]
+            result = self._run_launcher(
+                package / "launch" / "isis-app.cmd",
+                "reduce",
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                str(package / "bin" / "argument-probe.ps1"),
+                "0",
+                *payload,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn(f"ARGS=[{'|'.join(payload)}]", result.stdout)
+
+    def test_worker_does_not_bind_app_arguments_as_its_own_parameters(self):
+        with TemporaryDirectory() as temp_dir:
+            package = self._write_launcher_fixture(Path(temp_dir))
+            payload = [
+                "-AppName",
+                "literal",
+                "-AppArguments",
+                "value",
+                "-Verbose",
+                "-ErrorAction",
+                "Stop",
+                "",
+                "tail",
+            ]
             result = self._run_launcher(
                 package / "launch" / "isis-app.cmd",
                 "reduce",

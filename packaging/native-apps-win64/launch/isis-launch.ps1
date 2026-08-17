@@ -1,16 +1,28 @@
-param(
-    [Parameter(Position = 0)]
-    [AllowEmptyString()]
-    [string] $AppName,
-
-    [Parameter(Position = 1, ValueFromRemainingArguments = $true)]
-    [AllowEmptyCollection()]
-    [string[]] $AppArguments
-)
-
 $ErrorActionPreference = "Stop"
 $PackageRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
 $ManifestPath = Join-Path $PackageRoot "manifest\apps.json"
+
+[object[]] $InvocationArguments = @($args)
+if ($InvocationArguments.Count -eq 0) {
+    [Console]::Error.WriteLine("Missing APP name; not a public ISIS APP.")
+    exit 2
+}
+
+$AppName = [string] $InvocationArguments[0]
+[string[]] $AppArguments = @()
+if ($InvocationArguments.Count -gt 1) {
+    $AppArguments = [string[]] @(
+        $InvocationArguments[1..($InvocationArguments.Count - 1)]
+    )
+}
+
+# Windows PowerShell 5 drops an empty string at its native-process boundary.
+# A quoted-empty command-line token preserves that argv element for the APP.
+for ($ArgumentIndex = 0; $ArgumentIndex -lt $AppArguments.Count; $ArgumentIndex++) {
+    if ($AppArguments[$ArgumentIndex].Length -eq 0) {
+        $AppArguments[$ArgumentIndex] = '""'
+    }
+}
 
 if ([string]::IsNullOrEmpty($AppName)) {
     [Console]::Error.WriteLine("Missing APP name; not a public ISIS APP.")

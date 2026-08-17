@@ -8,6 +8,7 @@ Updated: 2026-08-18  Geng Xun added unlimited argv and metacharacter regression 
 Updated: 2026-08-18  Geng Xun covered binder-shaped and empty APP arguments.
 Updated: 2026-08-18  Geng Xun added JSON argv coverage for slot transport and native quoting.
 Updated: 2026-08-18  Geng Xun added curated staging and deterministic archive coverage.
+Updated: 2026-08-18  Geng Xun hardened transactional publication and reparse-point coverage.
 """
 
 from __future__ import annotations
@@ -18,12 +19,14 @@ import json
 import os
 from pathlib import Path
 import shutil
+import stat
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
 from unittest import mock
+import zipfile
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -177,6 +180,173 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
                 fixture.dependency_report,
             )
 
+    @staticmethod
+    def _write_old_outputs(fixture) -> tuple[Path, bytes, bytes]:
+        old_root = fixture.output / fixture.contract.root_name
+        old_root.mkdir(parents=True)
+        old_stage = b"known-good-stage"
+        old_report = b"known-good-report"
+        (old_root / "old.bin").write_bytes(old_stage)
+        fixture.dependency_report.parent.mkdir(parents=True, exist_ok=True)
+        fixture.dependency_report.write_bytes(old_report)
+        return old_root, old_stage, old_report
+
+    def _assert_old_outputs_unchanged(
+        self, fixture, old_root: Path, old_stage: bytes, old_report: bytes
+    ) -> None:
+        self.assertEqual((old_root / "old.bin").read_bytes(), old_stage)
+        self.assertEqual(fixture.dependency_report.read_bytes(), old_report)
+        self.assertEqual(
+            list(fixture.output.glob(f".{fixture.contract.root_name}.tmp-*")), []
+        )
+        self.assertEqual(
+            list(fixture.output.glob(f".{fixture.contract.root_name}.backup-*")),
+            [],
+        )
+        self.assertEqual(
+            list(
+                fixture.dependency_report.parent.glob(
+                    f".{fixture.dependency_report.name}.tmp-*"
+                )
+            ),
+            [],
+        )
+        self.assertEqual(
+            list(
+                fixture.dependency_report.parent.glob(
+                    f".{fixture.dependency_report.name}.backup-*"
+                )
+            ),
+            [],
+        )
+
+    def test_failed_dependency_closure_preserves_previous_outputs(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            old_root, old_stage, old_report = self._write_old_outputs(fixture)
+
+            written_reports = []
+
+            def fail_closure(seed_files, prefixes, target, dependency_report=None):
+                del seed_files, prefixes, target
+                written_reports.append(dependency_report)
+                dependency_report.write_text(
+                    json.dumps({"unresolved": ["missing.dll"]}), encoding="utf-8"
+                )
+                raise FileNotFoundError(
+                    "Unresolved Windows runtime dependencies: missing.dll"
+                )
+
+            with mock.patch.object(
+                self.stage_module,
+                "copy_dependency_closure",
+                side_effect=fail_closure,
+            ):
+                with self.assertRaisesRegex(FileNotFoundError, "missing.dll"):
+                    self.stage_module.stage_native_apps(
+                        fixture.isis_prefix,
+                        (fixture.dependency_prefix,),
+                        fixture.minimal_data,
+                        fixture.contract,
+                        fixture.output,
+                        fixture.dependency_report,
+                    )
+
+            self._assert_old_outputs_unchanged(
+                fixture, old_root, old_stage, old_report
+            )
+            self.assertEqual(len(written_reports), 1)
+            self.assertNotEqual(written_reports[0], fixture.dependency_report)
+            self.assertEqual(written_reports[0].parent, fixture.dependency_report.parent)
+
+    def test_forbidden_content_failure_preserves_previous_outputs(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            old_root, old_stage, old_report = self._write_old_outputs(fixture)
+            (fixture.isis_prefix / "IsisPreferences").write_text(
+                r'D:\build\isis\runtime' + "\n", encoding="utf-8"
+            )
+
+            with self.assertRaisesRegex(ValueError, "absolute build/conda"):
+                self._stage(fixture)
+
+            self._assert_old_outputs_unchanged(
+                fixture, old_root, old_stage, old_report
+            )
+
+    def test_publish_rename_failure_restores_previous_outputs(self):
+        for failed_output in ("stage", "report"):
+            with self.subTest(failed_output=failed_output), TemporaryDirectory() as temp_dir:
+                fixture = self._write_stage_fixture(Path(temp_dir))
+                old_root, old_stage, old_report = self._write_old_outputs(fixture)
+                real_replace = os.replace
+                failed = False
+
+                def fail_candidate_publish(source, destination):
+                    nonlocal failed
+                    source_path = Path(source)
+                    destination_path = Path(destination)
+                    target = old_root if failed_output == "stage" else fixture.dependency_report
+                    if (
+                        not failed
+                        and ".tmp-" in source_path.name
+                        and destination_path == target
+                    ):
+                        failed = True
+                        raise OSError(f"injected {failed_output} publish failure")
+                    return real_replace(source, destination)
+
+                with mock.patch.object(
+                    self.stage_module.os,
+                    "replace",
+                    side_effect=fail_candidate_publish,
+                ):
+                    with self.assertRaisesRegex(
+                        OSError, f"injected {failed_output} publish"
+                    ):
+                        self._stage(fixture)
+
+                self._assert_old_outputs_unchanged(
+                    fixture, old_root, old_stage, old_report
+                )
+
+    def test_absolute_build_and_conda_paths_are_rejected_without_false_positive(self):
+        forbidden = (
+            r'D:\build\isis\x',
+            '{"prefix":"C:/conda/envs/isis"}',
+            r'prefix=D:\code\build\isis\x',
+        )
+        for value in forbidden:
+            with self.subTest(value=value), TemporaryDirectory() as temp_dir:
+                fixture = self._write_stage_fixture(Path(temp_dir))
+                (fixture.isis_prefix / "IsisPreferences").write_text(
+                    value + "\n", encoding="utf-8"
+                )
+                with self.assertRaisesRegex(ValueError, "absolute build/conda"):
+                    self._stage(fixture)
+
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            (fixture.isis_prefix / "IsisPreferences").write_text(
+                "Drive D: selected; build output is relative.\n", encoding="utf-8"
+            )
+            result = self._stage(fixture)
+            self.assertTrue(result.root.is_dir())
+
+    def test_stager_rejects_reparse_source_and_destination(self):
+        for rejected_name in ("reduce.exe", "usgs-isis-native-apps-9.0.0-win64"):
+            with self.subTest(rejected_name=rejected_name), TemporaryDirectory() as temp_dir:
+                fixture = self._write_stage_fixture(Path(temp_dir))
+                if rejected_name == fixture.contract.root_name:
+                    (fixture.output / fixture.contract.root_name).mkdir(parents=True)
+                with mock.patch.object(
+                    self.stage_module,
+                    "_is_reparse_point",
+                    side_effect=lambda path: Path(path).name == rejected_name,
+                ):
+                    with self.assertRaisesRegex(ValueError, "reparse"):
+                        self._stage(fixture)
+
     def test_stage_copies_only_declared_payload_and_hashes_every_file(self):
         with TemporaryDirectory() as temp_dir:
             fixture = self._write_stage_fixture(Path(temp_dir))
@@ -243,6 +413,18 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
                 self._stage(fixture)
             self.assertFalse((fixture.output.parent / "escaped").exists())
 
+    def test_stage_rejects_dependency_report_inside_final_package(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            fixture.dependency_report = (
+                fixture.output
+                / fixture.contract.root_name
+                / "manifest"
+                / "dependencies.json"
+            )
+            with self.assertRaisesRegex(ValueError, "outside the staged package"):
+                self._stage(fixture)
+
     def test_deterministic_zip_is_byte_reproducible(self):
         with TemporaryDirectory() as temp_dir:
             fixture = self._write_stage_fixture(Path(temp_dir))
@@ -259,6 +441,82 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
                 (stage.parent / "b.zip").read_bytes(),
             )
             self.assertEqual(first["root_name"], stage.name)
+            with zipfile.ZipFile(stage.parent / "a.zip") as archive:
+                infos = archive.infolist()
+            names = [info.filename for info in infos]
+            self.assertEqual(names, sorted(names))
+            self.assertEqual({name.split("/", 1)[0] for name in names}, {stage.name})
+            self.assertFalse(any(name.endswith("/a.zip") for name in names))
+            for info in infos:
+                self.assertEqual(info.date_time, (1980, 1, 1, 0, 0, 0))
+                self.assertEqual(info.create_system, 3)
+                self.assertEqual((info.external_attr >> 16) & 0o170000, stat.S_IFREG)
+                self.assertEqual(info.compress_type, zipfile.ZIP_DEFLATED)
+
+    def test_archive_failures_preserve_previous_zip_and_remove_temps(self):
+        for failure_kind in ("read", "write", "replace"):
+            with self.subTest(failure_kind=failure_kind), TemporaryDirectory() as temp_dir:
+                fixture = self._write_stage_fixture(Path(temp_dir))
+                stage = self._stage(fixture).root
+                archive_path = stage.parent / "release.zip"
+                old_archive = b"known-good-zip"
+                archive_path.write_bytes(old_archive)
+
+                if failure_kind == "read":
+                    original_read = Path.read_bytes
+
+                    def fail_read(path):
+                        if Path(path).name == "README.md":
+                            raise RuntimeError("injected member read failure")
+                        return original_read(path)
+
+                    patcher = mock.patch.object(Path, "read_bytes", new=fail_read)
+                elif failure_kind == "write":
+                    patcher = mock.patch.object(
+                        zipfile.ZipFile,
+                        "writestr",
+                        side_effect=RuntimeError("injected member write failure"),
+                    )
+                else:
+                    patcher = mock.patch.object(
+                        self.archive_module.os,
+                        "replace",
+                        side_effect=OSError("injected member replace failure"),
+                    )
+
+                with patcher, self.assertRaisesRegex(
+                    (RuntimeError, OSError), "injected member"
+                ):
+                    self.archive_module.create_deterministic_zip(stage, archive_path)
+
+                self.assertEqual(archive_path.read_bytes(), old_archive)
+                self.assertEqual(
+                    list(archive_path.parent.glob(f".{archive_path.name}.tmp-*")),
+                    [],
+                )
+
+    def test_archive_rejects_reparse_members(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            stage = self._stage(fixture).root
+            archive_path = stage.parent / "release.zip"
+            with mock.patch.object(
+                self.archive_module,
+                "_is_reparse_point",
+                return_value=True,
+            ):
+                with self.assertRaisesRegex(ValueError, "reparse"):
+                    self.archive_module.create_deterministic_zip(stage, archive_path)
+            self.assertFalse(archive_path.exists())
+
+    def test_reparse_attribute_helper_is_permission_independent(self):
+        attributes = SimpleNamespace(
+            st_file_attributes=stat.FILE_ATTRIBUTE_REPARSE_POINT
+        )
+        with mock.patch("os.lstat", return_value=attributes):
+            for module in (self.stage_module, self.archive_module):
+                with self.subTest(module=module.__name__):
+                    self.assertTrue(module._is_reparse_point(Path("virtual-entry")))
 
     def test_packaging_scripts_expose_orchestrator_cli(self):
         for script, expected in (

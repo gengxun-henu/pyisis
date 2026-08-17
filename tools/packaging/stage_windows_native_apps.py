@@ -6,10 +6,13 @@ import argparse
 import hashlib
 import json
 from dataclasses import dataclass
+import os
 from pathlib import Path
 import re
 import shutil
+import stat
 from tempfile import TemporaryDirectory
+import uuid
 
 try:
     from tools.packaging.windows_native_app_manifest import (
@@ -33,7 +36,9 @@ LAUNCH_FILES = (
 )
 TEXT_SUFFIXES = {"", ".cmd", ".json", ".md", ".plugin", ".ps1", ".sha256", ".txt", ".xml"}
 FORBIDDEN_ABSOLUTE_RE = re.compile(
-    rb"(?i)[a-z]:[\\/][^\x00\r\n]{0,260}(?:conda|miniconda|pyisis-win-env|[\\/]build[\\/])"
+    rb"(?i)[a-z]:[\\/](?:[^\\/\x00\r\n]+[\\/])*"
+    rb"(?:build|conda|miniconda|pyisis-win-env)"
+    rb"(?=[\\/ \t\r\n\"',;}\]]|$)"
 )
 
 
@@ -43,6 +48,105 @@ class StageResult:
     apps_manifest: Path
     files_manifest: Path
     dependency_report: Path
+
+
+def _is_reparse_point(path: Path) -> bool:
+    attributes = getattr(os.lstat(path), "st_file_attributes", 0)
+    return bool(attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400))
+
+
+def _reject_reparse_below(path: Path, root: Path, label: str) -> None:
+    current = Path(path).absolute()
+    root = Path(root).absolute()
+    try:
+        current.relative_to(root)
+    except ValueError as error:
+        raise ValueError(f"{label} escapes declared source root: {path}") from error
+    while True:
+        if os.path.lexists(current) and _is_reparse_point(current):
+            raise ValueError(f"{label} contains a symlink or reparse point: {current}")
+        if current == root:
+            return
+        current = current.parent
+
+
+def _reject_reparse_tree(path: Path, label: str) -> None:
+    if _is_reparse_point(path):
+        raise ValueError(f"{label} contains a symlink or reparse point: {path}")
+    if Path(path).is_dir():
+        for entry in Path(path).rglob("*"):
+            if _is_reparse_point(entry):
+                raise ValueError(
+                    f"{label} contains a symlink or reparse point: {entry}"
+                )
+
+
+def _unique_sibling(path: Path, kind: str) -> Path:
+    return path.parent / f".{path.name}.{kind}-{uuid.uuid4().hex}"
+
+
+def _remove_path(path: Path) -> None:
+    if not os.path.lexists(path):
+        return
+    if _is_reparse_point(path):
+        if path.is_dir():
+            os.rmdir(path)
+        else:
+            path.unlink()
+    elif path.is_dir():
+        shutil.rmtree(path)
+    else:
+        path.unlink()
+
+
+def _require_direct_child(path: Path, parent: Path, label: str) -> None:
+    if path.parent != parent or path.name in {"", ".", ".."}:
+        raise ValueError(f"{label} is not a safe sibling temporary path: {path}")
+
+
+def _publish_outputs(outputs: tuple[tuple[Path, Path], ...]) -> None:
+    records: list[dict[str, object]] = []
+    try:
+        for candidate, final in outputs:
+            candidate = candidate.absolute()
+            final = final.absolute()
+            _require_direct_child(candidate, final.parent, "publish candidate")
+            if not os.path.lexists(candidate):
+                raise FileNotFoundError(f"publish candidate does not exist: {candidate}")
+            backup: Path | None = None
+            record: dict[str, object] = {
+                "final": final,
+                "backup": backup,
+                "published": False,
+            }
+            records.append(record)
+            if os.path.lexists(final):
+                backup = _unique_sibling(final, "backup")
+                _require_direct_child(backup, final.parent, "publish backup")
+                os.replace(final, backup)
+                record["backup"] = backup
+            os.replace(candidate, final)
+            record["published"] = True
+    except BaseException:
+        rollback_error: BaseException | None = None
+        for record in reversed(records):
+            final = record["final"]
+            backup = record["backup"]
+            try:
+                if record["published"] and os.path.lexists(final):
+                    _remove_path(final)
+                if isinstance(backup, Path) and os.path.lexists(backup):
+                    os.replace(backup, final)
+            except BaseException as error:
+                rollback_error = rollback_error or error
+        if rollback_error is not None:
+            raise RuntimeError("failed to restore previous published outputs") from rollback_error
+        raise
+    else:
+        for record in records:
+            backup = record["backup"]
+            if isinstance(backup, Path):
+                _remove_path(backup)
 
 
 def _existing_directory(path: Path, label: str) -> Path:
@@ -56,6 +160,7 @@ def _existing_directory(path: Path, label: str) -> Path:
 
 
 def _require_below(path: Path, root: Path, label: str) -> Path:
+    _reject_reparse_below(path, root, label)
     resolved = path.resolve(strict=True)
     try:
         resolved.relative_to(root)
@@ -209,122 +314,189 @@ def stage_native_apps(
     root_name = release_contract.root_name
     if not root_name or Path(root_name).name != root_name or root_name in {".", ".."}:
         raise ValueError(f"unsafe release root_name: {root_name!r}")
-    root = _destination(stage_parent, Path(root_name))
-    if root.is_symlink():
-        raise ValueError(f"staging root must not be a symlink: {root}")
-    if root.exists():
-        shutil.rmtree(root)
-    root.mkdir()
+    final_root = _destination(stage_parent, Path(root_name))
+    if os.path.lexists(final_root):
+        _reject_reparse_tree(final_root, "staging root")
+        if not final_root.is_dir():
+            raise NotADirectoryError(f"staging root is not a directory: {final_root}")
 
-    dependency_report = Path(dependency_report)
-    dependency_report.parent.mkdir(parents=True, exist_ok=True)
-    dependency_report = dependency_report.resolve(strict=False)
+    dependency_report = Path(dependency_report).absolute()
+    resolved_report = dependency_report.resolve(strict=False)
     try:
-        dependency_report.relative_to(root)
+        resolved_report.relative_to(final_root.resolve(strict=False))
     except ValueError:
         pass
     else:
         raise ValueError("dependency report must be outside the staged package")
+    dependency_report.parent.mkdir(parents=True, exist_ok=True)
+    dependency_report = (
+        dependency_report.parent.resolve(strict=True) / dependency_report.name
+    )
+    if os.path.lexists(dependency_report):
+        if _is_reparse_point(dependency_report):
+            raise ValueError(
+                "dependency report contains a symlink or reparse point: "
+                f"{dependency_report}"
+            )
+        if not dependency_report.is_file():
+            raise ValueError(
+                f"dependency report output is not a file: {dependency_report}"
+            )
 
-    bin_source = isis_prefix / "bin"
-    seeds: list[Path] = []
-    for app in release_contract.public_apps:
-        seeds.append(
+    root = _unique_sibling(final_root, "tmp")
+    _require_direct_child(root, stage_parent, "stage candidate")
+    root.mkdir()
+    temporary_dependency_report = _unique_sibling(dependency_report, "tmp")
+    _require_direct_child(
+        temporary_dependency_report,
+        dependency_report.parent,
+        "dependency report candidate",
+    )
+
+    try:
+        bin_source = isis_prefix / "bin"
+        seeds: list[Path] = []
+        for app in release_contract.public_apps:
+            seeds.append(
+                _copy_file(
+                    bin_source / f"{app}.exe",
+                    isis_prefix,
+                    root,
+                    Path("bin") / f"{app}.exe",
+                )
+            )
+        for helper in release_contract.runtime_helpers:
+            seeds.append(
+                _copy_file(
+                    bin_source / f"{helper}.exe",
+                    isis_prefix,
+                    root,
+                    Path("bin") / f"{helper}.exe",
+                )
+            )
+        for app in release_contract.public_cli_apps:
             _copy_file(
-                bin_source / f"{app}.exe",
+                bin_source / "xml" / f"{app}.xml",
                 isis_prefix,
                 root,
-                Path("bin") / f"{app}.exe",
+                Path("bin") / "xml" / f"{app}.xml",
             )
-        )
-    for helper in release_contract.runtime_helpers:
-        seeds.append(
-            _copy_file(
-                bin_source / f"{helper}.exe",
-                isis_prefix,
-                root,
-                Path("bin") / f"{helper}.exe",
-            )
-        )
-    for app in release_contract.public_cli_apps:
-        _copy_file(
-            bin_source / "xml" / f"{app}.xml",
+
+        isis_dll = _copy_file(
+            isis_prefix / "lib" / "isis.dll",
             isis_prefix,
             root,
-            Path("bin") / "xml" / f"{app}.xml",
+            Path("lib") / "isis.dll",
         )
-
-    isis_dll = _copy_file(
-        isis_prefix / "lib" / "isis.dll",
-        isis_prefix,
-        root,
-        Path("lib") / "isis.dll",
-    )
-    seeds.append(isis_dll)
-    for plugin in sorted(
-        (isis_prefix / "lib").glob("*.plugin"), key=lambda path: path.name.lower()
-    ):
-        _copy_file(plugin, isis_prefix, root, Path("lib") / plugin.name)
-
-    _copy_file(isis_prefix / "IsisPreferences", isis_prefix, root, Path("IsisPreferences"))
-    _copy_file(isis_prefix / "LICENSE.md", isis_prefix, root, Path("LICENSE.md"))
-    _copy_tree(isis_prefix / "appdata", isis_prefix, root / "appdata")
-    _copy_tree(minimal_data_root, minimal_data_root, root / "data")
-    _write_package_readme(root, release_contract)
-    for name in LAUNCH_FILES:
-        _copy_file(LAUNCH_SOURCE / name, REPOSITORY_ROOT, root, Path("launch") / name)
-
-    for pattern in release_contract.qt_plugin_globs:
-        matches: list[tuple[Path, Path]] = []
-        for prefix in dependency_prefixes:
-            matches.extend((source, prefix) for source in prefix.glob(pattern) if source.is_file())
-        if not matches:
-            raise FileNotFoundError(f"Qt plugin pattern matched no files: {pattern}")
-        for source, prefix in sorted(
-            matches,
-            key=lambda item: (item[0].name.lower(), str(item[0]).lower()),
+        seeds.append(isis_dll)
+        for plugin in sorted(
+            (isis_prefix / "lib").glob("*.plugin"),
+            key=lambda path: path.name.lower(),
         ):
-            relative = source.relative_to(prefix / "Library" / "plugins")
-            staged = _copy_file(source, prefix, root, Path("plugins") / relative)
-            seeds.append(staged)
+            _copy_file(plugin, isis_prefix, root, Path("lib") / plugin.name)
 
-    with TemporaryDirectory(prefix="native-app-deps-", dir=stage_parent) as closure_dir:
-        closure_root = Path(closure_dir)
-        report = copy_dependency_closure(
-            tuple(seeds),
-            (isis_prefix, *dependency_prefixes),
-            closure_root,
-            dependency_report,
+        _copy_file(
+            isis_prefix / "IsisPreferences",
+            isis_prefix,
+            root,
+            Path("IsisPreferences"),
         )
-        for item in report.get("files", []):
-            if not isinstance(item, dict) or not isinstance(item.get("target"), str):
-                raise ValueError("dependency report contains an invalid file entry")
-            source = closure_root / Path(item["target"])
-            name = item.get("name")
-            if not isinstance(name, str) or Path(name).name != name:
-                raise ValueError("dependency report contains an unsafe DLL name")
-            _copy_file(source, closure_root, root, Path("lib") / name)
+        _copy_file(isis_prefix / "LICENSE.md", isis_prefix, root, Path("LICENSE.md"))
+        _copy_tree(isis_prefix / "appdata", isis_prefix, root / "appdata")
+        _copy_tree(minimal_data_root, minimal_data_root, root / "data")
+        _write_package_readme(root, release_contract)
+        for name in LAUNCH_FILES:
+            _copy_file(
+                LAUNCH_SOURCE / name,
+                REPOSITORY_ROOT,
+                root,
+                Path("launch") / name,
+            )
 
-    _enrich_dependency_report(report, root / "lib")
-    dependency_report.write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        for pattern in release_contract.qt_plugin_globs:
+            matches: list[tuple[Path, Path]] = []
+            for prefix in dependency_prefixes:
+                matches.extend(
+                    (source, prefix)
+                    for source in prefix.glob(pattern)
+                    if source.is_file()
+                )
+            if not matches:
+                raise FileNotFoundError(
+                    f"Qt plugin pattern matched no files: {pattern}"
+                )
+            for source, prefix in sorted(
+                matches,
+                key=lambda item: (item[0].name.lower(), str(item[0]).lower()),
+            ):
+                relative = source.relative_to(prefix / "Library" / "plugins")
+                staged = _copy_file(
+                    source, prefix, root, Path("plugins") / relative
+                )
+                seeds.append(staged)
+
+        with TemporaryDirectory(
+            prefix="native-app-deps-", dir=stage_parent
+        ) as closure_dir:
+            closure_root = Path(closure_dir)
+            report = copy_dependency_closure(
+                tuple(seeds),
+                (isis_prefix, *dependency_prefixes),
+                closure_root,
+                temporary_dependency_report,
+            )
+            for item in report.get("files", []):
+                if not isinstance(item, dict) or not isinstance(
+                    item.get("target"), str
+                ):
+                    raise ValueError("dependency report contains an invalid file entry")
+                source = closure_root / Path(item["target"])
+                name = item.get("name")
+                if not isinstance(name, str) or Path(name).name != name:
+                    raise ValueError("dependency report contains an unsafe DLL name")
+                _copy_file(source, closure_root, root, Path("lib") / name)
+
+        _enrich_dependency_report(report, root / "lib")
+        temporary_dependency_report.write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        if FORBIDDEN_ABSOLUTE_RE.search(temporary_dependency_report.read_bytes()):
+            raise ValueError("dependency report contains an absolute build/conda path")
+
+        expected_executables = {
+            f"{name}.exe"
+            for name in (
+                *release_contract.public_apps,
+                *release_contract.runtime_helpers,
+            )
+        }
+        actual_executables = {path.name for path in (root / "bin").glob("*.exe")}
+        if actual_executables != expected_executables:
+            raise ValueError(
+                "staged executable inventory does not match the release contract"
+            )
+
+        write_apps_manifest(root, release_contract)
+        _write_build_metadata(root, release_contract)
+        _reject_forbidden_content(root, release_contract)
+        _write_files_manifest(root)
+        _publish_outputs(
+            (
+                (root, final_root),
+                (temporary_dependency_report, dependency_report),
+            )
+        )
+    finally:
+        _remove_path(root)
+        _remove_path(temporary_dependency_report)
+
+    return StageResult(
+        final_root,
+        final_root / "manifest" / "apps.json",
+        final_root / "manifest" / "files.sha256",
+        dependency_report,
     )
-    if FORBIDDEN_ABSOLUTE_RE.search(dependency_report.read_bytes()):
-        raise ValueError("dependency report contains an absolute build/conda path")
-
-    expected_executables = {
-        f"{name}.exe"
-        for name in (*release_contract.public_apps, *release_contract.runtime_helpers)
-    }
-    actual_executables = {path.name for path in (root / "bin").glob("*.exe")}
-    if actual_executables != expected_executables:
-        raise ValueError("staged executable inventory does not match the release contract")
-
-    apps_manifest = write_apps_manifest(root, release_contract)
-    _write_build_metadata(root, release_contract)
-    _reject_forbidden_content(root, release_contract)
-    files_manifest = _write_files_manifest(root)
-    return StageResult(root, apps_manifest, files_manifest, dependency_report)
 
 
 def main() -> int:

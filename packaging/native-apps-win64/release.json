@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "distribution": "usgs-isis-native-apps",
+  "isis_version": "9.0.0",
+  "platform": "win64",
+  "archive_name": "usgs-isis-native-apps-9.0.0-win64.zip",
+  "root_name": "usgs-isis-native-apps-9.0.0-win64",
+  "cli_manifest": "ports/windows/isis/windows-app-manifest.json",
+  "cli_manifest_sha256": "bca645e1bf9ba3594ef48be0cb3fbec642a98da1e6f1b91b31a4aaa9519987d5",
+  "public_gui_apps": [
+    "qnet"
+  ],
+  "runtime_helpers": [
+    "isisui"
+  ],
+  "mandatory_apps": [
+    "reduce",
+    "jigsaw",
+    "qnet"
+  ],
+  "qt_plugin_globs": [
+    "Library/plugins/platforms/qwindows.dll",
+    "Library/plugins/imageformats/*.dll",
+    "Library/plugins/styles/*.dll"
+  ],
+  "forbidden_globs": [
+    "include/**",
+    "lib/**/*.lib",
+    "lib/**/*.a",
+    "lib/cmake/**",
+    "make/**",
+    "**/*.whl",
+    "**/CMakeCache.txt"
+  ]
+}

@@ -185,7 +185,7 @@ overall_rank,app,module,portability_score,importance_score,combined_score,recomm
 184,copylabel,base,5,2,25,W4-medium,no,1,303,none,通用但使用频率或链路位置较低,isis/src/base/apps/copylabel
 185,cosi,base,5,2,25,W4-medium,no,1,47,none,通用但使用频率或链路位置较低,isis/src/base/apps/cosi
 186,csminit,base,5,2,25,W4-medium,no,3,515,none,通用但使用频率或链路位置较低,isis/src/base/apps/csminit
-187,csv2table,base,5,2,25,W4-medium,no,3,260,none,通用但使用频率或链路位置较低,isis/src/base/apps/csv2table
+187,csv2table,base,5,2,25,W0-current-batch,yes,3,260,none,通用但使用频率或链路位置较低,isis/src/base/apps/csv2table
 188,ddd2isis,base,5,2,25,W4-medium,no,1,187,none,通用但使用频率或链路位置较低,isis/src/base/apps/ddd2isis
 189,demprep,base,5,2,25,W4-medium,no,3,439,none,通用但使用频率或链路位置较低,isis/src/base/apps/demprep
 190,deriv,base,5,2,25,W4-medium,no,1,46,none,通用但使用频率或链路位置较低,isis/src/base/apps/deriv

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-16
+Last Modified: 2026-08-17
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -32,6 +32,8 @@ Updated: 2026-08-05  Geng Xun covered the Windows 11 runner readiness contract.
 Updated: 2026-08-15  Geng Xun required CRLF-safe context handling for Windows ISIS patches.
 Updated: 2026-08-16  Geng Xun added structured Windows wheel clean-install evidence coverage.
 Updated: 2026-08-16  Geng Xun added isolated-install, stale-report, unittest-count, and command-serialization coverage.
+Updated: 2026-08-17  Geng Xun aligned Windows APP inventory coverage with the csv2table 150-APP manifest.
+Updated: 2026-08-17  Geng Xun covered manifest-only Windows APP priority refresh integrity.
 """
 
 from __future__ import annotations
@@ -307,7 +309,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
             "trim",
         }
         apps = {app["name"]: app for app in manifest["apps"]}
-        self.assertEqual(len(apps), 149)
+        self.assertEqual(len(apps), 150)
         self.assertTrue(behavior_apps.issubset(apps))
         w1_apps = {
             name
@@ -431,6 +433,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 "ciss2isis",
                 "clemnircal",
                 "clemuvviscal",
+                "csv2table",
                 "ctxcal",
                 "eis2isis",
                 "gllssi2isis",
@@ -506,7 +509,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         batch_smoke = (
             WINDOWS_ISIS_DIR / "test_isis_app_batch_smoke.ps1"
         ).read_text(encoding="utf-8")
-        self.assertIn("$appNames.Count -lt 149", batch_smoke)
+        self.assertIn("$appNames.Count -lt 150", batch_smoke)
         self.assertIn('Join-Path $Prefix "bin\\$Name.exe"', batch_smoke)
         self.assertIn('Invoke-IsisApp $appName @("-HELP")', batch_smoke)
         for name in behavior_apps:
@@ -519,7 +522,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("runs-on: windows-2022", workflow)
         self.assertIn("-IsisVersion 10.0.0", workflow)
         self.assertIn("-WindowsApps $apps", workflow)
-        self.assertIn("Build and smoke-test 149 ISIS 10 APPs", workflow)
+        self.assertIn("Build and smoke-test 150 ISIS 10 APPs", workflow)
         self.assertIn("test_isis_app_batch_smoke.ps1", workflow)
         self.assertIn("windows-isis10-app-batch-smoke-logs", workflow)
 
@@ -584,13 +587,127 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertEqual(apps["hrsc2isis"]["importance_score"], "4")
         self.assertEqual(
             sum(row["current_manifest"] == "yes" for row in rows),
-            149,
+            150,
         )
+
+        csv2table = next(row for row in rows if row["app"] == "csv2table")
+        self.assertEqual(csv2table["current_manifest"], "yes")
 
         summary = WINDOWS_ISIS_APP_PRIORITY_SUMMARY.read_text(encoding="utf-8")
         self.assertIn("APP 总数：365", summary)
         self.assertIn("固定源码提交", summary)
-        self.assertIn("W0-current-batch | 149", summary)
+        self.assertIn("W0-current-batch | 150", summary)
+
+    def test_windows_app_priority_manifest_only_refresh_preserves_ranking_data(self):
+        import csv
+
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            csv_output = root / "windows-app-priority.csv"
+            summary_output = root / "windows-app-priority.md"
+            manifest_path = root / "windows-app-manifest.json"
+            csv_output.write_bytes(WINDOWS_ISIS_APP_PRIORITY.read_bytes())
+            manifest_path.write_bytes(WINDOWS_ISIS_APP_MANIFEST.read_bytes())
+
+            with csv_output.open(encoding="utf-8", newline="") as priority_file:
+                reader = csv.DictReader(priority_file)
+                before_rows = list(reader)
+                self.assertIsNotNone(reader.fieldnames)
+            for row in before_rows:
+                if row["app"] == "csv2table":
+                    row["current_manifest"] = "no"
+                    row["recommended_wave"] = "W4-medium"
+            with csv_output.open("w", encoding="utf-8", newline="") as priority_file:
+                writer = csv.DictWriter(
+                    priority_file,
+                    fieldnames=reader.fieldnames,
+                    lineterminator="\n",
+                )
+                writer.writeheader()
+                writer.writerows(before_rows)
+
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(WINDOWS_ISIS_DIR / "rank_isis_apps.py"),
+                    "--refresh-manifest-only",
+                    "--manifest",
+                    str(manifest_path),
+                    "--csv-output",
+                    str(csv_output),
+                    "--summary-output",
+                    str(summary_output),
+                ],
+                cwd=str(PROJECT_ROOT),
+                text=True,
+                capture_output=True,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+
+            with csv_output.open(encoding="utf-8", newline="") as priority_file:
+                after_rows = list(csv.DictReader(priority_file))
+
+            self.assertEqual(len(after_rows), 365)
+            self.assertEqual(
+                [row["app"] for row in after_rows],
+                [row["app"] for row in before_rows],
+            )
+            membership_fields = {"current_manifest", "recommended_wave"}
+            for before, after in zip(before_rows, after_rows, strict=True):
+                with self.subTest(app=before["app"]):
+                    self.assertEqual(
+                        {
+                            key: value
+                            for key, value in after.items()
+                            if key not in membership_fields
+                        },
+                        {
+                            key: value
+                            for key, value in before.items()
+                            if key not in membership_fields
+                        },
+                    )
+
+            before_csv2table = next(
+                row for row in before_rows if row["app"] == "csv2table"
+            )
+            after_csv2table = next(
+                row for row in after_rows if row["app"] == "csv2table"
+            )
+            self.assertEqual(before_csv2table["current_manifest"], "no")
+            self.assertEqual(before_csv2table["recommended_wave"], "W4-medium")
+            self.assertEqual(after_csv2table["current_manifest"], "yes")
+            self.assertEqual(
+                after_csv2table["recommended_wave"],
+                "W0-current-batch",
+            )
+            self.assertIn("W0-current-batch | 150", summary_output.read_text(encoding="utf-8"))
+
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["apps"].append({"name": "missing-manifest-app"})
+            missing_manifest_path = root / "missing-manifest-app.json"
+            missing_manifest_path.write_text(
+                json.dumps(manifest),
+                encoding="utf-8",
+            )
+            missing_completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(WINDOWS_ISIS_DIR / "rank_isis_apps.py"),
+                    "--refresh-manifest-only",
+                    "--manifest",
+                    str(missing_manifest_path),
+                    "--csv-output",
+                    str(csv_output),
+                    "--summary-output",
+                    str(summary_output),
+                ],
+                cwd=str(PROJECT_ROOT),
+                text=True,
+                capture_output=True,
+            )
+            self.assertNotEqual(missing_completed.returncode, 0)
+            self.assertIn("missing-manifest-app", missing_completed.stderr)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

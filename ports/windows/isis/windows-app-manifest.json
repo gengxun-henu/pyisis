@@ -819,8 +819,8 @@
       "versions": {
         "9.0.0": {
           "status": "supported",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
+          "build_status": "compiled_installed",
+          "smoke_status": "minimal_passed",
           "linux_comparison": "pending"
         },
         "10.0.0": {

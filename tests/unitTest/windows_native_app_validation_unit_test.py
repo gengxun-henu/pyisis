@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-08-18
 Last Modified: 2026-08-18
 Updated: 2026-08-18  Geng Xun added fail-closed archive and evidence validation coverage.
+Updated: 2026-08-18  Geng Xun hardened Windows paths and closed dependency/runtime schemas after review.
 """
 
 from __future__ import annotations
@@ -134,6 +135,7 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
         payload = {
             "README.md": b"portable package\n",
             "lib/isis.dll": b"isis-runtime",
+            "lib/runtime.dll": b"closure-runtime",
             "plugins/platforms/qwindows.dll": b"qt-plugin",
             "manifest/apps.json": (json.dumps(apps_payload, sort_keys=True) + "\n").encode(),
             "manifest/build-metadata.json": b'{"schema_version": 1}\n',
@@ -152,14 +154,15 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             ] + [
                 {"binary": "isis.dll", "imports": []},
                 {"binary": "qwindows.dll", "imports": []},
+                {"binary": "runtime.dll", "imports": []},
             ],
             "files": [{
-                "name": "isis.dll",
-                "source": "bin/isis.dll",
-                "target": "lib/isis.dll",
+                "name": "runtime.dll",
+                "source": "Library/bin/runtime.dll",
+                "target": "lib/runtime.dll",
                 "import_kind": "direct",
                 "parents": ["reduce.exe"],
-                "sha256": hashlib.sha256(payload["lib/isis.dll"]).hexdigest(),
+                "sha256": hashlib.sha256(payload["lib/runtime.dll"]).hexdigest(),
             }],
             "unresolved": [],
         }
@@ -171,20 +174,42 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
                 "archive_name": archive.name,
                 "archive_sha256": archive_sha256,
             },
-            "host": {"os": "Windows 11", "architecture": "x64"},
-            "checks": {
-                name: {"passed": 1, "failed": 0, "skipped": 0, "exit_codes": [0]}
-                for name in (
-                    "archive-extract",
-                    "cli-help",
-                    "real-operations",
-                    "gui-launch",
-                    "external-isisdata",
-                    "negative-launcher",
-                )
+            "host": {
+                "os": "Microsoft Windows 11 Pro",
+                "version": "10.0.26100",
+                "architecture": "x64",
             },
+            "extraction_path": r"C:\Users\clean\AppData\Local\Temp\native package with spaces",
+            "scrubbed_environment": {
+                "variables": [
+                    "CONDA_PREFIX",
+                    "ISISROOT",
+                    "ISIS_PREFIX",
+                    "ISISDATA",
+                    "QT_PLUGIN_PATH",
+                ],
+                "path_entries_removed": 3,
+            },
+            "checks": {
+                name: {
+                    "commands": [f"launch/{name}-{index}" for index in range(count)],
+                    "passed": count,
+                    "failed": 0,
+                    "skipped": 0,
+                    "exit_codes": [0] * count,
+                }
+                for name, count in {
+                    "archive-extract": 1,
+                    "cli-help": 150,
+                    "real-operations": 9,
+                    "gui-launch": 3,
+                    "external-isisdata": 1,
+                    "negative-launcher": 2,
+                }.items()
+            },
+            "summary": {"passed": 166, "failed": 0, "skipped": 0},
         }
-        runtime_payload["checks"]["cli-help"]["passed"] = 150
+        runtime_payload["checks"]["negative-launcher"]["exit_codes"] = [4, 3]
         fixture = ValidationFixture(
             archive,
             dependency_report,
@@ -230,6 +255,18 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             f"{root}/./escape.dll",
             f"{root}/../escape.dll",
             "wrong-root/escape.dll",
+            f"{root}/readme.txt:stream",
+            f"{root}/bad\x01name.txt",
+            f"{root}/trailing-dot.",
+            f"{root}/trailing-space ",
+            f"{root}/CON",
+            f"{root}/prn.txt",
+            f"{root}/Aux.Xml",
+            f"{root}/nul.data",
+            f"{root}/COM1.log",
+            f"{root}/com9",
+            f"{root}/LPT1.txt",
+            f"{root}/lpt9",
         ):
             with self.subTest(name=name), self.assertRaisesRegex(ValueError, "unsafe ZIP member|fixed root"):
                 self.module.safe_zip_member(name, root)
@@ -325,7 +362,7 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
                     payload["binaries"] = [
                         item for item in payload["binaries"] if item["binary"] != "reduce.exe"
                     ]
-                    pattern = "dependency report seed binding"
+                    pattern = "unknown dependency parent|dependency binary inventory"
                 else:
                     payload["files"][0]["source"] = r"D:\build\private\isis.dll"
                     pattern = "absolute build/conda path"
@@ -333,16 +370,92 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             with self.subTest(kind=kind), self.assertRaisesRegex(ValueError, pattern):
                 self.module.validate_release(**fixture.arguments)
 
+    def test_dependency_schema_and_reverse_dll_inventory_are_exact(self):
+        mutations = []
+
+        def add_top(payload, fixture):
+            payload["extra"] = True
+
+        mutations.append((add_top, "dependency report keys mismatch"))
+
+        def duplicate_binary(payload, fixture):
+            payload["binaries"].append(dict(payload["binaries"][0]))
+
+        mutations.append((duplicate_binary, "duplicate dependency binary"))
+
+        def unexpected_binary(payload, fixture):
+            payload["binaries"].append({"binary": "evil.dll", "imports": []})
+
+        mutations.append((unexpected_binary, "dependency binary inventory"))
+
+        def extra_binary_key(payload, fixture):
+            payload["binaries"][0]["extra"] = 1
+
+        mutations.append((extra_binary_key, "dependency binary keys mismatch"))
+
+        def malformed_import(payload, fixture):
+            payload["binaries"][0]["imports"] = [{
+                "name": "runtime.dll",
+                "import_kind": "invalid",
+                "classification": "resolved",
+            }]
+
+        mutations.append((malformed_import, "dependency import_kind"))
+
+        def extra_file_key(payload, fixture):
+            payload["files"][0]["extra"] = 1
+
+        mutations.append((extra_file_key, "dependency file keys mismatch"))
+
+        def unreported_archive_dll(payload, fixture):
+            self._rewrite_member(fixture, "lib/evil.dll", b"evil")
+
+        mutations.append((unreported_archive_dll, "archive DLL inventory"))
+
+        for mutate, pattern in mutations:
+            fixture = self._write_valid_fixture()
+            payload = json.loads(fixture.dependency_report.read_text())
+            mutate(payload, fixture)
+            fixture.dependency_report.write_text(json.dumps(payload), encoding="utf-8")
+            with self.subTest(pattern=pattern), self.assertRaisesRegex(ValueError, pattern):
+                self.module.validate_release(**fixture.arguments)
+
     def test_stale_runtime_binding_wrong_host_nonzero_and_skips_are_rejected(self):
         mutations = (
             (lambda p: p["artifact"].update(archive_sha256="0" * 64), "runtime report archive SHA-256"),
             (lambda p: p["host"].update(os="Windows 10"), "Windows 11"),
             (lambda p: p["host"].update(architecture="arm64"), "x64"),
-            (lambda p: p["checks"].pop("archive-extract"), "missing required checks"),
+            (lambda p: p["checks"].pop("archive-extract"), "runtime check groups mismatch"),
             (lambda p: p["checks"]["cli-help"].update(passed=149), "exactly 150"),
-            (lambda p: p["checks"]["real-operations"].update(exit_codes=[1]), "nonzero exit code"),
+            (lambda p: p["checks"]["real-operations"].update(exit_codes=[1] + [0] * 8), "nonzero exit code"),
             (lambda p: p["checks"]["cli-help"].update(failed=1), "required check.*failed"),
             (lambda p: p["checks"]["gui-launch"].update(skipped=1), "required check.*skipped"),
+        )
+        for mutate, pattern in mutations:
+            fixture = self._write_valid_fixture()
+            mutate(fixture.runtime_payload)
+            fixture.write_runtime_report()
+            with self.subTest(pattern=pattern), self.assertRaisesRegex(ValueError, pattern):
+                self.module.validate_release(**fixture.arguments)
+
+    def test_runtime_schema_provenance_counts_and_results_are_exact(self):
+        mutations = (
+            (lambda p: p.update(extra=True), "runtime report keys mismatch"),
+            (lambda p: p["artifact"].update(extra=True), "runtime artifact keys mismatch"),
+            (lambda p: p["host"].update(extra=True), "runtime host keys mismatch"),
+            (lambda p: p.pop("extraction_path"), "runtime report keys mismatch"),
+            (lambda p: p.update(extraction_path=r"D:\build\native package with spaces"), "clean absolute Windows path"),
+            (lambda p: p["scrubbed_environment"].update(extra=True), "scrubbed_environment keys mismatch"),
+            (lambda p: p["scrubbed_environment"].update(variables=["CONDA_PREFIX"]), "scrubbed variables"),
+            (lambda p: p["scrubbed_environment"].update(path_entries_removed=True), "path_entries_removed"),
+            (lambda p: p["checks"].update(extra={"commands": [], "passed": 0, "failed": 1, "skipped": 1, "exit_codes": [1]}), "runtime check groups mismatch"),
+            (lambda p: p["checks"]["gui-launch"].update(extra=True), "required check gui-launch keys mismatch"),
+            (lambda p: p["checks"]["real-operations"].update(passed=8), "real-operations must record exactly 9"),
+            (lambda p: p["checks"]["gui-launch"]["commands"].pop(), "commands must contain exactly 3"),
+            (lambda p: p["checks"]["cli-help"]["exit_codes"].pop(), "exit_codes must contain exactly 150"),
+            (lambda p: p["checks"]["negative-launcher"].update(exit_codes=[3, 4]), "expected exit codes"),
+            (lambda p: p.update(summary={"passed": 165, "failed": 0, "skipped": 0}), "runtime summary mismatch"),
+            (lambda p: p["checks"]["gui-launch"]["commands"].__setitem__(0, r"D:\source\qnet.cmd"), "absolute path outside extraction_path"),
         )
         for mutate, pattern in mutations:
             fixture = self._write_valid_fixture()

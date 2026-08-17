@@ -8,7 +8,7 @@ import fnmatch
 import hashlib
 import json
 import os
-from pathlib import Path, PurePosixPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import re
 import stat
 from typing import Any
@@ -40,6 +40,20 @@ FORBIDDEN_ABSOLUTE_RE = re.compile(
 )
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 DRIVE_COMPONENT_RE = re.compile(r"^[A-Za-z]:")
+WINDOWS_FORBIDDEN_CHARACTERS = frozenset('<>:"|?*')
+WINDOWS_RESERVED_BASENAMES = frozenset(
+    {"con", "prn", "aux", "nul"}
+    | {f"com{index}" for index in range(1, 10)}
+    | {f"lpt{index}" for index in range(1, 10)}
+)
+EXPECTED_RUNTIME_COUNTS = {
+    "archive-extract": 1,
+    "cli-help": 150,
+    "real-operations": 9,
+    "gui-launch": 3,
+    "external-isisdata": 1,
+    "negative-launcher": 2,
+}
 
 
 def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -87,6 +101,15 @@ def _require_schema_one(payload: dict[str, Any], label: str) -> None:
         raise ValueError(f"{label} schema_version must be integer 1")
 
 
+def _require_exact_keys(value: dict[str, Any], expected: set[str], label: str) -> None:
+    actual = set(value)
+    if actual != expected:
+        raise ValueError(
+            f"{label} keys mismatch: missing={sorted(expected - actual)}, "
+            f"extra={sorted(actual - expected)}"
+        )
+
+
 def _require_string_list(value: Any, label: str) -> tuple[str, ...]:
     if type(value) is not list or any(type(item) is not str for item in value):
         raise ValueError(f"{label} must be a list of strings")
@@ -108,6 +131,15 @@ def safe_zip_member(name: str, expected_root: str) -> PurePosixPath:
         or any(DRIVE_COMPONENT_RE.match(part) for part in raw_parts)
     ):
         raise ValueError(f"unsafe ZIP member: {name}")
+    for component in raw_parts:
+        if (
+            any(ord(character) < 32 for character in component)
+            or any(character in WINDOWS_FORBIDDEN_CHARACTERS for character in component)
+            or component.endswith((".", " "))
+            or component.split(".", 1)[0].rstrip(" .").casefold()
+            in WINDOWS_RESERVED_BASENAMES
+        ):
+            raise ValueError(f"unsafe ZIP member: {name}")
     member = PurePosixPath(name)
     if member.is_absolute() or not member.parts:
         raise ValueError(f"unsafe ZIP member: {name}")
@@ -116,6 +148,10 @@ def safe_zip_member(name: str, expected_root: str) -> PurePosixPath:
     if len(member.parts) == 1:
         raise ValueError(f"unsafe ZIP member: {name}")
     return member
+
+
+def _windows_canonical_member(member: PurePosixPath) -> str:
+    return "/".join(component.casefold() for component in member.parts)
 
 
 def _read_archive(
@@ -135,7 +171,7 @@ def _read_archive(
                 member = safe_zip_member(info.filename, contract.root_name)
                 if info.filename in exact_names:
                     raise ValueError(f"duplicate ZIP member: {info.filename}")
-                folded = info.filename.casefold()
+                folded = _windows_canonical_member(member)
                 if folded in folded_names:
                     raise ValueError(
                         "case-insensitive ZIP member collision: "
@@ -144,7 +180,11 @@ def _read_archive(
                 exact_names.add(info.filename)
                 folded_names[folded] = info.filename
                 mode = (info.external_attr >> 16) & 0xFFFF
-                if info.is_dir() or (mode and not stat.S_ISREG(mode)):
+                if (
+                    info.is_dir()
+                    or bool(info.external_attr & 0x10)
+                    or (mode and not stat.S_ISREG(mode))
+                ):
                     raise ValueError(f"non-regular ZIP member: {info.filename}")
                 relative = PurePosixPath(*member.parts[1:]).as_posix()
                 try:
@@ -241,15 +281,23 @@ def _validate_payload_inventory(
             f"missing={sorted(expected_xml - actual_xml)}, extra={sorted(actual_xml - expected_xml)}"
         )
 
+    plugin_patterns: list[str] = []
     for required_pattern in contract.qt_plugin_globs:
         relative_pattern = required_pattern
         prefix = "Library/plugins/"
         if relative_pattern.startswith(prefix):
             relative_pattern = "plugins/" + relative_pattern[len(prefix):]
+        plugin_patterns.append(relative_pattern)
         if not any(fnmatch.fnmatchcase(name, relative_pattern) for name in members):
             raise ValueError(f"required Qt plugin pattern matched no archive member: {required_pattern}")
     for name, content in members.items():
         path = PurePosixPath(name)
+        if (
+            name.casefold().startswith("plugins/")
+            and path.suffix.casefold() == ".dll"
+            and not any(fnmatch.fnmatchcase(name, pattern) for pattern in plugin_patterns)
+        ):
+            raise ValueError(f"undeclared Qt plugin archive member: {name}")
         intrinsically_forbidden = (
             path.suffix.casefold() in {".a", ".lib", ".whl"}
             or name.casefold() == "cmakecache.txt"
@@ -319,35 +367,154 @@ def _safe_report_target(value: Any) -> str:
     return PurePosixPath(value).as_posix()
 
 
+def _safe_dependency_name(value: Any, label: str) -> str:
+    if (
+        type(value) is not str
+        or not value
+        or "/" in value
+        or "\\" in value
+        or any(ord(character) < 32 for character in value)
+        or any(character in WINDOWS_FORBIDDEN_CHARACTERS for character in value)
+        or value.endswith((".", " "))
+        or value.split(".", 1)[0].casefold() in WINDOWS_RESERVED_BASENAMES
+    ):
+        raise ValueError(f"unsafe {label}: {value}")
+    return value
+
+
+def _safe_dependency_source(value: Any) -> str:
+    if type(value) is not str or not value or "\\" in value or value.startswith("/"):
+        raise ValueError(f"unsafe dependency source: {value}")
+    parts = value.split("/")
+    if any(part in {"", ".", ".."} for part in parts) or any(
+        DRIVE_COMPONENT_RE.match(part) for part in parts
+    ):
+        raise ValueError(f"unsafe dependency source: {value}")
+    return PurePosixPath(value).as_posix()
+
+
 def _validate_dependencies(
     payload: dict[str, Any], members: dict[str, bytes], contract: ReleaseContract
 ) -> int:
+    _require_exact_keys(
+        payload,
+        {"schema_version", "binaries", "files", "unresolved"},
+        "dependency report",
+    )
     _require_schema_one(payload, "dependency report")
     unresolved = payload.get("unresolved")
     if type(unresolved) is not list or any(type(name) is not str for name in unresolved):
         raise ValueError("dependency report unresolved must be a list of strings")
+    if len({name.casefold() for name in unresolved}) != len(unresolved):
+        raise ValueError("dependency report unresolved contains duplicate names")
     if unresolved:
         raise ValueError(f"unresolved dependencies: {unresolved}")
     files = payload.get("files")
     binaries = payload.get("binaries")
     if type(files) is not list or type(binaries) is not list:
         raise ValueError("dependency report files and binaries must be lists")
+    binary_names: dict[str, str] = {}
+    for index, binary in enumerate(binaries):
+        if type(binary) is not dict:
+            raise ValueError(f"dependency report binaries[{index}] must be an object")
+        _require_exact_keys(binary, {"binary", "imports"}, "dependency binary")
+        binary_name = _safe_dependency_name(binary["binary"], "dependency binary name")
+        normalized_binary = binary_name.casefold()
+        if normalized_binary in binary_names:
+            raise ValueError(f"duplicate dependency binary: {binary_name}")
+        binary_names[normalized_binary] = binary_name
+        imports = binary["imports"]
+        if type(imports) is not list:
+            raise ValueError("dependency binary imports must be a list")
+        import_names: set[str] = set()
+        for imported in imports:
+            if type(imported) is not dict:
+                raise ValueError("dependency import must be an object")
+            _require_exact_keys(
+                imported,
+                {"name", "import_kind", "classification"},
+                "dependency import",
+            )
+            imported_name = _safe_dependency_name(
+                imported["name"], "dependency import name"
+            )
+            if PureWindowsPath(imported_name).suffix.casefold() != ".dll":
+                raise ValueError(f"dependency import name is not a DLL: {imported_name}")
+            normalized_import = imported_name.casefold()
+            if normalized_import in import_names:
+                raise ValueError(f"duplicate dependency import: {imported_name}")
+            import_names.add(normalized_import)
+            if type(imported["import_kind"]) is not str or imported["import_kind"] not in {
+                "direct",
+                "forwarder",
+            }:
+                raise ValueError(
+                    f"dependency import_kind is invalid: {imported['import_kind']}"
+                )
+            if type(imported["classification"]) is not str or imported["classification"] not in {
+                "system",
+                "packaged",
+                "resolved",
+                "unresolved",
+            }:
+                raise ValueError(
+                    "dependency import classification is invalid: "
+                    f"{imported['classification']}"
+                )
+            if imported["classification"] == "unresolved":
+                raise ValueError("dependency report contains an unresolved import")
+
+    seen_names: set[str] = set()
+    seen_sources: set[str] = set()
     seen_targets: set[str] = set()
+    closure_names: set[str] = set()
+    closure_targets: set[str] = set()
     for index, item in enumerate(files):
         if type(item) is not dict:
             raise ValueError(f"dependency report files[{index}] must be an object")
+        _require_exact_keys(
+            item,
+            {"name", "source", "target", "import_kind", "parents", "sha256"},
+            "dependency file",
+        )
         target = _safe_report_target(item.get("target"))
         if not target.casefold().startswith("lib/") or PurePosixPath(target).suffix.casefold() != ".dll":
             raise ValueError(f"dependency target must be a lib DLL: {target}")
-        dependency_name = item.get("name")
-        if (
-            type(dependency_name) is not str
-            or PurePosixPath(target).name.casefold() != dependency_name.casefold()
-        ):
+        dependency_name = _safe_dependency_name(item.get("name"), "dependency name")
+        source = _safe_dependency_source(item.get("source"))
+        if target.casefold() != f"lib/{dependency_name}".casefold():
             raise ValueError(f"dependency target/name binding mismatch: {target}")
+        normalized_name = dependency_name.casefold()
+        normalized_source = source.casefold()
+        if normalized_name in seen_names:
+            raise ValueError(f"duplicate dependency name: {dependency_name}")
+        if normalized_source in seen_sources:
+            raise ValueError(f"duplicate dependency source: {source}")
         if target.casefold() in seen_targets:
             raise ValueError(f"duplicate dependency target: {target}")
+        seen_names.add(normalized_name)
+        seen_sources.add(normalized_source)
         seen_targets.add(target.casefold())
+        closure_names.add(normalized_name)
+        closure_targets.add(target.casefold())
+        if type(item["import_kind"]) is not str or item["import_kind"] not in {
+            "direct",
+            "forwarder",
+        }:
+            raise ValueError(f"dependency file import_kind is invalid: {item['import_kind']}")
+        parents = item["parents"]
+        if type(parents) is not list or not parents or any(
+            type(parent) is not str for parent in parents
+        ):
+            raise ValueError("dependency file parents must be a non-empty string list")
+        checked_parents = [
+            _safe_dependency_name(parent, "dependency parent") for parent in parents
+        ]
+        normalized_parents = [parent.casefold() for parent in checked_parents]
+        if len(set(normalized_parents)) != len(normalized_parents):
+            raise ValueError(f"duplicate dependency parent for {dependency_name}")
+        if not set(normalized_parents) <= set(binary_names):
+            raise ValueError(f"unknown dependency parent for {dependency_name}")
         if target not in members:
             raise ValueError(f"dependency target is missing from archive: {target}")
         digest = item.get("sha256")
@@ -356,27 +523,43 @@ def _validate_dependencies(
         actual = _sha256(members[target])
         if digest != actual:
             raise ValueError(f"dependency hash mismatch for {target}")
-    binary_names: set[str] = set()
-    for index, binary in enumerate(binaries):
-        if type(binary) is not dict or type(binary.get("binary")) is not str or type(binary.get("imports")) is not list:
-            raise ValueError(f"dependency report binaries[{index}] is invalid")
-        binary_names.add(binary["binary"].casefold())
-        for imported in binary["imports"]:
-            if type(imported) is not dict or imported.get("classification") == "unresolved":
-                raise ValueError("dependency report contains an unresolved import")
-    expected_seeds = {
+    expected_binaries = {
         f"{name}.exe".casefold()
         for name in (*contract.public_apps, *contract.runtime_helpers)
     }
-    expected_seeds.add("isis.dll")
-    expected_seeds.update(
+    expected_binaries.add("isis.dll")
+    plugin_dll_names = {
         PurePosixPath(name).name.casefold()
         for name in members
         if name.casefold().startswith("plugins/") and name.casefold().endswith(".dll")
+    }
+    expected_binaries.update(plugin_dll_names)
+    expected_binaries.update(closure_names)
+    actual_binaries = set(binary_names)
+    if actual_binaries != expected_binaries:
+        raise ValueError(
+            "dependency binary inventory mismatch: "
+            f"missing={sorted(expected_binaries - actual_binaries)}, "
+            f"extra={sorted(actual_binaries - expected_binaries)}"
+        )
+
+    actual_archive_dlls = {
+        name.casefold()
+        for name in members
+        if PurePosixPath(name).suffix.casefold() == ".dll"
+    }
+    expected_archive_dlls = {"lib/isis.dll", *closure_targets}
+    expected_archive_dlls.update(
+        name.casefold()
+        for name in members
+        if name.casefold().startswith("plugins/") and name.casefold().endswith(".dll")
     )
-    missing_seeds = sorted(expected_seeds - binary_names)
-    if missing_seeds:
-        raise ValueError(f"dependency report seed binding is incomplete: {missing_seeds}")
+    if actual_archive_dlls != expected_archive_dlls:
+        raise ValueError(
+            "archive DLL inventory mismatch: "
+            f"missing={sorted(expected_archive_dlls - actual_archive_dlls)}, "
+            f"extra={sorted(actual_archive_dlls - expected_archive_dlls)}"
+        )
     return len(files)
 
 
@@ -386,58 +569,224 @@ def _nonnegative_integer(value: Any, label: str) -> int:
     return value
 
 
+def _looks_like_absolute_path(value: str) -> bool:
+    return (
+        PureWindowsPath(value).is_absolute()
+        or PurePosixPath(value).is_absolute()
+        or re.search(r"(?i)(?:^|[\s=\"])(?:[a-z]:[\\/]|\\\\)", value)
+        is not None
+    )
+
+
+def _reject_absolute_strings(
+    value: Any, label: str, path: tuple[str, ...] = (), exempt: set[tuple[str, ...]] | None = None
+) -> None:
+    exempt = exempt or set()
+    if type(value) is str:
+        if path not in exempt and _looks_like_absolute_path(value):
+            raise ValueError(f"{label} contains an absolute path outside extraction_path")
+        return
+    if type(value) is dict:
+        for key, child in value.items():
+            _reject_absolute_strings(child, label, (*path, str(key)), exempt)
+    elif type(value) is list:
+        for index, child in enumerate(value):
+            _reject_absolute_strings(child, label, (*path, str(index)), exempt)
+
+
+def _validate_clean_extraction_path(value: Any) -> str:
+    if type(value) is not str or not value:
+        raise ValueError("runtime extraction_path must be a non-empty string")
+    path = PureWindowsPath(value)
+    if not path.is_absolute() or not path.drive or path.name != "native package with spaces":
+        raise ValueError("runtime extraction_path must be a clean absolute Windows path")
+    forbidden_components = {
+        "build",
+        "src",
+        "source",
+        "sources",
+        ".worktrees",
+        "conda",
+        "miniconda",
+        "miniconda3",
+        "pyisis-win-env",
+    }
+    components = [component for component in path.parts if component not in {path.anchor, path.drive}]
+    for component in components:
+        normalized = component.casefold()
+        if (
+            normalized in forbidden_components
+            or normalized.startswith(
+                ("build-", "build_", "conda-", "miniconda-", "source-", "source_")
+            )
+            or normalized.endswith(("-source", "_source"))
+            or any(ord(character) < 32 for character in component)
+            or any(character in WINDOWS_FORBIDDEN_CHARACTERS for character in component)
+            or component.endswith((".", " "))
+            or component.split(".", 1)[0].rstrip(" .").casefold()
+            in WINDOWS_RESERVED_BASENAMES
+        ):
+            raise ValueError("runtime extraction_path must be a clean absolute Windows path")
+    return value
+
+
 def _validate_runtime(
     payload: dict[str, Any], archive_name: str, archive_sha256: str
 ) -> tuple[int, int, int]:
+    _require_exact_keys(
+        payload,
+        {
+            "schema_version",
+            "artifact",
+            "host",
+            "extraction_path",
+            "scrubbed_environment",
+            "checks",
+            "summary",
+        },
+        "runtime report",
+    )
     _require_schema_one(payload, "runtime report")
+    _reject_absolute_strings(
+        payload,
+        "runtime report",
+        exempt={("extraction_path",)},
+    )
     artifact = payload.get("artifact")
     if type(artifact) is not dict:
         raise ValueError("runtime report artifact must be an object")
+    _require_exact_keys(
+        artifact, {"archive_name", "archive_sha256"}, "runtime artifact"
+    )
     if artifact.get("archive_name") != archive_name:
         raise ValueError("runtime report archive name mismatch")
+    if type(artifact.get("archive_sha256")) is not str or not SHA256_RE.fullmatch(
+        artifact["archive_sha256"]
+    ):
+        raise ValueError("runtime report archive SHA-256 is invalid")
     if artifact.get("archive_sha256") != archive_sha256:
         raise ValueError("runtime report archive SHA-256 mismatch (stale artifact binding)")
     host = payload.get("host")
+    if type(host) is not dict:
+        raise ValueError("runtime report host must be an object")
+    _require_exact_keys(host, {"os", "version", "architecture"}, "runtime host")
     if (
-        type(host) is not dict
-        or type(host.get("os")) is not str
+        type(host.get("os")) is not str
         or "Windows 11" not in host["os"]
     ):
         raise ValueError("runtime report host must be Windows 11")
-    if host.get("architecture") not in {"x64", "AMD64"}:
+    if type(host.get("version")) is not str or not host["version"]:
+        raise ValueError("runtime report host version must be a non-empty string")
+    if type(host.get("architecture")) is not str or host["architecture"] not in {
+        "x64",
+        "AMD64",
+    }:
         raise ValueError("runtime report host architecture must be x64")
+    _validate_clean_extraction_path(payload["extraction_path"])
+
+    scrubbed = payload["scrubbed_environment"]
+    if type(scrubbed) is not dict:
+        raise ValueError("runtime scrubbed_environment must be an object")
+    _require_exact_keys(
+        scrubbed,
+        {"variables", "path_entries_removed"},
+        "runtime scrubbed_environment",
+    )
+    expected_variables = (
+        "CONDA_PREFIX",
+        "ISISROOT",
+        "ISIS_PREFIX",
+        "ISISDATA",
+        "QT_PLUGIN_PATH",
+    )
+    variables = _require_string_list(
+        scrubbed["variables"], "runtime scrubbed variables"
+    )
+    if variables != expected_variables:
+        raise ValueError(
+            f"runtime scrubbed variables mismatch: expected {list(expected_variables)}"
+        )
+    _nonnegative_integer(
+        scrubbed["path_entries_removed"], "runtime path_entries_removed"
+    )
+
     checks = payload.get("checks")
     if type(checks) is not dict:
         raise ValueError("runtime report checks must be an object")
-    missing = [name for name in REQUIRED_CHECK_GROUPS if name not in checks]
-    if missing:
-        raise ValueError(f"runtime report missing required checks: {missing}")
+    if set(checks) != set(REQUIRED_CHECK_GROUPS):
+        raise ValueError(
+            "runtime check groups mismatch: "
+            f"missing={sorted(set(REQUIRED_CHECK_GROUPS) - set(checks))}, "
+            f"extra={sorted(set(checks) - set(REQUIRED_CHECK_GROUPS))}"
+        )
     totals = [0, 0, 0]
     for name in REQUIRED_CHECK_GROUPS:
         check = checks[name]
         if type(check) is not dict:
             raise ValueError(f"required check {name} must be an object")
+        _require_exact_keys(
+            check,
+            {"commands", "passed", "failed", "skipped", "exit_codes"},
+            f"required check {name}",
+        )
+        expected_count = EXPECTED_RUNTIME_COUNTS[name]
         passed = _nonnegative_integer(check.get("passed"), f"required check {name} passed")
         failed = _nonnegative_integer(check.get("failed"), f"required check {name} failed")
         skipped = _nonnegative_integer(check.get("skipped"), f"required check {name} skipped")
-        if passed == 0:
-            raise ValueError(f"required check {name} recorded no passing probe")
-        if name == "cli-help" and passed != 150:
+        if passed != expected_count:
             raise ValueError(
-                f"required check cli-help must contain exactly 150 passes, found {passed}"
+                f"required check {name} must record exactly {expected_count} passes, found {passed}"
             )
         if failed:
             raise ValueError(f"required check {name} failed")
         if skipped:
             raise ValueError(f"required check {name} skipped")
+        commands = check["commands"]
+        if (
+            type(commands) is not list
+            or any(type(command) is not str or not command for command in commands)
+            or len(commands) != expected_count
+        ):
+            raise ValueError(
+                f"required check {name} commands must contain exactly {expected_count} strings"
+            )
+        if len({command.casefold() for command in commands}) != len(commands):
+            raise ValueError(f"required check {name} commands contain duplicates")
+        if any(
+            _looks_like_absolute_path(command)
+            or re.search(r"(?:^|[\\/])\.\.(?:[\\/]|$)", command) is not None
+            for command in commands
+        ):
+            raise ValueError("runtime report contains an absolute path outside extraction_path")
         exit_codes = check.get("exit_codes")
-        if type(exit_codes) is not list or any(type(code) is not int for code in exit_codes):
-            raise ValueError(f"required check {name} exit_codes must be a list of integers")
-        if any(code != 0 for code in exit_codes):
+        if (
+            type(exit_codes) is not list
+            or any(type(code) is not int for code in exit_codes)
+            or len(exit_codes) != expected_count
+        ):
+            raise ValueError(
+                f"required check {name} exit_codes must contain exactly {expected_count} integers"
+            )
+        expected_exit_codes = [4, 3] if name == "negative-launcher" else [0] * expected_count
+        if exit_codes != expected_exit_codes:
+            if name == "negative-launcher":
+                raise ValueError("required check negative-launcher expected exit codes [4, 3]")
             raise ValueError(f"required check {name} contains a nonzero exit code")
         totals[0] += passed
         totals[1] += failed
         totals[2] += skipped
+
+    summary = payload["summary"]
+    if type(summary) is not dict:
+        raise ValueError("runtime summary must be an object")
+    _require_exact_keys(summary, {"passed", "failed", "skipped"}, "runtime summary")
+    expected_summary = {"passed": 166, "failed": 0, "skipped": 0}
+    if any(type(summary.get(key)) is not int for key in expected_summary) or summary != expected_summary:
+        raise ValueError(
+            f"runtime summary mismatch: expected {expected_summary}, found {summary}"
+        )
+    if tuple(totals) != (166, 0, 0):
+        raise ValueError(f"runtime check totals mismatch: {totals}")
     return tuple(totals)
 
 
@@ -494,6 +843,7 @@ def validate_release(
     )
     if _contains_forbidden_absolute_path(dependency_content):
         raise ValueError("dependency report contains an absolute build/conda path")
+    _reject_absolute_strings(dependencies, "dependency report")
     dependency_count = _validate_dependencies(
         dependencies, members, release_contract
     )

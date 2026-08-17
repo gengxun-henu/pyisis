@@ -186,10 +186,15 @@ Required validation cases are:
 - negative launcher checks for an undeclared APP name and a nonexistent
   explicit ISISDATA directory.
 
-Every required group records its exact command, passed/failed/skipped counts,
-exit code, host OS/build, architecture, ISIS version, extraction path, and input
-artifact hashes. Completion requires zero failures, zero skips, and exit code 0
-for every required group.
+The schema is closed. Six exact groups account for 166 passed probes: one
+extraction, 150 CLI help, nine real operations, three GUI, one external
+ISISDATA, and two negative launcher probes. Each group records its exact
+package-relative commands and one exit code per pass. The negative undeclared
+APP and invalid-ISISDATA probes must return 4 and 3 respectively; every other
+recorded exit code is zero. Host OS/build, architecture, ISIS version, the
+clean extraction path, scrubbed variables/PATH-entry count, and the archive
+hash are recorded once in exact top-level provenance fields. Unknown keys or
+groups, count mismatches, failures, or skips are fatal.
 
 ## Failure Handling
 

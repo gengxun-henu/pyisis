@@ -70,6 +70,7 @@ Phase 1: csv2table native APP unification
 | Accept the ISIS 10 PROJ full-suite error as an unrelated environment concern | Both ISIS 10 extension build/import and the focused csv2table validator passed; the sole broad-suite error is IProj failing to open the missing `asp370/share/proj` data directory. |
 | Bind the native distribution to the current manifest's normalized-LF hash | The earlier design hash predates the reviewed csv2table manifest synchronization; LF normalization preserves one exact content identity across Windows and Linux checkouts. |
 | Use an internal PowerShell argv worker behind public CMD launchers | Native CMD `shift` does not alter `%*`, `%1..%9` truncates arguments, and `call` re-expands metacharacters; array splatting preserves argv without string evaluation. |
+| Freeze a closed schema-1 clean-host runtime report | Exact provenance fields, six groups, 166 passes, zero failures/skips, and expected negative exit codes prevent omitted or hidden runtime results. |
 
 ## Errors Encountered
 

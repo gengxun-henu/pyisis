@@ -540,6 +540,23 @@ git commit -m "test: enforce native app archive release gate"
 - Runtime report: schema 1 with artifact hash, host, extraction path, scrubbed variables, and named pass/fail/skip/exit-code checks.
 - Build inputs: `-PythonExecutable`, `-IsisPrefix`, repeatable `-DependencyPrefix`, `-MinimalDataRoot`, `-OutputDir`, `-ReportDir`, `-WorkDir`.
 
+The runtime report is a closed schema. Its exact top-level keys are
+`schema_version`, `artifact`, `host`, `extraction_path`,
+`scrubbed_environment`, `checks`, and `summary`. `artifact` contains only
+`archive_name` and `archive_sha256`; `host` contains only `os`, `version`, and
+`architecture`; `scrubbed_environment` contains only `variables` and
+`path_entries_removed`. The variables list is exactly `CONDA_PREFIX`,
+`ISISROOT`, `ISIS_PREFIX`, `ISISDATA`, and `QT_PLUGIN_PATH`.
+
+The exact check groups and pass counts are `archive-extract=1`,
+`cli-help=150`, `real-operations=9`, `gui-launch=3`,
+`external-isisdata=1`, and `negative-launcher=2`. Each group contains only
+`commands`, `passed`, `failed`, `skipped`, and `exit_codes`; command and exit
+code counts equal `passed`, with zero failed/skipped. All exit codes are zero
+except `negative-launcher`, whose undeclared-APP and invalid-ISISDATA probes
+record `[4, 3]`. `summary` contains only `passed=166`, `failed=0`, and
+`skipped=0`. Unknown keys, groups, or results are fatal.
+
 - [ ] **Step 1: Write PowerShell contract tests**
 
 ```python

@@ -151,9 +151,11 @@ explicit `ISISDATA` is an error rather than a reason to silently fall back.
 `isis-app.cmd <name> [arguments...]` rejects names absent from
 `manifest/apps.json`, applies the same environment, and invokes the selected
 APP without string re-evaluation. `qnet.cmd` is double-clickable. Both process
-launching CMD entry points delegate to an internal `isis-launch.ps1` worker,
-which receives argv as an array and invokes with splatting; it never rebuilds
-or evaluates a command string. Users are not required to edit PATH or create 151
+launching CMD entry points capture the already parsed `%~1` values into indexed
+environment slots with delayed expansion disabled, then invoke an internal
+`isis-launch.ps1` worker without reinserting `%*` into another command line.
+The worker rebuilds argv from those slots and invokes with splatting; it never
+rebuilds or evaluates a command string. Users are not required to edit PATH or create 151
 per-APP wrapper scripts.
 
 ## Validation Matrix

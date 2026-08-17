@@ -250,7 +250,7 @@ git commit -m "feat: define Windows native app release contract"
 - `isis-env.cmd` applies package-relative runtime variables and fails for an explicitly invalid `ISISDATA`.
 - `isis-app.cmd <name> [arguments]` validates exact public membership and invokes without string re-evaluation.
 - `isis-shell.cmd` opens an initialized shell; `qnet.cmd` delegates to the generic launcher.
-- `isis-launch.ps1` receives original argv as an array and launches with PowerShell splatting, preserving arbitrary argument counts and literal metacharacters without `call`, `cmd /c`, or string evaluation.
+- With delayed expansion disabled, each public CMD shim captures the already parsed `%~1` values into indexed environment slots and then launches `isis-launch.ps1` without reinserting `%*` into another command line. The worker rebuilds the argv array from those slots and launches with PowerShell splatting, preserving arbitrary argument counts, empty values, literal quotes, backslashes, and metacharacters without `call`, `cmd /c`, or string evaluation.
 
 - [ ] **Step 1: Write launcher safety and execution tests**
 
@@ -300,10 +300,12 @@ set "PATH=%ISIS_PACKAGE_ROOT%\bin;%ISIS_PACKAGE_ROOT%\lib;%PATH%"
 exit /b 0
 ```
 
-`isis-app.cmd` and `qnet.cmd` pass their original arguments once to the internal
-`isis-launch.ps1` worker. The worker validates names against `public_apps`,
-applies the package-relative environment, and invokes the selected executable
-with array splatting. `isis-shell.cmd` calls `isis-env.cmd` then `cmd /k`.
+`isis-app.cmd` and `qnet.cmd` capture each already parsed argument into indexed
+environment slots with delayed expansion disabled, then invoke the internal
+`isis-launch.ps1` worker without reinserting `%*` into a new command line. The
+worker validates names against `public_apps`, applies the package-relative
+environment, and invokes the selected executable with array splatting.
+`isis-shell.cmd` calls `isis-env.cmd` then `cmd /k`.
 
 - [ ] **Step 4: Run launcher tests from a path containing spaces**
 

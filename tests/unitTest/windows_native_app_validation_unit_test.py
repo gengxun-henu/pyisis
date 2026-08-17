@@ -5,6 +5,7 @@ Created: 2026-08-18
 Last Modified: 2026-08-18
 Updated: 2026-08-18  Geng Xun added fail-closed archive and evidence validation coverage.
 Updated: 2026-08-18  Geng Xun hardened Windows paths and closed dependency/runtime schemas after review.
+Updated: 2026-08-18  Geng Xun bound dependency graphs and canonical runtime command identities.
 """
 
 from __future__ import annotations
@@ -166,6 +167,26 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             }],
             "unresolved": [],
         }
+        reduce_binary = next(
+            item for item in dependency_payload["binaries"] if item["binary"] == "reduce.exe"
+        )
+        reduce_binary["imports"] = [
+            {
+                "name": "runtime.dll",
+                "import_kind": "direct",
+                "classification": "resolved",
+            },
+            {
+                "name": "isis.dll",
+                "import_kind": "direct",
+                "classification": "packaged",
+            },
+            {
+                "name": "kernel32.dll",
+                "import_kind": "direct",
+                "classification": "system",
+            },
+        ]
         dependency_report.write_text(json.dumps(dependency_payload), encoding="utf-8")
         archive_sha256 = hashlib.sha256(archive.read_bytes()).hexdigest()
         runtime_payload = {
@@ -175,7 +196,7 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
                 "archive_sha256": archive_sha256,
             },
             "host": {
-                "os": "Microsoft Windows 11 Pro",
+                "os": "Windows 11",
                 "version": "10.0.26100",
                 "architecture": "x64",
             },
@@ -209,6 +230,7 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             },
             "summary": {"passed": 166, "failed": 0, "skipped": 0},
         }
+        runtime_payload["checks"] = self._canonical_checks(contract)
         runtime_payload["checks"]["negative-launcher"]["exit_codes"] = [4, 3]
         fixture = ValidationFixture(
             archive,
@@ -220,6 +242,53 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
         )
         fixture.write_runtime_report()
         return fixture
+
+    @staticmethod
+    def _canonical_checks(contract) -> dict[str, dict[str, object]]:
+        real_apps = (
+            "stats",
+            "getkey",
+            "catlab",
+            "campt",
+            "reduce",
+            "cam2map",
+            "isis2std",
+            "cubeit",
+            "fx",
+        )
+        commands = {
+            "archive-extract": ["archive-extract"],
+            "cli-help": [
+                f"launch/isis-app.cmd {name} -HELP"
+                for name in sorted(contract.public_cli_apps)
+            ],
+            "real-operations": [
+                f"launch/isis-app.cmd {name} mode=real-operation"
+                for name in real_apps
+            ],
+            "gui-launch": [
+                "launch/isis-app.cmd reduce -gui",
+                "launch/isis-app.cmd jigsaw -gui",
+                "launch/qnet.cmd",
+            ],
+            "external-isisdata": [
+                "launch/isis-app.cmd stats isisdata=external"
+            ],
+            "negative-launcher": [
+                "launch/isis-app.cmd __undeclared_app__ isisdata=bundled",
+                "launch/isis-app.cmd stats isisdata=missing",
+            ],
+        }
+        return {
+            name: {
+                "commands": values,
+                "passed": len(values),
+                "failed": 0,
+                "skipped": 0,
+                "exit_codes": [0] * len(values),
+            }
+            for name, values in commands.items()
+        }
 
     def _append_zip_member(
         self, fixture: ValidationFixture, name: str, content: bytes = b"bad", mode: int = 0o100644
@@ -420,11 +489,64 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             with self.subTest(pattern=pattern), self.assertRaisesRegex(ValueError, pattern):
                 self.module.validate_release(**fixture.arguments)
 
+    def test_dependency_graph_edges_bind_imports_files_binaries_and_parents(self):
+        def resolved_without_file(payload, fixture):
+            payload["files"] = []
+            payload["binaries"] = [
+                item for item in payload["binaries"] if item["binary"] != "runtime.dll"
+            ]
+            self._rewrite_without(fixture, "lib/runtime.dll")
+
+        def false_system(payload, fixture):
+            reduce_binary = next(
+                item for item in payload["binaries"] if item["binary"] == "reduce.exe"
+            )
+            reduce_binary["imports"][0]["classification"] = "system"
+
+        def orphan_file(payload, fixture):
+            reduce_binary = next(
+                item for item in payload["binaries"] if item["binary"] == "reduce.exe"
+            )
+            reduce_binary["imports"] = [
+                item for item in reduce_binary["imports"] if item["name"] != "runtime.dll"
+            ]
+
+        def parent_disagreement(payload, fixture):
+            payload["files"][0]["parents"] = ["app000.exe"]
+
+        def unknown_packaged(payload, fixture):
+            reduce_binary = next(
+                item for item in payload["binaries"] if item["binary"] == "reduce.exe"
+            )
+            reduce_binary["imports"].append({
+                "name": "evil.dll",
+                "import_kind": "direct",
+                "classification": "packaged",
+            })
+
+        mutations = (
+            (resolved_without_file, "resolved import.*closure file"),
+            (false_system, "system classification"),
+            (orphan_file, "orphaned dependency file"),
+            (parent_disagreement, "parent/import disagreement"),
+            (unknown_packaged, "packaged import.*staged DLL"),
+        )
+        for mutate, pattern in mutations:
+            fixture = self._write_valid_fixture()
+            payload = json.loads(fixture.dependency_report.read_text())
+            mutate(payload, fixture)
+            fixture.dependency_report.write_text(json.dumps(payload), encoding="utf-8")
+            with self.subTest(pattern=pattern), self.assertRaisesRegex(ValueError, pattern):
+                self.module.validate_release(**fixture.arguments)
+
     def test_stale_runtime_binding_wrong_host_nonzero_and_skips_are_rejected(self):
         mutations = (
             (lambda p: p["artifact"].update(archive_sha256="0" * 64), "runtime report archive SHA-256"),
             (lambda p: p["host"].update(os="Windows 10"), "Windows 11"),
+            (lambda p: p["host"].update(os="Definitely not Windows 11"), "Windows 11"),
+            (lambda p: p["host"].update(version="unknown"), "host version"),
             (lambda p: p["host"].update(architecture="arm64"), "x64"),
+            (lambda p: p["host"].update(architecture="X64"), "x64"),
             (lambda p: p["checks"].pop("archive-extract"), "runtime check groups mismatch"),
             (lambda p: p["checks"]["cli-help"].update(passed=149), "exactly 150"),
             (lambda p: p["checks"]["real-operations"].update(exit_codes=[1] + [0] * 8), "nonzero exit code"),
@@ -463,6 +585,34 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             fixture.write_runtime_report()
             with self.subTest(pattern=pattern), self.assertRaisesRegex(ValueError, pattern):
                 self.module.validate_release(**fixture.arguments)
+
+    def test_runtime_commands_are_bound_to_canonical_probe_identities(self):
+        mutations = (
+            (lambda p: p["checks"]["cli-help"].update(commands=[f"fake/{index}" for index in range(150)]), "cli-help command identities"),
+            (lambda p: p["checks"]["real-operations"]["commands"].__setitem__(0, "launch/isis-app.cmd fake mode=real-operation"), "real-operations command identities"),
+            (lambda p: p["checks"]["real-operations"]["commands"].__setitem__(1, p["checks"]["real-operations"]["commands"][0]), "real-operations command identities|duplicates"),
+            (lambda p: p["checks"]["gui-launch"]["commands"].__setitem__(2, "launch/isis-app.cmd qview -gui"), "gui-launch command identities"),
+            (lambda p: p["checks"]["external-isisdata"]["commands"].__setitem__(0, "launch/isis-app.cmd stats isisdata=bundled"), "external-isisdata command identities"),
+            (lambda p: p["checks"]["negative-launcher"]["commands"].reverse(), "negative-launcher command identities"),
+            (lambda p: p["checks"]["cli-help"]["commands"].__setitem__(0, "launch/isis-app.cmd reduce -HELP\x01"), "control character"),
+        )
+        for mutate, pattern in mutations:
+            fixture = self._write_valid_fixture()
+            mutate(fixture.runtime_payload)
+            fixture.write_runtime_report()
+            with self.subTest(pattern=pattern), self.assertRaisesRegex(ValueError, pattern):
+                self.module.validate_release(**fixture.arguments)
+
+    def test_validator_exports_same_canonical_commands_used_by_fixture(self):
+        fixture = self._write_valid_fixture()
+        expected = {
+            name: tuple(check["commands"])
+            for name, check in fixture.runtime_payload["checks"].items()
+        }
+        self.assertEqual(
+            self.module.canonical_runtime_commands(fixture.release_contract),
+            expected,
+        )
 
     def test_failure_preserves_existing_report(self):
         fixture = self._write_valid_fixture()

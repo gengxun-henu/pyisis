@@ -20,8 +20,10 @@ try:
         ReleaseContract,
         load_release_contract,
     )
+    from tools.packaging.windows_pe_dependencies import _is_system_dependency
 except ModuleNotFoundError:
     from windows_native_app_manifest import ReleaseContract, load_release_contract
+    from windows_pe_dependencies import _is_system_dependency
 
 
 REQUIRED_CHECK_GROUPS = (
@@ -54,6 +56,17 @@ EXPECTED_RUNTIME_COUNTS = {
     "external-isisdata": 1,
     "negative-launcher": 2,
 }
+REAL_OPERATION_APPS = (
+    "stats",
+    "getkey",
+    "catlab",
+    "campt",
+    "reduce",
+    "cam2map",
+    "isis2std",
+    "cubeit",
+    "fx",
+)
 
 
 def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -414,6 +427,7 @@ def _validate_dependencies(
     if type(files) is not list or type(binaries) is not list:
         raise ValueError("dependency report files and binaries must be lists")
     binary_names: dict[str, str] = {}
+    import_edges: dict[tuple[str, str], str] = {}
     for index, binary in enumerate(binaries):
         if type(binary) is not dict:
             raise ValueError(f"dependency report binaries[{index}] must be an object")
@@ -463,12 +477,23 @@ def _validate_dependencies(
                 )
             if imported["classification"] == "unresolved":
                 raise ValueError("dependency report contains an unresolved import")
+            classified_system = imported["classification"] == "system"
+            expected_system = _is_system_dependency(imported_name)
+            if classified_system != expected_system:
+                raise ValueError(
+                    "dependency system classification mismatch for "
+                    f"{imported_name}: {imported['classification']}"
+                )
+            import_edges[(normalized_binary, normalized_import)] = imported[
+                "classification"
+            ]
 
     seen_names: set[str] = set()
     seen_sources: set[str] = set()
     seen_targets: set[str] = set()
     closure_names: set[str] = set()
     closure_targets: set[str] = set()
+    closure_parents: dict[str, set[str]] = {}
     for index, item in enumerate(files):
         if type(item) is not dict:
             raise ValueError(f"dependency report files[{index}] must be an object")
@@ -515,6 +540,7 @@ def _validate_dependencies(
             raise ValueError(f"duplicate dependency parent for {dependency_name}")
         if not set(normalized_parents) <= set(binary_names):
             raise ValueError(f"unknown dependency parent for {dependency_name}")
+        closure_parents[normalized_name] = set(normalized_parents)
         if target not in members:
             raise ValueError(f"dependency target is missing from archive: {target}")
         digest = item.get("sha256")
@@ -542,6 +568,45 @@ def _validate_dependencies(
             f"missing={sorted(expected_binaries - actual_binaries)}, "
             f"extra={sorted(actual_binaries - expected_binaries)}"
         )
+
+    known_packaged_dlls = {"isis.dll", *plugin_dll_names, *closure_names}
+    resolved_edges_by_name: dict[str, set[str]] = {
+        name: set() for name in closure_names
+    }
+    closure_edges_by_name: dict[str, set[str]] = {
+        name: set() for name in closure_names
+    }
+    for (parent, imported_name), classification in import_edges.items():
+        if classification == "resolved":
+            if imported_name not in closure_names:
+                raise ValueError(
+                    f"resolved import {imported_name} has no unique closure file"
+                )
+            if imported_name not in binary_names:
+                raise ValueError(
+                    f"resolved import {imported_name} has no dependency binary"
+                )
+            resolved_edges_by_name[imported_name].add(parent)
+            closure_edges_by_name[imported_name].add(parent)
+        elif classification == "packaged":
+            if imported_name not in known_packaged_dlls:
+                raise ValueError(
+                    f"packaged import {imported_name} has no known staged DLL"
+                )
+            if imported_name in closure_names:
+                closure_edges_by_name[imported_name].add(parent)
+
+    for name in sorted(closure_names):
+        resolved_parents = resolved_edges_by_name[name]
+        if not resolved_parents:
+            raise ValueError(f"orphaned dependency file without resolved edge: {name}")
+        declared_parents = closure_parents[name]
+        edge_parents = closure_edges_by_name[name]
+        if declared_parents != edge_parents:
+            raise ValueError(
+                f"dependency parent/import disagreement for {name}: "
+                f"declared={sorted(declared_parents)}, edges={sorted(edge_parents)}"
+            )
 
     actual_archive_dlls = {
         name.casefold()
@@ -630,8 +695,41 @@ def _validate_clean_extraction_path(value: Any) -> str:
     return value
 
 
+def canonical_runtime_commands(
+    contract: ReleaseContract,
+) -> dict[str, tuple[str, ...]]:
+    """Return the frozen package-relative identities for the Task 6 probes."""
+
+    return {
+        "archive-extract": ("archive-extract",),
+        "cli-help": tuple(
+            f"launch/isis-app.cmd {name} -HELP"
+            for name in sorted(contract.public_cli_apps)
+        ),
+        "real-operations": tuple(
+            f"launch/isis-app.cmd {name} mode=real-operation"
+            for name in REAL_OPERATION_APPS
+        ),
+        "gui-launch": (
+            "launch/isis-app.cmd reduce -gui",
+            "launch/isis-app.cmd jigsaw -gui",
+            "launch/qnet.cmd",
+        ),
+        "external-isisdata": (
+            "launch/isis-app.cmd stats isisdata=external",
+        ),
+        "negative-launcher": (
+            "launch/isis-app.cmd __undeclared_app__ isisdata=bundled",
+            "launch/isis-app.cmd stats isisdata=missing",
+        ),
+    }
+
+
 def _validate_runtime(
-    payload: dict[str, Any], archive_name: str, archive_sha256: str
+    payload: dict[str, Any],
+    archive_name: str,
+    archive_sha256: str,
+    contract: ReleaseContract,
 ) -> tuple[int, int, int]:
     _require_exact_keys(
         payload,
@@ -672,11 +770,14 @@ def _validate_runtime(
     _require_exact_keys(host, {"os", "version", "architecture"}, "runtime host")
     if (
         type(host.get("os")) is not str
-        or "Windows 11" not in host["os"]
+        or host["os"].casefold() != "windows 11"
     ):
         raise ValueError("runtime report host must be Windows 11")
-    if type(host.get("version")) is not str or not host["version"]:
-        raise ValueError("runtime report host version must be a non-empty string")
+    if (
+        type(host.get("version")) is not str
+        or re.fullmatch(r"[0-9]+(?:\.[0-9]+){1,3}", host["version"]) is None
+    ):
+        raise ValueError("runtime report host version is not a reasonable Windows version")
     if type(host.get("architecture")) is not str or host["architecture"] not in {
         "x64",
         "AMD64",
@@ -720,6 +821,7 @@ def _validate_runtime(
             f"extra={sorted(set(checks) - set(REQUIRED_CHECK_GROUPS))}"
         )
     totals = [0, 0, 0]
+    expected_commands = canonical_runtime_commands(contract)
     for name in REQUIRED_CHECK_GROUPS:
         check = checks[name]
         if type(check) is not dict:
@@ -753,11 +855,18 @@ def _validate_runtime(
         if len({command.casefold() for command in commands}) != len(commands):
             raise ValueError(f"required check {name} commands contain duplicates")
         if any(
+            any(ord(character) < 32 for character in command)
+            for command in commands
+        ):
+            raise ValueError(f"required check {name} command contains a control character")
+        if any(
             _looks_like_absolute_path(command)
             or re.search(r"(?:^|[\\/])\.\.(?:[\\/]|$)", command) is not None
             for command in commands
         ):
             raise ValueError("runtime report contains an absolute path outside extraction_path")
+        if tuple(commands) != expected_commands[name]:
+            raise ValueError(f"required check {name} command identities mismatch")
         exit_codes = check.get("exit_codes")
         if (
             type(exit_codes) is not list
@@ -849,7 +958,7 @@ def validate_release(
     )
     runtime, runtime_content = _read_json(Path(runtime_report), "runtime report")
     passed, failed, skipped = _validate_runtime(
-        runtime, archive.name, archive_sha256
+        runtime, archive.name, archive_sha256, release_contract
     )
 
     report: dict[str, object] = {

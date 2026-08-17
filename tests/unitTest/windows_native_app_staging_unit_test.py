@@ -12,6 +12,7 @@ Updated: 2026-08-18  Geng Xun hardened transactional publication and reparse-poi
 Updated: 2026-08-18  Geng Xun covered authoritative PE seed identity for strict validation.
 Updated: 2026-08-18  Geng Xun covered bundled clean-host camera validation data.
 Updated: 2026-08-18  Geng Xun covered the Windows executable-name XML lookup.
+Updated: 2026-08-18  Geng Xun covered isolated worker launch from metacharacter roots.
 """
 
 from __future__ import annotations
@@ -783,11 +784,12 @@ internal static class ArgvProbe {
         shutil.copy2(worker, package / "launch" / worker.name)
 
         (package / "manifest" / "apps.json").write_text(
-            json.dumps({"public_apps": ["qnet", "reduce"]}) + "\n",
+            json.dumps({"public_apps": ["lronacecho", "qnet", "reduce"]}) + "\n",
             encoding="utf-8",
         )
         shutil.copy2(self._argv_probe, package / "bin" / "reduce.exe")
         shutil.copy2(self._argv_probe, package / "bin" / "qnet.exe")
+        shutil.copy2(self._argv_probe, package / "bin" / "lronacecho.exe")
         return package
 
     def _clean_environment(self) -> dict[str, str]:
@@ -881,6 +883,44 @@ internal static class ArgvProbe {
                 self.assertNotRegex(
                     text, r"(?i)[A-Z]:\\(?:code|miniconda|pyisis-win-env)"
                 )
+
+    def test_public_cmd_shims_use_system_powershell_from_launch_directory(self):
+        expected = r'"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"'
+        for name in ("isis-app.cmd", "qnet.cmd"):
+            with self.subTest(name=name):
+                text = (LAUNCH_ROOT / name).read_text(encoding="utf-8")
+                self.assertIn(expected, text)
+                self.assertNotRegex(text, r"(?im)^powershell\.exe\s")
+                self.assertIn(
+                    '"%ComSpec%" /d /s /c ""%SystemRoot%\\System32\\'
+                    'WindowsPowerShell\\v1.0\\powershell.exe"',
+                    text,
+                )
+                self.assertIn('set "ISIS_LAUNCH_DIR=%~dp0"', text)
+                self.assertIn('pushd "%ISIS_LAUNCH_DIR%"', text)
+                self.assertIn('-File .\\isis-launch.ps1', text)
+                self.assertNotIn('!ISIS_LAUNCH_WORKER!', text)
+
+    def test_launchers_use_clean_child_cmd_from_space_ampersand_bang_root(self):
+        with TemporaryDirectory() as temp_dir:
+            package = self._write_launcher_fixture(
+                Path(temp_dir), "native package spaces & bang! root"
+            )
+            for launcher, arguments, expected_code, expected_arguments in (
+                (
+                    package / "launch" / "isis-app.cmd",
+                    ("lronacecho", "23", "-HELP"),
+                    23,
+                    ["-HELP"],
+                ),
+                (package / "launch" / "qnet.cmd", ("17", "QNET_OK"), 17, ["QNET_OK"]),
+            ):
+                with self.subTest(launcher=launcher.name):
+                    result = self._run_launcher(launcher, *arguments)
+                    self.assertEqual(result.returncode, expected_code, result.stderr)
+                    self.assertEqual(
+                        self._probe_arguments(result), expected_arguments, result.stderr
+                    )
 
     def test_environment_launcher_uses_bundled_data_and_runtime_paths(self):
         with TemporaryDirectory() as temp_dir:

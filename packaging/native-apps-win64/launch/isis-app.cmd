@@ -1,6 +1,6 @@
 @echo off
 setlocal DisableDelayedExpansion
-set "ISIS_LAUNCH_WORKER=%~dp0isis-launch.ps1"
+set "ISIS_LAUNCH_DIR=%~dp0"
 set "ISIS_LAUNCH_ARG_COUNT=0"
 
 :capture_argument
@@ -12,6 +12,8 @@ shift
 goto capture_argument
 
 :launch
-powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%ISIS_LAUNCH_WORKER%"
+pushd "%ISIS_LAUNCH_DIR%"
+"%ComSpec%" /d /s /c ""%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\isis-launch.ps1"
 set "ISIS_LAUNCH_EXIT=%ERRORLEVEL%"
+popd
 endlocal & exit /b %ISIS_LAUNCH_EXIT%

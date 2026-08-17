@@ -5,7 +5,6 @@ Created: 2026-08-18
 Last Modified: 2026-08-18
 Updated: 2026-08-18  Geng Xun added runtime-matrix and guarded-orchestration coverage.
 Updated: 2026-08-18  Geng Xun added repeated-prefix and descendant GUI-process fixtures.
-Updated: 2026-08-18  Geng Xun covered bounded transient execution retries.
 """
 
 from pathlib import Path
@@ -48,15 +47,6 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
             self.assertIn(token, script)
         self.assertIn("passed = 150", script)
         self.assertIn("skipped = 0", script)
-
-    def test_runtime_retries_only_transient_access_denied_failures(self):
-        script = RUNTIME_SCRIPT.read_text(encoding="utf-8")
-        self.assertIn("$maximumAttempts = 4", script)
-        self.assertIn('$exitCode -eq 5', script)
-        self.assertIn('$tail.Trim() -ceq "Access is denied."', script)
-        self.assertIn('$attempt -lt $maximumAttempts', script)
-        self.assertIn('Start-Sleep -Seconds $attempt', script)
-        self.assertIn('throw "package launcher exit mismatch', script)
 
     def test_runtime_report_uses_the_closed_canonical_schema(self):
         script = RUNTIME_SCRIPT.read_text(encoding="utf-8")

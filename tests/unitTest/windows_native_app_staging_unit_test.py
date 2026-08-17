@@ -12,6 +12,7 @@ Updated: 2026-08-18  Geng Xun hardened transactional publication and reparse-poi
 Updated: 2026-08-18  Geng Xun covered authoritative PE seed identity for strict validation.
 Updated: 2026-08-18  Geng Xun covered bundled clean-host camera validation data.
 Updated: 2026-08-18  Geng Xun covered the Windows executable-name XML lookup.
+Updated: 2026-08-18  Geng Xun covered a loader-safe deterministic ZIP timestamp.
 """
 
 from __future__ import annotations
@@ -594,7 +595,7 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertEqual({name.split("/", 1)[0] for name in names}, {stage.name})
             self.assertFalse(any(name.endswith("/a.zip") for name in names))
             for info in infos:
-                self.assertEqual(info.date_time, (1980, 1, 1, 0, 0, 0))
+                self.assertEqual(info.date_time, (2000, 1, 1, 0, 0, 0))
                 self.assertEqual(info.create_system, 3)
                 self.assertEqual((info.external_attr >> 16) & 0o170000, stat.S_IFREG)
                 self.assertEqual(info.compress_type, zipfile.ZIP_DEFLATED)

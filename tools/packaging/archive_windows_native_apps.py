@@ -13,6 +13,12 @@ import uuid
 import zipfile
 
 
+# The DOS epoch (1980) makes some unsigned ISIS executables, notably
+# lronacecho.exe, hang under Windows compatibility/security handling after
+# extraction. A fixed modern-enough timestamp preserves byte reproducibility.
+ARCHIVE_TIMESTAMP = (2000, 1, 1, 0, 0, 0)
+
+
 def _is_reparse_point(path: Path) -> bool:
     attributes = getattr(os.lstat(path), "st_file_attributes", 0)
     return bool(attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400))
@@ -89,7 +95,7 @@ def create_deterministic_zip(stage_root: Path, archive_path: Path) -> dict[str, 
                     or name.split("/", 1)[0] != stage_root.name
                 ):
                     raise ValueError(f"unsafe archive member: {name}")
-                info = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0))
+                info = zipfile.ZipInfo(name, ARCHIVE_TIMESTAMP)
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.create_system = 3
                 info.external_attr = 0o100644 << 16

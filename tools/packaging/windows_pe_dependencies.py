@@ -47,6 +47,7 @@ SYSTEM_DLL_NAMES = {
     "winspool.drv",
     "wldap32.dll",
     "ws2_32.dll",
+    "wtsapi32.dll",
 }
 DEPENDENCY_NAME_RE = re.compile(r"^[A-Za-z0-9_.+\-]+\.dll$", re.IGNORECASE)
 PYTHON_DLL_RE = re.compile(r"^python3\d{2}\.dll$", re.IGNORECASE)

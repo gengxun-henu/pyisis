@@ -17,6 +17,7 @@ Updated: 2026-08-05  Geng Xun enforced the Windows minimal-runtime boundary agai
 Updated: 2026-08-16  Geng Xun covered tolerant UTF-8 decoding of Windows dumpbin output.
 Updated: 2026-08-18  Geng Xun covered shared Windows PE closure provenance.
 Updated: 2026-08-18  Geng Xun made PE closure evidence order and case deterministic.
+Updated: 2026-08-18  Geng Xun classified the Qt WTS dependency as a Windows system DLL.
 """
 
 from __future__ import annotations
@@ -142,6 +143,52 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             self.assertEqual(
                 classifications,
                 {"A.exe": "resolved", "b.exe": "packaged"},
+            )
+
+    def test_shared_pe_closure_classifies_wtsapi32_as_system(self):
+        module = self._load_module(
+            "windows_pe_dependencies_wtsapi32",
+            WINDOWS_PE_SCRIPT,
+        )
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            prefix = root / "deps"
+            target = root / "stage"
+            seed = root / "qwindows.dll"
+            prefix.mkdir()
+            target.mkdir()
+            seed.write_bytes(b"qt-platform")
+            with (
+                mock.patch.object(
+                    module,
+                    "dumpbin_dependencies",
+                    side_effect=lambda path: (
+                        ("wtsapi32.dll",) if path.name == "qwindows.dll" else ()
+                    ),
+                ),
+                mock.patch.object(
+                    module,
+                    "dumpbin_forwarded_dependencies",
+                    return_value=(),
+                ),
+            ):
+                report = module.copy_dependency_closure(
+                    (seed,),
+                    (prefix,),
+                    target,
+                )
+
+            self.assertEqual(report["unresolved"], [])
+            self.assertEqual(report["files"], [])
+            self.assertEqual(
+                report["binaries"][0]["imports"],
+                [
+                    {
+                        "name": "wtsapi32.dll",
+                        "import_kind": "direct",
+                        "classification": "system",
+                    }
+                ],
             )
 
     def assert_single_dependency_file(self, report):

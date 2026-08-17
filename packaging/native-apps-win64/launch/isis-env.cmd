@@ -4,7 +4,7 @@ for %%I in ("%ISIS_PACKAGE_ROOT%") do set "ISIS_PACKAGE_ROOT=%%~fI"
 
 if defined ISISDATA (
   if not exist "%ISISDATA%\." (
-    >&2 echo Explicit ISISDATA directory does not exist: %ISISDATA%
+    >&2 echo Explicit ISISDATA directory does not exist.
     exit /b 3
   )
 ) else (

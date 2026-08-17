@@ -320,6 +320,34 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
         )
         self.assertEqual(json.loads(fixture.output_report.read_text()), report)
 
+    def test_bundled_python_runtime_is_a_resolved_closure_dependency(self):
+        fixture = self._write_valid_fixture()
+        python_content = b"python-runtime"
+        self._rewrite_member(fixture, "lib/python312.dll", python_content)
+        payload = json.loads(fixture.dependency_report.read_text())
+        reduce_binary = next(
+            item for item in payload["binaries"] if item["binary"] == "reduce.exe"
+        )
+        reduce_binary["imports"].append({
+            "name": "python312.dll",
+            "import_kind": "direct",
+            "classification": "resolved",
+        })
+        payload["binaries"].append({"binary": "python312.dll", "imports": []})
+        payload["files"].append({
+            "name": "python312.dll",
+            "source": "python312.dll",
+            "target": "lib/python312.dll",
+            "import_kind": "direct",
+            "parents": ["reduce.exe"],
+            "sha256": hashlib.sha256(python_content).hexdigest(),
+        })
+        fixture.dependency_report.write_text(json.dumps(payload), encoding="utf-8")
+
+        report = self.module.validate_release(**fixture.arguments)
+
+        self.assertEqual(report["dependency_closure"]["unresolved"], 0)
+
     def test_runtime_plugin_manifest_requires_its_library_dll(self):
         fixture = self._write_valid_fixture()
         self._rewrite_without(fixture, "lib/CameraModel.dll")

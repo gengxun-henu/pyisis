@@ -483,7 +483,10 @@ def _validate_dependencies(
             if imported["classification"] == "unresolved":
                 raise ValueError("dependency report contains an unresolved import")
             classified_system = imported["classification"] == "system"
-            expected_system = _is_system_dependency(imported_name)
+            expected_system = _is_system_dependency(
+                imported_name,
+                bundle_python_runtime=True,
+            )
             if classified_system != expected_system:
                 raise ValueError(
                     "dependency system classification mismatch for "

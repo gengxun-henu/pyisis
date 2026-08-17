@@ -68,7 +68,9 @@ report records the final ZIP SHA-256 separately.
 The 150 CLI APP names are exactly the sorted `apps[].name` values from
 `ports/windows/isis/windows-app-manifest.json` at design time. The design-time
 manifest SHA-256 is
-`f507c7a94348cb99b347f9c9173d405fb18f11df7f0d6b726e18cb83458c9b45`.
+normalized-LF SHA-256 `bca645e1bf9ba3594ef48be0cb3fbec642a98da1e6f1b91b31a4aaa9519987d5`.
+The loader normalizes CRLF/CR to LF before hashing so the same tracked manifest
+has one contract identity on Windows and Linux.
 The release staging command must fail if the manifest no longer contains
 exactly these 150 names unless a later approved design changes the inventory.
 

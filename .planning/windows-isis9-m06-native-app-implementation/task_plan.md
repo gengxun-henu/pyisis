@@ -68,6 +68,7 @@ Phase 1: csv2table native APP unification
 | Preserve M05 as an immutable archived prerequisite | Completed milestone state cannot be reopened; M06 owns implementation. |
 | Permit deterministic manifest-only priority refresh | Fixed upstream source downloads repeatedly truncated; the approved mode updates only membership fields while preserving all source-derived fields and ranking policy. |
 | Accept the ISIS 10 PROJ full-suite error as an unrelated environment concern | Both ISIS 10 extension build/import and the focused csv2table validator passed; the sole broad-suite error is IProj failing to open the missing `asp370/share/proj` data directory. |
+| Bind the native distribution to the current manifest's normalized-LF hash | The earlier design hash predates the reviewed csv2table manifest synchronization; LF normalization preserves one exact content identity across Windows and Linux checkouts. |
 
 ## Errors Encountered
 

@@ -14,6 +14,7 @@
 - Task 4 added and cleanly reviewed a native-process validator with seven passing unit tests; it publishes atomic schema-1 JSON and treats every prerequisite/behavior check as required.
 - Task 5 recorded genuine 3/0/0 native validator results for all four ISIS 9/10 x Windows/Linux cells in `docs/superpowers/evidence/2026-08-17-csv2table-native-app-matrix.json`; raw-report hashes and GitHub run provenance were independently verified.
 - The csv2table final review is Ready after `d8409ad2` added the explicit high-level API absence gate and corrected the ISIS 10 binding metadata.
+- The original native-distribution design hash identified the pre-csv2table manifest. The current reviewed 150-APP manifest has Git/normalized-LF SHA-256 `bca645e1bf9ba3594ef48be0cb3fbec642a98da1e6f1b91b31a4aaa9519987d5`; its Windows working-tree raw hash differs only because of line endings.
 - The working tree contains an unstaged ISIS-generated `print.prt`; repository guardrails prohibit modifying, restoring, deleting, or staging it.
 
 ## Evidence-Based Inference

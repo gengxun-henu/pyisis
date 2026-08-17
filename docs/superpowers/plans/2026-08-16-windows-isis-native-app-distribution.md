@@ -12,7 +12,7 @@
 
 - Target only ISIS 9.0.0 on Windows 11 x64; do not claim Windows 10 or ARM64 support.
 - Use conda-managed/build-provided dependencies; do not introduce pip or npm workflows.
-- The public inventory is exactly the 150 names in `ports/windows/isis/windows-app-manifest.json` at SHA-256 `f507c7a94348cb99b347f9c9173d405fb18f11df7f0d6b726e18cb83458c9b45`, plus `qnet`.
+- The public inventory is exactly the 150 names in `ports/windows/isis/windows-app-manifest.json` at normalized-LF SHA-256 `bca645e1bf9ba3594ef48be0cb3fbec642a98da1e6f1b91b31a4aaa9519987d5`, plus `qnet`. Normalize CRLF/CR to LF before hashing so the contract is stable across Git checkout platforms.
 - Keep standalone APP executables and XML out of all PyISIS wheels.
 - Produce one ZIP; do not copy the complete development prefix or split the release across dependent archives.
 - Bundle repository-owned minimal ISISDATA and preserve a valid external `ISISDATA` override.
@@ -188,7 +188,7 @@ Expected: FAIL because the release config/parser do not exist.
   "archive_name": "usgs-isis-native-apps-9.0.0-win64.zip",
   "root_name": "usgs-isis-native-apps-9.0.0-win64",
   "cli_manifest": "ports/windows/isis/windows-app-manifest.json",
-  "cli_manifest_sha256": "f507c7a94348cb99b347f9c9173d405fb18f11df7f0d6b726e18cb83458c9b45",
+  "cli_manifest_sha256": "bca645e1bf9ba3594ef48be0cb3fbec642a98da1e6f1b91b31a4aaa9519987d5",
   "public_gui_apps": ["qnet"],
   "runtime_helpers": ["isisui"],
   "mandatory_apps": ["reduce", "jigsaw", "qnet"],

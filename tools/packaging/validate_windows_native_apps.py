@@ -549,17 +549,18 @@ def _validate_dependencies(
         actual = _sha256(members[target])
         if digest != actual:
             raise ValueError(f"dependency hash mismatch for {target}")
-    expected_binaries = {
+    authoritative_seeds = {
         f"{name}.exe".casefold()
         for name in (*contract.public_apps, *contract.runtime_helpers)
     }
-    expected_binaries.add("isis.dll")
+    authoritative_seeds.add("isis.dll")
     plugin_dll_names = {
         PurePosixPath(name).name.casefold()
         for name in members
         if name.casefold().startswith("plugins/") and name.casefold().endswith(".dll")
     }
-    expected_binaries.update(plugin_dll_names)
+    authoritative_seeds.update(plugin_dll_names)
+    expected_binaries = set(authoritative_seeds)
     expected_binaries.update(closure_names)
     actual_binaries = set(binary_names)
     if actual_binaries != expected_binaries:
@@ -607,6 +608,27 @@ def _validate_dependencies(
                 f"dependency parent/import disagreement for {name}: "
                 f"declared={sorted(declared_parents)}, edges={sorted(edge_parents)}"
             )
+
+    reachable_binaries = set(authoritative_seeds)
+    pending = list(sorted(authoritative_seeds))
+    while pending:
+        parent = pending.pop(0)
+        for (edge_parent, imported_name), classification in import_edges.items():
+            if (
+                edge_parent == parent
+                and classification in {"resolved", "packaged"}
+                and imported_name in closure_names
+                and imported_name in binary_names
+                and imported_name not in reachable_binaries
+            ):
+                reachable_binaries.add(imported_name)
+                pending.append(imported_name)
+    unreachable = sorted(closure_names - reachable_binaries)
+    if unreachable:
+        raise ValueError(
+            "dependency closure files are not reachable from authoritative seeds: "
+            f"{unreachable}"
+        )
 
     actual_archive_dlls = {
         name.casefold()

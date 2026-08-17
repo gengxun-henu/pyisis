@@ -6,6 +6,7 @@ Last Modified: 2026-08-18
 Updated: 2026-08-18  Geng Xun added fail-closed archive and evidence validation coverage.
 Updated: 2026-08-18  Geng Xun hardened Windows paths and closed dependency/runtime schemas after review.
 Updated: 2026-08-18  Geng Xun bound dependency graphs and canonical runtime command identities.
+Updated: 2026-08-18  Geng Xun added authoritative-seed reachability coverage for closure cycles.
 """
 
 from __future__ import annotations
@@ -538,6 +539,47 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             fixture.dependency_report.write_text(json.dumps(payload), encoding="utf-8")
             with self.subTest(pattern=pattern), self.assertRaisesRegex(ValueError, pattern):
                 self.module.validate_release(**fixture.arguments)
+
+    def test_disconnected_resolved_cycle_is_not_reachable_from_authoritative_seeds(self):
+        fixture = self._write_valid_fixture()
+        payload = json.loads(fixture.dependency_report.read_text())
+        reduce_binary = next(
+            item for item in payload["binaries"] if item["binary"] == "reduce.exe"
+        )
+        reduce_binary["imports"] = [
+            item for item in reduce_binary["imports"] if item["name"] != "runtime.dll"
+        ]
+        runtime_binary = next(
+            item for item in payload["binaries"] if item["binary"] == "runtime.dll"
+        )
+        runtime_binary["imports"] = [{
+            "name": "evil.dll",
+            "import_kind": "direct",
+            "classification": "resolved",
+        }]
+        payload["binaries"].append({
+            "binary": "evil.dll",
+            "imports": [{
+                "name": "runtime.dll",
+                "import_kind": "direct",
+                "classification": "resolved",
+            }],
+        })
+        payload["files"][0]["parents"] = ["evil.dll"]
+        evil_content = b"disconnected-cycle"
+        payload["files"].append({
+            "name": "evil.dll",
+            "source": "Library/bin/evil.dll",
+            "target": "lib/evil.dll",
+            "import_kind": "direct",
+            "parents": ["runtime.dll"],
+            "sha256": hashlib.sha256(evil_content).hexdigest(),
+        })
+        self._rewrite_member(fixture, "lib/evil.dll", evil_content)
+        fixture.dependency_report.write_text(json.dumps(payload), encoding="utf-8")
+
+        with self.assertRaisesRegex(ValueError, "not reachable from authoritative seeds"):
+            self.module.validate_release(**fixture.arguments)
 
     def test_stale_runtime_binding_wrong_host_nonzero_and_skips_are_rejected(self):
         mutations = (

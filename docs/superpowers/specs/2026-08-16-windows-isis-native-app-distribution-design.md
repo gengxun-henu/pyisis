@@ -195,6 +195,11 @@ recorded exit code is zero. Host OS/build, architecture, ISIS version, the
 clean extraction path, scrubbed variables/PATH-entry count, and the archive
 hash are recorded once in exact top-level provenance fields. Unknown keys or
 groups, count mismatches, failures, or skips are fatal.
+Command identities are compared to the release contract and the fixed
+operation/GUI/negative probe set, rather than accepted by count alone. The PE
+dependency evidence is also graph-bound: every resolved import maps to one
+reported closure file and binary record, and every closure file is reachable
+from a reported parent/import edge.
 
 ## Failure Handling
 

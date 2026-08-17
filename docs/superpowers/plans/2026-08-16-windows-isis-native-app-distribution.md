@@ -556,6 +556,14 @@ code counts equal `passed`, with zero failed/skipped. All exit codes are zero
 except `negative-launcher`, whose undeclared-APP and invalid-ISISDATA probes
 record `[4, 3]`. `summary` contains only `passed=166`, `failed=0`, and
 `skipped=0`. Unknown keys, groups, or results are fatal.
+Command identities are canonical and package-relative: the CLI group is
+derived exactly from the 150 contract names as
+`launch/isis-app.cmd <name> -HELP`; real-operation identities name exactly
+`stats`, `getkey`, `catlab`, `campt`, `reduce`, `cam2map`, `isis2std`,
+`cubeit`, and `fx`; GUI identities are `reduce -gui`, `jigsaw -gui`, and
+`launch/qnet.cmd`; and the external-data and two negative identities explicitly
+record their ISISDATA mode. The host OS value is exactly `Windows 11`, not a
+substring match.
 
 - [ ] **Step 1: Write PowerShell contract tests**
 

@@ -377,7 +377,9 @@ Expected: FAIL because the staging and archiving modules do not exist.
 
 Resolve every source/destination and require it to remain below its declared
 root. Copy all public EXEs, CLI XML to `bin/xml`, `qnet.exe`, `isisui.exe`,
-`IsisPreferences`, licenses, appdata, minimal data, and explicit Qt plugins.
+`IsisPreferences`, licenses, appdata, minimal data, the explicit clean-host
+fixtures `tests/data/mosrange/EN0108828322M_iof.cub` and
+`tests/data/mosrange/equi.map` under `validation-data/`, and explicit Qt plugins.
 Seed PE closure with public/helper EXEs plus `isis.dll`. Reject forbidden globs
 and absolute build/conda strings before generating `manifest/apps.json`,
 `manifest/files.sha256`, and `manifest/build-metadata.json`:

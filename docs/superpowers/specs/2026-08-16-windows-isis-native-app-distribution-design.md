@@ -54,6 +54,9 @@ usgs-isis-native-apps-9.0.0-win64/
 │   ├── apps.json
 │   ├── files.sha256
 │   └── build-metadata.json
+├── validation-data/
+│   ├── EN0108828322M_iof.cub
+│   └── equi.map
 ├── IsisPreferences
 ├── LICENSE.md
 └── README.md

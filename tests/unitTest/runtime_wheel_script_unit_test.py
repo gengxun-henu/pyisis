@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-16
+Last Modified: 2026-08-18
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
@@ -15,6 +15,7 @@ Updated: 2026-08-05  Geng Xun added Windows PE export-forwarder closure regressi
 Updated: 2026-08-05  Geng Xun required fail-closed Windows DLL audit reports.
 Updated: 2026-08-05  Geng Xun enforced the Windows minimal-runtime boundary against APP executables and XML.
 Updated: 2026-08-16  Geng Xun covered tolerant UTF-8 decoding of Windows dumpbin output.
+Updated: 2026-08-18  Geng Xun covered shared Windows PE closure provenance.
 """
 
 from __future__ import annotations
@@ -33,21 +34,64 @@ from unittest import mock
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WINDOWS_STAGING_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "stage_runtime_win64.py"
+WINDOWS_PE_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "windows_pe_dependencies.py"
 LINUX_STAGING_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "stage_runtime_linux.py"
 
 
 class RuntimeWheelScriptUnitTest(unittest.TestCase):
     """Test suite for runtime wheel staging. Added: 2026-06-18."""
 
-    def test_dumpbin_forwarded_dependencies_extracts_unique_non_system_dlls(self):
-        spec = importlib.util.spec_from_file_location(
-            "stage_runtime_win64_forwarder_parser",
-            WINDOWS_STAGING_SCRIPT,
-        )
+    def _load_module(self, name, path):
+        spec = importlib.util.spec_from_file_location(name, path)
         self.assertIsNotNone(spec)
         self.assertIsNotNone(spec.loader)
-        stage_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(stage_module)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    def test_shared_pe_closure_records_forwarder_provenance(self):
+        module = self._load_module("windows_pe_dependencies", WINDOWS_PE_SCRIPT)
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            prefix = root / "deps"
+            target = root / "stage"
+            seed = root / "reduce.exe"
+            (prefix / "bin").mkdir(parents=True)
+            target.mkdir()
+            seed.write_bytes(b"exe")
+            (prefix / "bin" / "isis.dll").write_bytes(b"isis")
+            (prefix / "bin" / "openblas.dll").write_bytes(b"blas")
+            direct = {"reduce.exe": ("isis.dll",), "isis.dll": ()}
+            forwarded = {"reduce.exe": ("openblas.dll",), "openblas.dll": ()}
+            with (
+                mock.patch.object(
+                    module,
+                    "dumpbin_dependencies",
+                    side_effect=lambda path: direct.get(path.name, ()),
+                ),
+                mock.patch.object(
+                    module,
+                    "dumpbin_forwarded_dependencies",
+                    side_effect=lambda path: forwarded.get(path.name, ()),
+                ),
+            ):
+                report = module.copy_dependency_closure(
+                    (seed,),
+                    (prefix,),
+                    target,
+                )
+            self.assertEqual(report["unresolved"], [])
+            openblas = next(
+                item for item in report["files"] if item["name"] == "openblas.dll"
+            )
+            self.assertEqual(openblas["import_kind"], "forwarder")
+            self.assertEqual(openblas["parents"], ["reduce.exe"])
+
+    def test_dumpbin_forwarded_dependencies_extracts_unique_non_system_dlls(self):
+        pe_module = self._load_module(
+            "windows_pe_dependencies_forwarder_parser",
+            WINDOWS_PE_SCRIPT,
+        )
 
         completed = subprocess.CompletedProcess(
             ["dumpbin", "/EXPORTS", "libcblas.dll"],
@@ -60,25 +104,19 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             stderr="",
         )
         with mock.patch.object(
-            stage_module.subprocess,
+            pe_module.subprocess,
             "run",
             return_value=completed,
         ):
-            result = stage_module._dumpbin_forwarded_dependencies(
-                Path("libcblas.dll")
-            )
+            result = pe_module.dumpbin_forwarded_dependencies(Path("libcblas.dll"))
 
         self.assertEqual(result, ("openblas.dll", "KERNEL32.dll"))
 
     def test_dumpbin_dependencies_uses_tolerant_utf8_decoding(self):
-        spec = importlib.util.spec_from_file_location(
-            "stage_runtime_win64_dependency_decoding",
-            WINDOWS_STAGING_SCRIPT,
+        pe_module = self._load_module(
+            "windows_pe_dependencies_dependency_decoding",
+            WINDOWS_PE_SCRIPT,
         )
-        self.assertIsNotNone(spec)
-        self.assertIsNotNone(spec.loader)
-        stage_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(stage_module)
 
         def fake_run(command, **kwargs):
             self.assertEqual(command[1], "/DEPENDENTS")
@@ -92,20 +130,16 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 stderr="",
             )
 
-        with mock.patch.object(stage_module.subprocess, "run", side_effect=fake_run):
-            result = stage_module._dumpbin_dependencies(Path("isis.dll"))
+        with mock.patch.object(pe_module.subprocess, "run", side_effect=fake_run):
+            result = pe_module.dumpbin_dependencies(Path("isis.dll"))
 
         self.assertEqual(result, ("ale.dll",))
 
     def test_dumpbin_forwarded_dependencies_uses_tolerant_utf8_decoding(self):
-        spec = importlib.util.spec_from_file_location(
-            "stage_runtime_win64_forwarder_decoding",
-            WINDOWS_STAGING_SCRIPT,
+        pe_module = self._load_module(
+            "windows_pe_dependencies_forwarder_decoding",
+            WINDOWS_PE_SCRIPT,
         )
-        self.assertIsNotNone(spec)
-        self.assertIsNotNone(spec.loader)
-        stage_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(stage_module)
 
         def fake_run(command, **kwargs):
             self.assertEqual(command[1], "/EXPORTS")
@@ -119,20 +153,16 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 stderr="",
             )
 
-        with mock.patch.object(stage_module.subprocess, "run", side_effect=fake_run):
-            result = stage_module._dumpbin_forwarded_dependencies(Path("libcblas.dll"))
+        with mock.patch.object(pe_module.subprocess, "run", side_effect=fake_run):
+            result = pe_module.dumpbin_forwarded_dependencies(Path("libcblas.dll"))
 
         self.assertEqual(result, ("openblas.dll",))
 
     def test_dumpbin_dependency_failure_is_fatal(self):
-        spec = importlib.util.spec_from_file_location(
-            "stage_runtime_win64_dumpbin_failure",
-            WINDOWS_STAGING_SCRIPT,
+        pe_module = self._load_module(
+            "windows_pe_dependencies_dumpbin_failure",
+            WINDOWS_PE_SCRIPT,
         )
-        self.assertIsNotNone(spec)
-        self.assertIsNotNone(spec.loader)
-        stage_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(stage_module)
 
         completed = subprocess.CompletedProcess(
             ["dumpbin", "/DEPENDENTS", "isis.dll"],
@@ -141,12 +171,12 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             stderr="fatal error LNK1107",
         )
         with mock.patch.object(
-            stage_module.subprocess,
+            pe_module.subprocess,
             "run",
             return_value=completed,
         ):
             with self.assertRaisesRegex(RuntimeError, "dumpbin failed.*isis.dll"):
-                stage_module._dumpbin_dependencies(Path("isis.dll"))
+                pe_module.dumpbin_dependencies(Path("isis.dll"))
 
     def test_stage_runtime_copies_binding_runtime_and_excludes_apps_and_sdk_files(self):
         with TemporaryDirectory() as temp_dir:
@@ -285,13 +315,13 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             report = temp / "dependency-report.json"
             with (
                 mock.patch.object(
-                    stage_module,
-                    "_dumpbin_dependencies",
+                    stage_module._pe_dependencies,
+                    "dumpbin_dependencies",
                     fake_dumpbin,
                 ),
                 mock.patch.object(
-                    stage_module,
-                    "_dumpbin_forwarded_dependencies",
+                    stage_module._pe_dependencies,
+                    "dumpbin_forwarded_dependencies",
                     return_value=(),
                 ),
             ):
@@ -350,10 +380,14 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 return ("missing.dll",) if binary.name == "isis.dll" else ()
 
             with (
-                mock.patch.object(stage_module, "_dumpbin_dependencies", fake_dumpbin),
                 mock.patch.object(
-                    stage_module,
-                    "_dumpbin_forwarded_dependencies",
+                    stage_module._pe_dependencies,
+                    "dumpbin_dependencies",
+                    fake_dumpbin,
+                ),
+                mock.patch.object(
+                    stage_module._pe_dependencies,
+                    "dumpbin_forwarded_dependencies",
                     return_value=(),
                 ),
             ):
@@ -419,13 +453,13 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     stage = temp / distribution_name
                     with (
                         mock.patch.object(
-                            stage_module,
-                            "_dumpbin_dependencies",
+                            stage_module._pe_dependencies,
+                            "dumpbin_dependencies",
                             fake_dependencies,
                         ),
                         mock.patch.object(
-                            stage_module,
-                            "_dumpbin_forwarded_dependencies",
+                            stage_module._pe_dependencies,
+                            "dumpbin_forwarded_dependencies",
                             fake_forwarded_dependencies,
                         ),
                     ):

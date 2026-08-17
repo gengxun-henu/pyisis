@@ -103,6 +103,18 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
         self.assertIn('"from=$cameraCube"', invocation)
         self.assertNotIn('"map=$mapFile"', invocation)
 
+    def test_cubeit_list_uses_a_package_relative_name_without_spaces(self):
+        script = RUNTIME_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn(
+            '$cubeitInput = Join-Path $extractionPath "validation-cubeit-input.cub"',
+            script,
+        )
+        self.assertIn("Copy-Item -LiteralPath $reducedCube -Destination $cubeitInput", script)
+        self.assertIn(
+            'Set-Content -LiteralPath $cubeList -Value @("..\\validation-cubeit-input.cub", "..\\validation-cubeit-input.cub")',
+            script,
+        )
+
     def test_orchestrator_guards_recursive_cleanup(self):
         script = BUILD_SCRIPT.read_text(encoding="utf-8")
         self.assertIn("Resolve-FullPath $WorkDir", script)

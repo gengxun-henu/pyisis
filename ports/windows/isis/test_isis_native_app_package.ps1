@@ -337,6 +337,7 @@ try {
     $remappedCube = Join-Path $operationDir "cam2map.cub"
     $pngOutput = Join-Path $operationDir "preview.png"
     $cubeList = Join-Path $operationDir "cubeit.lis"
+    $cubeitInput = Join-Path $extractionPath "validation-cubeit-input.cub"
     $cubeitOutput = Join-Path $operationDir "cubeit.cub"
     $fxOutput = Join-Path $operationDir "fx.cub"
 
@@ -352,7 +353,8 @@ try {
     $realExitCodes.Add((Invoke-PackageLauncher "reduce" @("from=$sourceCube", "to=$reducedCube", "sscale=2", "lscale=2") 0 "reduce.log")); Assert-OutputFile $reducedCube
     $realExitCodes.Add((Invoke-PackageLauncher "cam2map" @("from=$cameraCube", "to=$remappedCube", "pixres=mpp", "resolution=1000", "interp=bilinear") 0 "cam2map.log")); Assert-OutputFile $remappedCube
     $realExitCodes.Add((Invoke-PackageLauncher "isis2std" @("from=$reducedCube", "to=$pngOutput", "mode=grayscale", "format=png", "stretch=linear") 0 "isis2std.log")); Assert-OutputFile $pngOutput
-    Set-Content -LiteralPath $cubeList -Value @($reducedCube, $reducedCube) -Encoding ASCII
+    Copy-Item -LiteralPath $reducedCube -Destination $cubeitInput
+    Set-Content -LiteralPath $cubeList -Value @("..\validation-cubeit-input.cub", "..\validation-cubeit-input.cub") -Encoding ASCII
     $realExitCodes.Add((Invoke-PackageLauncher "cubeit" @("fromlist=$cubeList", "to=$cubeitOutput") 0 "cubeit.log")); Assert-OutputFile $cubeitOutput
     $realExitCodes.Add((Invoke-PackageLauncher "fx" @("to=$fxOutput", "equation=sample+line", "mode=outputonly", "lines=16", "samples=16", "bands=1") 0 "fx.log")); Assert-OutputFile $fxOutput
     $realCommands = @("stats", "getkey", "catlab", "campt", "reduce", "cam2map", "isis2std", "cubeit", "fx") | ForEach-Object { "launch/isis-app.cmd $_ mode=real-operation" }

@@ -28,6 +28,7 @@
 - `packaging/native-apps-win64/release.json`: release identity, source-manifest binding, GUI APP/helper lists, plugin allowlist, forbidden paths.
 - `tools/packaging/windows_native_app_manifest.py`: typed release-contract validation and 151-APP composition.
 - `packaging/native-apps-win64/launch/*.cmd`: relative environment, shell, generic APP, and qnet launch templates.
+- `packaging/native-apps-win64/launch/isis-launch.ps1`: internal argv-preserving worker used by the public APP and qnet CMD shims; it never evaluates a reconstructed command string.
 - `tools/packaging/stage_windows_native_apps.py`: curated payload staging and generated manifests.
 - `tools/packaging/archive_windows_native_apps.py`: normalized hashes and deterministic ZIP creation.
 - `tools/packaging/validate_windows_native_apps.py`: ZIP, boundary, evidence, inventory, dependency, and hash validation.
@@ -242,12 +243,14 @@ git commit -m "feat: define Windows native app release contract"
 - Create: `packaging/native-apps-win64/launch/isis-shell.cmd`
 - Create: `packaging/native-apps-win64/launch/isis-app.cmd`
 - Create: `packaging/native-apps-win64/launch/qnet.cmd`
+- Create: `packaging/native-apps-win64/launch/isis-launch.ps1`
 - Create: `tests/unitTest/windows_native_app_staging_unit_test.py`
 
 **Interfaces:**
 - `isis-env.cmd` applies package-relative runtime variables and fails for an explicitly invalid `ISISDATA`.
 - `isis-app.cmd <name> [arguments]` validates exact public membership and invokes without string re-evaluation.
 - `isis-shell.cmd` opens an initialized shell; `qnet.cmd` delegates to the generic launcher.
+- `isis-launch.ps1` receives original argv as an array and launches with PowerShell splatting, preserving arbitrary argument counts and literal metacharacters without `call`, `cmd /c`, or string evaluation.
 
 - [ ] **Step 1: Write launcher safety and execution tests**
 
@@ -297,7 +300,10 @@ set "PATH=%ISIS_PACKAGE_ROOT%\bin;%ISIS_PACKAGE_ROOT%\lib;%PATH%"
 exit /b 0
 ```
 
-`isis-app.cmd` sets `ISIS_APP_MANIFEST`, rejects names outside `[A-Za-z0-9_-]+`, asks built-in PowerShell for `public_apps` exact membership, calls `isis-env.cmd`, shifts the name, and invokes `"%ISISROOT%\bin\%ISIS_APP_NAME%.exe" %*`. `qnet.cmd` calls `isis-app.cmd qnet %*`; `isis-shell.cmd` calls `isis-env.cmd` then `cmd /k`.
+`isis-app.cmd` and `qnet.cmd` pass their original arguments once to the internal
+`isis-launch.ps1` worker. The worker validates names against `public_apps`,
+applies the package-relative environment, and invokes the selected executable
+with array splatting. `isis-shell.cmd` calls `isis-env.cmd` then `cmd /k`.
 
 - [ ] **Step 4: Run launcher tests from a path containing spaces**
 

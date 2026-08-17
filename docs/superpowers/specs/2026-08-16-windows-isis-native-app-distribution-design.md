@@ -48,7 +48,8 @@ usgs-isis-native-apps-9.0.0-win64/
 │   ├── isis-env.cmd
 │   ├── isis-shell.cmd
 │   ├── isis-app.cmd
-│   └── qnet.cmd
+│   ├── qnet.cmd
+│   └── isis-launch.ps1
 ├── manifest/
 │   ├── apps.json
 │   ├── files.sha256
@@ -149,8 +150,10 @@ explicit `ISISDATA` is an error rather than a reason to silently fall back.
 `isis-shell.cmd` opens a command shell after applying `isis-env.cmd`.
 `isis-app.cmd <name> [arguments...]` rejects names absent from
 `manifest/apps.json`, applies the same environment, and invokes the selected
-APP without string re-evaluation. `qnet.cmd` is double-clickable and delegates
-to `isis-app.cmd qnet`. Users are not required to edit PATH or create 151
+APP without string re-evaluation. `qnet.cmd` is double-clickable. Both process
+launching CMD entry points delegate to an internal `isis-launch.ps1` worker,
+which receives argv as an array and invokes with splatting; it never rebuilds
+or evaluates a command string. Users are not required to edit PATH or create 151
 per-APP wrapper scripts.
 
 ## Validation Matrix

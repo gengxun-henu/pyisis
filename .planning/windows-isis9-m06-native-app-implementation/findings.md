@@ -10,6 +10,7 @@
 - `011f8d15` classifies `csv2table.h` as `native-app` while preserving it in the complete ISIS 10 discovered-header/function inventory.
 - `251d0fb5` synchronizes the tracked Windows manifest and priority outputs at 150 CLI APPs.
 - A real Windows ISIS 9 batch smoke passed all 150 executable startup probes; native `csv2table` and `tabledump` both exited 0 and produced a nonempty table dump.
+- Task 3 specification and quality review passed; the reviewer recorded one deferred CLI-diagnostic Minor and no Critical/Important issue.
 - The working tree contains an unstaged ISIS-generated `print.prt`; repository guardrails prohibit modifying, restoring, deleting, or staging it.
 
 ## Evidence-Based Inference
@@ -19,7 +20,6 @@
 
 ## Unresolved Items
 
-- Task 3 independent review was interrupted before producing `task-3-review.md`.
 - csv2table Task 4 validator and Task 5 four-cell evidence are pending.
 - All seven Windows portable-distribution implementation tasks remain pending.
 - M06 completion evidence has not yet been produced.

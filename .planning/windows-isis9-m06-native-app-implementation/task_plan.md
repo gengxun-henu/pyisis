@@ -26,7 +26,7 @@ The csv2table Python and in-process binding exception is removed; native csv2tab
 
 ## Next Step
 
-Re-dispatch the independent Task 3 review for commits `011f8d15..251d0fb5`, resolve its findings, and record the verdict before starting csv2table Task 4.
+Implement csv2table Task 4: add and independently review the cross-platform native-process behavior validator and its focused tests.
 
 ## Current Phase
 
@@ -38,7 +38,7 @@ Phase 1: csv2table native APP unification
 
 - [x] Remove the Python facade, private APP runner, and in-process ISIS 10 adapter
 - [x] Classify csv2table as native-app in generated ISIS 10 inventories and current documentation
-- [ ] Complete independent review of the synchronized 150-APP Windows baseline
+- [x] Complete independent review of the synchronized 150-APP Windows baseline
 - [ ] Add the cross-platform native-process behavior validator
 - [ ] Collect ISIS 9/10 × Windows/Linux native csv2table evidence
 - **Status:** in_progress

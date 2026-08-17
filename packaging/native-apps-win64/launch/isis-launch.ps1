@@ -41,10 +41,6 @@ function ConvertTo-WindowsNativeArgument([string] $Value) {
     if ($Value.Length -eq 0) {
         return '""'
     }
-    if ($Value -notmatch '[\s"]') {
-        return $Value
-    }
-
     $Builder = New-Object System.Text.StringBuilder
     [void] $Builder.Append('"')
     $BackslashCount = 0
@@ -66,13 +62,6 @@ function ConvertTo-WindowsNativeArgument([string] $Value) {
     [void] $Builder.Append(('\' * (2 * $BackslashCount)))
     [void] $Builder.Append('"')
     return $Builder.ToString()
-}
-
-# Windows PowerShell 5 needs each native argv element encoded separately.
-for ($ArgumentIndex = 0; $ArgumentIndex -lt $AppArguments.Count; $ArgumentIndex++) {
-    $AppArguments[$ArgumentIndex] = ConvertTo-WindowsNativeArgument(
-        $AppArguments[$ArgumentIndex]
-    )
 }
 
 if ([string]::IsNullOrEmpty($AppName)) {
@@ -123,9 +112,26 @@ if (-not (Test-Path -LiteralPath $Executable -PathType Leaf)) {
     exit 6
 }
 
-& $Executable @AppArguments
-$ExitCode = $LASTEXITCODE
-if ($null -eq $ExitCode) {
-    $ExitCode = 0
+# Build the exact native command line once; Windows PowerShell 5 otherwise
+# re-encodes pre-quoted values when invoking an executable with array splatting.
+for ($ArgumentIndex = 0; $ArgumentIndex -lt $AppArguments.Count; $ArgumentIndex++) {
+    $AppArguments[$ArgumentIndex] = ConvertTo-WindowsNativeArgument(
+        $AppArguments[$ArgumentIndex]
+    )
+}
+
+$StartInfo = New-Object System.Diagnostics.ProcessStartInfo
+$StartInfo.FileName = $Executable
+$StartInfo.UseShellExecute = $false
+$StartInfo.Arguments = $AppArguments -join " "
+$Process = New-Object System.Diagnostics.Process
+$Process.StartInfo = $StartInfo
+try {
+    [void] $Process.Start()
+    $Process.WaitForExit()
+    $ExitCode = $Process.ExitCode
+}
+finally {
+    $Process.Dispose()
 }
 exit [int] $ExitCode

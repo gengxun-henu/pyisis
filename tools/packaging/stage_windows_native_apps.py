@@ -407,6 +407,12 @@ def stage_native_apps(
             root,
             Path("IsisPreferences"),
         )
+        _copy_file(
+            isis_prefix / "isis_version.txt",
+            isis_prefix,
+            root,
+            Path("isis_version.txt"),
+        )
         _copy_file(isis_prefix / "LICENSE.md", isis_prefix, root, Path("LICENSE.md"))
         _copy_tree(isis_prefix / "appdata", isis_prefix, root / "appdata")
         _copy_tree(minimal_data_root, minimal_data_root, root / "data")
@@ -455,6 +461,7 @@ def stage_native_apps(
                 (isis_prefix, *dependency_prefixes),
                 closure_root,
                 temporary_dependency_report,
+                bundle_python_runtime=True,
             )
             for item in report.get("files", []):
                 if not isinstance(item, dict) or not isinstance(

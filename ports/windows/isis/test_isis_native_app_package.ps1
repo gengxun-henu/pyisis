@@ -56,14 +56,25 @@ function Invoke-PackageLauncher {
         [Parameter(Mandatory = $true)][string]$LogName
     )
     $logPath = Join-Path $resolvedWorkDir $LogName
+    $runnerPath = Join-Path $resolvedWorkDir ("runtime-launch-" + [Guid]::NewGuid().ToString("N") + ".cmd")
+    $commandValues = @($IsisAppLauncher, $Name) + @($Arguments)
+    $quotedValues = @($commandValues | ForEach-Object {
+        if ([string]$_ -match '"') { throw "runtime launcher arguments must not contain quotes" }
+        '"' + ([string]$_).Replace('%', '%%') + '"'
+    })
+    if ($logPath -match '"') { throw "runtime launcher log path must not contain quotes" }
+    $logTarget = '"' + $logPath.Replace('%', '%%') + '"'
+    $runnerText = "@echo off`r`nsetlocal DisableDelayedExpansion`r`n" + ($quotedValues -join " ") + " > " + $logTarget + " 2>&1`r`n"
+    [System.IO.File]::WriteAllText($runnerPath, $runnerText, (New-Object System.Text.UTF8Encoding($false)))
     $previousPreference = $ErrorActionPreference
     try {
         $ErrorActionPreference = "Continue"
-        & $IsisAppLauncher $Name @Arguments *> $logPath
+        & $env:ComSpec /d /c $runnerPath
         $exitCode = $LASTEXITCODE
     }
     finally {
         $ErrorActionPreference = $previousPreference
+        Remove-Item -LiteralPath $runnerPath -Force -ErrorAction SilentlyContinue
     }
     if ($exitCode -ne $ExpectedExitCode) {
         $tail = ""

@@ -13,6 +13,7 @@ Updated: 2026-08-18  Geng Xun covered authoritative PE seed identity for strict 
 Updated: 2026-08-18  Geng Xun covered bundled clean-host camera validation data.
 Updated: 2026-08-18  Geng Xun covered the Windows executable-name XML lookup.
 Updated: 2026-08-18  Geng Xun covered isolated worker launch from metacharacter roots.
+Updated: 2026-08-18  Geng Xun covered native process argv and runtime-root resources.
 """
 
 from __future__ import annotations
@@ -102,6 +103,9 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             "Group = DataDirectory\n", encoding="utf-8"
         )
         (isis_prefix / "LICENSE.md").write_text("license\n", encoding="utf-8")
+        (isis_prefix / "isis_version.txt").write_text(
+            "9.0.0 | 2025-07-07\n", encoding="utf-8"
+        )
 
         for relative in (
             "Library/plugins/platforms/qwindows.dll",
@@ -146,9 +150,16 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
 
     @staticmethod
     def _fake_dependency_closure(
-        seed_files, dependency_prefixes, target_root, dependency_report=None
+        seed_files,
+        dependency_prefixes,
+        target_root,
+        dependency_report=None,
+        *,
+        bundle_python_runtime=False,
     ):
         del seed_files
+        if not bundle_python_runtime:
+            raise AssertionError("native APP closure must bundle the Python runtime")
         source = dependency_prefixes[-1] / "Library" / "bin" / "runtime.dll"
         target_root.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target_root / "runtime.dll")
@@ -235,8 +246,16 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
 
             written_reports = []
 
-            def fail_closure(seed_files, prefixes, target, dependency_report=None):
+            def fail_closure(
+                seed_files,
+                prefixes,
+                target,
+                dependency_report=None,
+                *,
+                bundle_python_runtime=False,
+            ):
                 del seed_files, prefixes, target
+                self.assertTrue(bundle_python_runtime)
                 written_reports.append(dependency_report)
                 dependency_report.write_text(
                     json.dumps({"unresolved": ["missing.dll"]}), encoding="utf-8"
@@ -398,6 +417,10 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertTrue((result.root / "plugins" / "platforms" / "qwindows.dll").is_file())
             self.assertTrue((result.root / "lib" / "Camera.plugin").is_file())
             self.assertTrue((result.root / "data" / "base" / "base.test").is_file())
+            self.assertEqual(
+                (result.root / "isis_version.txt").read_text(encoding="utf-8"),
+                "9.0.0 | 2025-07-07\n",
+            )
             for name in ("EN0108828322M_iof.cub", "equi.map"):
                 staged = result.root / "validation-data" / name
                 source = REPOSITORY_ROOT / "tests" / "data" / "mosrange" / name
@@ -731,6 +754,10 @@ internal static class ArgvProbe {
     public static int Main(string[] arguments) {
         int exitCode;
         if (arguments.Length == 0 || !int.TryParse(arguments[0], out exitCode)) return 97;
+        if (arguments.Length > 1 && arguments[1] == "__raw_command_line__") {
+            Console.WriteLine(JsonString(Environment.CommandLine));
+            return exitCode;
+        }
         Console.Write("[");
         for (int index = 1; index < arguments.Length; index++) {
             if (index > 1) Console.Write(",");
@@ -1110,6 +1137,26 @@ internal static class ArgvProbe {
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(self._probe_arguments(result), payload, result.stderr)
+
+    def test_worker_quotes_parameter_expressions_in_the_native_command_line(self):
+        with TemporaryDirectory() as temp_dir:
+            package = self._write_launcher_fixture(Path(temp_dir))
+            result = self._run_launcher(
+                package / "launch" / "isis-app.cmd",
+                "reduce",
+                "0",
+                "__raw_command_line__",
+                "equation=sample+line",
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            command_line = json.loads(result.stdout.strip().splitlines()[-1])
+            self.assertIn('"equation=sample+line"', command_line)
+            worker = (package / "launch" / "isis-launch.ps1").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("System.Diagnostics.ProcessStartInfo", worker)
+            self.assertNotIn("& $Executable", worker)
 
     def test_qnet_launcher_delegates_with_arguments_and_exit_code(self):
         with TemporaryDirectory() as temp_dir:

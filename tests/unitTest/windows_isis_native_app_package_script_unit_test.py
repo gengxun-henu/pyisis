@@ -5,6 +5,7 @@ Created: 2026-08-18
 Last Modified: 2026-08-18
 Updated: 2026-08-18  Geng Xun added runtime-matrix and guarded-orchestration coverage.
 Updated: 2026-08-18  Geng Xun added repeated-prefix and descendant GUI-process fixtures.
+Updated: 2026-08-18  Geng Xun covered lossless name-value runtime launcher arguments.
 """
 
 from pathlib import Path
@@ -82,6 +83,15 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
         self.assertIn("Remove-Item Env:\\ISISDATA", script)
         self.assertIn("Remove-Item Env:\\QT_PLUGIN_PATH", script)
         self.assertIn("pathEntriesRemoved", script)
+
+    def test_runtime_invokes_public_launcher_through_a_cmd_runner(self):
+        script = RUNTIME_SCRIPT.read_text(encoding="utf-8")
+        function = script.split("function Invoke-PackageLauncher", 1)[1].split(
+            "function Invoke-GuiProbe", 1
+        )[0]
+        self.assertIn("runtime-launch-", function)
+        self.assertIn("$env:ComSpec /d /c", function)
+        self.assertNotIn("& $IsisAppLauncher", function)
 
     def test_orchestrator_guards_recursive_cleanup(self):
         script = BUILD_SCRIPT.read_text(encoding="utf-8")

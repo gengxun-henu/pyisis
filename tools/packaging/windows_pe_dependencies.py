@@ -32,7 +32,6 @@ SYSTEM_DLL_NAMES = {
     "ntdll.dll",
     "ole32.dll",
     "oleaut32.dll",
-    "python312.dll",
     "rpcrt4.dll",
     "secur32.dll",
     "setupapi.dll",
@@ -76,6 +75,12 @@ def _dependency_index(
 ) -> dict[str, tuple[Path, Path]]:
     index: dict[str, tuple[Path, Path]] = {}
     for dependency_prefix in dependency_prefixes:
+        for source in sorted(
+            dependency_prefix.glob("*.dll"),
+            key=lambda path: (str(path).lower(), str(path)),
+        ):
+            if source.is_file():
+                index.setdefault(source.name.lower(), (source, dependency_prefix))
         for root in _dependency_search_roots(dependency_prefix):
             if not root.exists():
                 continue
@@ -88,12 +93,15 @@ def _dependency_index(
     return index
 
 
-def _is_system_dependency(name: str) -> bool:
+def _is_system_dependency(name: str, *, bundle_python_runtime: bool = False) -> bool:
     normalized = name.lower()
     return (
         normalized.startswith(SYSTEM_DLL_PREFIXES)
         or normalized in SYSTEM_DLL_NAMES
-        or PYTHON_DLL_RE.match(normalized) is not None
+        or (
+            not bundle_python_runtime
+            and PYTHON_DLL_RE.match(normalized) is not None
+        )
     )
 
 
@@ -154,6 +162,8 @@ def copy_dependency_closure(
     dependency_prefixes: tuple[Path, ...],
     target_root: Path,
     dependency_report: Path | None = None,
+    *,
+    bundle_python_runtime: bool = False,
 ) -> dict[str, object]:
     """Copy all non-system PE imports into *target_root* and report provenance."""
 
@@ -196,7 +206,10 @@ def copy_dependency_closure(
                 "name": dependency_name,
                 "import_kind": import_kind,
             }
-            if _is_system_dependency(dependency_name):
+            if _is_system_dependency(
+                dependency_name,
+                bundle_python_runtime=bundle_python_runtime,
+            ):
                 import_entry["classification"] = "system"
                 imports.append(import_entry)
                 continue

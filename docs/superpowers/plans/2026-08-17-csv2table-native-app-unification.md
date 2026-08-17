@@ -267,7 +267,20 @@ git commit -m "docs: classify csv2table as native app"
 
 ### Task 3: Align the 150-APP Windows manifest baseline
 
+**Approved execution amendment (2026-08-17):** If the pinned ISIS source
+cannot be restored after bounded, integrity-checked attempts, extend
+`rank_isis_apps.py` with `--refresh-manifest-only` and use the existing tracked
+CSV as its source. This mode must update only `current_manifest` and
+`recommended_wave`, recompute the summary from the resulting rows, preserve
+all other CSV fields and row order byte-for-value, and fail if the existing CSV
+does not contain every manifest APP. For newly selected rows set
+`recommended_wave=W0-current-batch`; for deselected rows recover the wave by
+calling the existing `wave()` function with the row's recorded portability,
+importance, and GUI/module values. This is a deterministic derived-data refresh,
+not permission to hand-edit generated artifacts or change ranking policy.
+
 **Files:**
+- Modify when the approved fallback is needed: `ports/windows/isis/rank_isis_apps.py`
 - Modify: `tests/unitTest/packaging_tools_unit_test.py:300-315,500-595`
 - Regenerate: `ports/windows/isis/windows-app-priority.csv`
 - Regenerate: `ports/windows/isis/windows-app-priority.md`
@@ -320,6 +333,22 @@ Import-Csv ports/windows/isis/windows-app-priority.csv | Where-Object app -eq cs
 ```
 
 Expected: `current_manifest: yes`.
+
+When fixed-source restoration has failed and the approved fallback is used,
+first add a test fixture that snapshots every non-membership field, run it RED,
+then invoke:
+
+```powershell
+D:/pyisis-win-env/python.exe ports/windows/isis/rank_isis_apps.py `
+  --refresh-manifest-only `
+  --manifest ports/windows/isis/windows-app-manifest.json `
+  --csv-output ports/windows/isis/windows-app-priority.csv `
+  --summary-output ports/windows/isis/windows-app-priority.md
+```
+
+Expected: 365 rows remain in the same order; only `csv2table` changes from
+`current_manifest=no` to `yes` and from `W4-medium` to `W0-current-batch`;
+the summary reports `W0-current-batch | 150`.
 
 - [ ] **Step 4: Verify the Windows ISIS 9 executable before promoting its evidence**
 

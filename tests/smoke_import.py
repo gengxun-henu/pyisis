@@ -108,6 +108,9 @@ def temporary_raw_input_file(name="example.raw"):
 
 
 def test_basic_symbols_present():
+    assert not hasattr(ip, "csv2table")
+    assert "csv2table" not in ip.__all__
+    assert not hasattr(ip._isis_core, "_csv2table_native")
     assert (
         hasattr(ip, "OsirisRexOcamsOpenCVDistortionMap")
         == (ip.__isis_major__ >= 10)

@@ -2,18 +2,12 @@
   "schema_version": 1,
   "project_id": "windows-isis9-native-app-implementation",
   "title": "Windows ISIS 9 native APP implementation",
-  "created_date": "2026-08-17",
   "document_header": "# Windows ISIS 9 Native APP Implementation Milestone",
-  "branch": "feature/m04-windows-pyisis-wheelhouse",
-  "worktree": ".",
-  "initial_commit": "251d0fb55c3578f00e8768c546b79d7beed80679",
   "milestones": [
     {
       "id": "windows-isis9-m06-native-app-implementation",
       "title": "Build and validate the Windows ISIS native APP release",
-      "status": "in_progress",
       "dependencies": [],
-      "plan_dir": ".planning/windows-isis9-m06-native-app-implementation",
       "source_plans": [
         "docs/superpowers/plans/2026-08-17-csv2table-native-app-unification.md",
         "docs/superpowers/plans/2026-08-16-windows-isis-native-app-distribution.md"
@@ -36,11 +30,7 @@
           "windows-isis9-m04-wheelhouse-complete",
           "windows-isis9-native-prefix"
         ]
-      },
-      "last_session_date": "2026-08-17",
-      "last_close_outcome": null,
-      "blocker": null,
-      "completion_evidence": null
+      }
     }
   ]
 }

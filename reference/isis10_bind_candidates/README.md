@@ -9,8 +9,8 @@
 - `classes_inventory_summary.csv`：ISIS 10 新增类的优先级、安装面、风险和
   推荐策略。
 - `class_details/*_methods.csv`：沿用 ISIS 9 台账格式的逐类公开 API 明细。
-- `functions_inventory.csv`：ISIS 10 新增应用函数的最终处理边界及 Python
-  facade 建议。
+- `functions_inventory.csv`：ISIS 10 新增应用函数的最终处理边界；原生 APP
+  项不提供 Python binding 或 helper。
 - `excluded_new_headers.csv`：已发现但不应进入公共绑定面的新头文件及原因。
 
 通过以下命令重新生成：
@@ -43,17 +43,15 @@ python tools/dev/generate_isis10_bind_inventory.py \
 2. `ImageIoHandler` 与 `GdalIoHandler`：已完成抽象基类注册和 Python
    友好 facade；构造时预检文件及波段，通过 `PixelType` 选择输出类型，
    默认只读，并排除 `GDALDataset*`、Qt mutex 和不明确的裸所有权。
-3. `csv2table`：跨平台 Python facade 已完成。Linux 在进程内调用 ISIS 10
-   `libisis` 导出的原生函数；Windows 通过私有、无 shell runner 调用
-   `csv2table.exe`。公共入口只在 ISIS 10 构建中导出，未暴露
-   `UserInterface`。
-4. `ocams2isis`、`eisstitch`：采用原生 ISIS APP 执行边界，不单独绑定
-   `UserInterface`，也不新增逐程序 Python wrapper。
+3. `csv2table`、`ocams2isis`、`eisstitch`：所有 ISIS 9/10 和 Linux/Windows
+   支持单元均采用原生 ISIS APP 执行边界；不绑定 `UserInterface`，也不新增
+   逐程序 Python wrapper 或 helper。Python 编排如有需要可直接使用标准库
+   `subprocess`。
 
 ## 边界
 
 - 默认排除 QWidget/qisis、signals/slots、测试 fixture 和第三方内部实现。
-- 私有 APP runner 不是公共 API；本批次只公开 `csv2table(...)`。
+- 原生 APP 不构成 PyISIS 公共 API；PyISIS 不提供 `csv2table` helper。
 - `IEndian.h` 是 `Endian.h` 的重命名兼容项，不属于 ISIS 10 新功能。
 - 目录中的 `N` 表示待绑定候选，不表示已经承诺进入首个 ISIS 10 release。
 - 真正实施前仍需阅读实际 prefix 头文件、上游 `.cpp`、上游用例，并核实

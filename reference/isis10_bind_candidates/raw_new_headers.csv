@@ -8,7 +8,7 @@ IProj.h,class,complete,IProj,ISIS 10-only projection class; dual-version compati
 ImageIoHandler.h,class,candidate,ImageIoHandler,Abstract image-I/O base registered for the completed GdalIoHandler facade
 OsirisRexOcamsOpenCVDistortionMap.h,class,candidate,OsirisRexOcamsOpenCVDistortionMap,Public OCAMS OpenCV distortion model with mission-specific value
 RestfulSpice.h,placeholder,excluded,,Installed header contains no bindable public declaration
-csv2table.h,function,bound,csv2table,Cross-platform facade complete: Linux library adapter and Windows executable backend
+csv2table.h,function,native-app,csv2table,Use the native ISIS APP in every supported version/OS cell; do not bind UserInterface
 eisstitch.h,function,native-app,eisstitch,Use the native ISIS APP; raw UserInterface binding is intentionally excluded
 ocams2isis.h,function,native-app,ocams2isis,Use the native ISIS APP; raw UserInterface binding is intentionally excluded
 restincurl.h,internal,excluded,restincurl implementation types,Third-party HTTP implementation must not become public isis_pybind API

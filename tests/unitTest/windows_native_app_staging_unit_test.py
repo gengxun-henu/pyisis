@@ -595,7 +595,7 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertEqual({name.split("/", 1)[0] for name in names}, {stage.name})
             self.assertFalse(any(name.endswith("/a.zip") for name in names))
             for info in infos:
-                self.assertEqual(info.date_time, (2000, 1, 1, 0, 0, 0))
+                self.assertEqual(info.date_time, (2025, 1, 1, 0, 0, 0))
                 self.assertEqual(info.create_system, 3)
                 self.assertEqual((info.external_attr >> 16) & 0o170000, stat.S_IFREG)
                 self.assertEqual(info.compress_type, zipfile.ZIP_DEFLATED)

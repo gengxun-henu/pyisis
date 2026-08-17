@@ -13,10 +13,10 @@ import uuid
 import zipfile
 
 
-# The DOS epoch (1980) makes some unsigned ISIS executables, notably
+# Historical timestamps make some unsigned ISIS executables, notably
 # lronacecho.exe, hang under Windows compatibility/security handling after
-# extraction. A fixed modern-enough timestamp preserves byte reproducibility.
-ARCHIVE_TIMESTAMP = (2000, 1, 1, 0, 0, 0)
+# extraction. A fixed recent timestamp preserves byte reproducibility.
+ARCHIVE_TIMESTAMP = (2025, 1, 1, 0, 0, 0)
 
 
 def _is_reparse_point(path: Path) -> bool:

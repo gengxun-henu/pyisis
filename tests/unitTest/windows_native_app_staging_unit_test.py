@@ -7,17 +7,23 @@ Updated: 2026-08-18  Geng Xun added package-relative launcher safety and executi
 Updated: 2026-08-18  Geng Xun added unlimited argv and metacharacter regression coverage.
 Updated: 2026-08-18  Geng Xun covered binder-shaped and empty APP arguments.
 Updated: 2026-08-18  Geng Xun added JSON argv coverage for slot transport and native quoting.
+Updated: 2026-08-18  Geng Xun added curated staging and deterministic archive coverage.
 """
 
 from __future__ import annotations
 
+import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 import unittest
+from unittest import mock
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -28,6 +34,247 @@ PUBLIC_LAUNCHER_NAMES = (
     "isis-app.cmd",
     "qnet.cmd",
 )
+STAGE_SCRIPT = REPOSITORY_ROOT / "tools" / "packaging" / "stage_windows_native_apps.py"
+ARCHIVE_SCRIPT = REPOSITORY_ROOT / "tools" / "packaging" / "archive_windows_native_apps.py"
+MANIFEST_SCRIPT = REPOSITORY_ROOT / "tools" / "packaging" / "windows_native_app_manifest.py"
+
+
+def _load_module(name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
+    """Exercise the curated payload boundary independently of a real ISIS build."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.manifest_module = _load_module("native_app_manifest_fixture", MANIFEST_SCRIPT)
+        cls.stage_module = _load_module("native_app_stage_fixture", STAGE_SCRIPT)
+        cls.archive_module = _load_module("native_app_archive_fixture", ARCHIVE_SCRIPT)
+
+    def _write_stage_fixture(self, root: Path) -> SimpleNamespace:
+        isis_prefix = root / "isis-prefix"
+        dependency_prefix = root / "dependency-prefix"
+        minimal_data = root / "minimal-data"
+        output = root / "output"
+        dependency_report = root / "reports" / "dependencies.json"
+
+        for relative in (
+            "bin/xml",
+            "lib",
+            "appdata/templates/maps",
+            "include",
+        ):
+            (isis_prefix / relative).mkdir(parents=True, exist_ok=True)
+        for name in ("reduce", "qnet", "isisui", "unlisted"):
+            (isis_prefix / "bin" / f"{name}.exe").write_bytes(name.encode("ascii"))
+        (isis_prefix / "bin" / "xml" / "reduce.xml").write_text(
+            "<application />\n", encoding="utf-8"
+        )
+        (isis_prefix / "lib" / "isis.dll").write_bytes(b"isis")
+        (isis_prefix / "lib" / "Camera.plugin").write_text(
+            "camera metadata\n", encoding="utf-8"
+        )
+        (isis_prefix / "appdata" / "templates" / "maps" / "map.tpl").write_text(
+            "map\n", encoding="utf-8"
+        )
+        (isis_prefix / "include" / "private.h").write_text(
+            "private\n", encoding="utf-8"
+        )
+        (isis_prefix / "IsisPreferences").write_text(
+            "Group = DataDirectory\n", encoding="utf-8"
+        )
+        (isis_prefix / "LICENSE.md").write_text("license\n", encoding="utf-8")
+
+        for relative in (
+            "Library/plugins/platforms/qwindows.dll",
+            "Library/plugins/imageformats/qjpeg.dll",
+            "Library/plugins/styles/qwindowsvistastyle.dll",
+            "Library/plugins/bearer/qgenericbearer.dll",
+        ):
+            path = dependency_prefix / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(relative.encode("ascii"))
+        (dependency_prefix / "Library" / "bin").mkdir(parents=True, exist_ok=True)
+        (dependency_prefix / "Library" / "bin" / "runtime.dll").write_bytes(b"runtime")
+
+        (minimal_data / "base").mkdir(parents=True)
+        (minimal_data / "base" / "base.test").write_text("data\n", encoding="utf-8")
+
+        contract = self.manifest_module.ReleaseContract(
+            distribution="usgs-isis-native-apps",
+            isis_version="9.0.0",
+            platform="win64",
+            archive_name="usgs-isis-native-apps-9.0.0-win64.zip",
+            root_name="usgs-isis-native-apps-9.0.0-win64",
+            public_cli_apps=("reduce",),
+            public_gui_apps=("qnet",),
+            runtime_helpers=("isisui",),
+            mandatory_apps=("reduce", "qnet"),
+            qt_plugin_globs=(
+                "Library/plugins/platforms/qwindows.dll",
+                "Library/plugins/imageformats/*.dll",
+                "Library/plugins/styles/*.dll",
+            ),
+            forbidden_globs=("include/**", "lib/**/*.lib", "**/*.whl"),
+        )
+        return SimpleNamespace(
+            isis_prefix=isis_prefix,
+            dependency_prefix=dependency_prefix,
+            minimal_data=minimal_data,
+            output=output,
+            dependency_report=dependency_report,
+            contract=contract,
+        )
+
+    @staticmethod
+    def _fake_dependency_closure(
+        seed_files, dependency_prefixes, target_root, dependency_report=None
+    ):
+        del seed_files
+        source = dependency_prefixes[-1] / "Library" / "bin" / "runtime.dll"
+        target_root.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target_root / "runtime.dll")
+        report = {
+            "schema_version": 1,
+            "binaries": [],
+            "files": [
+                {
+                    "name": "runtime.dll",
+                    "source": "Library/bin/runtime.dll",
+                    "target": "runtime.dll",
+                    "import_kind": "direct",
+                    "parents": ["reduce.exe"],
+                }
+            ],
+            "unresolved": [],
+        }
+        if dependency_report is not None:
+            dependency_report.parent.mkdir(parents=True, exist_ok=True)
+            dependency_report.write_text(
+                json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
+        return report
+
+    def _stage(self, fixture):
+        with mock.patch.object(
+            self.stage_module,
+            "copy_dependency_closure",
+            side_effect=self._fake_dependency_closure,
+        ):
+            return self.stage_module.stage_native_apps(
+                fixture.isis_prefix,
+                (fixture.dependency_prefix,),
+                fixture.minimal_data,
+                fixture.contract,
+                fixture.output,
+                fixture.dependency_report,
+            )
+
+    def test_stage_copies_only_declared_payload_and_hashes_every_file(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            result = self._stage(fixture)
+
+            self.assertTrue((result.root / "bin" / "reduce.exe").is_file())
+            self.assertTrue((result.root / "bin" / "qnet.exe").is_file())
+            self.assertTrue((result.root / "bin" / "isisui.exe").is_file())
+            self.assertTrue((result.root / "bin" / "xml" / "reduce.xml").is_file())
+            self.assertFalse((result.root / "bin" / "unlisted.exe").exists())
+            self.assertFalse((result.root / "include").exists())
+            self.assertFalse((result.root / "plugins" / "bearer").exists())
+            self.assertTrue((result.root / "plugins" / "platforms" / "qwindows.dll").is_file())
+            self.assertTrue((result.root / "lib" / "Camera.plugin").is_file())
+            self.assertTrue((result.root / "data" / "base" / "base.test").is_file())
+
+            launch_files = sorted(path.name for path in (result.root / "launch").iterdir())
+            self.assertEqual(
+                launch_files,
+                ["isis-app.cmd", "isis-env.cmd", "isis-launch.ps1", "isis-shell.cmd", "qnet.cmd"],
+            )
+            apps = json.loads(result.apps_manifest.read_text(encoding="utf-8"))
+            self.assertEqual(apps["public_apps"], ["qnet", "reduce"])
+
+            entries = {}
+            for line in result.files_manifest.read_text(encoding="utf-8").splitlines():
+                digest, relative = line.split("  ", 1)
+                entries[relative] = digest
+            expected = {
+                path.relative_to(result.root).as_posix()
+                for path in result.root.rglob("*")
+                if path.is_file() and path != result.files_manifest
+            }
+            self.assertEqual(set(entries), expected)
+            for relative, digest in entries.items():
+                self.assertEqual(
+                    digest,
+                    hashlib.sha256((result.root / relative).read_bytes()).hexdigest(),
+                )
+            self.assertIn("manifest/apps.json", entries)
+            self.assertIn("manifest/build-metadata.json", entries)
+            self.assertNotIn("manifest/files.sha256", entries)
+
+            generated = (
+                result.apps_manifest.read_text(encoding="utf-8")
+                + (result.root / "manifest" / "build-metadata.json").read_text(encoding="utf-8")
+                + result.dependency_report.read_text(encoding="utf-8")
+            )
+            self.assertNotIn(str(fixture.isis_prefix), generated)
+            self.assertNotIn(str(fixture.dependency_prefix), generated)
+            dependency = json.loads(result.dependency_report.read_text(encoding="utf-8"))
+            self.assertEqual(
+                dependency["files"][0]["sha256"],
+                hashlib.sha256(b"runtime").hexdigest(),
+            )
+
+    def test_stage_rejects_contract_root_escape(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            values = dict(vars(fixture.contract))
+            values["root_name"] = "../escaped"
+            fixture.contract = self.manifest_module.ReleaseContract(**values)
+            with self.assertRaisesRegex(ValueError, "root_name"):
+                self._stage(fixture)
+            self.assertFalse((fixture.output.parent / "escaped").exists())
+
+    def test_deterministic_zip_is_byte_reproducible(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            stage = self._stage(fixture).root
+            first = self.archive_module.create_deterministic_zip(
+                stage, stage.parent / "a.zip"
+            )
+            second = self.archive_module.create_deterministic_zip(
+                stage, stage.parent / "b.zip"
+            )
+            self.assertEqual(first["sha256"], second["sha256"])
+            self.assertEqual(
+                (stage.parent / "a.zip").read_bytes(),
+                (stage.parent / "b.zip").read_bytes(),
+            )
+            self.assertEqual(first["root_name"], stage.name)
+
+    def test_packaging_scripts_expose_orchestrator_cli(self):
+        for script, expected in (
+            (STAGE_SCRIPT, "--dependency-report"),
+            (ARCHIVE_SCRIPT, "--archive"),
+        ):
+            with self.subTest(script=script.name):
+                result = subprocess.run(
+                    [sys.executable, str(script), "--help"],
+                    capture_output=True,
+                    text=True,
+                    encoding="utf-8",
+                    errors="replace",
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(expected, result.stdout)
 
 
 @unittest.skipUnless(os.name == "nt", "Windows CMD launchers require Windows")

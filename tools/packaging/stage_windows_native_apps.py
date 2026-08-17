@@ -1,0 +1,354 @@
+"""Stage the curated Windows ISIS native-application payload."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from dataclasses import dataclass
+from pathlib import Path
+import re
+import shutil
+from tempfile import TemporaryDirectory
+
+try:
+    from tools.packaging.windows_native_app_manifest import (
+        ReleaseContract,
+        load_release_contract,
+    )
+    from tools.packaging.windows_pe_dependencies import copy_dependency_closure
+except ModuleNotFoundError:
+    from windows_native_app_manifest import ReleaseContract, load_release_contract
+    from windows_pe_dependencies import copy_dependency_closure
+
+
+REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+LAUNCH_SOURCE = REPOSITORY_ROOT / "packaging" / "native-apps-win64" / "launch"
+LAUNCH_FILES = (
+    "isis-app.cmd",
+    "isis-env.cmd",
+    "isis-launch.ps1",
+    "isis-shell.cmd",
+    "qnet.cmd",
+)
+TEXT_SUFFIXES = {"", ".cmd", ".json", ".md", ".plugin", ".ps1", ".sha256", ".txt", ".xml"}
+FORBIDDEN_ABSOLUTE_RE = re.compile(
+    rb"(?i)[a-z]:[\\/][^\x00\r\n]{0,260}(?:conda|miniconda|pyisis-win-env|[\\/]build[\\/])"
+)
+
+
+@dataclass(frozen=True)
+class StageResult:
+    root: Path
+    apps_manifest: Path
+    files_manifest: Path
+    dependency_report: Path
+
+
+def _existing_directory(path: Path, label: str) -> Path:
+    try:
+        resolved = Path(path).resolve(strict=True)
+    except OSError as error:
+        raise FileNotFoundError(f"{label} not found: {path}") from error
+    if not resolved.is_dir():
+        raise NotADirectoryError(f"{label} is not a directory: {path}")
+    return resolved
+
+
+def _require_below(path: Path, root: Path, label: str) -> Path:
+    resolved = path.resolve(strict=True)
+    try:
+        resolved.relative_to(root)
+    except ValueError as error:
+        raise ValueError(f"{label} escapes declared source root: {path}") from error
+    return resolved
+
+
+def _destination(root: Path, relative: Path) -> Path:
+    if relative.is_absolute() or ".." in relative.parts:
+        raise ValueError(f"unsafe staging destination: {relative}")
+    target = root.joinpath(*relative.parts)
+    try:
+        target.resolve(strict=False).relative_to(root)
+    except ValueError as error:
+        raise ValueError(f"staging destination escapes package root: {relative}") from error
+    return target
+
+
+def _copy_file(source: Path, source_root: Path, stage_root: Path, relative: Path) -> Path:
+    source = _require_below(source, source_root, "payload file")
+    if not source.is_file():
+        raise FileNotFoundError(f"required payload file not found: {source}")
+    target = _destination(stage_root, relative)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, target)
+    return target
+
+
+def _copy_tree(source: Path, source_root: Path, target_root: Path) -> None:
+    source = _require_below(source, source_root, "payload directory")
+    if not source.is_dir():
+        raise FileNotFoundError(f"required payload directory not found: {source}")
+    for item in sorted(source.rglob("*"), key=lambda value: value.relative_to(source).as_posix()):
+        if item.is_symlink():
+            _require_below(item, source_root, "payload symlink")
+        if item.is_file():
+            relative = item.relative_to(source)
+            _copy_file(item, source_root, target_root, relative)
+
+
+def write_apps_manifest(root: Path, contract: ReleaseContract) -> Path:
+    path = root / "manifest" / "apps.json"
+    payload = {
+        "schema_version": 1,
+        "distribution": contract.distribution,
+        "isis_version": contract.isis_version,
+        "platform": contract.platform,
+        "public_cli_apps": list(contract.public_cli_apps),
+        "public_gui_apps": list(contract.public_gui_apps),
+        "public_apps": list(contract.public_apps),
+        "runtime_helpers": list(contract.runtime_helpers),
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+def _write_build_metadata(root: Path, contract: ReleaseContract) -> Path:
+    path = root / "manifest" / "build-metadata.json"
+    payload = {
+        "schema_version": 1,
+        "distribution": contract.distribution,
+        "isis_version": contract.isis_version,
+        "platform": contract.platform,
+        "public_app_count": len(contract.public_apps),
+        "runtime_helpers": list(contract.runtime_helpers),
+        "generated_manifests_hashed": [
+            "manifest/apps.json",
+            "manifest/build-metadata.json",
+        ],
+        "files_manifest_excludes": ["manifest/files.sha256"],
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+def _write_package_readme(root: Path, contract: ReleaseContract) -> Path:
+    path = root / "README.md"
+    path.write_text(
+        f"# USGS ISIS {contract.isis_version} native APPs for Windows 11 x64\n\n"
+        "Run `launch\\isis-shell.cmd` for an initialized command prompt, "
+        "`launch\\isis-app.cmd <name> [arguments]` for a public APP, or "
+        "`launch\\qnet.cmd` for qnet. The bundled minimal data is used unless "
+        "ISISDATA already names an existing external data directory.\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def _write_files_manifest(root: Path) -> Path:
+    path = root / "manifest" / "files.sha256"
+    members = sorted(
+        (
+            item
+            for item in root.rglob("*")
+            if item.is_file() and item != path
+        ),
+        key=lambda item: item.relative_to(root).as_posix(),
+    )
+    lines = [
+        f"{hashlib.sha256(item.read_bytes()).hexdigest()}  {item.relative_to(root).as_posix()}"
+        for item in members
+    ]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
+def _enrich_dependency_report(report: dict[str, object], lib_root: Path) -> None:
+    for item in report.get("files", []):
+        if not isinstance(item, dict) or not isinstance(item.get("name"), str):
+            raise ValueError("dependency report contains an invalid file entry")
+        target = lib_root / item["name"]
+        if not target.is_file():
+            raise FileNotFoundError(f"staged dependency missing: {item['name']}")
+        item["target"] = f"lib/{item['name']}"
+        item["sha256"] = hashlib.sha256(target.read_bytes()).hexdigest()
+
+
+def _reject_forbidden_content(root: Path, contract: ReleaseContract) -> None:
+    for pattern in contract.forbidden_globs:
+        matches = [path for path in root.glob(pattern) if path.exists()]
+        if matches:
+            raise ValueError(f"forbidden staged content matches {pattern}: {matches[0]}")
+    for path in root.rglob("*"):
+        if path.is_file() and path.suffix.lower() in TEXT_SUFFIXES:
+            if FORBIDDEN_ABSOLUTE_RE.search(path.read_bytes()):
+                raise ValueError(f"staged file contains an absolute build/conda path: {path}")
+
+
+def stage_native_apps(
+    isis_prefix: Path,
+    dependency_prefixes: tuple[Path, ...],
+    minimal_data_root: Path,
+    release_contract: ReleaseContract,
+    stage_parent: Path,
+    dependency_report: Path,
+) -> StageResult:
+    """Create one fail-closed portable payload below *stage_parent*."""
+
+    isis_prefix = _existing_directory(isis_prefix, "ISIS prefix")
+    minimal_data_root = _existing_directory(minimal_data_root, "minimal data root")
+    dependency_prefixes = tuple(
+        _existing_directory(path, "dependency prefix") for path in dependency_prefixes
+    )
+    stage_parent = Path(stage_parent)
+    stage_parent.mkdir(parents=True, exist_ok=True)
+    stage_parent = stage_parent.resolve(strict=True)
+
+    root_name = release_contract.root_name
+    if not root_name or Path(root_name).name != root_name or root_name in {".", ".."}:
+        raise ValueError(f"unsafe release root_name: {root_name!r}")
+    root = _destination(stage_parent, Path(root_name))
+    if root.is_symlink():
+        raise ValueError(f"staging root must not be a symlink: {root}")
+    if root.exists():
+        shutil.rmtree(root)
+    root.mkdir()
+
+    dependency_report = Path(dependency_report)
+    dependency_report.parent.mkdir(parents=True, exist_ok=True)
+    dependency_report = dependency_report.resolve(strict=False)
+    try:
+        dependency_report.relative_to(root)
+    except ValueError:
+        pass
+    else:
+        raise ValueError("dependency report must be outside the staged package")
+
+    bin_source = isis_prefix / "bin"
+    seeds: list[Path] = []
+    for app in release_contract.public_apps:
+        seeds.append(
+            _copy_file(
+                bin_source / f"{app}.exe",
+                isis_prefix,
+                root,
+                Path("bin") / f"{app}.exe",
+            )
+        )
+    for helper in release_contract.runtime_helpers:
+        seeds.append(
+            _copy_file(
+                bin_source / f"{helper}.exe",
+                isis_prefix,
+                root,
+                Path("bin") / f"{helper}.exe",
+            )
+        )
+    for app in release_contract.public_cli_apps:
+        _copy_file(
+            bin_source / "xml" / f"{app}.xml",
+            isis_prefix,
+            root,
+            Path("bin") / "xml" / f"{app}.xml",
+        )
+
+    isis_dll = _copy_file(
+        isis_prefix / "lib" / "isis.dll",
+        isis_prefix,
+        root,
+        Path("lib") / "isis.dll",
+    )
+    seeds.append(isis_dll)
+    for plugin in sorted(
+        (isis_prefix / "lib").glob("*.plugin"), key=lambda path: path.name.lower()
+    ):
+        _copy_file(plugin, isis_prefix, root, Path("lib") / plugin.name)
+
+    _copy_file(isis_prefix / "IsisPreferences", isis_prefix, root, Path("IsisPreferences"))
+    _copy_file(isis_prefix / "LICENSE.md", isis_prefix, root, Path("LICENSE.md"))
+    _copy_tree(isis_prefix / "appdata", isis_prefix, root / "appdata")
+    _copy_tree(minimal_data_root, minimal_data_root, root / "data")
+    _write_package_readme(root, release_contract)
+    for name in LAUNCH_FILES:
+        _copy_file(LAUNCH_SOURCE / name, REPOSITORY_ROOT, root, Path("launch") / name)
+
+    for pattern in release_contract.qt_plugin_globs:
+        matches: list[tuple[Path, Path]] = []
+        for prefix in dependency_prefixes:
+            matches.extend((source, prefix) for source in prefix.glob(pattern) if source.is_file())
+        if not matches:
+            raise FileNotFoundError(f"Qt plugin pattern matched no files: {pattern}")
+        for source, prefix in sorted(
+            matches,
+            key=lambda item: (item[0].name.lower(), str(item[0]).lower()),
+        ):
+            relative = source.relative_to(prefix / "Library" / "plugins")
+            staged = _copy_file(source, prefix, root, Path("plugins") / relative)
+            seeds.append(staged)
+
+    with TemporaryDirectory(prefix="native-app-deps-", dir=stage_parent) as closure_dir:
+        closure_root = Path(closure_dir)
+        report = copy_dependency_closure(
+            tuple(seeds),
+            (isis_prefix, *dependency_prefixes),
+            closure_root,
+            dependency_report,
+        )
+        for item in report.get("files", []):
+            if not isinstance(item, dict) or not isinstance(item.get("target"), str):
+                raise ValueError("dependency report contains an invalid file entry")
+            source = closure_root / Path(item["target"])
+            name = item.get("name")
+            if not isinstance(name, str) or Path(name).name != name:
+                raise ValueError("dependency report contains an unsafe DLL name")
+            _copy_file(source, closure_root, root, Path("lib") / name)
+
+    _enrich_dependency_report(report, root / "lib")
+    dependency_report.write_text(
+        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    if FORBIDDEN_ABSOLUTE_RE.search(dependency_report.read_bytes()):
+        raise ValueError("dependency report contains an absolute build/conda path")
+
+    expected_executables = {
+        f"{name}.exe"
+        for name in (*release_contract.public_apps, *release_contract.runtime_helpers)
+    }
+    actual_executables = {path.name for path in (root / "bin").glob("*.exe")}
+    if actual_executables != expected_executables:
+        raise ValueError("staged executable inventory does not match the release contract")
+
+    apps_manifest = write_apps_manifest(root, release_contract)
+    _write_build_metadata(root, release_contract)
+    _reject_forbidden_content(root, release_contract)
+    files_manifest = _write_files_manifest(root)
+    return StageResult(root, apps_manifest, files_manifest, dependency_report)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--isis-prefix", required=True, type=Path)
+    parser.add_argument("--dependency-prefix", action="append", default=[], type=Path)
+    parser.add_argument("--minimal-data-root", required=True, type=Path)
+    parser.add_argument("--release", required=True, type=Path)
+    parser.add_argument("--cli-manifest", required=True, type=Path)
+    parser.add_argument("--stage-parent", required=True, type=Path)
+    parser.add_argument("--dependency-report", required=True, type=Path)
+    args = parser.parse_args()
+    contract = load_release_contract(args.release, args.cli_manifest)
+    result = stage_native_apps(
+        args.isis_prefix,
+        tuple(args.dependency_prefix),
+        args.minimal_data_root,
+        contract,
+        args.stage_parent,
+        args.dependency_report,
+    )
+    print(result.root)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

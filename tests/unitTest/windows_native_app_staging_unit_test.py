@@ -10,6 +10,7 @@ Updated: 2026-08-18  Geng Xun added JSON argv coverage for slot transport and na
 Updated: 2026-08-18  Geng Xun added curated staging and deterministic archive coverage.
 Updated: 2026-08-18  Geng Xun hardened transactional publication and reparse-point coverage.
 Updated: 2026-08-18  Geng Xun covered authoritative PE seed identity for strict validation.
+Updated: 2026-08-18  Geng Xun covered bundled clean-host camera validation data.
 """
 
 from __future__ import annotations
@@ -279,6 +280,29 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
                 fixture, old_root, old_stage, old_report
             )
 
+    def test_missing_validation_data_preserves_previous_outputs(self):
+        for missing_name in ("EN0108828322M_iof.cub", "equi.map"):
+            with self.subTest(missing_name=missing_name), TemporaryDirectory() as temp_dir:
+                fixture = self._write_stage_fixture(Path(temp_dir))
+                old_root, old_stage, old_report = self._write_old_outputs(fixture)
+                validation_source = Path(temp_dir) / "validation-source"
+                validation_source.mkdir()
+                for name in ("EN0108828322M_iof.cub", "equi.map"):
+                    if name != missing_name:
+                        (validation_source / name).write_bytes(name.encode("ascii"))
+
+                with mock.patch.object(
+                    self.stage_module,
+                    "VALIDATION_DATA_SOURCE",
+                    validation_source,
+                ):
+                    with self.assertRaises(FileNotFoundError):
+                        self._stage(fixture)
+
+                self._assert_old_outputs_unchanged(
+                    fixture, old_root, old_stage, old_report
+                )
+
     def test_publish_rename_failure_restores_previous_outputs(self):
         for failed_output in ("stage", "report"):
             with self.subTest(failed_output=failed_output), TemporaryDirectory() as temp_dir:
@@ -339,7 +363,11 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertTrue(result.root.is_dir())
 
     def test_stager_rejects_reparse_source_and_destination(self):
-        for rejected_name in ("reduce.exe", "usgs-isis-native-apps-9.0.0-win64"):
+        for rejected_name in (
+            "reduce.exe",
+            "EN0108828322M_iof.cub",
+            "usgs-isis-native-apps-9.0.0-win64",
+        ):
             with self.subTest(rejected_name=rejected_name), TemporaryDirectory() as temp_dir:
                 fixture = self._write_stage_fixture(Path(temp_dir))
                 if rejected_name == fixture.contract.root_name:
@@ -367,6 +395,10 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertTrue((result.root / "plugins" / "platforms" / "qwindows.dll").is_file())
             self.assertTrue((result.root / "lib" / "Camera.plugin").is_file())
             self.assertTrue((result.root / "data" / "base" / "base.test").is_file())
+            for name in ("EN0108828322M_iof.cub", "equi.map"):
+                staged = result.root / "validation-data" / name
+                source = REPOSITORY_ROOT / "tests" / "data" / "mosrange" / name
+                self.assertEqual(staged.read_bytes(), source.read_bytes())
 
             launch_files = sorted(path.name for path in (result.root / "launch").iterdir())
             self.assertEqual(
@@ -394,6 +426,21 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertIn("manifest/apps.json", entries)
             self.assertIn("manifest/build-metadata.json", entries)
             self.assertNotIn("manifest/files.sha256", entries)
+            for name in ("EN0108828322M_iof.cub", "equi.map"):
+                relative = f"validation-data/{name}"
+                self.assertIn(relative, entries)
+                self.assertEqual(
+                    entries[relative],
+                    hashlib.sha256(
+                        (
+                            REPOSITORY_ROOT
+                            / "tests"
+                            / "data"
+                            / "mosrange"
+                            / name
+                        ).read_bytes()
+                    ).hexdigest(),
+                )
 
             generated = (
                 result.apps_manifest.read_text(encoding="utf-8")
@@ -536,6 +583,10 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             self.assertEqual(first["root_name"], stage.name)
             with zipfile.ZipFile(stage.parent / "a.zip") as archive:
                 infos = archive.infolist()
+                validation_members = {
+                    name: archive.read(f"{stage.name}/validation-data/{name}")
+                    for name in ("EN0108828322M_iof.cub", "equi.map")
+                }
             names = [info.filename for info in infos]
             self.assertEqual(names, sorted(names))
             self.assertEqual({name.split("/", 1)[0] for name in names}, {stage.name})
@@ -545,6 +596,17 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
                 self.assertEqual(info.create_system, 3)
                 self.assertEqual((info.external_attr >> 16) & 0o170000, stat.S_IFREG)
                 self.assertEqual(info.compress_type, zipfile.ZIP_DEFLATED)
+            for name, content in validation_members.items():
+                self.assertEqual(
+                    content,
+                    (
+                        REPOSITORY_ROOT
+                        / "tests"
+                        / "data"
+                        / "mosrange"
+                        / name
+                    ).read_bytes(),
+                )
 
     def test_archive_failures_preserve_previous_zip_and_remove_temps(self):
         for failure_kind in ("read", "write", "replace"):

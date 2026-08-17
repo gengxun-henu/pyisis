@@ -27,6 +27,8 @@ except ModuleNotFoundError:
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 LAUNCH_SOURCE = REPOSITORY_ROOT / "packaging" / "native-apps-win64" / "launch"
+VALIDATION_DATA_SOURCE = REPOSITORY_ROOT / "tests" / "data" / "mosrange"
+VALIDATION_DATA_FILES = ("EN0108828322M_iof.cub", "equi.map")
 LAUNCH_FILES = (
     "isis-app.cmd",
     "isis-env.cmd",
@@ -304,6 +306,9 @@ def stage_native_apps(
 
     isis_prefix = _existing_directory(isis_prefix, "ISIS prefix")
     minimal_data_root = _existing_directory(minimal_data_root, "minimal data root")
+    validation_data_source = _existing_directory(
+        VALIDATION_DATA_SOURCE, "validation data source"
+    )
     dependency_prefixes = tuple(
         _existing_directory(path, "dependency prefix") for path in dependency_prefixes
     )
@@ -405,6 +410,13 @@ def stage_native_apps(
         _copy_file(isis_prefix / "LICENSE.md", isis_prefix, root, Path("LICENSE.md"))
         _copy_tree(isis_prefix / "appdata", isis_prefix, root / "appdata")
         _copy_tree(minimal_data_root, minimal_data_root, root / "data")
+        for name in VALIDATION_DATA_FILES:
+            _copy_file(
+                validation_data_source / name,
+                validation_data_source,
+                root,
+                Path("validation-data") / name,
+            )
         _write_package_readme(root, release_contract)
         for name in LAUNCH_FILES:
             _copy_file(

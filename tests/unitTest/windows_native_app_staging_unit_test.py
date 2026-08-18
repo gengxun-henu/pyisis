@@ -522,6 +522,7 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
             )
             binary_names = [item["binary"] for item in dependency["binaries"]]
             expected_binaries = {
+                "CameraModel.dll",
                 "isis.dll",
                 "isisui.exe",
                 "qjpeg.dll",

@@ -140,6 +140,12 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
             re.compile(r"if \(\$completed\)[\s\S]*Remove-Item -LiteralPath \$resolvedWorkDir"),
         )
 
+    def test_orchestrator_uses_the_declared_validation_report_name(self):
+        script = BUILD_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn('"isis-native-apps-{0}-{1}-validation.json" -f', script)
+        self.assertIn("[string]$release.isis_version", script)
+        self.assertIn("[string]$release.platform", script)
+
     def test_orchestrator_accepts_repeated_dependency_prefixes_and_forwards_both(self):
         build_windows_root = REPOSITORY_ROOT / "build/windows"
         build_windows_root.mkdir(parents=True, exist_ok=True)

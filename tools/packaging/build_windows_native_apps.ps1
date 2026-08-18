@@ -99,7 +99,9 @@ $cliManifest = Join-Path $repoRoot "ports\windows\isis\windows-app-manifest.json
 $release = Get-Content -Raw -LiteralPath $releaseConfig | ConvertFrom-Json
 $archive = Join-Path $resolvedOutputDir ([string]$release.archive_name)
 $dependencyReport = Join-Path $resolvedOutputDir (([System.IO.Path]::GetFileNameWithoutExtension([string]$release.archive_name)) + "-dll-dependencies.json")
-$validationReport = Join-Path $resolvedReportDir (([System.IO.Path]::GetFileNameWithoutExtension([string]$release.archive_name)) + "-validation.json")
+$validationReportName = "isis-native-apps-{0}-{1}-validation.json" -f `
+    [string]$release.isis_version, [string]$release.platform
+$validationReport = Join-Path $resolvedReportDir $validationReportName
 $stageParent = Join-Path $resolvedWorkDir "stage"
 $stageRoot = Join-Path $stageParent ([string]$release.root_name)
 $runtimeWork = Join-Path $resolvedWorkDir "runtime logs"

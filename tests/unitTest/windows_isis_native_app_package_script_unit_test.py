@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-08-18
-Last Modified: 2026-08-18
+Last Modified: 2026-08-19
 Updated: 2026-08-18  Geng Xun added runtime-matrix and guarded-orchestration coverage.
 Updated: 2026-08-18  Geng Xun added repeated-prefix and descendant GUI-process fixtures.
 Updated: 2026-08-18  Geng Xun covered lossless name-value runtime launcher arguments.
+Updated: 2026-08-19  Geng Xun covered clean-host GUI startup latency.
 """
 
 from pathlib import Path
@@ -92,6 +93,13 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
         self.assertIn("runtime-launch-", function)
         self.assertIn("$env:ComSpec /d /c", function)
         self.assertNotIn("& $IsisAppLauncher", function)
+
+    def test_gui_probe_timeout_covers_measured_clean_host_latency(self):
+        script = RUNTIME_SCRIPT.read_text(encoding="utf-8")
+        timeout = re.search(r"\$guiProbeTimeoutSeconds\s*=\s*(\d+)", script)
+        self.assertIsNotNone(timeout)
+        self.assertGreaterEqual(int(timeout.group(1)), 300)
+        self.assertIn("AddSeconds($guiProbeTimeoutSeconds)", script)
 
     def test_cam2map_uses_the_camera_cube_target_instead_of_the_mars_map_target(self):
         script = RUNTIME_SCRIPT.read_text(encoding="utf-8")
@@ -217,7 +225,11 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
     def test_gui_probe_tracks_real_descendant_windows_and_cleans_every_target(self):
         compiler = Path(r"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe")
         self.assertTrue(compiler.is_file(), "WinForms fixture compiler is required")
-        with tempfile.TemporaryDirectory(prefix="native package & spaces-") as temporary_directory:
+        build_windows_root = REPOSITORY_ROOT / "build/windows"
+        build_windows_root.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(
+            prefix="native package & spaces-", dir=build_windows_root
+        ) as temporary_directory:
             root = Path(temporary_directory)
             source = root / "gui fixture.cs"
             source.write_text(
@@ -259,6 +271,14 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
                     f'powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%~dp0worker.ps1" "%~dp0{name}.exe" "{name} fixture window"\r\n',
                     encoding="utf-8",
                 )
+            # Establish Windows security-scan cache entries before the timed
+            # process-tree assertions; otherwise a newly copied unsigned EXE
+            # can be denied transiently before the probe itself starts.
+            for target in targets[1:]:
+                warmup = subprocess.Popen([str(target), "fixture warmup"])
+                time.sleep(0.5)
+                warmup.terminate()
+                warmup.wait(timeout=5)
             old_reduce = subprocess.Popen([str(targets[0]), "old reduce window"])
             try:
                 time.sleep(0.5)

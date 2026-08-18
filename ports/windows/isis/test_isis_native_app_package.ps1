@@ -9,6 +9,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 2.0
+$guiProbeTimeoutSeconds = 300
 
 # PowerShell rejects a normally declared array parameter when callers repeat
 # its name. Parse the documented repeatable -ForbiddenPath form explicitly.
@@ -124,7 +125,7 @@ function Invoke-GuiProbe {
     $target = $null
     $probeError = $null
     try {
-        $deadline = [DateTime]::UtcNow.AddSeconds(30)
+        $deadline = [DateTime]::UtcNow.AddSeconds($guiProbeTimeoutSeconds)
         do {
             Start-Sleep -Milliseconds 250
             $processRows = @(Get-CimInstance Win32_Process)

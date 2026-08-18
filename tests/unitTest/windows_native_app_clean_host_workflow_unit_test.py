@@ -51,6 +51,10 @@ class WindowsNativeAppCleanHostWorkflowTest(unittest.TestCase):
         self.assertIn("validate_windows_native_apps.py", bind_job)
         self.assertIn("actions/upload-artifact@v4", bind_job)
 
+    def test_push_trigger_is_scoped_to_the_milestone_feature_branch(self):
+        workflow = WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn("  push:\n    branches:\n      - feature/m04-windows-pyisis-wheelhouse", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

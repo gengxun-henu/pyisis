@@ -2,6 +2,9 @@ name: windows-native-app-clean-host
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/m04-windows-pyisis-wheelhouse
 
 permissions:
   contents: read

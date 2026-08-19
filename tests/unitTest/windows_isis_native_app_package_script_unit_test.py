@@ -7,6 +7,7 @@ Updated: 2026-08-18  Geng Xun added runtime-matrix and guarded-orchestration cov
 Updated: 2026-08-18  Geng Xun added repeated-prefix and descendant GUI-process fixtures.
 Updated: 2026-08-18  Geng Xun covered lossless name-value runtime launcher arguments.
 Updated: 2026-08-19  Geng Xun covered clean-host GUI startup latency.
+Updated: 2026-08-19  Geng Xun made the WinForms fixture retain its process ancestry.
 """
 
 from pathlib import Path
@@ -257,8 +258,13 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
             worker = root / "worker.ps1"
             worker.write_text(
                 "param([string]$Target, [string]$Title)\n"
-                "& $Target $Title\n"
-                "exit $LASTEXITCODE\n",
+                "$startInfo = New-Object System.Diagnostics.ProcessStartInfo\n"
+                "$startInfo.FileName = $Target\n"
+                "$startInfo.Arguments = '\"' + $Title + '\"'\n"
+                "$startInfo.UseShellExecute = $false\n"
+                "$process = [System.Diagnostics.Process]::Start($startInfo)\n"
+                "$process.WaitForExit()\n"
+                "exit $process.ExitCode\n",
                 encoding="utf-8",
             )
             targets = []

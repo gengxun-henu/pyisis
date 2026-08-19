@@ -210,23 +210,16 @@ distribution as shown above; pip resolves the included local dependencies.
 
 You do not need to select or install the dependency wheels individually.
 
-ISIS 10 builds expose one targeted application facade for attaching CSV data
-as a typed ISIS table:
+Use the native ISIS `csv2table` application to attach CSV data as a typed ISIS
+table:
 
-```python
-import isis_pybind as ip
-
-ip.csv2table(
-    "measurements.csv",
-    "target.cub",
-    "Measurements",
-    coltypes=["Double", "Text"],
-)
+```text
+Linux:  csv2table CSV=input.csv TO=target.cub TABLENAME=MyTable
+Windows portable archive: launch\isis-app.cmd csv2table CSV=input.csv TO=target.cub TABLENAME=MyTable
 ```
 
-The same Python call uses the ISIS library directly on Linux and the packaged
-`csv2table.exe` on Windows. It is not exported by ISIS 9 builds, and the
-underlying application runner remains private.
+Python orchestration may use the standard library's `subprocess`, but PyISIS
+publishes no `csv2table` helper or in-process binding.
 
 ## Scope and limitations
 

@@ -2,11 +2,12 @@
 
 Author: Geng Xun
 Created: 2026-07-23
-Last Modified: 2026-07-24
+Last Modified: 2026-08-17
 Updated: 2026-07-23  Geng Xun added source-diff and generated-inventory coverage.
 Updated: 2026-07-24  Geng Xun added installed-header discovery and classification-gate coverage.
 Updated: 2026-07-24  Geng Xun covered C++ .hpp discovery for the official ISIS 10 prefix.
 Updated: 2026-08-02  Geng Xun added final ISIS APP disposition coverage.
+Updated: 2026-08-17  Geng Xun covered csv2table as a native ISIS APP only.
 """
 
 from __future__ import annotations
@@ -59,18 +60,17 @@ class Isis10BindInventoryUnitTest(unittest.TestCase):
 
     def test_application_headers_have_final_dispositions(self) -> None:
         classifications = inventory.HEADER_CLASSIFICATIONS
-        self.assertEqual(
-            classifications["csv2table.h"].disposition,
-            "bound",
+        for header in ("csv2table.h", "ocams2isis.h", "eisstitch.h"):
+            self.assertEqual(classifications[header].disposition, "native-app")
+
+    def test_csv2table_inventory_does_not_advertise_a_python_binding(self) -> None:
+        candidate = next(
+            item
+            for item in inventory.FUNCTION_CANDIDATES
+            if item.function_name == "csv2table"
         )
-        self.assertEqual(
-            classifications["ocams2isis.h"].disposition,
-            "native-app",
-        )
-        self.assertEqual(
-            classifications["eisstitch.h"].disposition,
-            "native-app",
-        )
+        self.assertEqual(candidate.proposed_python_name, "N/A (native ISIS APP)")
+        self.assertIn("不新增", candidate.recommendation)
 
     def test_installed_header_diff_is_discovered_without_a_curated_seed(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

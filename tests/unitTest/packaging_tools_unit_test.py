@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-15
+Last Modified: 2026-08-17
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -30,6 +30,11 @@ Updated: 2026-07-26  Geng Xun covered the 149-APP Windows promotion.
 Updated: 2026-08-05  Geng Xun covered complete Windows dependency-prefix isolation.
 Updated: 2026-08-05  Geng Xun covered the Windows 11 runner readiness contract.
 Updated: 2026-08-15  Geng Xun required CRLF-safe context handling for Windows ISIS patches.
+Updated: 2026-08-16  Geng Xun added structured Windows wheel clean-install evidence coverage.
+Updated: 2026-08-16  Geng Xun added isolated-install, stale-report, unittest-count, and command-serialization coverage.
+Updated: 2026-08-17  Geng Xun aligned Windows APP inventory coverage with the csv2table 150-APP manifest.
+Updated: 2026-08-17  Geng Xun covered manifest-only Windows APP priority refresh integrity.
+Updated: 2026-08-18  Geng Xun recorded csv2table's verified four-cell native APP status.
 """
 
 from __future__ import annotations
@@ -37,6 +42,9 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import sys
+from tempfile import TemporaryDirectory
 import unittest
 from unittest import mock
 
@@ -302,7 +310,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
             "trim",
         }
         apps = {app["name"]: app for app in manifest["apps"]}
-        self.assertEqual(len(apps), 149)
+        self.assertEqual(len(apps), 150)
         self.assertTrue(behavior_apps.issubset(apps))
         w1_apps = {
             name
@@ -484,6 +492,22 @@ class PackagingToolsUnitTest(unittest.TestCase):
             "minimal_passed",
         )
 
+        csv2table = apps["csv2table"]
+        for version in ("9.0.0", "10.0.0"):
+            with self.subTest(app="csv2table", version=version):
+                self.assertEqual(
+                    csv2table["versions"][version]["build_status"],
+                    "compiled_installed",
+                )
+                self.assertEqual(
+                    csv2table["versions"][version]["smoke_status"],
+                    "minimal_passed",
+                )
+                self.assertEqual(
+                    csv2table["versions"][version]["linux_comparison"],
+                    "cross_platform_passed",
+                )
+
         configure_script = (
             WINDOWS_ISIS_DIR / "configure_isis.ps1"
         ).read_text(encoding="utf-8")
@@ -501,7 +525,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         batch_smoke = (
             WINDOWS_ISIS_DIR / "test_isis_app_batch_smoke.ps1"
         ).read_text(encoding="utf-8")
-        self.assertIn("$appNames.Count -lt 149", batch_smoke)
+        self.assertIn("$appNames.Count -lt 150", batch_smoke)
         self.assertIn('Join-Path $Prefix "bin\\$Name.exe"', batch_smoke)
         self.assertIn('Invoke-IsisApp $appName @("-HELP")', batch_smoke)
         for name in behavior_apps:
@@ -514,7 +538,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("runs-on: windows-2022", workflow)
         self.assertIn("-IsisVersion 10.0.0", workflow)
         self.assertIn("-WindowsApps $apps", workflow)
-        self.assertIn("Build and smoke-test 149 ISIS 10 APPs", workflow)
+        self.assertIn("Build and smoke-test 150 ISIS 10 APPs", workflow)
         self.assertIn("test_isis_app_batch_smoke.ps1", workflow)
         self.assertIn("windows-isis10-app-batch-smoke-logs", workflow)
 
@@ -579,23 +603,144 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertEqual(apps["hrsc2isis"]["importance_score"], "4")
         self.assertEqual(
             sum(row["current_manifest"] == "yes" for row in rows),
-            149,
+            150,
         )
+
+        csv2table = next(row for row in rows if row["app"] == "csv2table")
+        self.assertEqual(csv2table["current_manifest"], "yes")
 
         summary = WINDOWS_ISIS_APP_PRIORITY_SUMMARY.read_text(encoding="utf-8")
         self.assertIn("APP 总数：365", summary)
         self.assertIn("固定源码提交", summary)
-        self.assertIn("W0-current-batch | 149", summary)
+        self.assertIn("W0-current-batch | 150", summary)
+
+    def test_windows_app_priority_manifest_only_refresh_preserves_ranking_data(self):
+        import csv
+
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            csv_output = root / "windows-app-priority.csv"
+            summary_output = root / "windows-app-priority.md"
+            manifest_path = root / "windows-app-manifest.json"
+            csv_output.write_bytes(WINDOWS_ISIS_APP_PRIORITY.read_bytes())
+            manifest_path.write_bytes(WINDOWS_ISIS_APP_MANIFEST.read_bytes())
+
+            with csv_output.open(encoding="utf-8", newline="") as priority_file:
+                reader = csv.DictReader(priority_file)
+                before_rows = list(reader)
+                self.assertIsNotNone(reader.fieldnames)
+            for row in before_rows:
+                if row["app"] == "csv2table":
+                    row["current_manifest"] = "no"
+                    row["recommended_wave"] = "W4-medium"
+            with csv_output.open("w", encoding="utf-8", newline="") as priority_file:
+                writer = csv.DictWriter(
+                    priority_file,
+                    fieldnames=reader.fieldnames,
+                    lineterminator="\n",
+                )
+                writer.writeheader()
+                writer.writerows(before_rows)
+
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(WINDOWS_ISIS_DIR / "rank_isis_apps.py"),
+                    "--refresh-manifest-only",
+                    "--manifest",
+                    str(manifest_path),
+                    "--csv-output",
+                    str(csv_output),
+                    "--summary-output",
+                    str(summary_output),
+                ],
+                cwd=str(PROJECT_ROOT),
+                text=True,
+                capture_output=True,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+
+            with csv_output.open(encoding="utf-8", newline="") as priority_file:
+                after_rows = list(csv.DictReader(priority_file))
+
+            self.assertEqual(len(after_rows), 365)
+            self.assertEqual(
+                [row["app"] for row in after_rows],
+                [row["app"] for row in before_rows],
+            )
+            membership_fields = {"current_manifest", "recommended_wave"}
+            for before, after in zip(before_rows, after_rows, strict=True):
+                with self.subTest(app=before["app"]):
+                    self.assertEqual(
+                        {
+                            key: value
+                            for key, value in after.items()
+                            if key not in membership_fields
+                        },
+                        {
+                            key: value
+                            for key, value in before.items()
+                            if key not in membership_fields
+                        },
+                    )
+
+            before_csv2table = next(
+                row for row in before_rows if row["app"] == "csv2table"
+            )
+            after_csv2table = next(
+                row for row in after_rows if row["app"] == "csv2table"
+            )
+            self.assertEqual(before_csv2table["current_manifest"], "no")
+            self.assertEqual(before_csv2table["recommended_wave"], "W4-medium")
+            self.assertEqual(after_csv2table["current_manifest"], "yes")
+            self.assertEqual(
+                after_csv2table["recommended_wave"],
+                "W0-current-batch",
+            )
+            self.assertIn("W0-current-batch | 150", summary_output.read_text(encoding="utf-8"))
+
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["apps"].append({"name": "missing-manifest-app"})
+            missing_manifest_path = root / "missing-manifest-app.json"
+            missing_manifest_path.write_text(
+                json.dumps(manifest),
+                encoding="utf-8",
+            )
+            missing_completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(WINDOWS_ISIS_DIR / "rank_isis_apps.py"),
+                    "--refresh-manifest-only",
+                    "--manifest",
+                    str(missing_manifest_path),
+                    "--csv-output",
+                    str(csv_output),
+                    "--summary-output",
+                    str(summary_output),
+                ],
+                cwd=str(PROJECT_ROOT),
+                text=True,
+                capture_output=True,
+            )
+            self.assertNotEqual(missing_completed.returncode, 0)
+            self.assertIn("missing-manifest-app", missing_completed.stderr)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
 
         script = TEST_WHEEL_INSTALL_SCRIPT.read_text(encoding="utf-8")
         self.assertIn("--no-index", script)
+        self.assertIn("--isolated", script)
+        self.assertIn("--no-cache-dir", script)
         self.assertIn("--find-links", script)
         self.assertIn("usgs-pyisis", script)
         self.assertIn("pyisis", script)
         self.assertIn("status.usable_for_smoke_tests", script)
+        self.assertIn('parser.add_argument("--report", type=Path)', script)
+        self.assertIn('"schema_version": 1', script)
+        self.assertIn('"status": "passed"', script)
+        self.assertIn('"checks": checks', script)
+        self.assertIn("args.report.write_text(", script)
         self.assertIn("_verification_environment", script)
         self.assertIn("ISIS_PREFIX", script)
         self.assertIn("CONDA_PREFIX", script)
@@ -604,6 +749,81 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("--expected-isis-version", script)
         self.assertIn("__isis_version__", script)
         self.assertIn('"-m", "unittest"', script)
+
+    def test_clean_venv_install_invalidates_stale_report_before_venv_check(self):
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            venv_dir = root / "existing-venv"
+            venv_dir.mkdir()
+            report = root / "clean-install-report.json"
+            report.write_text('{"status": "passed"}\n', encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(TEST_WHEEL_INSTALL_SCRIPT),
+                    "--wheelhouse",
+                    str(root / "wheelhouse"),
+                    "--venv",
+                    str(venv_dir),
+                    "--report",
+                    str(report),
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertFalse(report.exists())
+
+    def test_unittest_summary_parser_reports_truthful_counts(self):
+        spec = importlib.util.spec_from_file_location(
+            "test_wheel_install_counts",
+            TEST_WHEEL_INSTALL_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        cases = (
+            ("Ran 1 test in 0.001s\n\nOK\n", (1, 0, 0, 0)),
+            ("Ran 4 tests in 0.002s\n\nOK (skipped=1)\n", (3, 0, 1, 0)),
+            (
+                "Ran 5 tests in 0.003s\n\nFAILED (failures=1, errors=1, skipped=1)\n",
+                (2, 2, 1, 0),
+            ),
+            ("Ran 3 tests in 0.004s\n\nOK (expected failures=1)\n", (2, 0, 0, 1)),
+        )
+        for output, expected in cases:
+            with self.subTest(output=output):
+                self.assertEqual(module._parse_unittest_summary(output), expected)
+
+    def test_clean_venv_windows_command_serialization_quotes_paths(self):
+        spec = importlib.util.spec_from_file_location(
+            "test_wheel_install_command",
+            TEST_WHEEL_INSTALL_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        command = [
+            r"C:\Program Files\Python 3.12\python.exe",
+            "-c",
+            'print("quoted value")',
+            r"C:\wheel house\quoted path",
+        ]
+        with mock.patch.object(module.sys, "platform", "win32"):
+            serialized = module._command_text(command)
+
+        self.assertEqual(
+            serialized,
+            '"C:\\Program Files\\Python 3.12\\python.exe" -c '
+            '"print(\\\"quoted value\\\")" "C:\\wheel house\\quoted path"',
+        )
 
     def test_clean_venv_install_script_selects_platform_python_path(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
@@ -654,6 +874,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
                 "CONDA_PREFIX": str(conda_root),
                 "PYISIS_WINDOWS_DEP_PREFIX": str(windows_dependency_root),
                 "PYTHONPATH": str(PROJECT_ROOT / "build" / "python"),
+                "PIP_CONFIG_FILE": str(PROJECT_ROOT / "pip.ini"),
+                "PIP_INDEX_URL": "https://example.invalid/simple",
+                "PIP_EXTRA_INDEX_URL": "https://example.invalid/extra",
                 "PATH": path,
             },
             clear=True,
@@ -666,6 +889,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertNotIn("PYTHONPATH", env)
         self.assertNotIn("CONDA_PREFIX", env)
         self.assertNotIn("PYISIS_WINDOWS_DEP_PREFIX", env)
+        self.assertNotIn("PIP_CONFIG_FILE", env)
+        self.assertNotIn("PIP_INDEX_URL", env)
+        self.assertNotIn("PIP_EXTRA_INDEX_URL", env)
         self.assertEqual(env["PATH"], str(safe_path))
 
     def test_clean_venv_unit_test_environment_exposes_only_test_helpers(self):

@@ -207,9 +207,9 @@ FUNCTION_CANDIDATES = (
         "void csv2table(UserInterface &ui, Pvl *log = nullptr)",
         "libisis",
         "Medium",
-        "isis_pybind.csv2table",
-        "已完成跨平台 facade：Linux 进程内调用 libisis，Windows 无 shell 调用 csv2table.exe；不公开 UserInterface",
-        "CSV 到 ISIS Table 的转换具有通用价值；Python 公共入口仅在 ISIS 10 构建中导出。",
+        "N/A (native ISIS APP)",
+        "采用原生 ISIS APP 执行边界；ISIS 9/10 与 Windows/Linux 均不新增 Python wrapper 或进程内绑定",
+        "CSV 到 ISIS Table 的转换由安装的 csv2table 可执行程序提供。",
     ),
     FunctionCandidate(
         2,
@@ -308,9 +308,9 @@ HEADER_CLASSIFICATIONS = {
     ),
     "csv2table.h": HeaderClassification(
         "function",
-        "bound",
+        "native-app",
         "csv2table",
-        "Cross-platform facade complete: Linux library adapter and Windows executable backend",
+        "Use the native ISIS APP in every supported version/OS cell; do not bind UserInterface",
     ),
     "eisstitch.h": HeaderClassification(
         "function",

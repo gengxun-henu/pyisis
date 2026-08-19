@@ -101,6 +101,66 @@ jobs:
             -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
             -IsisVersion 10.0.0
 
+      - name: Validate csv2table native behavior
+        run: |
+          $repoRoot = $env:GITHUB_WORKSPACE
+          $workDir = Join-Path $repoRoot "build\windows\csv2table-matrix\isis10-windows"
+          $reportPath = Join-Path $repoRoot "build\windows\csv2table-matrix\isis10-windows.json"
+          New-Item -ItemType Directory -Force -Path $workDir | Out-Null
+
+          $env:ISISROOT = $env:PYISIS_WINDOWS_ISIS_PREFIX
+          $env:ISIS_PREFIX = $env:PYISIS_WINDOWS_ISIS_PREFIX
+          $env:ISISDATA = Join-Path $repoRoot "tests\data\isisdata\mockup"
+          $runtimeEntries = @(
+            (Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX "bin"),
+            (Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX "lib"),
+            (Join-Path $env:CONDA_PREFIX "bin"),
+            (Join-Path $env:CONDA_PREFIX "Library\bin"),
+            (Join-Path $env:CONDA_PREFIX "Library\usr\bin"),
+            (Join-Path $env:CONDA_PREFIX "Library\mingw-w64\bin"),
+            (Join-Path $env:CONDA_PREFIX "Scripts"),
+            $env:CONDA_PREFIX
+          )
+          $env:PATH = (($runtimeEntries | Where-Object { Test-Path $_ }) + @($env:PATH)) -join ";"
+
+          Push-Location $workDir
+          try {
+            & python (Join-Path $repoRoot "tools\dev\test_csv2table_native_app.py") `
+              --isis-version 10.0.0 `
+              --bin-dir (Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX "bin") `
+              --input-cube (Join-Path $repoRoot "tests\data\hidtmgen\ortho\PSP_002118_1510_1m_o_forPDS_cropped.cub") `
+              --work-dir $workDir `
+              --report $reportPath
+            if ($LASTEXITCODE -ne 0) {
+              throw "csv2table native validator failed with exit code $LASTEXITCODE"
+            }
+          }
+          finally {
+            Pop-Location
+          }
+
+          @'
+          import json
+          import pathlib
+
+          report = json.loads(pathlib.Path('build/windows/csv2table-matrix/isis10-windows.json').read_text())
+          assert report['summary'] == {'passed': 3, 'failed': 0, 'skipped': 0}
+          assert report['platform']['os'] == 'Windows'
+          assert report['isis_version']['requested'] == '10.0.0'
+          assert all(item['sha256'] for item in report['native_artifacts'].values())
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) {
+            throw "csv2table native report assertion failed with exit code $LASTEXITCODE"
+          }
+
+      - name: Upload ISIS 10 Windows native report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: csv2table-native-app-isis10-windows
+          if-no-files-found: error
+          path: build/windows/csv2table-matrix/isis10-windows.json
+
       - name: Upload APP batch smoke logs
         if: always()
         uses: actions/upload-artifact@v4

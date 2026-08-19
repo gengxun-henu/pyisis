@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "project_id": "windows-pyisis-isis9-wheelhouse",
+  "title": "Windows PyISIS ISIS 9 wheelhouse",
+  "document_header": "# Windows PyISIS ISIS 9 Wheelhouse Milestone",
+  "milestones": [
+    {
+      "id": "windows-isis9-m04-wheelhouse",
+      "title": "Build and release-validate the Windows PyISIS wheelhouse",
+      "dependencies": [],
+      "source_plans": [
+        "docs/superpowers/specs/2026-08-16-windows-pyisis-wheelhouse-design.md",
+        "docs/superpowers/plans/2026-08-16-windows-pyisis-wheelhouse.md"
+      ],
+      "completion_gate": "The exact CPython 3.12 Windows three-wheel wheelhouse builds against the verified ISIS 9.0.0 prefix, has no unresolved runtime DLLs or APP payloads, installs without build-time runtime paths, passes focused/basic tests, and has reproducible SHA-256 reports.",
+      "completion_requirements": {
+        "tests": [
+          "windows-wheel-focused-tests",
+          "windows-wheel-clean-install",
+          "windows-wheelhouse-validation"
+        ],
+        "artifacts": [
+          "build/windows/wheelhouse-isis9/usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl",
+          "build/windows/wheelhouse-isis9/usgs_pyisis_runtime_win64-1.3.0rc2-py3-none-win_amd64.whl",
+          "build/windows/wheelhouse-isis9/usgs_pyisis_isisdata_minimal-1.3.0rc2-py3-none-any.whl",
+          "build/windows/reports/pyisis-wheelhouse-isis9-validation.json"
+        ],
+        "prerequisites": [
+          "verified-isis9-prefix",
+          "cpython-3-12",
+          "mock-isisdata"
+        ]
+      }
+    }
+  ]
+}

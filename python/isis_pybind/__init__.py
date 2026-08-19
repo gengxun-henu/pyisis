@@ -533,11 +533,6 @@ else:
         ]
     )
 
-if _core_isis_major >= 10:
-    from ._csv2table import csv2table
-
-    _OPTIONAL_ISIS10_EXPORTS.append("csv2table")
-
 __all__ = [
     "__isis_major__",
     "__isis_version__",

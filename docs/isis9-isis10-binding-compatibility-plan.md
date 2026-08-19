@@ -100,14 +100,22 @@ ISIS 10 声明、导出库、分类、代码改动、ISIS 9 测试和 ISIS 10 �
 
 上述6个类共完成30个构造/方法入口。新增应用函数的审计边界已关闭：
 
-- `csv2table` 已提供 ISIS 10 专属的跨平台 Python facade。Linux 后端在
-  进程内调用 `libisis`，Windows 后端无 shell 调用原生
-  `csv2table.exe`；不公开 `UserInterface` 或通用 APP runner。
-- `ocams2isis` 与 `eisstitch` 采用原生 ISIS APP 执行边界，不再作为独立
-  Python 绑定候选。
+- `csv2table`、`ocams2isis` 与 `eisstitch` 在 ISIS 9/10 和 Linux/Windows
+  均采用原生 ISIS APP 执行边界，不公开 `UserInterface`，也不新增 Python
+  wrapper、helper 或进程内绑定。Python 编排如有需要可使用标准库
+  `subprocess`。
+- `csv2table` 的公开调用方式为：Linux 使用
+  `csv2table CSV=input.csv TO=target.cub TABLENAME=MyTable`；Windows portable
+  archive 使用 `launch\isis-app.cmd csv2table CSV=input.csv TO=target.cub TABLENAME=MyTable`。
 
-Windows 清单和行为烟测已由 GitHub Actions run `30739433903` 验证：
-150 个 APP 完成编译安装，`csv2table -> tabledump` 行为烟测通过。
+`csv2table` 四格原生行为矩阵已关闭：Linux ISIS 9/10 由 GitHub Actions
+run `32043732248`（ISIS 9 为 attempt 2，ISIS 10 为 attempt 1）验证，
+Windows ISIS 10 的 150 个 APP 编译安装、批量烟测和行为验证由 run
+`32043735505` 验证，Windows ISIS 9 则使用本地已安装的验证前缀执行。四格
+均实际运行 `csv2table -> tabledump` 验证器并得到
+`passed=3, failed=0, skipped=0`；精确 package/source-build 身份、OS、命令和
+原生文件 SHA-256 记录在
+`docs/superpowers/evidence/2026-08-17-csv2table-native-app-matrix.json`。
 
 ### 明确排除
 

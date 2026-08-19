@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "milestone_id": "windows-isis9-m04-wheelhouse",
+  "verified_at": "2026-08-16T05:26:25.568059Z",
+  "git": {
+    "status": "classified: M04 completion planning and evidence updates only; source head 9083f186 is fully reviewed; ignored wheelhouse and reports are retained",
+    "porcelain_v1_sha256": "aa58f0573e737f50000b3429fdff30453bd30b4115f79dd52b3bc6c89917b2a1",
+    "commit": "9083f1865773b82e6a94ec90be8c7d3b5f138cb9"
+  },
+  "tests": [
+    {
+      "id": "windows-wheel-focused-tests",
+      "command": "D:/pyisis-win-env/python.exe -m unittest <M04 65-test Windows-focused selector> -v",
+      "passed": 65,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "id": "windows-wheel-clean-install",
+      "command": "D:/pyisis-win-env/python.exe tools/packaging/test_wheel_install.py --wheelhouse build/windows/wheelhouse-isis9 --venv build/windows/pyisis-wheel-install-venv-20260816 --package usgs-pyisis==1.3.0rc2 --expected-isis-version 9.0.0 --test-list tools/packaging/basic_tests.txt --report build/windows/reports/pyisis-wheel-install-isis9.json",
+      "passed": 330,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    {
+      "id": "windows-wheelhouse-validation",
+      "command": "D:/pyisis-win-env/python.exe tools/packaging/validate_windows_wheelhouse.py --wheelhouse build/windows/wheelhouse-isis9 --clean-install-report build/windows/reports/pyisis-wheel-install-isis9.json --report build/windows/reports/pyisis-wheelhouse-isis9-validation.json --package-version 1.3.0rc2 --python-abi cp312 --platform-tag win_amd64 --expected-isis-version 9.0.0",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "build/windows/wheelhouse-isis9/usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl",
+      "sha256": "8f1a923e62c12e98041bd7a5eebdffaaf00858597747cd9d4d690393451dcc00"
+    },
+    {
+      "path": "build/windows/wheelhouse-isis9/usgs_pyisis_runtime_win64-1.3.0rc2-py3-none-win_amd64.whl",
+      "sha256": "1d51ad225a238d70b6accc56989023ca9dbe7401e74f6dd62153c5c55e0556bf"
+    },
+    {
+      "path": "build/windows/wheelhouse-isis9/usgs_pyisis_isisdata_minimal-1.3.0rc2-py3-none-any.whl",
+      "sha256": "43009899a9586e90bb2cbc042233f37c77c4f68fbf0d6036a5179bd1549388b5"
+    },
+    {
+      "path": "build/windows/reports/pyisis-wheelhouse-isis9-validation.json",
+      "sha256": "ecf910d5205bb987e4b49599afcfa31469855babbb09e3ee40fe5d83b7ac71b3"
+    }
+  ],
+  "prerequisites": [
+    {
+      "id": "verified-isis9-prefix",
+      "path": "D:/code/pyisis/pyisis/build/windows/isis-prefix/lib/isis.dll",
+      "status": "verified",
+      "sha256": "7291ff4ae9683bdae8c758ae9e615eb9f5cfb23da9253ad15d45a69583044420"
+    },
+    {
+      "id": "cpython-3-12",
+      "path": "D:/pyisis-win-env/python.exe",
+      "status": "verified",
+      "sha256": "32733c1f0c531b2a259a7003c9af5de6771427c4d7d90797a41d11d0ed708c90"
+    },
+    {
+      "id": "mock-isisdata",
+      "path": "tests/data/isisdata/mockup/base/kernels/lsk/naif0012.tls",
+      "status": "verified",
+      "sha256": "f15293b0747e5fb01a865596281cb0534f7c77274e78184bd64260cc92be3706"
+    }
+  ]
+}

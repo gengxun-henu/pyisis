@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-05
+Last Modified: 2026-08-18
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
@@ -14,6 +14,11 @@ Updated: 2026-07-25  Geng Xun aligned runtime staging fixtures with the ISIS 10 
 Updated: 2026-08-05  Geng Xun added Windows PE export-forwarder closure regression coverage.
 Updated: 2026-08-05  Geng Xun required fail-closed Windows DLL audit reports.
 Updated: 2026-08-05  Geng Xun enforced the Windows minimal-runtime boundary against APP executables and XML.
+Updated: 2026-08-16  Geng Xun covered tolerant UTF-8 decoding of Windows dumpbin output.
+Updated: 2026-08-18  Geng Xun covered shared Windows PE closure provenance.
+Updated: 2026-08-18  Geng Xun made PE closure evidence order and case deterministic.
+Updated: 2026-08-18  Geng Xun classified the Qt WTS dependency as a Windows system DLL.
+Updated: 2026-08-18  Geng Xun covered embedded Python DLLs for native APP archives.
 """
 
 from __future__ import annotations
@@ -32,21 +37,246 @@ from unittest import mock
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WINDOWS_STAGING_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "stage_runtime_win64.py"
+WINDOWS_PE_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "windows_pe_dependencies.py"
 LINUX_STAGING_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "stage_runtime_linux.py"
 
 
 class RuntimeWheelScriptUnitTest(unittest.TestCase):
     """Test suite for runtime wheel staging. Added: 2026-06-18."""
 
-    def test_dumpbin_forwarded_dependencies_extracts_unique_non_system_dlls(self):
-        spec = importlib.util.spec_from_file_location(
-            "stage_runtime_win64_forwarder_parser",
-            WINDOWS_STAGING_SCRIPT,
-        )
+    def _load_module(self, name, path):
+        spec = importlib.util.spec_from_file_location(name, path)
         self.assertIsNotNone(spec)
         self.assertIsNotNone(spec.loader)
-        stage_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(stage_module)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    def test_shared_pe_closure_records_forwarder_provenance(self):
+        module = self._load_module("windows_pe_dependencies", WINDOWS_PE_SCRIPT)
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            prefix = root / "deps"
+            target = root / "stage"
+            seed = root / "reduce.exe"
+            (prefix / "bin").mkdir(parents=True)
+            target.mkdir()
+            seed.write_bytes(b"exe")
+            (prefix / "bin" / "isis.dll").write_bytes(b"isis")
+            (prefix / "bin" / "openblas.dll").write_bytes(b"blas")
+            direct = {"reduce.exe": ("isis.dll",), "isis.dll": ()}
+            forwarded = {"reduce.exe": ("openblas.dll",), "openblas.dll": ()}
+            with (
+                mock.patch.object(
+                    module,
+                    "dumpbin_dependencies",
+                    side_effect=lambda path: direct.get(path.name, ()),
+                ),
+                mock.patch.object(
+                    module,
+                    "dumpbin_forwarded_dependencies",
+                    side_effect=lambda path: forwarded.get(path.name, ()),
+                ),
+            ):
+                report = module.copy_dependency_closure(
+                    (seed,),
+                    (prefix,),
+                    target,
+                )
+            self.assertEqual(report["unresolved"], [])
+            openblas = next(
+                item for item in report["files"] if item["name"] == "openblas.dll"
+            )
+            self.assertEqual(openblas["import_kind"], "forwarder")
+            self.assertEqual(openblas["parents"], ["reduce.exe"])
+
+    def test_shared_pe_closure_is_seed_order_and_case_deterministic(self):
+        module = self._load_module(
+            "windows_pe_dependencies_determinism",
+            WINDOWS_PE_SCRIPT,
+        )
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            prefix = root / "deps"
+            (prefix / "bin").mkdir(parents=True)
+            (prefix / "bin" / "Isis.DLL").write_bytes(b"isis")
+            upper_seed = root / "A.exe"
+            lower_seed = root / "b.exe"
+            upper_seed.write_bytes(b"upper")
+            lower_seed.write_bytes(b"lower")
+            direct = {"A.exe": ("ISIS.dll",)}
+            forwarded = {"b.exe": ("isis.DLL",)}
+
+            def build_report(seed_files, target_name):
+                target = root / target_name
+                target.mkdir()
+                with (
+                    mock.patch.object(
+                        module,
+                        "dumpbin_dependencies",
+                        side_effect=lambda path: direct.get(path.name, ()),
+                    ),
+                    mock.patch.object(
+                        module,
+                        "dumpbin_forwarded_dependencies",
+                        side_effect=lambda path: forwarded.get(path.name, ()),
+                    ),
+                ):
+                    return module.copy_dependency_closure(
+                        seed_files,
+                        (prefix,),
+                        target,
+                    )
+
+            forward = build_report((upper_seed, lower_seed), "forward")
+            reverse = build_report((lower_seed, upper_seed), "reverse")
+
+            self.assertEqual(forward, reverse)
+            dependency = self.assert_single_dependency_file(forward)
+            self.assertEqual(dependency["name"], "isis.dll")
+            self.assertEqual(dependency["import_kind"], "direct")
+            self.assertEqual(dependency["parents"], ["A.exe", "b.exe"])
+            classifications = {
+                binary["binary"]: binary["imports"][0]["classification"]
+                for binary in forward["binaries"]
+                if binary["imports"]
+            }
+            self.assertEqual(
+                classifications,
+                {"A.exe": "resolved", "b.exe": "packaged"},
+            )
+
+    def test_shared_pe_closure_classifies_wtsapi32_as_system(self):
+        module = self._load_module(
+            "windows_pe_dependencies_wtsapi32",
+            WINDOWS_PE_SCRIPT,
+        )
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            prefix = root / "deps"
+            target = root / "stage"
+            seed = root / "qwindows.dll"
+            prefix.mkdir()
+            target.mkdir()
+            seed.write_bytes(b"qt-platform")
+            with (
+                mock.patch.object(
+                    module,
+                    "dumpbin_dependencies",
+                    side_effect=lambda path: (
+                        ("wtsapi32.dll",) if path.name == "qwindows.dll" else ()
+                    ),
+                ),
+                mock.patch.object(
+                    module,
+                    "dumpbin_forwarded_dependencies",
+                    return_value=(),
+                ),
+            ):
+                report = module.copy_dependency_closure(
+                    (seed,),
+                    (prefix,),
+                    target,
+                )
+
+            self.assertEqual(report["unresolved"], [])
+            self.assertEqual(report["files"], [])
+            self.assertEqual(
+                report["binaries"][0]["imports"],
+                [
+                    {
+                        "name": "wtsapi32.dll",
+                        "import_kind": "direct",
+                        "classification": "system",
+                    }
+                ],
+            )
+
+    def test_shared_pe_closure_can_bundle_prefix_root_python_runtime(self):
+        module = self._load_module(
+            "windows_pe_dependencies_native_python",
+            WINDOWS_PE_SCRIPT,
+        )
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            prefix = root / "deps"
+            target = root / "stage"
+            seed = root / "ale.dll"
+            prefix.mkdir()
+            target.mkdir()
+            seed.write_bytes(b"ale")
+            (prefix / "python312.dll").write_bytes(b"python")
+            with (
+                mock.patch.object(
+                    module,
+                    "dumpbin_dependencies",
+                    side_effect=lambda path: (
+                        ("python312.dll",) if path.name == "ale.dll" else ()
+                    ),
+                ),
+                mock.patch.object(
+                    module,
+                    "dumpbin_forwarded_dependencies",
+                    return_value=(),
+                ),
+            ):
+                report = module.copy_dependency_closure(
+                    (seed,),
+                    (prefix,),
+                    target,
+                    bundle_python_runtime=True,
+                )
+
+            dependency = self.assert_single_dependency_file(report)
+            self.assertEqual(dependency["name"], "python312.dll")
+            self.assertEqual(dependency["source"], "python312.dll")
+            self.assertEqual(dependency["target"], "python312.dll")
+            self.assertEqual(report["unresolved"], [])
+
+    def assert_single_dependency_file(self, report):
+        self.assertEqual(len(report["files"]), 1)
+        return report["files"][0]
+
+    def test_stage_runtime_preserves_shared_pe_compatibility_aliases(self):
+        stage_module = self._load_module(
+            "stage_runtime_win64_compatibility_aliases",
+            WINDOWS_STAGING_SCRIPT,
+        )
+        self.assertIs(
+            stage_module._copy_dependency_closure,
+            stage_module._pe_dependencies.copy_dependency_closure,
+        )
+        self.assertIs(
+            stage_module._dumpbin_dependencies,
+            stage_module._pe_dependencies.dumpbin_dependencies,
+        )
+        self.assertIs(
+            stage_module._dumpbin_forwarded_dependencies,
+            stage_module._pe_dependencies.dumpbin_forwarded_dependencies,
+        )
+
+    def test_stage_runtime_direct_script_loads_shared_pe_sibling(self):
+        with TemporaryDirectory() as temp_dir:
+            environment = dict(os.environ)
+            environment.pop("PYTHONPATH", None)
+            result = subprocess.run(
+                [sys.executable, str(WINDOWS_STAGING_SCRIPT), "--help"],
+                cwd=temp_dir,
+                env=environment,
+                check=False,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--dependency-copy-mode", result.stdout)
+
+    def test_dumpbin_forwarded_dependencies_extracts_unique_non_system_dlls(self):
+        pe_module = self._load_module(
+            "windows_pe_dependencies_forwarder_parser",
+            WINDOWS_PE_SCRIPT,
+        )
 
         completed = subprocess.CompletedProcess(
             ["dumpbin", "/EXPORTS", "libcblas.dll"],
@@ -59,25 +289,65 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             stderr="",
         )
         with mock.patch.object(
-            stage_module.subprocess,
+            pe_module.subprocess,
             "run",
             return_value=completed,
         ):
-            result = stage_module._dumpbin_forwarded_dependencies(
-                Path("libcblas.dll")
-            )
+            result = pe_module.dumpbin_forwarded_dependencies(Path("libcblas.dll"))
 
         self.assertEqual(result, ("openblas.dll", "KERNEL32.dll"))
 
-    def test_dumpbin_dependency_failure_is_fatal(self):
-        spec = importlib.util.spec_from_file_location(
-            "stage_runtime_win64_dumpbin_failure",
-            WINDOWS_STAGING_SCRIPT,
+    def test_dumpbin_dependencies_uses_tolerant_utf8_decoding(self):
+        pe_module = self._load_module(
+            "windows_pe_dependencies_dependency_decoding",
+            WINDOWS_PE_SCRIPT,
         )
-        self.assertIsNotNone(spec)
-        self.assertIsNotNone(spec.loader)
-        stage_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(stage_module)
+
+        def fake_run(command, **kwargs):
+            self.assertEqual(command[1], "/DEPENDENTS")
+            self.assertTrue(kwargs.get("text"))
+            self.assertEqual(kwargs.get("encoding"), "utf-8")
+            self.assertEqual(kwargs.get("errors"), "replace")
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                stdout="\ufffd diagnostic text\nale.dll\n",
+                stderr="",
+            )
+
+        with mock.patch.object(pe_module.subprocess, "run", side_effect=fake_run):
+            result = pe_module.dumpbin_dependencies(Path("isis.dll"))
+
+        self.assertEqual(result, ("ale.dll",))
+
+    def test_dumpbin_forwarded_dependencies_uses_tolerant_utf8_decoding(self):
+        pe_module = self._load_module(
+            "windows_pe_dependencies_forwarder_decoding",
+            WINDOWS_PE_SCRIPT,
+        )
+
+        def fake_run(command, **kwargs):
+            self.assertEqual(command[1], "/EXPORTS")
+            self.assertTrue(kwargs.get("text"))
+            self.assertEqual(kwargs.get("encoding"), "utf-8")
+            self.assertEqual(kwargs.get("errors"), "replace")
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                stdout="\ufffd diagnostic text\nforwarded = openblas.dll.cblas_saxpy\n",
+                stderr="",
+            )
+
+        with mock.patch.object(pe_module.subprocess, "run", side_effect=fake_run):
+            result = pe_module.dumpbin_forwarded_dependencies(Path("libcblas.dll"))
+
+        self.assertEqual(result, ("openblas.dll",))
+
+    def test_dumpbin_dependency_failure_is_fatal(self):
+        pe_module = self._load_module(
+            "windows_pe_dependencies_dumpbin_failure",
+            WINDOWS_PE_SCRIPT,
+        )
 
         completed = subprocess.CompletedProcess(
             ["dumpbin", "/DEPENDENTS", "isis.dll"],
@@ -86,12 +356,12 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             stderr="fatal error LNK1107",
         )
         with mock.patch.object(
-            stage_module.subprocess,
+            pe_module.subprocess,
             "run",
             return_value=completed,
         ):
             with self.assertRaisesRegex(RuntimeError, "dumpbin failed.*isis.dll"):
-                stage_module._dumpbin_dependencies(Path("isis.dll"))
+                pe_module.dumpbin_dependencies(Path("isis.dll"))
 
     def test_stage_runtime_copies_binding_runtime_and_excludes_apps_and_sdk_files(self):
         with TemporaryDirectory() as temp_dir:
@@ -230,13 +500,13 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             report = temp / "dependency-report.json"
             with (
                 mock.patch.object(
-                    stage_module,
-                    "_dumpbin_dependencies",
+                    stage_module._pe_dependencies,
+                    "dumpbin_dependencies",
                     fake_dumpbin,
                 ),
                 mock.patch.object(
-                    stage_module,
-                    "_dumpbin_forwarded_dependencies",
+                    stage_module._pe_dependencies,
+                    "dumpbin_forwarded_dependencies",
                     return_value=(),
                 ),
             ):
@@ -263,7 +533,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             classifications = {item["name"]: item["classification"] for item in isis_imports}
             self.assertEqual(classifications["needed.dll"], "resolved")
             self.assertEqual(classifications["cspice.dll"], "resolved")
-            self.assertEqual(classifications["KERNEL32.dll"], "system")
+            self.assertEqual(classifications["kernel32.dll"], "system")
 
     def test_stage_runtime_closure_reports_unresolved_dependency(self):
         spec = importlib.util.spec_from_file_location(
@@ -295,10 +565,14 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 return ("missing.dll",) if binary.name == "isis.dll" else ()
 
             with (
-                mock.patch.object(stage_module, "_dumpbin_dependencies", fake_dumpbin),
                 mock.patch.object(
-                    stage_module,
-                    "_dumpbin_forwarded_dependencies",
+                    stage_module._pe_dependencies,
+                    "dumpbin_dependencies",
+                    fake_dumpbin,
+                ),
+                mock.patch.object(
+                    stage_module._pe_dependencies,
+                    "dumpbin_forwarded_dependencies",
                     return_value=(),
                 ),
             ):
@@ -364,13 +638,13 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     stage = temp / distribution_name
                     with (
                         mock.patch.object(
-                            stage_module,
-                            "_dumpbin_dependencies",
+                            stage_module._pe_dependencies,
+                            "dumpbin_dependencies",
                             fake_dependencies,
                         ),
                         mock.patch.object(
-                            stage_module,
-                            "_dumpbin_forwarded_dependencies",
+                            stage_module._pe_dependencies,
+                            "dumpbin_forwarded_dependencies",
                             fake_forwarded_dependencies,
                         ),
                     ):

@@ -1,7 +1,11 @@
 # Cross-Platform `csv2table` Python Facade Design
 
+> **Historical / superseded:** The 2026-08-17 native-APP unification supersedes
+> this facade design. PyISIS publishes no `csv2table` Python helper or
+> in-process binding.
+
 **Date:** 2026-08-02
-**Status:** Implemented and verified on hosted Windows
+**Status:** Historical / superseded
 **Scope:** ISIS 10 only
 
 ## Context

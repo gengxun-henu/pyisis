@@ -53,9 +53,9 @@ ISIS 10 二进制所需的 `libcsmapi.so.3` 链接名。
 | `OsirisRexOcamsOpenCVDistortionMap.h` | OCAMS OpenCV 畸变模型 | 公共任务类 | 已绑定 |
 | `GdalIoHandler.h` | GDAL Cube I/O 后端 | 公共底层类 | 已绑定 Python facade |
 | `ImageIoHandler.h` | 图像 I/O 抽象基类 | 公共抽象类 | 已注册安全共享接口 |
-| `csv2table.h` | `csv2table` | 应用函数 | 待设计 `UserInterface` facade |
-| `eisstitch.h` | `eisstitch` | Europa Clipper 应用函数 | 待绑定 |
-| `ocams2isis.h` | `ocams2isis` | OSIRIS-REx 应用函数 | 待绑定 |
+| `csv2table.h` | `csv2table` | 应用函数 | 原生 ISIS APP；不绑定 `UserInterface` |
+| `eisstitch.h` | `eisstitch` | Europa Clipper 应用函数 | 原生 ISIS APP；不绑定 `UserInterface` |
+| `ocams2isis.h` | `ocams2isis` | OSIRIS-REx 应用函数 | 原生 ISIS APP；不绑定 `UserInterface` |
 | `DskSegmentBuffer.hpp` | DSK mesh buffer | 明确标记 `@internal` | 排除公共绑定 |
 | `IEndian.h` | 原 `Endian.h` 内容 | 重命名兼容 | 复用现有 ByteOrder 绑定 |
 | `RestfulSpice.h` | 全部内容被注释 | 占位头 | 排除 |
@@ -244,8 +244,11 @@ Changelog 用于解释“为什么变化”，安装 prefix 用于确认“实�
 1. 当前绑定引用的57个conda风险头文件已全部关闭，继续保持人工台账与
    prefix矩阵同步。
 2. 6个ISIS 10专属类已在正式USGS ISIS 10环境完成编译、导入和聚焦测试。
-3. `csv2table`、`eisstitch`、`ocams2isis`按既定范围留待后续APP facade
-   工作，不阻塞本轮核心绑定发布。
+3. `csv2table`、`eisstitch`、`ocams2isis`均维持原生 ISIS APP 边界：不绑定
+   `UserInterface`，不新增 Python wrapper、helper 或进程内绑定。Python 编排
+   可使用标准库 `subprocess`；PyISIS 不发布对应 helper。`csv2table` 在 Linux
+   使用 `csv2table CSV=input.csv TO=target.cub TABLENAME=MyTable`，在 Windows
+   portable archive 使用 `launch\isis-app.cmd csv2table CSV=input.csv TO=target.cub TABLENAME=MyTable`。
 4. 下一门槛是运行Linux/Windows × ISIS 9/10四条wheel构建和干净安装；
    Windows结果必须来自真实DLL/import library，不能用Linux `.so`替代。
 5. 四条流水线全部通过后，再分别创建ISIS 9和ISIS 10 GitHub prerelease。

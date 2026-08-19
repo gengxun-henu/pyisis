@@ -819,15 +819,15 @@
       "versions": {
         "9.0.0": {
           "status": "supported",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
-          "linux_comparison": "pending"
+          "build_status": "compiled_installed",
+          "smoke_status": "minimal_passed",
+          "linux_comparison": "cross_platform_passed"
         },
         "10.0.0": {
           "status": "experimental",
-          "build_status": "implementation_ready",
-          "smoke_status": "pending",
-          "linux_comparison": "pending"
+          "build_status": "compiled_installed",
+          "smoke_status": "minimal_passed",
+          "linux_comparison": "cross_platform_passed"
         }
       },
       "release_component": "apps-base"

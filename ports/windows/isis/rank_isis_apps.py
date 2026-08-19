@@ -119,7 +119,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--source-root",
         type=Path,
-        required=True,
         help="Pinned ISIS source root containing isis/src.",
     )
     parser.add_argument(
@@ -130,6 +129,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--csv-output", type=Path, required=True)
     parser.add_argument("--summary-output", type=Path, required=True)
+    parser.add_argument(
+        "--refresh-manifest-only",
+        action="store_true",
+        help="Refresh manifest membership from an existing priority CSV.",
+    )
     return parser.parse_args()
 
 
@@ -205,12 +209,143 @@ def wave(portability_score: int, importance_score: int, gui: bool) -> str:
     return "W5-blocked-or-specialized"
 
 
+def write_summary(
+    rows: list[dict[str, object]],
+    expected_commit: str,
+    summary_output: Path,
+) -> None:
+    wave_counts: dict[str, int] = {}
+    for row in rows:
+        key = str(row["recommended_wave"])
+        wave_counts[key] = wave_counts.get(key, 0) + 1
+    top_rows = rows[:40]
+    summary = [
+        "# ISIS 10 Windows APP 移植优先级",
+        "",
+        f"- 固定源码提交：`{expected_commit}`",
+        f"- APP 总数：{len(rows)}",
+        "- 便利性和重要性均采用 1–5 分；综合分为 `重要性×10+便利性`，"
+        "因此任务价值优先、同等级再优先选择易移植项。",
+        "- 该表是源码级规划清单，不等同于 Windows 编译或科学结果验证。",
+        "",
+        "## 建议批次统计",
+        "",
+        "| 批次 | 数量 |",
+        "|---|---:|",
+    ]
+    summary.extend(
+        f"| {name} | {count} |"
+        for name, count in sorted(wave_counts.items())
+    )
+    summary.extend(
+        [
+            "",
+            "## 综合优先级前 40",
+            "",
+            "| 排名 | APP | 模块 | 便利性 | 重要性 | 建议批次 | 阻塞因素 |",
+            "|---:|---|---|---:|---:|---|---|",
+        ]
+    )
+    summary.extend(
+        "| {overall_rank} | {app} | {module} | {portability_score} | "
+        "{importance_score} | {recommended_wave} | {detected_blockers} |".format(
+            **row
+        )
+        for row in top_rows
+    )
+    summary.extend(
+        [
+            "",
+            "## 使用说明",
+            "",
+            "- `W1`：高价值且预计容易移植，优先进入下一批。",
+            "- `W2`：高价值但存在中等平台风险，应单独编译定位。",
+            "- `W3`：通用、易移植，可用于扩大覆盖面。",
+            "- `W4`：中等优先级，等待核心链路稳定后推进。",
+            "- `W5-GUI`：Qt GUI 单独成线，不与 CLI 批次混编。",
+            "- `W5-blocked-or-specialized`：存在直接平台阻塞或任务用途较窄。",
+            "",
+            "完整 365 项及源码证据见 `windows-app-priority.csv`。",
+        ]
+    )
+    summary_output.write_text("\n".join(summary) + "\n", encoding="utf-8")
+
+
+def refresh_manifest_only(
+    csv_output: Path,
+    summary_output: Path,
+    selected: set[str],
+    expected_commit: str,
+) -> int:
+    with csv_output.open(encoding="utf-8", newline="") as priority_file:
+        reader = csv.DictReader(priority_file)
+        fieldnames = reader.fieldnames
+        rows = list(reader)
+    if fieldnames is None:
+        raise ValueError(f"priority CSV has no header: {csv_output}")
+    required_fields = {
+        "app",
+        "module",
+        "portability_score",
+        "importance_score",
+        "recommended_wave",
+        "current_manifest",
+    }
+    missing_fields = required_fields - set(fieldnames)
+    if missing_fields:
+        raise ValueError(
+            "priority CSV is missing required fields: "
+            + ", ".join(sorted(missing_fields))
+        )
+    available = {row["app"] for row in rows}
+    missing_apps = selected - available
+    if missing_apps:
+        raise ValueError(
+            "priority CSV is missing manifest APPs: "
+            + ", ".join(sorted(missing_apps))
+        )
+
+    for row in rows:
+        app = row["app"]
+        if app in selected:
+            row["current_manifest"] = "yes"
+            row["recommended_wave"] = "W0-current-batch"
+        else:
+            row["current_manifest"] = "no"
+            row["recommended_wave"] = wave(
+                int(row["portability_score"]),
+                int(row["importance_score"]),
+                row["module"] == "qisis" or app in GUI_NAMES,
+            )
+
+    with csv_output.open("w", encoding="utf-8", newline="") as output:
+        writer = csv.DictWriter(
+            output,
+            fieldnames=fieldnames,
+            lineterminator="\n",
+        )
+        writer.writeheader()
+        writer.writerows(rows)
+    write_summary(rows, expected_commit, summary_output)
+    print(f"refreshed manifest membership for {len(rows)} ISIS APPs")
+    return 0
+
+
 def main() -> int:
     args = parse_args()
-    source_root = args.source_root.resolve()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     selected = {app["name"] for app in manifest["apps"]}
     expected_commit = manifest["source_baselines"]["10.0.0"]["commit"]
+    if args.refresh_manifest_only:
+        return refresh_manifest_only(
+            args.csv_output,
+            args.summary_output,
+            selected,
+            expected_commit,
+        )
+    if args.source_root is None:
+        raise ValueError("--source-root is required unless --refresh-manifest-only is used")
+    source_root = args.source_root.resolve()
 
     app_dirs = sorted(
         path
@@ -293,61 +428,7 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(rows)
 
-    wave_counts: dict[str, int] = {}
-    for row in rows:
-        key = str(row["recommended_wave"])
-        wave_counts[key] = wave_counts.get(key, 0) + 1
-    top_rows = rows[:40]
-    summary = [
-        "# ISIS 10 Windows APP 移植优先级",
-        "",
-        f"- 固定源码提交：`{expected_commit}`",
-        f"- APP 总数：{len(rows)}",
-        "- 便利性和重要性均采用 1–5 分；综合分为 `重要性×10+便利性`，"
-        "因此任务价值优先、同等级再优先选择易移植项。",
-        "- 该表是源码级规划清单，不等同于 Windows 编译或科学结果验证。",
-        "",
-        "## 建议批次统计",
-        "",
-        "| 批次 | 数量 |",
-        "|---|---:|",
-    ]
-    summary.extend(
-        f"| {name} | {count} |"
-        for name, count in sorted(wave_counts.items())
-    )
-    summary.extend(
-        [
-            "",
-            "## 综合优先级前 40",
-            "",
-            "| 排名 | APP | 模块 | 便利性 | 重要性 | 建议批次 | 阻塞因素 |",
-            "|---:|---|---|---:|---:|---|---|",
-        ]
-    )
-    summary.extend(
-        "| {overall_rank} | {app} | {module} | {portability_score} | "
-        "{importance_score} | {recommended_wave} | {detected_blockers} |".format(
-            **row
-        )
-        for row in top_rows
-    )
-    summary.extend(
-        [
-            "",
-            "## 使用说明",
-            "",
-            "- `W1`：高价值且预计容易移植，优先进入下一批。",
-            "- `W2`：高价值但存在中等平台风险，应单独编译定位。",
-            "- `W3`：通用、易移植，可用于扩大覆盖面。",
-            "- `W4`：中等优先级，等待核心链路稳定后推进。",
-            "- `W5-GUI`：Qt GUI 单独成线，不与 CLI 批次混编。",
-            "- `W5-blocked-or-specialized`：存在直接平台阻塞或任务用途较窄。",
-            "",
-            "完整 365 项及源码证据见 `windows-app-priority.csv`。",
-        ]
-    )
-    args.summary_output.write_text("\n".join(summary) + "\n", encoding="utf-8")
+    write_summary(rows, expected_commit, args.summary_output)
     print(f"ranked {len(rows)} ISIS APPs")
     return 0
 

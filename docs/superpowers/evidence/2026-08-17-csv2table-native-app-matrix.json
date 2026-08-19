@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "subject": "csv2table-native-app-matrix",
+  "validator_revision": "318c173b39df1f840c419c3c205d55ab18c6f316",
+  "source_cube": {
+    "path": "tests/data/hidtmgen/ortho/PSP_002118_1510_1m_o_forPDS_cropped.cub",
+    "sha256": "ef90c8fe6221c8a0140aaffd6f3cd7c7c5290943dfdcf6534b0b2b2c518a2071"
+  },
+  "cells": {
+    "isis9-linux": {
+      "isis": {
+        "version": "9.0.0",
+        "distribution": "conda",
+        "package": {
+          "name": "isis",
+          "version": "9.0.0",
+          "build": "h1f94ec8_0",
+          "build_number": 0,
+          "channel": "usgs-astrogeology",
+          "subdir": "linux-64"
+        },
+        "csm_package": {
+          "name": "csm",
+          "version": "3.0.3.3",
+          "build": "hb700be7_3",
+          "build_number": 3,
+          "channel": "conda-forge",
+          "subdir": "linux-64"
+        }
+      },
+      "platform": {
+        "os": "Linux",
+        "release": "7.0.0-22-generic",
+        "version": "#22-Ubuntu SMP PREEMPT_DYNAMIC Mon May 25 15:54:34 UTC 2026",
+        "architecture": "x86_64"
+      },
+      "provenance": {
+        "kind": "github-actions",
+        "workflow": ".github/workflows/ci-pybind.yml",
+        "run_id": 32043732248,
+        "attempt": 2,
+        "job_id": 95429938927,
+        "head_sha": "318c173b39df1f840c419c3c205d55ab18c6f316",
+        "artifact": "csv2table-native-app-isis9-linux",
+        "raw_report_sha256": "33c5ca61ff7a9962d5ad082b9c4703b65702cad22a051df24cb7434a5b0a5ffa"
+      },
+      "commands": {
+        "validator": "python tools/dev/test_csv2table_native_app.py --isis-version 9.0.0 --bin-dir \"$CONDA_PREFIX/bin\" --input-cube tests/data/hidtmgen/ortho/PSP_002118_1510_1m_o_forPDS_cropped.cub --work-dir build/csv2table-matrix/isis9-linux --report build/csv2table-matrix/isis9-linux.json",
+        "native": [
+          "$CONDA_PREFIX/bin/csv2table -HELP",
+          "$CONDA_PREFIX/bin/csv2table CSV=build/csv2table-matrix/isis9-linux/csv2table_native_app_probe.csv TO=build/csv2table-matrix/isis9-linux/csv2table_native_app_input.cub TABLENAME=PyIsisNativeAppProbe",
+          "$CONDA_PREFIX/bin/tabledump FROM=build/csv2table-matrix/isis9-linux/csv2table_native_app_input.cub NAME=PyIsisNativeAppProbe TO=build/csv2table-matrix/isis9-linux/csv2table_native_app_probe.txt"
+        ]
+      },
+      "native_artifacts": {
+        "csv2table": {
+          "path": "$CONDA_PREFIX/bin/csv2table",
+          "sha256": "36415ea938195019924050a737d8e9c193a07bd4e26caa8cfbd55f852697d5e8"
+        },
+        "csv2table_xml": {
+          "path": "$CONDA_PREFIX/bin/xml/csv2table.xml",
+          "sha256": "8cf084829d8a4cd553aff0a8bf6cb45b08675612217fecafa48f8245ecc0c8ea"
+        },
+        "tabledump": {
+          "path": "$CONDA_PREFIX/bin/tabledump",
+          "sha256": "12c3c5e5cd3f377f4d65e16c073277cc132e623b89acaf94aad2f5f9db4246a2"
+        }
+      },
+      "summary": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    "isis9-windows": {
+      "isis": {
+        "version": "9.0.0",
+        "distribution": "source-build",
+        "source": {
+          "repository": "https://github.com/USGS-Astrogeology/ISIS3.git",
+          "ref": "9.0.0",
+          "commit": "950a5606ffeaa13ddb40101fbf25a8737e88902a"
+        }
+      },
+      "platform": {
+        "os": "Windows",
+        "release": "11",
+        "version": "10.0.26200",
+        "architecture": "AMD64"
+      },
+      "provenance": {
+        "kind": "local",
+        "run_id": null,
+        "attempt": null,
+        "job_id": null,
+        "head_sha": "318c173b39df1f840c419c3c205d55ab18c6f316",
+        "artifact": null,
+        "raw_report_path": "build/windows/csv2table-matrix/isis9-windows.json",
+        "raw_report_sha256": "f7324361a80ddc778b5887aacc72757b584d9347005c9e25e0afc2236910d302",
+        "runtime_path_policy": "ISIS prefix bin/lib plus conda bin, Library/bin, Library/usr/bin, Library/mingw-w64/bin, Scripts, and prefix root"
+      },
+      "commands": {
+        "validator": "python tools/dev/test_csv2table_native_app.py --isis-version 9.0.0 --bin-dir build/windows/isis-prefix/bin --input-cube tests/data/hidtmgen/ortho/PSP_002118_1510_1m_o_forPDS_cropped.cub --work-dir build/windows/csv2table-matrix/isis9-windows --report build/windows/csv2table-matrix/isis9-windows.json",
+        "native": [
+          "build/windows/isis-prefix/bin/csv2table.exe -HELP",
+          "build/windows/isis-prefix/bin/csv2table.exe CSV=build/windows/csv2table-matrix/isis9-windows/csv2table_native_app_probe.csv TO=build/windows/csv2table-matrix/isis9-windows/csv2table_native_app_input.cub TABLENAME=PyIsisNativeAppProbe",
+          "build/windows/isis-prefix/bin/tabledump.exe FROM=build/windows/csv2table-matrix/isis9-windows/csv2table_native_app_input.cub NAME=PyIsisNativeAppProbe TO=build/windows/csv2table-matrix/isis9-windows/csv2table_native_app_probe.txt"
+        ]
+      },
+      "native_artifacts": {
+        "csv2table": {
+          "path": "build/windows/isis-prefix/bin/csv2table.exe",
+          "sha256": "4e26fd3e8e4bdced3970220e5f21c0a8e3395a25c42f0e4b470ae7ed2fbe664c"
+        },
+        "csv2table_xml": {
+          "path": "build/windows/isis-prefix/bin/xml/csv2table.xml",
+          "sha256": "8cf084829d8a4cd553aff0a8bf6cb45b08675612217fecafa48f8245ecc0c8ea"
+        },
+        "tabledump": {
+          "path": "build/windows/isis-prefix/bin/tabledump.exe",
+          "sha256": "242f4fe59b3c9954b6a28013c55ae1078523df8ae10bd5befd5d0c57e5212399"
+        }
+      },
+      "summary": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    "isis10-linux": {
+      "isis": {
+        "version": "10.0.0",
+        "distribution": "conda",
+        "package": {
+          "name": "isis",
+          "version": "10.0.0",
+          "build": "h1f94ec8_1",
+          "build_number": 1,
+          "channel": "https://conda.anaconda.org/usgs-astrogeology/linux-64",
+          "subdir": "linux-64"
+        },
+        "csm_package": {
+          "name": "csm",
+          "version": "3.0.3.3",
+          "build": "hb700be7_3",
+          "build_number": 3,
+          "channel": "https://conda.anaconda.org/conda-forge/linux-64",
+          "subdir": "linux-64"
+        }
+      },
+      "platform": {
+        "os": "Linux",
+        "release": "7.0.0-22-generic",
+        "version": "#22-Ubuntu SMP PREEMPT_DYNAMIC Mon May 25 15:54:34 UTC 2026",
+        "architecture": "x86_64"
+      },
+      "provenance": {
+        "kind": "github-actions",
+        "workflow": ".github/workflows/ci-pybind.yml",
+        "run_id": 32043732248,
+        "attempt": 1,
+        "job_id": 95427454751,
+        "head_sha": "318c173b39df1f840c419c3c205d55ab18c6f316",
+        "artifact": "csv2table-native-app-isis10-linux",
+        "raw_report_sha256": "3794bcbbd5d29c2e736f56a16162e3adfbbf5a014ec4baceae5cd93bed5791b7"
+      },
+      "commands": {
+        "validator": "python tools/dev/test_csv2table_native_app.py --isis-version 10.0.0 --bin-dir \"$CONDA_PREFIX/bin\" --input-cube tests/data/hidtmgen/ortho/PSP_002118_1510_1m_o_forPDS_cropped.cub --work-dir build/csv2table-matrix/isis10-linux --report build/csv2table-matrix/isis10-linux.json",
+        "native": [
+          "$CONDA_PREFIX/bin/csv2table -HELP",
+          "$CONDA_PREFIX/bin/csv2table CSV=build/csv2table-matrix/isis10-linux/csv2table_native_app_probe.csv TO=build/csv2table-matrix/isis10-linux/csv2table_native_app_input.cub TABLENAME=PyIsisNativeAppProbe",
+          "$CONDA_PREFIX/bin/tabledump FROM=build/csv2table-matrix/isis10-linux/csv2table_native_app_input.cub NAME=PyIsisNativeAppProbe TO=build/csv2table-matrix/isis10-linux/csv2table_native_app_probe.txt"
+        ]
+      },
+      "native_artifacts": {
+        "csv2table": {
+          "path": "$CONDA_PREFIX/bin/csv2table",
+          "sha256": "d3018bdcd70de2f78f49bc1f098c815632b6fd6cdd361264b4f9c3ac1c315e0e"
+        },
+        "csv2table_xml": {
+          "path": "$CONDA_PREFIX/bin/xml/csv2table.xml",
+          "sha256": "fa4b108a47614baa74851a8c646196492e5665bde0cf44b621b6602d4995e506"
+        },
+        "tabledump": {
+          "path": "$CONDA_PREFIX/bin/tabledump",
+          "sha256": "ec39f1fc7b310594fbc83e8fc22525d18f9a1c9d19dbb4088233b4932f0d3c83"
+        }
+      },
+      "summary": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    "isis10-windows": {
+      "isis": {
+        "version": "10.0.0",
+        "distribution": "source-build",
+        "source": {
+          "repository": "https://github.com/USGS-Astrogeology/ISIS3.git",
+          "ref": "10.0.0",
+          "commit": "524eec10a7b0ffa2c591fb7f8bc82b3223bc6904"
+        }
+      },
+      "platform": {
+        "os": "Windows",
+        "release": "2022Server",
+        "version": "10.0.20348",
+        "architecture": "AMD64"
+      },
+      "provenance": {
+        "kind": "github-actions",
+        "workflow": ".github/workflows/windows-isis-apps.yml",
+        "run_id": 32043735505,
+        "attempt": 1,
+        "job_id": 95427434691,
+        "head_sha": "318c173b39df1f840c419c3c205d55ab18c6f316",
+        "artifact": "csv2table-native-app-isis10-windows",
+        "raw_report_sha256": "7d57d8e032f818ab1eb99bff65453f2716137b17823c752bba36f52f2850562c",
+        "runtime_path_policy": "ISIS prefix bin/lib plus conda bin, Library/bin, Library/usr/bin, Library/mingw-w64/bin, Scripts, and prefix root"
+      },
+      "commands": {
+        "validator": "python tools/dev/test_csv2table_native_app.py --isis-version 10.0.0 --bin-dir build/windows/isis10-app-prefix/bin --input-cube tests/data/hidtmgen/ortho/PSP_002118_1510_1m_o_forPDS_cropped.cub --work-dir build/windows/csv2table-matrix/isis10-windows --report build/windows/csv2table-matrix/isis10-windows.json",
+        "native": [
+          "build/windows/isis10-app-prefix/bin/csv2table.exe -HELP",
+          "build/windows/isis10-app-prefix/bin/csv2table.exe CSV=build/windows/csv2table-matrix/isis10-windows/csv2table_native_app_probe.csv TO=build/windows/csv2table-matrix/isis10-windows/csv2table_native_app_input.cub TABLENAME=PyIsisNativeAppProbe",
+          "build/windows/isis10-app-prefix/bin/tabledump.exe FROM=build/windows/csv2table-matrix/isis10-windows/csv2table_native_app_input.cub NAME=PyIsisNativeAppProbe TO=build/windows/csv2table-matrix/isis10-windows/csv2table_native_app_probe.txt"
+        ]
+      },
+      "native_artifacts": {
+        "csv2table": {
+          "path": "build/windows/isis10-app-prefix/bin/csv2table.exe",
+          "sha256": "0313900d8ff2a86f90fdd46ecfe09216606f23e81e23479daddd88fd509dcd53"
+        },
+        "csv2table_xml": {
+          "path": "build/windows/isis10-app-prefix/bin/xml/csv2table.xml",
+          "sha256": "fa4b108a47614baa74851a8c646196492e5665bde0cf44b621b6602d4995e506"
+        },
+        "tabledump": {
+          "path": "build/windows/isis10-app-prefix/bin/tabledump.exe",
+          "sha256": "07c3193eef6f7ada772bcb2790699cb86c3cfb065deeb3c6e715c1d94d594b92"
+        }
+      },
+      "summary": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      }
+    }
+  }
+}

@@ -1,54 +1,75 @@
 {
   "schema_version": 1,
-  "project_id": "windows-isis9-pyisis-native-build",
-  "title": "Windows ISIS 9.0.0 and PyISIS native build",
-  "created_date": "2026-08-15",
-  "document_header": "# Windows ISIS 9.0.0 and PyISIS Native Build Milestones",
-  "branch": "main",
+  "project_id": "windows-isis9-native-app-implementation",
+  "title": "Windows ISIS 9 native APP implementation",
+  "created_date": "2026-08-17",
+  "document_header": "# Windows ISIS 9 Native APP Implementation Milestone",
+  "branch": "feature/m04-windows-pyisis-wheelhouse",
   "worktree": ".",
-  "initial_commit": "092e009a3ac625da95350b6dd8f9b241cf6d21b6",
+  "initial_commit": "251d0fb55c3578f00e8768c546b79d7beed80679",
   "milestones": [
     {
-      "id": "windows-isis9-m01-environment",
-      "title": "Prepare the Windows native build environment",
+      "id": "windows-isis9-m06-native-app-implementation",
+      "title": "Build and validate the Windows ISIS native APP release",
       "status": "complete",
       "dependencies": [],
-      "plan_dir": ".planning/windows-isis9-m01-environment",
+      "plan_dir": ".planning/windows-isis9-m06-native-app-implementation",
       "source_plans": [
-        "docs/superpowers/specs/2026-08-15-windows-isis9-pyisis-build-design.md#milestones",
-        "ports/windows/README.md#prerequisites"
+        "docs/superpowers/plans/2026-08-17-csv2table-native-app-unification.md",
+        "docs/superpowers/plans/2026-08-16-windows-isis-native-app-distribution.md"
       ],
-      "completion_gate": "The short-path conda environment and Visual Studio 2022 x64 toolchain are reproducible and all repository Windows prerequisite checks pass.",
+      "completion_gate": "The csv2table Python and in-process binding exception is removed; native csv2table behavior is verified for ISIS 9 and ISIS 10 on Windows and Linux; and one deterministic Windows 11 x64 portable ZIP containing the tracked 150 ISIS 9 CLI APPs plus qnet passes unit, dependency-closure, clean-extraction CLI/GUI/data, hash, inventory, and zero-skip validation with the declared retained reports.",
       "completion_requirements": {
         "tests": [
-          "windows-prerequisite-check"
+          "csv2table-native-app-unification",
+          "windows-native-app-release-unit-validation",
+          "windows-native-app-clean-host-validation"
         ],
         "artifacts": [
-          "build/windows/reports/environment-readiness.json"
+          "docs/superpowers/evidence/2026-08-17-csv2table-native-app-matrix.json",
+          "build/windows/native-apps-isis9/usgs-isis-native-apps-9.0.0-win64.zip",
+          "build/windows/native-apps-isis9/usgs-isis-native-apps-9.0.0-win64-dll-dependencies.json",
+          "build/windows/reports/isis-native-apps-9.0.0-win64-validation.json"
         ],
         "prerequisites": [
-          "windows-11-x64",
-          "visual-studio-2022-msvc",
-          "micromamba"
+          "windows-isis9-m05-native-app-design-complete",
+          "windows-isis9-m04-wheelhouse-complete",
+          "windows-isis9-native-prefix"
         ]
       },
-      "last_session_date": "2026-08-15",
+      "last_session_date": "2026-08-19",
       "last_close_outcome": "complete",
       "blocker": null,
       "completion_evidence": {
         "schema_version": 1,
-        "milestone_id": "windows-isis9-m01-environment",
-        "verified_at": "2026-08-15T04:28:33.2198359Z",
+        "milestone_id": "windows-isis9-m06-native-app-implementation",
+        "verified_at": "2026-08-19T02:13:32.1806544Z",
         "git": {
-          "status": "clean",
-          "porcelain_v1_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-          "commit": "0c6269e7787a12d9c00d85173861a47563b15d0e"
+          "status": "classified: M06 completion planning updates and the pre-existing guarded print.prt only; print.prt is untouched and unstaged",
+          "porcelain_v1_sha256": "c18fa9113039a5a78b328f8dc86ba47848d4d1a8fd0d7ddb239264646ed59029",
+          "commit": "e73659436fea12de87e3a7985b9543553a67fbc1"
         },
         "tests": [
           {
-            "id": "windows-prerequisite-check",
-            "command": "$env:CONDA_PREFIX=D:\\pyisis-win-env; activate_msvc.ps1; ports\\windows\\check_prereqs.ps1",
-            "passed": 1,
+            "id": "csv2table-native-app-unification",
+            "command": "D:/pyisis-win-env/python.exe -m unittest tests.unitTest.csv2table_native_app_contract_unit_test tests.unitTest.csv2table_native_app_smoke_unit_test tests.unitTest.isis10_bind_inventory_unit_test tests.unitTest.packaging_tools_unit_test tests.unitTest.windows_isis_app_smoke_script_unit_test -v && D:/pyisis-win-env/python.exe -c <assert exact ISIS9/10 x Windows/Linux matrix summaries>",
+            "passed": 59,
+            "failed": 0,
+            "skipped": 1,
+            "exit_code": 0
+          },
+          {
+            "id": "windows-native-app-release-unit-validation",
+            "command": "D:/pyisis-win-env/python.exe -m unittest tests.unitTest.windows_native_app_manifest_unit_test tests.unitTest.windows_native_app_staging_unit_test tests.unitTest.windows_native_app_validation_unit_test tests.unitTest.windows_isis_native_app_package_script_unit_test -v",
+            "passed": 73,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          },
+          {
+            "id": "windows-native-app-clean-host-validation",
+            "command": "QEMU -cpu Nehalem-v1 Windows 11 Enterprise Evaluation guest: D:/R.cmd -> test_isis_native_app_package.ps1 against read-only release ISO",
+            "passed": 166,
             "failed": 0,
             "skipped": 0,
             "exit_code": 0
@@ -56,220 +77,40 @@
         ],
         "artifacts": [
           {
-            "path": "build/windows/reports/environment-readiness.json",
-            "sha256": "68fb27ba98faa908456cb1a11d379991bc43282f93fb5013eaffc1a190209489"
+            "path": "docs/superpowers/evidence/2026-08-17-csv2table-native-app-matrix.json",
+            "sha256": "34a4c4ff98254a6a02526b48091fb140d152f8810e6c6b3db4c6da84a8c64a17"
+          },
+          {
+            "path": "build/windows/native-apps-isis9/usgs-isis-native-apps-9.0.0-win64.zip",
+            "sha256": "7ea41d54ba123d9f5a4aa57491a16ac3ebf1295010ec3e11df925ae4579b9e96"
+          },
+          {
+            "path": "build/windows/native-apps-isis9/usgs-isis-native-apps-9.0.0-win64-dll-dependencies.json",
+            "sha256": "426ff10ffa084815e196ac6248b4f8d71bbc83de34bb756a9853d6c413629738"
+          },
+          {
+            "path": "build/windows/reports/isis-native-apps-9.0.0-win64-validation.json",
+            "sha256": "005b2de03d11876ed73eb348d133d0d6c97cc2d92dac58b52d8956c593924dc5"
           }
         ],
         "prerequisites": [
           {
-            "id": "windows-11-x64",
-            "path": "C:\\Windows\\System32\\kernel32.dll",
+            "id": "windows-isis9-m05-native-app-design-complete",
+            "path": ".planning/archive/windows-isis9-native-app-m05/milestones.v1.json",
             "status": "verified",
-            "sha256": "0ab61f2e0d412a585233f1b308c120cba74f800c1030bffe0aabd20df8c6d907"
+            "sha256": "3a96595e380043e46cf24650e4c153c0c2c356a5a503a9c00e5e308a52ddd8af"
           },
           {
-            "id": "visual-studio-2022-msvc",
-            "path": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\cl.exe",
+            "id": "windows-isis9-m04-wheelhouse-complete",
+            "path": ".planning/archive/windows-pyisis-isis9-wheelhouse-m04/windows-isis9-m04-wheelhouse/completion-evidence.json",
             "status": "verified",
-            "sha256": "dc1ef4e36c7044ae9bd0ce24d27de45f8fe26dc1210897b8717e8ef0232360e8"
+            "sha256": "af236412dd17d35b05716d70ff735297e8d67aa4df87421aee258930de83e573"
           },
           {
-            "id": "micromamba",
-            "path": "D:\\tools\\micromamba\\micromamba.exe",
-            "status": "verified",
-            "sha256": "b645a5259cb92b5869b0e60943390dd0d362cae45bc7e2f5ba8c7e4a4b06c7aa"
-          }
-        ]
-      }
-    },
-    {
-      "id": "windows-isis9-m02-isis-prefix",
-      "title": "Build and verify the ISIS 9.0.0 native prefix",
-      "status": "complete",
-      "dependencies": [
-        "windows-isis9-m01-environment"
-      ],
-      "plan_dir": ".planning/windows-isis9-m02-isis-prefix",
-      "source_plans": [
-        "docs/superpowers/specs/2026-08-15-windows-isis9-pyisis-build-design.md#milestones",
-        "ports/windows/isis/README.md"
-      ],
-      "completion_gate": "The patched upstream ISIS 9.0.0 source builds and installs with MSVC, the prefix verification passes, and representative ISIS applications pass their smoke tests.",
-      "completion_requirements": {
-        "tests": [
-          "isis-prefix-verification",
-          "isis-app-smoke"
-        ],
-        "artifacts": [
-          "build/windows/isis-prefix/lib/isis.dll",
-          "build/windows/isis-prefix/lib/isis.lib"
-        ],
-        "prerequisites": [
-          "isis-upstream-tag-9-0-0",
-          "windows-patch-queue",
-          "windows-build-environment"
-        ]
-      },
-      "last_session_date": "2026-08-15",
-      "last_close_outcome": "complete",
-      "blocker": null,
-      "completion_evidence": {
-        "schema_version": 1,
-        "milestone_id": "windows-isis9-m02-isis-prefix",
-        "verified_at": "2026-08-15T10:20:00.1074251Z",
-        "git": {
-          "status": "classified: M2 planning and Windows ISIS build/test changes; preserved pre-existing M1 planning changes; print.prt is an unstaged ISIS side effect; no guardrail file is staged",
-          "porcelain_v1_sha256": "ab38f380efda1acfc63517d1b469c352209f76cc71b2a64a63c08785af001fa9",
-          "commit": "ce569a009141c730802879ca7d1ccc5b7ec810d8"
-        },
-        "tests": [
-          {
-            "id": "isis-prefix-verification",
-            "command": "ports/windows/isis/verify_isis_prefix.ps1 -Prefix build/windows/isis-prefix -ExpectedVersion 9.0.0",
-            "passed": 1,
-            "failed": 0,
-            "skipped": 0,
-            "exit_code": 0
-          },
-          {
-            "id": "isis-app-smoke",
-            "command": "ports/windows/isis/test_isis_apps_smoke.ps1 -Prefix build/windows/isis-prefix -WorkDir build/windows/isis-command-smoke",
-            "passed": 9,
-            "failed": 0,
-            "skipped": 0,
-            "exit_code": 0
-          },
-          {
-            "id": "isis-app-batch-smoke",
-            "command": "ports/windows/isis/test_isis_app_batch_smoke.ps1 -Prefix build/windows/isis-prefix -WorkDir build/windows/isis-app-batch-smoke -IsisVersion 9.0.0",
-            "passed": 173,
-            "failed": 0,
-            "skipped": 0,
-            "exit_code": 0
-          },
-          {
-            "id": "windows-isis-script-regressions",
-            "command": "D:/pyisis-win-env/python.exe -m unittest tests.unitTest.windows_isis_app_smoke_script_unit_test plus two focused PackagingToolsUnitTest methods -v",
-            "passed": 6,
-            "failed": 0,
-            "skipped": 0,
-            "exit_code": 0
-          }
-        ],
-        "artifacts": [
-          {
-            "path": "build/windows/isis-prefix/lib/isis.dll",
-            "sha256": "7291ff4ae9683bdae8c758ae9e615eb9f5cfb23da9253ad15d45a69583044420"
-          },
-          {
-            "path": "build/windows/isis-prefix/lib/isis.lib",
-            "sha256": "1582d80acd2d5d9b479cee1b24ee88065b37399be712cc92ab119051e2216a3d"
-          }
-        ],
-        "prerequisites": [
-          {
-            "id": "isis-upstream-tag-9-0-0",
-            "path": "build/windows/external/ISIS3-9.0.0-iwr2.tar.gz",
-            "status": "verified",
-            "sha256": "cb35421f078d91bef932e4ba365a3a4ac788ba46b90143ab9995d5dfd14984b4"
-          },
-          {
-            "id": "windows-patch-queue",
-            "path": "ports/windows/isis/apply_patches.ps1",
-            "status": "verified",
-            "sha256": "77c3311bd78ff445a5d99a9f99db299c62cbe2800f98f6ca6c6949c5f9caccb2"
-          },
-          {
-            "id": "windows-build-environment",
-            "path": "build/windows/reports/environment-readiness.json",
-            "status": "verified",
-            "sha256": "68fb27ba98faa908456cb1a11d379991bc43282f93fb5013eaffc1a190209489"
-          }
-        ]
-      }
-    },
-    {
-      "id": "windows-isis9-m03-pyisis-core",
-      "title": "Build and test isis_pybind._isis_core",
-      "status": "complete",
-      "dependencies": [
-        "windows-isis9-m02-isis-prefix"
-      ],
-      "plan_dir": ".planning/windows-isis9-m03-pyisis-core",
-      "source_plans": [
-        "docs/superpowers/specs/2026-08-15-windows-isis9-pyisis-build-design.md#milestones",
-        "ports/windows/README.md#stage-2-pyisis",
-        "ports/windows/pyisis/README.md"
-      ],
-      "completion_gate": "The CPython 3.12 Windows extension builds against the verified ISIS 9.0.0 prefix, imports in a fresh process, and passes the Windows basic test set.",
-      "completion_requirements": {
-        "tests": [
-          "pyisis-smoke-import",
-          "pyisis-basic-tests"
-        ],
-        "artifacts": [
-          "build/windows/pyisis-build/python/isis_pybind/_isis_core.cp312-win_amd64.pyd"
-        ],
-        "prerequisites": [
-          "verified-isis9-prefix",
-          "cpython-3-12",
-          "mock-isisdata"
-        ]
-      },
-      "last_session_date": "2026-08-15",
-      "last_close_outcome": "complete",
-      "blocker": null,
-      "completion_evidence": {
-        "schema_version": 1,
-        "milestone_id": "windows-isis9-m03-pyisis-core",
-        "verified_at": "2026-08-15T11:58:13.6753058Z",
-        "git": {
-          "status": "classified: M3 planning and lifecycle changes; print.prt is an unstaged ISIS side effect; ignored Windows build artifacts are retained for reuse",
-          "porcelain_v1_sha256": "27d1ab8700a4d9411dd8093d6b06f8d1268010d18e12d1684b3abe6caae66099",
-          "commit": "9eb48c6a3a737251997eb779c410c60e1a237c17"
-        },
-        "tests": [
-          {
-            "id": "pyisis-smoke-import",
-            "command": "ports/windows/pyisis/test_pyisis_smoke.ps1 -BuildDir build/windows/pyisis-build -IsisPrefix build/windows/isis-prefix -PythonExecutable D:/pyisis-win-env/python.exe",
-            "passed": 1,
-            "failed": 0,
-            "skipped": 0,
-            "exit_code": 0
-          },
-          {
-            "id": "pyisis-basic-tests",
-            "command": "ports/windows/pyisis/test_pyisis_basic.ps1 -BuildDir build/windows/pyisis-build -IsisPrefix build/windows/isis-prefix -PythonExecutable D:/pyisis-win-env/python.exe",
-            "passed": 329,
-            "failed": 0,
-            "skipped": 0,
-            "exit_code": 0
-          }
-        ],
-        "artifacts": [
-          {
-            "path": "build/windows/pyisis-build/python/isis_pybind/_isis_core.cp312-win_amd64.pyd",
-            "sha256": "66465d02a0a365eb2a821b63505f14fe4e856c5a1ad18024a461dd1a2ad3536b"
-          }
-        ],
-        "prerequisites": [
-          {
-            "id": "verified-isis9-prefix",
-            "path": "build/windows/isis-prefix/lib/isis.dll",
+            "id": "windows-isis9-native-prefix",
+            "path": "D:/code/pyisis/pyisis/build/windows/isis-prefix/lib/isis.dll",
             "status": "verified",
             "sha256": "7291ff4ae9683bdae8c758ae9e615eb9f5cfb23da9253ad15d45a69583044420"
-          },
-          {
-            "id": "cpython-3-12",
-            "path": "D:/pyisis-win-env/python.exe",
-            "status": "verified",
-            "sha256": "32733c1f0c531b2a259a7003c9af5de6771427c4d7d90797a41d11d0ed708c90"
-          },
-          {
-            "id": "mock-isisdata",
-            "path": "tests/data/isisdata/mockup/base/kernels/lsk/naif0012.tls",
-            "status": "verified",
-            "sha256": "f15293b0747e5fb01a865596281cb0534f7c77274e78184bd64260cc92be3706"
           }
         ]
       }

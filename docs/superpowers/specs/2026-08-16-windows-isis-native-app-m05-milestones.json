@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "project_id": "windows-isis9-native-app-distribution",
+  "title": "Windows ISIS 9 native APP distribution",
+  "document_header": "# Windows ISIS 9 Native APP Distribution Milestone",
+  "milestones": [
+    {
+      "id": "windows-isis9-m05-native-app-design",
+      "title": "Design the native Windows ISIS APP release",
+      "dependencies": [],
+      "source_plans": [
+        "docs/superpowers/specs/2026-08-16-windows-pyisis-wheelhouse-design.md#M05-Native-ISIS-Windows-APP-Distribution"
+      ],
+      "completion_gate": "An approved implementation-ready design fixes the Windows package format, explicit first-release APP inventory including reduce, jigsaw, and qnet, DLL/plugin/preferences/XML/data and launcher layout, clean-machine launch matrix, artifact/report names, hashes, and cleanup rules without placing standalone APPs in the PyISIS wheels.",
+      "completion_requirements": {
+        "tests": [
+          "windows-native-app-design-validation"
+        ],
+        "artifacts": [
+          "docs/superpowers/specs/2026-08-16-windows-isis-native-app-distribution-design.md"
+        ],
+        "prerequisites": [
+          "windows-isis9-m04-wheelhouse-complete"
+        ]
+      }
+    }
+  ]
+}

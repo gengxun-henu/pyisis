@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "project_id": "windows-isis9-native-app-implementation",
+  "title": "Windows ISIS 9 native APP implementation",
+  "document_header": "# Windows ISIS 9 Native APP Implementation Milestone",
+  "milestones": [
+    {
+      "id": "windows-isis9-m06-native-app-implementation",
+      "title": "Build and validate the Windows ISIS native APP release",
+      "dependencies": [],
+      "source_plans": [
+        "docs/superpowers/plans/2026-08-17-csv2table-native-app-unification.md",
+        "docs/superpowers/plans/2026-08-16-windows-isis-native-app-distribution.md"
+      ],
+      "completion_gate": "The csv2table Python and in-process binding exception is removed; native csv2table behavior is verified for ISIS 9 and ISIS 10 on Windows and Linux; and one deterministic Windows 11 x64 portable ZIP containing the tracked 150 ISIS 9 CLI APPs plus qnet passes unit, dependency-closure, clean-extraction CLI/GUI/data, hash, inventory, and zero-skip validation with the declared retained reports.",
+      "completion_requirements": {
+        "tests": [
+          "csv2table-native-app-unification",
+          "windows-native-app-release-unit-validation",
+          "windows-native-app-clean-host-validation"
+        ],
+        "artifacts": [
+          "docs/superpowers/evidence/2026-08-17-csv2table-native-app-matrix.json",
+          "build/windows/native-apps-isis9/usgs-isis-native-apps-9.0.0-win64.zip",
+          "build/windows/native-apps-isis9/usgs-isis-native-apps-9.0.0-win64-dll-dependencies.json",
+          "build/windows/reports/isis-native-apps-9.0.0-win64-validation.json"
+        ],
+        "prerequisites": [
+          "windows-isis9-m05-native-app-design-complete",
+          "windows-isis9-m04-wheelhouse-complete",
+          "windows-isis9-native-prefix"
+        ]
+      }
+    }
+  ]
+}

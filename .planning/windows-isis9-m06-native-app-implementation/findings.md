@@ -16,6 +16,13 @@
 - The csv2table final review is Ready after `d8409ad2` added the explicit high-level API absence gate and corrected the ISIS 10 binding metadata.
 - The original native-distribution design hash identified the pre-csv2table manifest. The current reviewed 150-APP manifest has Git/normalized-LF SHA-256 `bca645e1bf9ba3594ef48be0cb3fbec642a98da1e6f1b91b31a4aaa9519987d5`; its Windows working-tree raw hash differs only because of line endings.
 - The working tree contains an unstaged ISIS-generated `print.prt`; repository guardrails prohibit modifying, restoring, deleting, or staging it.
+- On the QEMU TCG clean host, GUI startup can be much slower than on hardware: `reduce.exe` first appeared after 49.856 seconds and its visible window after 126.125 seconds. A 300-second bounded timeout preserves fail-closed behavior while accommodating this measured clean-host latency.
+- The isolated `cnetref` failure was an outer Windows PowerShell `0xc0000005` crash. The same ZIP and launcher passed three consecutive `cnetref -HELP` runs after a fresh extraction; Windows Defender had also logged a `0xc0000005` in this guest, supporting classification as a TCG/guest transient rather than a deterministic payload fault.
+- A `Nehalem-v1` QEMU CPU profile completed 250/250 fresh PowerShell process launches with zero failures and no Application Error events. Under that stable profile, the isolated Windows 11 guest passed the full 166-test native package matrix with zero failures or skips.
+- The final clean-host raw report is SHA-256 `14c3c4e55a79a577924bba9d59a880f9792d01dfcee54504cc575822ad481a8d`; it records Windows 11 10.0.26200.0 AMD64, exact group counts `1/150/9/3/1/2`, and negative exits `[4,3]`.
+- Strict validation retained ZIP SHA-256 `7ea41d54ba123d9f5a4aa57491a16ac3ebf1295010ec3e11df925ae4579b9e96`, dependency-report SHA-256 `426ff10ffa084815e196ac6248b4f8d71bbc83de34bb756a9853d6c413629738`, and final-validation SHA-256 `005b2de03d11876ed73eb348d133d0d6c97cc2d92dac58b52d8956c593924dc5`; the staging work directory was removed after publication.
+- The Task 7 final review and full native-distribution final review are Ready with no findings. Fresh Windows-native regression is 73/73, and the six-module cross-host command's four errors are exclusively the already documented Windows absence of Linux `ldd`/`readelf` tools.
+- Starting the configured `pyisis-windows11` runner proved its registration and labels are valid. The self-hosted job failed before package execution because the development machine contains `D:/code/pyisis/pyisis/build/windows/isis-prefix`, an explicitly forbidden clean-host path; this strengthens rather than replaces the isolated QEMU provenance requirement.
 
 ## Evidence-Based Inference
 
@@ -23,8 +30,6 @@
 
 ## Unresolved Items
 
-- All seven Windows portable-distribution implementation tasks remain pending.
-- M06 completion evidence has not yet been produced.
 - `rank_isis_apps.py` still exposes a raw `ValueError` when normal ranking omits `--source-root`; final csv2table review accepted this as a deferred non-blocking Minor.
 
 ## Decisions
@@ -33,6 +38,7 @@
 |---|---|
 | One milestone owns both csv2table normalization and the Windows native APP archive | The csv2table classification and 150-APP inventory are direct inputs to the approved 151-APP release contract. |
 | Do not claim a platform cell from static inventory evidence | Every required cell must execute the native help and csv2table-to-tabledump behavior path. |
+| Do not promote the local Windows 11 run to clean-host evidence | The final retained validation must bind a runtime report produced without the source checkout, conda prefix, or build tree. |
 
 ## Resources
 

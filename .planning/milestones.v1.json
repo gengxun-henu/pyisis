@@ -11,7 +11,7 @@
     {
       "id": "windows-isis9-m06-native-app-implementation",
       "title": "Build and validate the Windows ISIS native APP release",
-      "status": "in_progress",
+      "status": "complete",
       "dependencies": [],
       "plan_dir": ".planning/windows-isis9-m06-native-app-implementation",
       "source_plans": [
@@ -37,10 +37,83 @@
           "windows-isis9-native-prefix"
         ]
       },
-      "last_session_date": "2026-08-17",
-      "last_close_outcome": null,
+      "last_session_date": "2026-08-19",
+      "last_close_outcome": "complete",
       "blocker": null,
-      "completion_evidence": null
+      "completion_evidence": {
+        "schema_version": 1,
+        "milestone_id": "windows-isis9-m06-native-app-implementation",
+        "verified_at": "2026-08-19T02:13:32.1806544Z",
+        "git": {
+          "status": "classified: M06 completion planning updates and the pre-existing guarded print.prt only; print.prt is untouched and unstaged",
+          "porcelain_v1_sha256": "c18fa9113039a5a78b328f8dc86ba47848d4d1a8fd0d7ddb239264646ed59029",
+          "commit": "e73659436fea12de87e3a7985b9543553a67fbc1"
+        },
+        "tests": [
+          {
+            "id": "csv2table-native-app-unification",
+            "command": "D:/pyisis-win-env/python.exe -m unittest tests.unitTest.csv2table_native_app_contract_unit_test tests.unitTest.csv2table_native_app_smoke_unit_test tests.unitTest.isis10_bind_inventory_unit_test tests.unitTest.packaging_tools_unit_test tests.unitTest.windows_isis_app_smoke_script_unit_test -v && D:/pyisis-win-env/python.exe -c <assert exact ISIS9/10 x Windows/Linux matrix summaries>",
+            "passed": 59,
+            "failed": 0,
+            "skipped": 1,
+            "exit_code": 0
+          },
+          {
+            "id": "windows-native-app-release-unit-validation",
+            "command": "D:/pyisis-win-env/python.exe -m unittest tests.unitTest.windows_native_app_manifest_unit_test tests.unitTest.windows_native_app_staging_unit_test tests.unitTest.windows_native_app_validation_unit_test tests.unitTest.windows_isis_native_app_package_script_unit_test -v",
+            "passed": 73,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          },
+          {
+            "id": "windows-native-app-clean-host-validation",
+            "command": "QEMU -cpu Nehalem-v1 Windows 11 Enterprise Evaluation guest: D:/R.cmd -> test_isis_native_app_package.ps1 against read-only release ISO",
+            "passed": 166,
+            "failed": 0,
+            "skipped": 0,
+            "exit_code": 0
+          }
+        ],
+        "artifacts": [
+          {
+            "path": "docs/superpowers/evidence/2026-08-17-csv2table-native-app-matrix.json",
+            "sha256": "34a4c4ff98254a6a02526b48091fb140d152f8810e6c6b3db4c6da84a8c64a17"
+          },
+          {
+            "path": "build/windows/native-apps-isis9/usgs-isis-native-apps-9.0.0-win64.zip",
+            "sha256": "7ea41d54ba123d9f5a4aa57491a16ac3ebf1295010ec3e11df925ae4579b9e96"
+          },
+          {
+            "path": "build/windows/native-apps-isis9/usgs-isis-native-apps-9.0.0-win64-dll-dependencies.json",
+            "sha256": "426ff10ffa084815e196ac6248b4f8d71bbc83de34bb756a9853d6c413629738"
+          },
+          {
+            "path": "build/windows/reports/isis-native-apps-9.0.0-win64-validation.json",
+            "sha256": "005b2de03d11876ed73eb348d133d0d6c97cc2d92dac58b52d8956c593924dc5"
+          }
+        ],
+        "prerequisites": [
+          {
+            "id": "windows-isis9-m05-native-app-design-complete",
+            "path": ".planning/archive/windows-isis9-native-app-m05/milestones.v1.json",
+            "status": "verified",
+            "sha256": "3a96595e380043e46cf24650e4c153c0c2c356a5a503a9c00e5e308a52ddd8af"
+          },
+          {
+            "id": "windows-isis9-m04-wheelhouse-complete",
+            "path": ".planning/archive/windows-pyisis-isis9-wheelhouse-m04/windows-isis9-m04-wheelhouse/completion-evidence.json",
+            "status": "verified",
+            "sha256": "af236412dd17d35b05716d70ff735297e8d67aa4df87421aee258930de83e573"
+          },
+          {
+            "id": "windows-isis9-native-prefix",
+            "path": "D:/code/pyisis/pyisis/build/windows/isis-prefix/lib/isis.dll",
+            "status": "verified",
+            "sha256": "7291ff4ae9683bdae8c758ae9e615eb9f5cfb23da9253ad15d45a69583044420"
+          }
+        ]
+      }
     }
   ]
 }

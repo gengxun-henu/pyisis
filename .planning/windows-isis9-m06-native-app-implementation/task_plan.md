@@ -26,11 +26,11 @@ The csv2table Python and in-process binding exception is removed; native csv2tab
 
 ## Next Step
 
-Extract the shared Windows PE dependency engine for the portable native APP distribution.
+None — milestone complete.
 
 ## Current Phase
 
-Phase 1: csv2table native APP unification
+Phase 3: Release artifact and milestone closure
 
 ## Phases
 
@@ -45,20 +45,20 @@ Phase 1: csv2table native APP unification
 
 ### Phase 2: Windows native APP portable distribution
 
-- [ ] Extract the shared Windows PE dependency engine
-- [ ] Lock and validate the 151-APP release contract
-- [ ] Add package-relative launchers
-- [ ] Stage the curated payload and create a deterministic archive
-- [ ] Add strict archive and evidence validation
-- [ ] Implement the clean-extraction runtime matrix and orchestrator
-- **Status:** in_progress
+- [x] Extract the shared Windows PE dependency engine
+- [x] Lock and validate the 151-APP release contract
+- [x] Add package-relative launchers
+- [x] Stage the curated payload and create a deterministic archive
+- [x] Add strict archive and evidence validation
+- [x] Implement the clean-extraction runtime matrix and orchestrator
+- **Status:** complete
 
 ### Phase 3: Release artifact and milestone closure
 
-- [ ] Build the Windows ISIS 9 portable ZIP and retained reports
-- [ ] Pass clean Windows 11 x64 validation with zero required skips
-- [ ] Produce fresh structured milestone evidence and close M06
-- **Status:** pending
+- [x] Build the Windows ISIS 9 portable ZIP and retained dependency report
+- [x] Pass clean Windows 11 x64 validation with zero required skips
+- [x] Produce fresh structured milestone evidence and close M06
+- **Status:** complete
 
 ## Decisions Made
 
@@ -72,6 +72,7 @@ Phase 1: csv2table native APP unification
 | Use an internal PowerShell argv worker behind public CMD launchers | Native CMD `shift` does not alter `%*`, `%1..%9` truncates arguments, and `call` re-expands metacharacters; array splatting preserves argv without string evaluation. |
 | Freeze a closed schema-1 clean-host runtime report | Exact provenance fields, six groups, 166 passes, zero failures/skips, and expected negative exit codes prevent omitted or hidden runtime results. |
 | Bundle one tracked camera cube and map as validation-only data | `campt` and `cam2map` cannot operate on an `fx`-generated generic cube; explicit fixtures keep clean-host evidence independent of the source tree and network. |
+| Use the stable QEMU `Nehalem-v1` CPU profile for final clean-host evidence | The prior `-cpu max` model produced nondeterministic outer-PowerShell access violations; a 250/250 process stress gate and the full 166-test run passed on `Nehalem-v1` without weakening product checks. |
 
 ## Errors Encountered
 

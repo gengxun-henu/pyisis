@@ -19,3 +19,4 @@
 | Decision | Rationale |
 |---|---|
 | Use the existing workflow unchanged | Its lanes already exercise the required package, installation, metadata, and runtime-closure contracts. |
+| Dispatch with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false` | `release_line=none` is unsupported. These supported, explicit non-publishing inputs preserve the four-lane validation scope; the GitHub-release job is additionally restricted to `main`, so the feature-branch dispatch cannot create a release. |

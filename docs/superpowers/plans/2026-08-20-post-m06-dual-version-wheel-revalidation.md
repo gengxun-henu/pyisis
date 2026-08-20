@@ -143,10 +143,12 @@ Run:
 gh workflow run wheels.yml `
   --repo gengxun-henu/pyisis `
   --ref feature/m04-windows-pyisis-wheelhouse `
-  -f release_line=none
+  -f release_line=isis10 `
+  -f publish_testpypi=false `
+  -f publish_github_release=false
 ```
 
-Expected: GitHub accepts a new workflow-dispatch event. If authentication or input names differ, use `gh workflow view wheels.yml --repo gengxun-henu/pyisis --yaml` and update only the command invocation; do not change the workflow file.
+Expected: GitHub accepts a new workflow-dispatch event for the full four-lane validation matrix. `release_line=isis10` is a supported dispatch value; the explicit publication inputs remain false. The GitHub-release job is additionally limited to `main`, so this feature-branch dispatch creates no release. If authentication or input names differ, use `gh workflow view wheels.yml --repo gengxun-henu/pyisis --yaml` and update only the command invocation; do not change the workflow file.
 
 - [ ] **Step 2: Record the new run ID and wait for completion**
 

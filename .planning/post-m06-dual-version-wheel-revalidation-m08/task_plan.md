@@ -20,7 +20,7 @@ Four successful workflow lanes with retained hashes, install/import/test evidenc
 
 ## Next Step
 
-Dispatch the non-publishing remote `wheels.yml` workflow at frozen SHA `07b87e389c09ad838b65dae3456927d66b289cd8` after its branch ref is available remotely.
+Dispatch the non-publishing remote `wheels.yml` workflow at frozen SHA `07b87e389c09ad838b65dae3456927d66b289cd8` after its branch ref is available remotely, using `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`. The GitHub-release job is also limited to `main`, so the feature-branch dispatch creates no release.
 
 ## Current Phase
 
@@ -46,7 +46,7 @@ Phase 1: Freeze inputs
 
 ### Phase 2: Dispatch and monitor
 
-- [ ] Push the frozen commit normally and dispatch `wheels.yml` at that ref.
+- [ ] Push the frozen commit normally and dispatch `wheels.yml` at that ref with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
 - [ ] Record one workflow run and its job outcomes.
 - **Status:** pending
 

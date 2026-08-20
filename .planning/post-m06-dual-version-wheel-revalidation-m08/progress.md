@@ -15,6 +15,12 @@
 - Planned evidence output directory: `build\\windows\\m08-release-evidence`.
 - The plan and initial M08 records were already committed by `07b87e38` (`docs: plan post-M06 wheel revalidation`); this task creates no empty commit and commits only the substantive Task 1 record updates.
 
+### Task 3 dispatch correction 2026-08-20
+
+- Corrected the invalid planned input `release_line=none` to the supported `release_line=isis10`.
+- The planned dispatch now explicitly sets `publish_testpypi=false` and `publish_github_release=false`; the GitHub-release job also requires `main`, so the feature-branch validation dispatch creates no release.
+- The M08 objective remains four-lane validation with no publication and a stop at the first failed layer.
+
 ## Test Results
 
 | Test | Passed | Failed | Skipped | Status |
@@ -29,4 +35,4 @@
 | Where am I going? | Fresh current-HEAD four-lane release evidence. |
 | What's the goal? | Revalidate wheels without publishing a release. |
 | What have I learned? | Historical rc2 evidence cannot validate M06-era changes; the tracked contract maps four required lanes to existing workflow jobs and passed locally. |
-| What is next? | Dispatch the non-publishing remote `wheels.yml` workflow at frozen SHA `07b87e389c09ad838b65dae3456927d66b289cd8` after its branch ref is available remotely. |
+| What is next? | Dispatch the non-publishing remote `wheels.yml` workflow at frozen SHA `07b87e389c09ad838b65dae3456927d66b289cd8` after its branch ref is available remotely with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`; stop at the first failed layer. |

@@ -2,7 +2,7 @@
 
 ## Goal
 
-Validate the current HEAD across Linux/Windows × ISIS 9/10 wheels without publishing a release.
+Validate frozen current HEAD `07b87e389c09ad838b65dae3456927d66b289cd8` across Linux/Windows × ISIS 9/10 wheels without publishing a release.
 
 ## Scope
 
@@ -20,7 +20,7 @@ Four successful workflow lanes with retained hashes, install/import/test evidenc
 
 ## Next Step
 
-Freeze the current Git state and run the workflow-contract tests.
+Dispatch the non-publishing remote `wheels.yml` workflow at frozen SHA `07b87e389c09ad838b65dae3456927d66b289cd8` after its branch ref is available remotely.
 
 ## Current Phase
 
@@ -30,9 +30,19 @@ Phase 1: Freeze inputs
 
 ### Phase 1: Freeze inputs
 
-- [ ] Record exact HEAD and classified Git state.
-- [ ] Run workflow contract tests.
-- **Status:** in_progress
+- [x] Record exact HEAD and classified Git state.
+- [x] Run workflow contract tests.
+- [x] Record four-lane workflow-job mapping.
+- **Status:** completed 2026-08-20
+
+### Frozen workflow-job mapping
+
+| Required lane | Committed `wheels.yml` job ID(s) |
+|---|---|
+| `linux-isis9` | `linux-cp312-build`, `linux-cp312-clean-install` |
+| `linux-isis10-cp313` | `linux-isis10-cp313-build`, `linux-isis10-cp313-clean-install` |
+| `windows-cp312` | `windows-cp312` |
+| `windows-isis10-cp313` | `windows-isis10-cp313` |
 
 ### Phase 2: Dispatch and monitor
 

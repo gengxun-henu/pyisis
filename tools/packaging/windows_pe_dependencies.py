@@ -82,7 +82,11 @@ def _dependency_index(
     index: dict[str, tuple[Path, Path]] = {}
     for dependency_prefix in dependency_prefixes:
         for source in sorted(
-            dependency_prefix.glob("*.dll"),
+            (
+                path
+                for path in dependency_prefix.glob("*")
+                if path.suffix.lower() == ".dll"
+            ),
             key=lambda path: (str(path).lower(), str(path)),
         ):
             if source.is_file():
@@ -91,7 +95,7 @@ def _dependency_index(
             if not root.exists():
                 continue
             for source in sorted(
-                root.rglob("*.dll"),
+                (path for path in root.rglob("*") if path.suffix.lower() == ".dll"),
                 key=lambda path: (str(path).lower(), str(path)),
             ):
                 if source.is_file():

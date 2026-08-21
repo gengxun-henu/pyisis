@@ -88,6 +88,7 @@
 - Run `32441886921` still failed on the same three archive paths. A current-user prewarm reused the cache without the DLL failures, isolating the remaining Viskores path at 263 characters despite system long paths being enabled. Switched fresh v3 cache/environment namespaces to the short persistent `D:\pyisis-conda` root.
 - Run `32444182125` passed the self-hosted Conda setup, then the generic prefix resolver selected global `C:\Python312` because auto-activation is intentionally disabled. The self-hosted resolver now uses and validates its explicit versioned D: prefix; hosted Windows retains runtime Python discovery.
 - PR #371 gate run `32444645945` exposed five identical file-path import errors in each ISIS unit lane. Added an explicit sibling-module fallback to `stage_runtime_win64.py`; all six Windows staging tests pass when the test file is invoked directly with no repository-root `PYTHONPATH`.
+- PR #371 gate run `32445126192` reduced both unit lanes to one deterministic PE-index failure. Replaced host-case-sensitive `*.dll` glob filtering with explicit case-insensitive suffix filtering; the targeted deterministic test, six staging tests, and 57 workflow/packaging tests pass locally.
 
 ## 5-Question Reboot Check
 

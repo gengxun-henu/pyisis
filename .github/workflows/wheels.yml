@@ -602,7 +602,12 @@ jobs:
             throw "Refusing to clean unexpected Conda cache: $legacyCache"
           }
           if (Test-Path -LiteralPath $legacyCache) {
-            Remove-Item -LiteralPath $legacyCache -Recurse -Force
+            try {
+              Remove-Item -LiteralPath $legacyCache -Recurse -Force -ErrorAction Stop
+            }
+            catch {
+              Write-Warning "Deferred locked legacy Conda cache cleanup: $_"
+            }
           }
           New-Item -ItemType Directory -Force `
             -Path "$env:RUNNER_TOOL_CACHE\pyisis-conda-pkgs" | Out-Null
@@ -842,7 +847,12 @@ jobs:
             throw "Refusing to clean unexpected Conda cache: $legacyCache"
           }
           if (Test-Path -LiteralPath $legacyCache) {
-            Remove-Item -LiteralPath $legacyCache -Recurse -Force
+            try {
+              Remove-Item -LiteralPath $legacyCache -Recurse -Force -ErrorAction Stop
+            }
+            catch {
+              Write-Warning "Deferred locked legacy Conda cache cleanup: $_"
+            }
           }
           New-Item -ItemType Directory -Force `
             -Path "$env:RUNNER_TOOL_CACHE\pyisis-conda-pkgs" | Out-Null

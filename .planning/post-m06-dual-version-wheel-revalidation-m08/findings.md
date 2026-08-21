@@ -23,6 +23,7 @@
 - In run `32439037432`, self-hosted cp312 correctly used bundled Conda with `run-init: false`, but the forced classic solver consumed more than 10 minutes of one CPU core and about 3.7 GB working set. The installed Conda 26.5.3 reports libmamba as its default and has conda-libmamba-solver 26.7.0 available.
 - Run `32439954637` confirmed libmamba reduced solve working set to roughly 0.4 GB and moved quickly into package extraction, but setup-miniconda's default `pkgs_dir` remained under the SYSTEM profile on C:. C: free space fell from 6.50 GiB to 2.69 GiB while D: retained about 1.6 TiB free.
 - GitHub's official self-hosted runner documentation recommends lowercase proxy variables in a runner-root `.env` and requires a runner restart. `D:\actions-runner-pyisis\.env` now contains the local proxy settings, but the current non-elevated Codex process could not restart the Windows service; the file will take effect on its next restart.
+- Run `32440343067` reached the guarded legacy-cache cleanup, but Windows denied deletion of a cached `HarfBuzzSharp.dll`. The cache target was correct; deletion failure is a lock/ACL cleanup issue and does not invalidate routing future package writes to D:.
 
 ## Unresolved Items
 
@@ -53,3 +54,4 @@
 | Disable conda shell initialization on self-hosted Windows | Later workflow steps resolve and export the environment's Python and runtime paths explicitly, so persistent shell profile mutation is unnecessary. Hosted behavior is unchanged. |
 | Use libmamba for self-hosted Windows environment solves | This removes the observed classic-solver bottleneck while keeping the existing hosted setup path and its classic solver unchanged. |
 | Keep self-hosted Conda storage on the runner tool volume | Both package caches and version-specific environments use D:. A guarded pre-step deletes only the exact legacy cache created by setup-miniconda under the SYSTEM profile, preventing system-disk exhaustion. |
+| Treat locked legacy cache cleanup as non-blocking | The workflow still refuses any unexpected cleanup path, attempts the exact deletion, and warns on failure. New package writes never fall back to the stale C: cache. |

@@ -244,7 +244,11 @@ class WheelWorkflowUnitTest(unittest.TestCase):
                 "System32\\config\\systemprofile\\conda_pkgs_dir",
                 job,
             )
-            self.assertIn("Remove-Item -LiteralPath $legacyCache", job)
+            self.assertIn(
+                "Remove-Item -LiteralPath $legacyCache -Recurse -Force -ErrorAction Stop",
+                job,
+            )
+            self.assertIn("Deferred locked legacy Conda cache cleanup", job)
 
     def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):
         workflow = self._workflow_text()

@@ -1,0 +1,180 @@
+name: Linux runner Docker maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Safe, fixed maintenance operation to run on pyisis-ubuntu26
+        required: true
+        default: probe
+        type: choice
+        options:
+          - probe
+          - install
+          - verify
+
+concurrency:
+  group: linux-runner-docker-maintenance
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  maintain:
+    name: ${{ inputs.operation }} Docker host
+    runs-on: [self-hosted, Linux, X64, pyisis, ubuntu-26.04]
+    timeout-minutes: 30
+
+    steps:
+      - name: Report host prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "runner_name=$RUNNER_NAME"
+          echo "host=$(hostname)"
+          echo "user=$(id -un)"
+          echo "uid=$(id -u)"
+          echo "groups=$(id -Gn)"
+          uname -a
+          cat /etc/os-release
+          df -h /
+          command -v docker || true
+          docker --version || true
+          systemctl is-active docker.service || true
+          systemctl list-units --type=service --all 'actions.runner*' --no-legend || true
+          dpkg-query -W -f='${binary:Package}\t${db:Status-Abbrev}\t${Version}\n' \
+            docker-ce docker-ce-cli docker.io containerd containerd.io runc podman-docker \
+            2>/dev/null || true
+          if sudo -n true; then
+            echo "passwordless_sudo=true"
+          else
+            echo "passwordless_sudo=false"
+          fi
+
+      - name: Install and configure Docker Engine
+        if: ${{ inputs.operation == 'install' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          . /etc/os-release
+          if [ "${ID:-}" != "ubuntu" ] || [ "${VERSION_ID:-}" != "26.04" ]; then
+            echo "::error::Expected Ubuntu 26.04, found ID=${ID:-unset} VERSION_ID=${VERSION_ID:-unset}."
+            exit 1
+          fi
+          if [ "$(dpkg --print-architecture)" != "amd64" ]; then
+            echo "::error::Expected amd64 architecture."
+            exit 1
+          fi
+          if ! sudo -n true; then
+            echo "::error::The runner account lacks passwordless sudo; refusing partial installation."
+            exit 1
+          fi
+
+          runner_user=$(id -un)
+          mapfile -t runner_services < <(
+            systemctl list-unit-files --type=service --no-legend 'actions.runner*' |
+              awk '$1 ~ /pyisis-ubuntu26/ {print $1}'
+          )
+          if [ "${#runner_services[@]}" -ne 1 ]; then
+            printf '::error::Expected exactly one pyisis-ubuntu26 runner service, found %s: %s\n' \
+              "${#runner_services[@]}" "${runner_services[*]:-none}"
+            exit 1
+          fi
+          runner_service=${runner_services[0]}
+          service_user=$(systemctl show -p User --value "$runner_service")
+          if [ -n "$service_user" ] && [ "$service_user" != "$runner_user" ]; then
+            echo "::error::Job user $runner_user does not match service user $service_user."
+            exit 1
+          fi
+
+          if ! command -v docker >/dev/null 2>&1; then
+            conflicts=()
+            for package in docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc; do
+              if dpkg-query -W -f='${db:Status-Abbrev}' "$package" 2>/dev/null | grep -q '^ii '; then
+                conflicts+=("$package")
+              fi
+            done
+            if [ "${#conflicts[@]}" -ne 0 ]; then
+              echo "::error::Conflicting packages are installed (${conflicts[*]}); refusing to remove them automatically."
+              exit 1
+            fi
+
+            sudo -n apt-get update
+            sudo -n env DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates curl
+            sudo -n install -m 0755 -d /etc/apt/keyrings
+            key_file=$(mktemp)
+            source_file=$(mktemp)
+            trap 'rm -f "$key_file" "$source_file"' EXIT
+            curl --fail --silent --show-error --location \
+              https://download.docker.com/linux/ubuntu/gpg --output "$key_file"
+            cat >"$source_file" <<EOF
+          Types: deb
+          URIs: https://download.docker.com/linux/ubuntu
+          Suites: ${UBUNTU_CODENAME:-$VERSION_CODENAME}
+          Components: stable
+          Architectures: $(dpkg --print-architecture)
+          Signed-By: /etc/apt/keyrings/docker.asc
+          EOF
+            sudo -n install -m 0644 "$key_file" /etc/apt/keyrings/docker.asc
+            sudo -n install -m 0644 "$source_file" /etc/apt/sources.list.d/docker.sources
+            sudo -n apt-get update
+            candidate=$(apt-cache policy docker-ce | awk '/Candidate:/ {print $2}')
+            if [ -z "$candidate" ] || [ "$candidate" = "(none)" ]; then
+              echo "::error::Docker's Ubuntu repository has no docker-ce candidate."
+              exit 1
+            fi
+            sudo -n env DEBIAN_FRONTEND=noninteractive apt-get install -y \
+              docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+          fi
+
+          docker_path=$(readlink -f "$(command -v docker)")
+          if [[ "$docker_path" == /snap/* ]]; then
+            echo "::error::Snap Docker is unsupported for this Actions runner: $docker_path"
+            exit 1
+          fi
+          sudo -n systemctl enable --now docker.service
+          sudo -n usermod -aG docker "$runner_user"
+          sudo -n docker info
+          sudo -n docker run --rm quay.io/pypa/manylinux_2_28_x86_64 /bin/true
+
+          restart_unit="pyisis-runner-restart-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          sudo -n systemd-run \
+            --unit "$restart_unit" \
+            --on-active=45s \
+            /bin/systemctl restart "$runner_service"
+          echo "Scheduled $runner_service restart in 45 seconds so future jobs inherit docker-group membership."
+
+      - name: Verify host Docker access as runner account
+        if: ${{ inputs.operation == 'verify' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker_path=$(readlink -f "$(command -v docker)")
+          if [[ "$docker_path" == /snap/* ]]; then
+            echo "::error::Snap Docker is unsupported for this Actions runner: $docker_path"
+            exit 1
+          fi
+          systemctl is-active --quiet docker.service
+          id -Gn | tr ' ' '\n' | grep -Fx docker
+          docker info
+          docker run --rm quay.io/pypa/manylinux_2_28_x86_64 /bin/true
+
+  manylinux-container-proof:
+    name: Prove Actions manylinux job container
+    if: ${{ inputs.operation == 'verify' }}
+    needs: maintain
+    runs-on: [self-hosted, Linux, X64, pyisis, ubuntu-26.04]
+    timeout-minutes: 15
+    container:
+      image: quay.io/pypa/manylinux_2_28_x86_64
+
+    steps:
+      - name: Verify job is inside the expected container
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f /.dockerenv
+          grep -Eq 'AlmaLinux|CentOS' /etc/os-release
+          uname -m | grep -Fx x86_64

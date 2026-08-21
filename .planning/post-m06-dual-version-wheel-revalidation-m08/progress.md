@@ -89,6 +89,7 @@
 - Run `32444182125` passed the self-hosted Conda setup, then the generic prefix resolver selected global `C:\Python312` because auto-activation is intentionally disabled. The self-hosted resolver now uses and validates its explicit versioned D: prefix; hosted Windows retains runtime Python discovery.
 - PR #371 gate run `32444645945` exposed five identical file-path import errors in each ISIS unit lane. Added an explicit sibling-module fallback to `stage_runtime_win64.py`; all six Windows staging tests pass when the test file is invoked directly with no repository-root `PYTHONPATH`.
 - PR #371 gate run `32445126192` reduced both unit lanes to one deterministic PE-index failure. Replaced host-case-sensitive `*.dll` glob filtering with explicit case-insensitive suffix filtering; the targeted deterministic test, six staging tests, and 57 workflow/packaging tests pass locally.
+- Wheels run `32445495106` attempt 2 completed and cached the ISIS 10 Windows prefix, then the binding build reused a stale Visual Studio scikit-build directory whose compiler was `NOTFOUND`. The wheel helper now pins Ninja, caps parallelism at 24, and uses `build/{wheel_tag}-ninja` for generator-safe reuse.
 
 ## 5-Question Reboot Check
 

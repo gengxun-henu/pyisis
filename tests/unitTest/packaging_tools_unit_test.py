@@ -96,6 +96,11 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn('$DistributionName.Replace("-", "_")', script)
         self.assertIn("--distribution-name $RuntimeDistribution", script)
         self.assertIn("--package-version $PackageVersion", script)
+        self.assertIn('$env:CMAKE_GENERATOR = "Ninja"', script)
+        self.assertIn(
+            "[Math]::Min(24, [Environment]::ProcessorCount)", script
+        )
+        self.assertIn('build-dir=build/{wheel_tag}-ninja', script)
 
     def test_windows_runner_readiness_script_checks_required_host_tools(self):
         self.assertTrue(WINDOWS_RUNNER_CHECK.is_file())

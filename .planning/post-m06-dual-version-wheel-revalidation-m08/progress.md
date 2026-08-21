@@ -26,13 +26,32 @@
 | Test | Passed | Failed | Skipped | Status |
 |---|---:|---:|---:|---|
 | Workflow contract tests | 33 | 0 | 0 | passed |
+| M08 remote workflow run `32373382592` | 3 build/scope jobs | 8 install/bootstrap jobs | 1 release job | failed; no publication |
+| Repair-focused RED tests | 0 | 3 | 0 | expected failure: missing behavior |
+| Repair-focused GREEN tests | 3 | 0 | 0 | passed |
+| Full packaging/workflow modules after repair | 35 | 0 | 0 | passed |
+
+### Failed validation and repair authorization 2026-08-21
+
+- Run `32373382592` completed with failure at exact SHA `b50506e365b1af6d80fdbefbba919d70b5779197`.
+- Linux: six clean-install jobs failed because the metadata probe hard-coded Windows and ISIS 9 distribution names.
+- Windows: cp312 failed downloading Python with `ECONNRESET`; cp313 failed checkout after DNS/connectivity errors.
+- User explicitly requested root-cause repair and revalidation. Repair phase is active; no release is authorized.
+
+### Repair implementation 2026-08-21
+
+- Added package-derived installed-distribution expectations and repeatable `--additional-distribution` runtime checks.
+- Windows ISIS 9/10 clean installs explicitly verify their matching runtime distributions.
+- Removed redundant Windows `actions/setup-python`; setup-miniconda supplies the version-pinned build interpreter.
+- RED: three focused tests failed for the absent behavior. GREEN: the same three passed. Full packaging/workflow modules passed 35/35.
+- Independent review found the code fix correct and requested this planning-state correction before commit.
 
 ## 5-Question Reboot Check
 
 | Question | Answer |
 |---|---|
-| Where am I? | M08 Phase 1 complete: inputs frozen. |
-| Where am I going? | Fresh current-HEAD four-lane release evidence. |
+| Where am I? | M08 repair phase after failed run `32373382592`. |
+| Where am I going? | Tested repair followed by fresh four-lane evidence. |
 | What's the goal? | Revalidate wheels without publishing a release. |
 | What have I learned? | Historical rc2 evidence cannot validate M06-era changes; the tracked contract maps four required lanes to existing workflow jobs and passed locally. |
-| What is next? | Dispatch the non-publishing remote `wheels.yml` workflow at frozen SHA `07b87e389c09ad838b65dae3456927d66b289cd8` after its branch ref is available remotely with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`; stop at the first failed layer. |
+| What is next? | Commit and push the repaired SHA, then dispatch the non-publishing matrix with `windows_runner=windows-2022`. |

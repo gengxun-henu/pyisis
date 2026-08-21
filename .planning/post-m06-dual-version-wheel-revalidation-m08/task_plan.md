@@ -2,12 +2,12 @@
 
 ## Goal
 
-Validate frozen current HEAD `07b87e389c09ad838b65dae3456927d66b289cd8` across Linux/Windows × ISIS 9/10 wheels without publishing a release.
+Validate and repair current HEAD across Linux/Windows × ISIS 9/10 wheels without publishing a release.
 
 ## Scope
 
 - Execute only the approved workflow and collect its current-HEAD evidence.
-- Stop at the first failed layer; do not make a repair without a new approved design.
+- Diagnose the failed M08 run, implement the smallest tested repair authorized by the user, and revalidate without publishing.
 
 ## Dependencies
 
@@ -20,11 +20,11 @@ Four successful workflow lanes with retained hashes, install/import/test evidenc
 
 ## Next Step
 
-Dispatch the non-publishing remote `wheels.yml` workflow at frozen SHA `07b87e389c09ad838b65dae3456927d66b289cd8` after its branch ref is available remotely, using `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`. The GitHub-release job is also limited to `main`, so the feature-branch dispatch creates no release.
+Commit and normally push the tested repair, freeze its exact SHA, then dispatch one replacement `wheels.yml` run with `windows_runner=windows-2022`, `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
 
 ## Current Phase
 
-Phase 1: Freeze inputs
+Phase 2: Diagnose and repair failed validation
 
 ## Phases
 
@@ -46,9 +46,11 @@ Phase 1: Freeze inputs
 
 ### Phase 2: Dispatch and monitor
 
-- [ ] Push the frozen commit normally and dispatch `wheels.yml` at that ref with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
-- [ ] Record one workflow run and its job outcomes.
-- **Status:** pending
+- [x] Push the frozen commit normally and dispatch `wheels.yml` at that ref with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
+- [x] Record workflow run `32373382592` and its job outcomes.
+- [x] Repair deterministic Linux metadata validation and Windows bootstrap/network resilience with focused tests (35 passed).
+- [ ] Dispatch and monitor a replacement non-publishing run.
+- **Status:** in progress
 
 ### Phase 3: Evidence and outcome
 
@@ -59,4 +61,6 @@ Phase 1: Freeze inputs
 
 | Error | Attempt | Resolution |
 |---|---:|---|
-| None | 0 | Not applicable. |
+| Run `32373382592`: six Linux clean-install jobs failed | 1 | Replaced hard-coded distribution names with package-derived expectations plus explicit additional runtime distributions; regression passed. |
+| Run `32373382592`: Windows cp312 setup-python failed | 1 | Removed the redundant Windows `setup-python`; conda environment supplies the target interpreter. |
+| Run `32373382592`: Windows cp313 checkout failed | 1 | Replacement validation will use supported GitHub-hosted `windows-2022`; self-hosted network remediation remains operational, outside product code. |

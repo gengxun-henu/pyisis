@@ -450,11 +450,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up Python for packaging checks
-        uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
-
       - name: Set up Windows ISIS build environment
         uses: conda-incubator/setup-miniconda@v4
         with:
@@ -551,6 +546,7 @@ jobs:
           & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_wheel_install.py `
             --wheelhouse $env:WHEELHOUSE `
             --venv $venv `
+            --additional-distribution usgs-pyisis-runtime-win64 `
             --expected-isis-version 9.0.0 `
             --test-list tools\packaging\basic_tests.txt
 
@@ -616,11 +612,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-
-      - name: Set up Python for packaging checks
-        uses: actions/setup-python@v7
-        with:
-          python-version: "3.13"
 
       - name: Set up Windows ISIS 10 build environment
         uses: conda-incubator/setup-miniconda@v4
@@ -726,6 +717,7 @@ jobs:
             --wheelhouse $env:WHEELHOUSE `
             --venv $venv `
             --package usgs-pyisis-isis10 `
+            --additional-distribution usgs-pyisis-runtime-isis10-win64 `
             --expected-isis-version 10.0.0 `
             --test-list tools\packaging\basic_tests.txt
 

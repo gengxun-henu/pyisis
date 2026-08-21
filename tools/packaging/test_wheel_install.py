@@ -16,11 +16,7 @@ import venv
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 UNIT_TEST_DIR = PROJECT_ROOT / "tests" / "unitTest"
-EXPECTED_DISTRIBUTIONS = (
-    "usgs-pyisis",
-    "usgs-pyisis-runtime-win64",
-    "usgs-pyisis-isisdata-minimal",
-)
+MINIMAL_DATA_DISTRIBUTION = "usgs-pyisis-isisdata-minimal"
 SANITIZED_VARIABLE_NAMES = (
     "CONDA_PREFIX",
     "ISIS_PREFIX",
@@ -226,7 +222,22 @@ def _wheel_artifacts(wheelhouse: Path) -> list[dict[str, object]]:
     ]
 
 
-def _installed_distribution_command(python: Path) -> list[str]:
+def _expected_distributions(
+    package: str,
+    additional_distributions: tuple[str, ...],
+) -> tuple[str, ...]:
+    distribution = re.split(r"[<>=!~;\s\[]", package, maxsplit=1)[0]
+    if not distribution:
+        raise ValueError(f"Unable to resolve distribution name from package: {package!r}")
+    return tuple(
+        dict.fromkeys((distribution, MINIMAL_DATA_DISTRIBUTION, *additional_distributions))
+    )
+
+
+def _installed_distribution_command(
+    python: Path,
+    expected_distributions: tuple[str, ...],
+) -> list[str]:
     script = "\n".join(
         (
             "import json, os",
@@ -239,7 +250,7 @@ def _installed_distribution_command(python: Path) -> list[str]:
             "assert status.usable_for_smoke_tests",
             "expected = os.environ.get('PYISIS_EXPECTED_ISIS_VERSION')",
             "assert expected is None or isis_pybind.__isis_version__ == expected",
-            f"names = {EXPECTED_DISTRIBUTIONS!r}",
+            f"names = {expected_distributions!r}",
             "origins = []",
             "for requested_name in names:",
             "    distribution = metadata.distribution(requested_name)",
@@ -255,6 +266,12 @@ def main() -> int:
     parser.add_argument("--wheelhouse", required=True, type=Path)
     parser.add_argument("--venv", required=True, type=Path)
     parser.add_argument("--package", default="usgs-pyisis")
+    parser.add_argument(
+        "--additional-distribution",
+        action="append",
+        default=[],
+        help="Additional installed distribution metadata to verify; may be repeated.",
+    )
     parser.add_argument("--expected-isis-version")
     parser.add_argument("--report", type=Path)
     parser.add_argument(
@@ -317,7 +334,11 @@ def main() -> int:
     verification_env["PYISIS_INSTALL_METADATA_REPORT"] = str(metadata_report)
     if args.expected_isis_version:
         verification_env["PYISIS_EXPECTED_ISIS_VERSION"] = args.expected_isis_version
-    import_command = _installed_distribution_command(python)
+    expected_distributions = _expected_distributions(
+        args.package,
+        tuple(args.additional_distribution),
+    )
+    import_command = _installed_distribution_command(python, expected_distributions)
     run(import_command, env=verification_env, cwd=clean_venv)
     checks.append(
         _check(
@@ -359,6 +380,7 @@ def main() -> int:
         "wheelhouse": str(wheelhouse),
         "venv": str(clean_venv),
         "expected_isis_version": args.expected_isis_version,
+        "expected_distributions": list(expected_distributions),
         "pip_install_flags": list(PIP_INSTALL_FLAGS),
         "sanitized_environment": {
             "removed_variable_names": list(SANITIZED_VARIABLE_NAMES),

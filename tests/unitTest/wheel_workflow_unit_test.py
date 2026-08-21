@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-05
+Last Modified: 2026-08-21
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
@@ -22,6 +22,7 @@ Updated: 2026-07-25  Geng Xun aligned the four-matrix workflow with the rc2 rele
 Updated: 2026-08-02  Geng Xun separated daily PyISIS checks from platform release matrices.
 Updated: 2026-08-02  Geng Xun added Ubuntu 26.04 wheel installation coverage.
 Updated: 2026-08-05  Geng Xun covered trusted Windows 11 runner routing and readiness.
+Updated: 2026-08-21  Geng Xun removed redundant Windows Python bootstrap downloads and preserved runtime metadata checks.
 """
 
 from __future__ import annotations
@@ -110,6 +111,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
                 job,
             )
             self.assertIn("check_windows_runner.ps1", job)
+            self.assertNotIn("actions/setup-python", job)
         self.assertIn("shell: pwsh", workflow)
         self.assertIn("actions/checkout@v7", workflow)
         self.assertIn("actions/setup-python@v7", workflow)
@@ -121,6 +123,20 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("ports\\windows\\isis\\verify_isis_prefix.ps1", workflow)
         self.assertIn("PYISIS_WINDOWS_ISIS_PREFIX", workflow)
         self.assertIn("PYISIS_WINDOWS_DEP_PREFIX", workflow)
+
+    def test_windows_clean_installs_verify_their_runtime_distributions(self):
+        workflow = self._workflow_text()
+        windows = self._job_block(workflow, "windows-cp312")
+        windows10 = self._job_block(workflow, "windows-isis10-cp313")
+
+        self.assertIn(
+            "--additional-distribution usgs-pyisis-runtime-win64",
+            windows,
+        )
+        self.assertIn(
+            "--additional-distribution usgs-pyisis-runtime-isis10-win64",
+            windows10,
+        )
 
     def test_workflow_builds_tests_checks_and_uploads_wheels(self):
         workflow = self._workflow_text()

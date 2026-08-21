@@ -11,23 +11,31 @@
 - Docker's official Ubuntu instructions now explicitly support Ubuntu Resolute 26.04 LTS on x86_64 and prescribe the Docker apt repository plus `docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin`, and `docker-compose-plugin`.
 - GitHub's official self-hosted-runner guidance requires Docker on Linux for job containers and recommends checking the Docker service and the runner service account's socket permission.
 - GitHub documents the runner unit convention as `actions.runner.<org>-<repo>.<runnerName>.service` and recommends discovering the exact unit from the runner `.service` file or `systemctl`.
+- Probe run `32482513889` succeeded on runner version 2.336.0 at host `gengxun-ThinkStation-P3-Tower`.
+- Target OS is Ubuntu 26.04 LTS Resolute, kernel 7.0.0-22-generic, x86_64.
+- Runner service account is `pyisis-runner` (UID 997), with no supplementary groups; service unit is `actions.runner.gengxun-henu-pyisis.pyisis-ubuntu26.service`.
+- Root filesystem has 74 GB available (384 GB total, 80% used).
+- `docker` is absent and `docker.service` is inactive. The package probe printed no installed conflicting Docker/container-runtime packages.
+- `sudo -n true` is denied for `pyisis-runner`; the workflow cannot perform a system-level apt installation or service mutation.
+- Docker's official rootless mode still requires `newuidmap`, `newgidmap`, and at least 65,536 subordinate UIDs/GIDs for the account.
+- On Ubuntu 24.04 and later, Docker documents restricted unprivileged user namespaces: script-based rootless installation needs an AppArmor profile and an AppArmor restart, both privileged operations. Installing `docker-ce-rootless-extras` via apt supplies the profile, but apt also requires privilege.
+- Rootless daemon persistence normally requires `loginctl enable-linger`, another administrator action, unless a suitable persistent user session is already configured.
 
 ## Evidence-Based Inferences
 
 - A workflow committed to the default branch is required before `workflow_dispatch` can invoke it reliably.
 - Adding the runner account to the `docker` group may require restarting the Actions runner listener so new jobs inherit the group.
+- Rootless Docker is unlikely to be viable without one-time administrator setup on stock Ubuntu 26.04, but the exact host prerequisites must be probed before ruling it out.
 
 ## Unresolved Items
 
-- Exact Ubuntu release/build currently installed.
-- Whether `sudo -n` is available to the runner service account.
-- Whether Ubuntu's `docker.io` package is available and suitable on Ubuntu 26.04.
-- Exact systemd unit name for the Actions runner listener.
+- Whether Docker rootless-mode prerequisites (`newuidmap`, `newgidmap`, subordinate UID/GID ranges, user namespaces, and a usable user service/session) are already present.
 
 ## Decisions
 
 - Prefer Docker's official apt repository because Ubuntu 26.04 is explicitly supported and Docker documents distro `docker.io` as a conflicting unofficial package. Probe and refuse to mutate if an existing conflicting Docker/container runtime installation is detected instead of silently removing it.
 - Verification must include an Actions-level job container, not only `sudo docker info`.
+- Do not dispatch the system-level `install` operation after the probe proved passwordless sudo is unavailable.
 
 ## Resources
 
@@ -35,3 +43,5 @@
 - Docker Engine on Ubuntu: `https://docs.docker.com/engine/install/ubuntu/`.
 - GitHub self-hosted runner troubleshooting: `https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/monitor-and-troubleshoot`.
 - GitHub Actions job-container syntax: `https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idcontainer`.
+- Docker rootless mode: `https://docs.docker.com/engine/security/rootless/`.
+- Docker rootless troubleshooting: `https://docs.docker.com/engine/security/rootless/troubleshoot/`.

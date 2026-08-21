@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-08-21
 Last Modified: 2026-08-21
 Updated: 2026-08-21  Geng Xun added safety and manylinux-container proof coverage.
+Updated: 2026-08-21  Geng Xun added rootless Docker prerequisite probe coverage.
 """
 
 from pathlib import Path
@@ -56,6 +57,22 @@ class LinuxRunnerDockerMaintenanceWorkflowUnitTest(unittest.TestCase):
         self.assertIn("/etc/apt/keyrings/docker.asc", workflow)
         self.assertIn("docker-ce docker-ce-cli containerd.io", workflow)
         self.assertIn("systemctl enable --now docker.service", workflow)
+
+    def test_probe_reports_rootless_prerequisites_before_requiring_admin(self):
+        workflow = self.workflow
+
+        for prerequisite in (
+            "newuidmap",
+            "newgidmap",
+            "/etc/subuid",
+            "/etc/subgid",
+            "kernel.apparmor_restrict_unprivileged_userns",
+            "kernel.unprivileged_userns_clone",
+            "XDG_RUNTIME_DIR",
+            "unprivileged_user_namespace",
+        ):
+            self.assertIn(prerequisite, workflow)
+        self.assertIn('loginctl show-user "$(id -u)" -p Linger -p State', workflow)
 
     def test_runner_permission_change_is_followed_by_delayed_restart(self):
         workflow = self.workflow

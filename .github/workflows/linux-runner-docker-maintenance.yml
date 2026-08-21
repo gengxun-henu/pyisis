@@ -46,6 +46,22 @@ jobs:
           dpkg-query -W -f='${binary:Package}\t${db:Status-Abbrev}\t${Version}\n' \
             docker-ce docker-ce-cli docker.io containerd containerd.io runc podman-docker \
             2>/dev/null || true
+          echo "rootless_prerequisites:"
+          for command_name in newuidmap newgidmap slirp4netns fuse-overlayfs; do
+            printf '%s=' "$command_name"
+            command -v "$command_name" || true
+          done
+          grep -E "^$(id -un):" /etc/subuid /etc/subgid 2>/dev/null || true
+          sysctl kernel.apparmor_restrict_unprivileged_userns 2>/dev/null || true
+          sysctl kernel.unprivileged_userns_clone 2>/dev/null || true
+          printf 'xdg_runtime_dir=%s\n' "${XDG_RUNTIME_DIR:-unset}"
+          loginctl show-user "$(id -u)" -p Linger -p State 2>/dev/null || true
+          systemctl --user is-active docker.service 2>/dev/null || true
+          if unshare --user --map-root-user true 2>/dev/null; then
+            echo "unprivileged_user_namespace=true"
+          else
+            echo "unprivileged_user_namespace=false"
+          fi
           if sudo -n true; then
             echo "passwordless_sudo=true"
           else

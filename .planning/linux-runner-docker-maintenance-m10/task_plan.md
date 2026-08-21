@@ -26,11 +26,11 @@ The runner is online after maintenance; a fresh workflow run on `pyisis-ubuntu26
 
 ## Current Phase
 
-Phase 2 — Publish maintenance workflow (`in_progress`)
+Phase 3 — Maintain and verify runner (`in_progress`)
 
 ## Next Step
 
-Commit the validated temporary workflow and tests, merge them to `main`, then dispatch the read-only probe.
+Evaluate Docker's official rootless prerequisites against the host; proceed without privilege only if it safely supports Actions job containers, otherwise record the exact one-time administrator bootstrap required.
 
 ## Phases
 
@@ -40,15 +40,17 @@ Commit the validated temporary workflow and tests, merge them to `main`, then di
 - [x] Confirm the supported Docker package/install route for the runner OS.
 - [x] Define safe install, service restart, and verification behavior.
 
-### Phase 2 — Publish maintenance workflow (`in_progress`)
+### Phase 2 — Publish maintenance workflow (`complete`)
 
 - [x] Add focused workflow and automated contract tests.
 - [x] Run local validation and review the diff.
-- [ ] Commit, push, merge through PR, and sync local `main`.
+- [x] Commit, push, merge through PR, and sync local `main`.
 
-### Phase 3 — Maintain and verify runner (`pending`)
+### Phase 3 — Maintain and verify runner (`in_progress`)
 
-- [ ] Dispatch probe/install and retain its evidence.
+- [x] Dispatch probe and retain its evidence; system install is blocked by the confirmed absence of passwordless sudo.
+- [ ] Determine whether official rootless Docker is viable without administrator intervention.
+- [ ] Install Docker through the safe viable route.
 - [ ] Restart the runner listener safely if group membership requires it.
 - [ ] Run a fresh Actions job using the manylinux job container without sudo.
 

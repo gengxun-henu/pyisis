@@ -78,6 +78,7 @@
 - Run `32437828115` showed the same installer failure with an explicit D: target, so the volume hypothesis was rejected. The self-hosted setup step now supplies the existing SYSTEM-accessible Conda base and leaves `miniforge-version` empty, activating setup-miniconda's documented bundled provider; hosted Windows still requests latest Miniforge. The new contract was RED first, then workflow tests passed 19/19 and the relevant suite passed 56/56.
 - Run `32438209261` exposed a GitHub expression error in that repair: selecting `''` through `&& ... || ...` fell through to `latest`, so the installer ran again. Replaced the expression with separate self-hosted and hosted setup steps guarded by opposite `if` conditions; the self-hosted step has no installer input at all.
 - Run `32438639372` confirmed the bundled provider, then failed because setup-miniconda's default `conda init` tried to persist shell configuration from the runner service account. Added `run-init: false` only to the two self-hosted setup steps; the relevant 56-test suite, YAML parse, and whitespace check pass.
+- Run `32439037432` passed the earlier bootstrap layers and reached dependency solving, but the forced classic solver remained CPU-bound for more than 10 minutes. Verified the preinstalled base has libmamba 26.7.0 and switched only the self-hosted setup steps to `conda-solver: libmamba`; the relevant 56-test suite, YAML parse, and whitespace check pass.
 
 ## 5-Question Reboot Check
 

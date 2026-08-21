@@ -223,6 +223,29 @@ class WheelWorkflowUnitTest(unittest.TestCase):
             self.assertIn("miniforge-version: latest", job)
             self.assertNotIn("&& '' || 'latest'", job)
 
+    def test_self_hosted_windows_conda_storage_stays_on_the_tool_volume(self):
+        workflow = self._workflow_text()
+
+        expected_envs = {
+            "windows-cp312": "pyisis-conda-envs\\isis9",
+            "windows-isis10-cp313": "pyisis-conda-envs\\isis10",
+        }
+        for job_name, environment_path in expected_envs.items():
+            job = self._job_block(workflow, job_name)
+            self.assertIn(
+                f"activate-environment: ${{{{ runner.tool_cache }}}}\\{environment_path}",
+                job,
+            )
+            self.assertIn(
+                "pkgs-dirs: ${{ runner.tool_cache }}\\pyisis-conda-pkgs",
+                job,
+            )
+            self.assertIn(
+                "System32\\config\\systemprofile\\conda_pkgs_dir",
+                job,
+            )
+            self.assertIn("Remove-Item -LiteralPath $legacyCache", job)
+
     def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):
         workflow = self._workflow_text()
         builder = LINUX_WHEEL_BUILDER.read_text(encoding="utf-8")

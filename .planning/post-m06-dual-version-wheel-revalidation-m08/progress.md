@@ -79,6 +79,8 @@
 - Run `32438209261` exposed a GitHub expression error in that repair: selecting `''` through `&& ... || ...` fell through to `latest`, so the installer ran again. Replaced the expression with separate self-hosted and hosted setup steps guarded by opposite `if` conditions; the self-hosted step has no installer input at all.
 - Run `32438639372` confirmed the bundled provider, then failed because setup-miniconda's default `conda init` tried to persist shell configuration from the runner service account. Added `run-init: false` only to the two self-hosted setup steps; the relevant 56-test suite, YAML parse, and whitespace check pass.
 - Run `32439037432` passed the earlier bootstrap layers and reached dependency solving, but the forced classic solver remained CPU-bound for more than 10 minutes. Verified the preinstalled base has libmamba 26.7.0 and switched only the self-hosted setup steps to `conda-solver: libmamba`; the relevant 56-test suite, YAML parse, and whitespace check pass.
+- Run `32439954637` showed libmamba working as intended, then exposed system-disk pressure from setup-miniconda's default package cache. Cancelled before C: filled; self-hosted package cache and ISIS 9/10 environments now use D: runner tool-cache paths. Added a guarded cleanup for only `C:\Windows\System32\config\systemprofile\conda_pkgs_dir`; relevant tests pass 57/57 with YAML and whitespace checks.
+- Added official runner-level proxy variables to `D:\actions-runner-pyisis\.env`. Restarting the service was denied to this non-elevated process, so the current service continues with direct action-download retries and the configuration will load on its next restart.
 
 ## 5-Question Reboot Check
 

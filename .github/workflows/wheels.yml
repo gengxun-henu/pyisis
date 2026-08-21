@@ -589,15 +589,34 @@ jobs:
           "PYISIS_WINDOWS_ISIS_PREFIX=$prefix" |
             Out-File -FilePath $env:GITHUB_ENV -Append
 
+      - name: Configure Windows self-hosted Conda storage
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: |
+          $legacyCache = [IO.Path]::GetFullPath(
+            "$env:SystemRoot\System32\config\systemprofile\conda_pkgs_dir"
+          )
+          $expectedLegacyCache = [IO.Path]::GetFullPath(
+            "C:\Windows\System32\config\systemprofile\conda_pkgs_dir"
+          )
+          if ($legacyCache -ne $expectedLegacyCache) {
+            throw "Refusing to clean unexpected Conda cache: $legacyCache"
+          }
+          if (Test-Path -LiteralPath $legacyCache) {
+            Remove-Item -LiteralPath $legacyCache -Recurse -Force
+          }
+          New-Item -ItemType Directory -Force `
+            -Path "$env:RUNNER_TOOL_CACHE\pyisis-conda-pkgs" | Out-Null
+
       - name: Set up Windows ISIS build environment from preinstalled Conda
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
           CONDA: C:\Users\gx\miniconda3
         uses: conda-incubator/setup-miniconda@v4
         with:
-          activate-environment: pyisis-isis-win64
+          activate-environment: ${{ runner.tool_cache }}\pyisis-conda-envs\isis9
           environment-file: ports/windows/env/pyisis-isis-win64.yml
           conda-solver: libmamba
+          pkgs-dirs: ${{ runner.tool_cache }}\pyisis-conda-pkgs
           auto-activate: false
           run-init: false
 
@@ -810,15 +829,34 @@ jobs:
           "PYISIS_WINDOWS_ISIS_PREFIX=$prefix" |
             Out-File -FilePath $env:GITHUB_ENV -Append
 
+      - name: Configure Windows self-hosted Conda storage
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: |
+          $legacyCache = [IO.Path]::GetFullPath(
+            "$env:SystemRoot\System32\config\systemprofile\conda_pkgs_dir"
+          )
+          $expectedLegacyCache = [IO.Path]::GetFullPath(
+            "C:\Windows\System32\config\systemprofile\conda_pkgs_dir"
+          )
+          if ($legacyCache -ne $expectedLegacyCache) {
+            throw "Refusing to clean unexpected Conda cache: $legacyCache"
+          }
+          if (Test-Path -LiteralPath $legacyCache) {
+            Remove-Item -LiteralPath $legacyCache -Recurse -Force
+          }
+          New-Item -ItemType Directory -Force `
+            -Path "$env:RUNNER_TOOL_CACHE\pyisis-conda-pkgs" | Out-Null
+
       - name: Set up Windows ISIS 10 build environment from preinstalled Conda
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
           CONDA: C:\Users\gx\miniconda3
         uses: conda-incubator/setup-miniconda@v4
         with:
-          activate-environment: pyisis-isis10-win64
+          activate-environment: ${{ runner.tool_cache }}\pyisis-conda-envs\isis10
           environment-file: ports/windows/env/pyisis-isis10-win64.yml
           conda-solver: libmamba
+          pkgs-dirs: ${{ runner.tool_cache }}\pyisis-conda-pkgs
           auto-activate: false
           run-init: false
 

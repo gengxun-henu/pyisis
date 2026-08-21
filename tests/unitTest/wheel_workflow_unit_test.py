@@ -247,6 +247,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
                 job,
             )
             self.assertIn('CONDA_ALWAYS_COPY: "true"', job)
+            self.assertIn('PYTHON_CPU_COUNT: "1"', job)
             self.assertIn(
                 "System32\\config\\systemprofile\\conda_pkgs_dir",
                 job,

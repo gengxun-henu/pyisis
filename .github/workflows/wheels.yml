@@ -617,6 +617,9 @@ jobs:
         env:
           CONDA: C:\Users\gx\miniconda3
           CONDA_ALWAYS_COPY: "true"
+          # Conda hard-codes extraction concurrency from os.cpu_count().
+          # Serial extraction avoids transient Windows DLL/file scanner locks.
+          PYTHON_CPU_COUNT: "1"
         uses: conda-incubator/setup-miniconda@v4
         with:
           activate-environment: ${{ runner.tool_cache }}\pyisis-conda-envs\isis9
@@ -863,6 +866,9 @@ jobs:
         env:
           CONDA: C:\Users\gx\miniconda3
           CONDA_ALWAYS_COPY: "true"
+          # Conda hard-codes extraction concurrency from os.cpu_count().
+          # Serial extraction avoids transient Windows DLL/file scanner locks.
+          PYTHON_CPU_COUNT: "1"
         uses: conda-incubator/setup-miniconda@v4
         with:
           activate-environment: ${{ runner.tool_cache }}\pyisis-conda-envs\isis10

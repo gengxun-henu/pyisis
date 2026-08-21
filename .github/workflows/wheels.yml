@@ -163,7 +163,6 @@ jobs:
       HOSTED_CONDA_PREFIX: /opt/pyisis-conda
       WHEELHOUSE: ${{ github.workspace }}/wheelhouse
       ABI_REPORT_DIR: ${{ github.workspace }}/build/packaging/linux-abi-report
-      PYISIS_CACHE_ROOT: ${{ runner.tool_cache }}/pyisis-wheel-cache
       PYTHONUNBUFFERED: "1"
 
     steps:
@@ -212,6 +211,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          PYISIS_CACHE_ROOT="$RUNNER_TOOL_CACHE/pyisis-wheel-cache"
           expected_cache_root="$(realpath -m "$RUNNER_TOOL_CACHE/pyisis-wheel-cache")"
           cache_root="$(realpath -m "$PYISIS_CACHE_ROOT")"
           if [ "$cache_root" != "$expected_cache_root" ]; then
@@ -335,7 +335,6 @@ jobs:
       HOSTED_CONDA_PREFIX: /opt/pyisis-isis10-conda
       WHEELHOUSE: ${{ github.workspace }}/wheelhouse-isis10
       ABI_REPORT_DIR: ${{ github.workspace }}/build/packaging/linux-isis10-abi-report
-      PYISIS_CACHE_ROOT: ${{ runner.tool_cache }}/pyisis-wheel-cache
       PYISIS_MAX_LINUX_RUNTIME_BYTES: "1100000000"
       PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES: "550000000"
       PYTHONUNBUFFERED: "1"
@@ -386,6 +385,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          PYISIS_CACHE_ROOT="$RUNNER_TOOL_CACHE/pyisis-wheel-cache"
           expected_cache_root="$(realpath -m "$RUNNER_TOOL_CACHE/pyisis-wheel-cache")"
           cache_root="$(realpath -m "$PYISIS_CACHE_ROOT")"
           if [ "$cache_root" != "$expected_cache_root" ]; then
@@ -514,13 +514,22 @@ jobs:
         shell: pwsh
 
     env:
-      PYISIS_WINDOWS_ISIS_PREFIX: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && format('{0}\pyisis-wheel-cache\windows\isis9-prefix', runner.tool_cache) || format('{0}\build\windows\isis-prefix', github.workspace) }}
+      PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis-prefix
       WHEELHOUSE: ${{ github.workspace }}\wheelhouse
       PYTHONUNBUFFERED: "1"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - name: Configure Windows self-hosted ISIS 9 cache path
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: |
+          $cacheRoot = Join-Path $env:RUNNER_TOOL_CACHE "pyisis-wheel-cache\windows"
+          New-Item -ItemType Directory -Force -Path $cacheRoot | Out-Null
+          $prefix = Join-Path $cacheRoot "isis9-prefix"
+          "PYISIS_WINDOWS_ISIS_PREFIX=$prefix" |
+            Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Set up Windows ISIS build environment
         uses: conda-incubator/setup-miniconda@v4
@@ -707,7 +716,7 @@ jobs:
         shell: pwsh
 
     env:
-      PYISIS_WINDOWS_ISIS_PREFIX: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && format('{0}\pyisis-wheel-cache\windows\isis10-prefix', runner.tool_cache) || format('{0}\build\windows\isis10-prefix', github.workspace) }}
+      PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis10-prefix
       PYISIS_WINDOWS_ISIS_SOURCE: ${{ github.workspace }}\build\windows\external\isis-10.0.0-src
       PYISIS_WINDOWS_ISIS_BUILD: ${{ github.workspace }}\build\windows\isis10-build
       WHEELHOUSE: ${{ github.workspace }}\wheelhouse-isis10-windows
@@ -716,6 +725,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - name: Configure Windows self-hosted ISIS 10 cache path
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: |
+          $cacheRoot = Join-Path $env:RUNNER_TOOL_CACHE "pyisis-wheel-cache\windows"
+          New-Item -ItemType Directory -Force -Path $cacheRoot | Out-Null
+          $prefix = Join-Path $cacheRoot "isis10-prefix"
+          "PYISIS_WINDOWS_ISIS_PREFIX=$prefix" |
+            Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Set up Windows ISIS 10 build environment
         uses: conda-incubator/setup-miniconda@v4

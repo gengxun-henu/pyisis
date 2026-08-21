@@ -68,3 +68,4 @@ Phase 2: Diagnose and repair failed validation
 | Run `32373382592`: Windows cp312 setup-python failed | 1 | Removed the redundant Windows `setup-python`; conda environment supplies the target interpreter. |
 | Run `32373382592`: Windows cp313 checkout failed | 1 | Replacement validation will use supported GitHub-hosted `windows-2022`; self-hosted network remediation remains operational, outside product code. |
 | Run `32433373707`: Windows ISIS 10 runtime staging rejected six SDK DLLs | 2 | Classified `authz.dll`, `d3d12.dll`, `dwrite.dll`, `odbc32.dll`, `psapi.dll`, and `winhttp.dll` as Windows system dependencies; focused regression passes. |
+| Dispatch at `0754f87f`: workflow parser rejected `runner.tool_cache` in job-level `env` | 3 | Resolve `RUNNER_TOOL_CACHE` inside runner shell steps and export derived paths through `GITHUB_ENV`; no workflow run was created. |

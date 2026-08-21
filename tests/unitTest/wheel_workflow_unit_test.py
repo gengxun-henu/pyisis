@@ -157,14 +157,15 @@ class WheelWorkflowUnitTest(unittest.TestCase):
     def test_workflow_uses_local_self_hosted_build_caches(self):
         workflow = self._workflow_text()
 
-        self.assertIn("${{ runner.tool_cache }}/pyisis-wheel-cache", workflow)
+        self.assertIn('$RUNNER_TOOL_CACHE/pyisis-wheel-cache', workflow)
         self.assertIn("CCACHE_DIR", workflow)
         self.assertIn("PYISIS_PERSISTENT_BUILD_ROOT", workflow)
         self.assertIn("ccache --max-size 20G", workflow)
         self.assertIn("-mtime +7", workflow)
         self.assertIn("Refusing cache maintenance outside runner tool cache", workflow)
         self.assertIn("windows-local-prefix-cache", workflow)
-        self.assertIn("runner.tool_cache", workflow)
+        self.assertIn("$env:RUNNER_TOOL_CACHE", workflow)
+        self.assertNotIn("runner.tool_cache", workflow)
         self.assertIn("needs.scope.outputs.windows_is_self_hosted != 'true'", workflow)
 
     def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):

@@ -610,18 +610,19 @@ jobs:
             }
           }
           New-Item -ItemType Directory -Force `
-            -Path "$env:RUNNER_TOOL_CACHE\pyisis-conda-pkgs" | Out-Null
+            -Path "$env:RUNNER_TOOL_CACHE\pyisis-conda-pkgs\isis9" | Out-Null
 
       - name: Set up Windows ISIS build environment from preinstalled Conda
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
           CONDA: C:\Users\gx\miniconda3
+          CONDA_ALWAYS_COPY: "true"
         uses: conda-incubator/setup-miniconda@v4
         with:
           activate-environment: ${{ runner.tool_cache }}\pyisis-conda-envs\isis9
           environment-file: ports/windows/env/pyisis-isis-win64.yml
           conda-solver: libmamba
-          pkgs-dirs: ${{ runner.tool_cache }}\pyisis-conda-pkgs
+          pkgs-dirs: ${{ runner.tool_cache }}\pyisis-conda-pkgs\isis9
           auto-activate: false
           run-init: false
 
@@ -855,18 +856,19 @@ jobs:
             }
           }
           New-Item -ItemType Directory -Force `
-            -Path "$env:RUNNER_TOOL_CACHE\pyisis-conda-pkgs" | Out-Null
+            -Path "$env:RUNNER_TOOL_CACHE\pyisis-conda-pkgs\isis10" | Out-Null
 
       - name: Set up Windows ISIS 10 build environment from preinstalled Conda
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
           CONDA: C:\Users\gx\miniconda3
+          CONDA_ALWAYS_COPY: "true"
         uses: conda-incubator/setup-miniconda@v4
         with:
           activate-environment: ${{ runner.tool_cache }}\pyisis-conda-envs\isis10
           environment-file: ports/windows/env/pyisis-isis10-win64.yml
           conda-solver: libmamba
-          pkgs-dirs: ${{ runner.tool_cache }}\pyisis-conda-pkgs
+          pkgs-dirs: ${{ runner.tool_cache }}\pyisis-conda-pkgs\isis10
           auto-activate: false
           run-init: false
 

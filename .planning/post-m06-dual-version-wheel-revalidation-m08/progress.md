@@ -82,6 +82,7 @@
 - Run `32439954637` showed libmamba working as intended, then exposed system-disk pressure from setup-miniconda's default package cache. Cancelled before C: filled; self-hosted package cache and ISIS 9/10 environments now use D: runner tool-cache paths. Added a guarded cleanup for only `C:\Windows\System32\config\systemprofile\conda_pkgs_dir`; relevant tests pass 57/57 with YAML and whitespace checks.
 - Added official runner-level proxy variables to `D:\actions-runner-pyisis\.env`. Restarting the service was denied to this non-elevated process, so the current service continues with direct action-download retries and the configuration will load on its next restart.
 - Run `32440343067` failed because a locked DLL prevented removing the legacy SYSTEM-profile package cache. The exact-path guard remains, while deletion now emits a warning and continues; all new cache/environment inputs still point to D:. Relevant tests pass 57/57 with YAML and whitespace checks.
+- Run `32440542931` confirmed D: routing, then ISIS 10 setup failed because ISIS 9/10 shared one package cache containing locked `ucrtbase.dll` and `OpenCL.dll`. Split the caches by ISIS release and enabled Conda copy mode for persistent environments. The storage contract was RED first; the relevant 57-test suite, YAML parse, and whitespace checks pass.
 
 ## 5-Question Reboot Check
 

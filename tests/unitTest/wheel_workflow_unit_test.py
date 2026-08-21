@@ -227,19 +227,26 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         workflow = self._workflow_text()
 
         expected_envs = {
-            "windows-cp312": "pyisis-conda-envs\\isis9",
-            "windows-isis10-cp313": "pyisis-conda-envs\\isis10",
+            "windows-cp312": (
+                "pyisis-conda-envs\\isis9",
+                "pyisis-conda-pkgs\\isis9",
+            ),
+            "windows-isis10-cp313": (
+                "pyisis-conda-envs\\isis10",
+                "pyisis-conda-pkgs\\isis10",
+            ),
         }
-        for job_name, environment_path in expected_envs.items():
+        for job_name, (environment_path, package_path) in expected_envs.items():
             job = self._job_block(workflow, job_name)
             self.assertIn(
                 f"activate-environment: ${{{{ runner.tool_cache }}}}\\{environment_path}",
                 job,
             )
             self.assertIn(
-                "pkgs-dirs: ${{ runner.tool_cache }}\\pyisis-conda-pkgs",
+                f"pkgs-dirs: ${{{{ runner.tool_cache }}}}\\{package_path}",
                 job,
             )
+            self.assertIn('CONDA_ALWAYS_COPY: "true"', job)
             self.assertIn(
                 "System32\\config\\systemprofile\\conda_pkgs_dir",
                 job,

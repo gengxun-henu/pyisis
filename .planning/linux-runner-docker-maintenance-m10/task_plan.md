@@ -26,11 +26,11 @@ The runner is online after maintenance; a fresh workflow run on `pyisis-ubuntu26
 
 ## Current Phase
 
-Phase 3 — Maintain and verify runner (`in_progress`)
+Phase 3 — Maintain and verify runner (`in_progress; blocked on one-time administrator action`)
 
 ## Next Step
 
-Evaluate Docker's official rootless prerequisites against the host; proceed without privilege only if it safely supports Actions job containers, otherwise record the exact one-time administrator bootstrap required.
+On the Ubuntu host, perform the one-time administrator Docker Engine installation and add `pyisis-runner` to the `docker` group; then tell Codex to continue M10 so it can restart/verify the runner and remove the temporary workflow.
 
 ## Phases
 
@@ -49,7 +49,7 @@ Evaluate Docker's official rootless prerequisites against the host; proceed with
 ### Phase 3 — Maintain and verify runner (`in_progress`)
 
 - [x] Dispatch probe and retain its evidence; system install is blocked by the confirmed absence of passwordless sudo.
-- [ ] Determine whether official rootless Docker is viable without administrator intervention.
+- [x] Determine whether official rootless Docker is viable without administrator intervention (it is not).
 - [ ] Install Docker through the safe viable route.
 - [ ] Restart the runner listener safely if group membership requires it.
 - [ ] Run a fresh Actions job using the manylinux job container without sudo.
@@ -65,6 +65,7 @@ Evaluate Docker's official rootless prerequisites against the host; proceed with
 - Keep this as a standalone M10 plan because the canonical milestone registry contains immutable historical milestones and has no reviewed manifest entry for M10.
 - Treat the user's request as explicit authorization to install Docker and manage its service on `pyisis-ubuntu26`.
 - Do not restart the active runner listener synchronously from its own job; use a safe post-job mechanism or a separate verification run.
+- Pause system mutation after two read-only probes proved both privilege escalation and rootless prerequisites unavailable.
 
 ## Errors Encountered
 
@@ -76,3 +77,6 @@ Evaluate Docker's official rootless prerequisites against the host; proceed with
 | `gh release download` of actionlint timed out after 34 seconds | 1 | Inspect partial files, then use GitHub's direct release-asset download with a longer bounded timeout instead of repeating the same command. |
 | Direct download target remained locked by the timed-out `gh` child process | 2 | Confirm the stale process, avoid the locked path, and download to a new explicit filename. |
 | `actionlint` reported repository-specific `pyisis` and `ubuntu-26.04` labels as unknown | 1 | These labels are verified on the live runner; rerun while suppressing only the custom-label diagnostic. |
+| Second probe dispatch wrapper timed out after 31 seconds while the run had already started | 1 | Track the returned run ID `32482923261` directly; do not redispatch. |
+| Checkpoint branch push reset the HTTPS connection after the commit succeeded | 1 | Retry once using Git HTTP/1.1 to avoid the reset-prone HTTP/2 path. |
+| HTTP/1.1 retry could not connect to GitHub:443 within 21 seconds | 2 | Check the repository-documented local WATT proxy and use it only if its port is reachable. |

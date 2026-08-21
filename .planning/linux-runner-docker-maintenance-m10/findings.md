@@ -20,6 +20,10 @@
 - Docker's official rootless mode still requires `newuidmap`, `newgidmap`, and at least 65,536 subordinate UIDs/GIDs for the account.
 - On Ubuntu 24.04 and later, Docker documents restricted unprivileged user namespaces: script-based rootless installation needs an AppArmor profile and an AppArmor restart, both privileged operations. Installing `docker-ce-rootless-extras` via apt supplies the profile, but apt also requires privilege.
 - Rootless daemon persistence normally requires `loginctl enable-linger`, another administrator action, unless a suitable persistent user session is already configured.
+- Rootless prerequisite probe run `32482923261` succeeded and confirmed that `newuidmap`, `newgidmap`, `slirp4netns`, and `fuse-overlayfs` are all absent.
+- No subordinate UID/GID mapping was reported for `pyisis-runner`; `XDG_RUNTIME_DIR` is unset.
+- `kernel.apparmor_restrict_unprivileged_userns = 1`; an actual `unshare --user --map-root-user true` probe failed.
+- Official rootless Docker therefore cannot be installed or started safely on this host without administrator changes.
 
 ## Evidence-Based Inferences
 
@@ -29,13 +33,14 @@
 
 ## Unresolved Items
 
-- Whether Docker rootless-mode prerequisites (`newuidmap`, `newgidmap`, subordinate UID/GID ranges, user namespaces, and a usable user service/session) are already present.
+- Administrator access is required once on the Ubuntu host to install Docker Engine and grant `pyisis-runner` access; GitHub Actions cannot cross this privilege boundary.
 
 ## Decisions
 
 - Prefer Docker's official apt repository because Ubuntu 26.04 is explicitly supported and Docker documents distro `docker.io` as a conflicting unofficial package. Probe and refuse to mutate if an existing conflicting Docker/container runtime installation is detected instead of silently removing it.
 - Verification must include an Actions-level job container, not only `sudo docker info`.
 - Do not dispatch the system-level `install` operation after the probe proved passwordless sudo is unavailable.
+- Do not attempt script-based rootless Docker: the host fails multiple mandatory prerequisites and Ubuntu 26.04's required AppArmor setup is privileged.
 
 ## Resources
 

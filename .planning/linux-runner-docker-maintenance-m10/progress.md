@@ -18,6 +18,8 @@
 - Cancelled the redundant post-merge PR gate and main CI runs to release the single Linux runner for maintenance.
 - Completed read-only probe run `32482513889` successfully and retained its host evidence.
 - Reviewed official rootless Docker requirements and extended the fixed probe with subordinate-ID, user-namespace, AppArmor, runtime-directory, and linger checks.
+- Published the extended probe through PR #375 with CI skipping, then completed run `32482923261` successfully.
+- Confirmed rootless Docker is not viable: required mapping/network helpers and subordinate IDs are absent, runtime directory is unset, AppArmor restriction is enabled, and the live unprivileged-user-namespace test fails.
 
 ### Changed Files
 
@@ -37,14 +39,15 @@
 - PR #374: merged.
 - Probe run `32482513889`: success; Ubuntu 26.04/x86_64, 74 GB free, Docker absent, runner service identified, passwordless sudo denied.
 - Extended workflow `actionlint`: pass; focused tests: 6 passed, 0 failed, 0 skipped.
+- Rootless prerequisite run `32482923261`: success as a probe; all decisive prerequisites failed or were absent.
 
 ### Next Step
 
-Evaluate official rootless Docker prerequisites; proceed only if it can safely satisfy Actions job-container requirements without administrator access.
+User performs the one-time administrator Docker installation/group assignment on Ubuntu; then resume M10 at host and Actions job-container verification.
 
 ### Reboot Check
 
 - Where: Phase 3, maintain and verify runner.
 - Goal: Docker-capable `pyisis-ubuntu26` with Actions job-container proof.
 - Next: inspect workflows/instructions and package support.
-- Known blocker: no direct SSH and no passwordless sudo; rootless viability is under evaluation.
+- Known blocker: no direct SSH or passwordless sudo, and official rootless prerequisites are absent. Administrator action on the Ubuntu host is required once.

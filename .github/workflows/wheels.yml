@@ -590,9 +590,11 @@ jobs:
             Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Set up Windows ISIS build environment
+        env:
+          CONDA: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'C:\Users\gx\miniconda3' || '' }}
         uses: conda-incubator/setup-miniconda@v4
         with:
-          miniforge-version: latest
+          miniforge-version: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && '' || 'latest' }}
           installation-dir: ${{ runner.tool_cache }}\pyisis-miniforge3
           activate-environment: pyisis-isis-win64
           environment-file: ports/windows/env/pyisis-isis-win64.yml
@@ -798,9 +800,11 @@ jobs:
             Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Set up Windows ISIS 10 build environment
+        env:
+          CONDA: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'C:\Users\gx\miniconda3' || '' }}
         uses: conda-incubator/setup-miniconda@v4
         with:
-          miniforge-version: latest
+          miniforge-version: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && '' || 'latest' }}
           installation-dir: ${{ runner.tool_cache }}\pyisis-miniforge3
           activate-environment: pyisis-isis10-win64
           environment-file: ports/windows/env/pyisis-isis10-win64.yml

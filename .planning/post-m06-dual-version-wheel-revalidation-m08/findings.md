@@ -16,6 +16,8 @@
 - Run `32436488892` confirmed the Linux capability probe selects hosted Ubuntu when the dedicated Linux runner lacks Docker. Its Windows ISIS 10 job then stalled in `actions/checkout@v7`; the local runner worker log showed the checkout Node process remained alive while GitHub traffic was not completing.
 - The Windows workstation proxy at `http://127.0.0.1:7890` is already proven for repository pushes. Job-level `HTTP_PROXY` and `HTTPS_PROXY` now apply only when `windows_is_self_hosted` is true, so checkout, Miniconda setup, and build downloads share the working route without changing hosted Windows behavior.
 - Run `32437219483` proved the proxy repair: Windows ISIS 10 checkout completed successfully. Both Windows jobs then failed in `setup-miniconda` with `Failed to extract packages`; the action log showed Miniforge targeting `C:\WINDOWS\system32\config\systemprofile\miniconda3`, while C: had only 6.50 GiB free and D: had about 1.6 TiB free.
+- Run `32437828115` targeted `D:\actions-runner-pyisis\_work\_tool\pyisis-miniforge3` exactly as configured but the same Miniforge 26.3.2-3 installer failed during package extraction, disproving installation volume as the root cause.
+- setup-miniconda v4's bundled installer provider explicitly uses the `CONDA` environment variable when no Miniconda/Miniforge version is requested. `C:\Users\gx\miniconda3` has conda 26.5.3 and grants `NT AUTHORITY\SYSTEM` FullControl, so it is a valid self-hosted base without running the failing installer.
 
 ## Unresolved Items
 
@@ -41,3 +43,4 @@
 | Keep Ubuntu clean-install matrices hosted | A wheel built on the dedicated Linux host still receives independent portability evidence on Ubuntu 22.04/24.04/26.04. |
 | Inject the workstation proxy at Windows self-hosted job scope | Bootstrap actions run before repository scripts, so job-level environment is the earliest workflow-controlled point that covers checkout and dependency setup. The expression resolves to an empty string on `windows-2022`. |
 | Install Windows Miniforge under `runner.tool_cache` | This keeps the base conda installation and named environments on the runner's large D: volume and gives the two serial Windows jobs a stable shared base path. Step-level `runner.tool_cache` is a supported context; the earlier parser failure involved job-level `env`. |
+| Reuse preinstalled Conda only on self-hosted Windows | The Miniforge installer fails under the runner service account on both C: and D:. Conditional action inputs select the documented bundled-Conda provider on this workstation, while GitHub-hosted Windows continues to install latest Miniforge under its tool cache. |

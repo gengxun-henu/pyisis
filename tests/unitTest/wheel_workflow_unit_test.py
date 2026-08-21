@@ -203,6 +203,20 @@ class WheelWorkflowUnitTest(unittest.TestCase):
                 job,
             )
 
+    def test_self_hosted_windows_reuses_the_preinstalled_conda(self):
+        workflow = self._workflow_text()
+
+        for job_name in ("windows-cp312", "windows-isis10-cp313"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn(
+                "CONDA: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'C:\\Users\\gx\\miniconda3' || '' }}",
+                job,
+            )
+            self.assertIn(
+                "miniforge-version: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && '' || 'latest' }}",
+                job,
+            )
+
     def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):
         workflow = self._workflow_text()
         builder = LINUX_WHEEL_BUILDER.read_text(encoding="utf-8")

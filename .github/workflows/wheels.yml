@@ -589,12 +589,22 @@ jobs:
           "PYISIS_WINDOWS_ISIS_PREFIX=$prefix" |
             Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Set up Windows ISIS build environment
+      - name: Set up Windows ISIS build environment from preinstalled Conda
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
-          CONDA: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'C:\Users\gx\miniconda3' || '' }}
+          CONDA: C:\Users\gx\miniconda3
         uses: conda-incubator/setup-miniconda@v4
         with:
-          miniforge-version: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && '' || 'latest' }}
+          activate-environment: pyisis-isis-win64
+          environment-file: ports/windows/env/pyisis-isis-win64.yml
+          conda-solver: classic
+          auto-activate: false
+
+      - name: Set up Windows ISIS build environment with Miniforge
+        if: ${{ needs.scope.outputs.windows_is_self_hosted != 'true' }}
+        uses: conda-incubator/setup-miniconda@v4
+        with:
+          miniforge-version: latest
           installation-dir: ${{ runner.tool_cache }}\pyisis-miniforge3
           activate-environment: pyisis-isis-win64
           environment-file: ports/windows/env/pyisis-isis-win64.yml
@@ -799,12 +809,22 @@ jobs:
           "PYISIS_WINDOWS_ISIS_PREFIX=$prefix" |
             Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Set up Windows ISIS 10 build environment
+      - name: Set up Windows ISIS 10 build environment from preinstalled Conda
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
-          CONDA: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'C:\Users\gx\miniconda3' || '' }}
+          CONDA: C:\Users\gx\miniconda3
         uses: conda-incubator/setup-miniconda@v4
         with:
-          miniforge-version: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && '' || 'latest' }}
+          activate-environment: pyisis-isis10-win64
+          environment-file: ports/windows/env/pyisis-isis10-win64.yml
+          conda-solver: classic
+          auto-activate: false
+
+      - name: Set up Windows ISIS 10 build environment with Miniforge
+        if: ${{ needs.scope.outputs.windows_is_self_hosted != 'true' }}
+        uses: conda-incubator/setup-miniconda@v4
+        with:
+          miniforge-version: latest
           installation-dir: ${{ runner.tool_cache }}\pyisis-miniforge3
           activate-environment: pyisis-isis10-win64
           environment-file: ports/windows/env/pyisis-isis10-win64.yml

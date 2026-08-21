@@ -208,14 +208,18 @@ class WheelWorkflowUnitTest(unittest.TestCase):
 
         for job_name in ("windows-cp312", "windows-isis10-cp313"):
             job = self._job_block(workflow, job_name)
+            self.assertEqual(job.count("conda-incubator/setup-miniconda@v4"), 2)
+            self.assertIn("CONDA: C:\\Users\\gx\\miniconda3", job)
             self.assertIn(
-                "CONDA: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'C:\\Users\\gx\\miniconda3' || '' }}",
+                "if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}",
                 job,
             )
             self.assertIn(
-                "miniforge-version: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && '' || 'latest' }}",
+                "if: ${{ needs.scope.outputs.windows_is_self_hosted != 'true' }}",
                 job,
             )
+            self.assertIn("miniforge-version: latest", job)
+            self.assertNotIn("&& '' || 'latest'", job)
 
     def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):
         workflow = self._workflow_text()

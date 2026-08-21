@@ -36,6 +36,9 @@
 | Wheel workflow module after proxy repair | 17 | 0 | 0 | passed |
 | Workflow YAML parse after proxy repair | 1 | 0 | 0 | passed |
 | Packaging/workflow/self-hosted relevant suite after proxy repair | 54 | 0 | 0 | passed |
+| Windows Miniforge tool-volume contract RED | 0 | 1 | 0 | expected failure before workflow change |
+| Wheel workflow module after Miniforge path repair | 18 | 0 | 0 | passed |
+| Packaging/workflow/self-hosted relevant suite after Miniforge path repair | 55 | 0 | 0 | passed |
 
 ### Failed validation and repair authorization 2026-08-21
 
@@ -68,6 +71,7 @@
 - Added job-level `HTTP_PROXY` and `HTTPS_PROXY` for both Windows wheel jobs, conditional on the self-hosted scope output, with `NO_PROXY` for localhost. The focused contract was RED before the edit and the complete 17-test workflow module is GREEN afterward; YAML parsing and `git diff --check` also pass.
 - One combined local validation wrapper timed out after the 17 tests had already reported `OK`; the remaining YAML and whitespace checks were rerun separately and passed immediately.
 - An over-broad 59-test command also included five Linux account-setup shell tests that cannot decode Git Bash output under the Windows GBK locale; those five failed in the subprocess reader before assertions. They do not cover this workflow edit. The intended four-module packaging/workflow/self-hosted suite was rerun separately and passed 54/54.
+- Run `32437219483` confirmed checkout now succeeds, then both Windows jobs failed extracting Miniforge into the SYSTEM profile on C:. Added the action-supported `installation-dir` input pointing at `${{ runner.tool_cache }}\pyisis-miniforge3`; focused contract was RED first, then the complete workflow module passed 18/18 with YAML and whitespace checks also passing.
 
 ## 5-Question Reboot Check
 

@@ -171,7 +171,11 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("Refusing cache maintenance outside runner tool cache", workflow)
         self.assertIn("windows-local-prefix-cache", workflow)
         self.assertIn("$env:RUNNER_TOOL_CACHE", workflow)
-        self.assertNotIn("runner.tool_cache", workflow)
+        self.assertNotIn("PYISIS_CACHE_ROOT: ${{ runner.tool_cache", workflow)
+        self.assertNotIn(
+            "PYISIS_WINDOWS_ISIS_PREFIX: ${{ needs.scope.outputs.windows_is_self_hosted",
+            workflow,
+        )
         self.assertIn("needs.scope.outputs.windows_is_self_hosted != 'true'", workflow)
 
     def test_workflow_routes_self_hosted_windows_bootstrap_through_local_proxy(self):
@@ -188,6 +192,16 @@ class WheelWorkflowUnitTest(unittest.TestCase):
                 job,
             )
             self.assertIn("NO_PROXY: 127.0.0.1,localhost", job)
+
+    def test_windows_miniforge_installs_on_the_runner_tool_volume(self):
+        workflow = self._workflow_text()
+
+        for job_name in ("windows-cp312", "windows-isis10-cp313"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn(
+                "installation-dir: ${{ runner.tool_cache }}\\pyisis-miniforge3",
+                job,
+            )
 
     def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):
         workflow = self._workflow_text()

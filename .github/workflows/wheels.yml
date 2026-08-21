@@ -593,6 +593,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v4
         with:
           miniforge-version: latest
+          installation-dir: ${{ runner.tool_cache }}\pyisis-miniforge3
           activate-environment: pyisis-isis-win64
           environment-file: ports/windows/env/pyisis-isis-win64.yml
           conda-solver: classic
@@ -800,6 +801,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v4
         with:
           miniforge-version: latest
+          installation-dir: ${{ runner.tool_cache }}\pyisis-miniforge3
           activate-environment: pyisis-isis10-win64
           environment-file: ports/windows/env/pyisis-isis10-win64.yml
           conda-solver: classic

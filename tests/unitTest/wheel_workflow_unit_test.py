@@ -228,12 +228,12 @@ class WheelWorkflowUnitTest(unittest.TestCase):
 
         expected_envs = {
             "windows-cp312": (
-                "pyisis-conda-envs\\isis9",
-                "pyisis-conda-pkgs\\isis9",
+                "pyisis-conda-envs\\isis9-v2",
+                "pyisis-conda-pkgs\\isis9-v2",
             ),
             "windows-isis10-cp313": (
-                "pyisis-conda-envs\\isis10",
-                "pyisis-conda-pkgs\\isis10",
+                "pyisis-conda-envs\\isis10-v2",
+                "pyisis-conda-pkgs\\isis10-v2",
             ),
         }
         for job_name, (environment_path, package_path) in expected_envs.items():

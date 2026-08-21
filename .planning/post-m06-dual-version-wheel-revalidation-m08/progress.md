@@ -84,6 +84,7 @@
 - Run `32440343067` failed because a locked DLL prevented removing the legacy SYSTEM-profile package cache. The exact-path guard remains, while deletion now emits a warning and continues; all new cache/environment inputs still point to D:. Relevant tests pass 57/57 with YAML and whitespace checks.
 - Run `32440542931` confirmed D: routing, then ISIS 10 setup failed because ISIS 9/10 shared one package cache containing locked `ucrtbase.dll` and `OpenCL.dll`. Split the caches by ISIS release and enabled Conda copy mode for persistent environments. The storage contract was RED first; the relevant 57-test suite, YAML parse, and whitespace checks pass.
 - Run `32441175716` reproduced the DLL/archive errors in a brand-new ISIS 10 cache, proving the remaining trigger is within concurrent extraction rather than cross-version cache reuse. Verified the preinstalled Python 3.14 reports one CPU under `PYTHON_CPU_COUNT=1`; scoped that override only to setup-miniconda, leaving dependency solving and all compilation parallel.
+- Moved the serial-extraction validation to `isis9-v2`/`isis10-v2` cache and environment namespaces so it starts clean without depending on deletion of the failed partial caches; successful v2 state remains reusable by later runs.
 
 ## 5-Question Reboot Check
 

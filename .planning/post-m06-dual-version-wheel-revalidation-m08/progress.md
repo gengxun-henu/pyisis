@@ -32,6 +32,10 @@
 | Full packaging/workflow modules after repair | 35 | 0 | 0 | passed |
 | Packaging/workflow/self-hosted suite after optimization | 50 | 0 | 0 | passed |
 | Windows PE closure focused suite | 5 | 0 | 0 | passed |
+| Windows self-hosted proxy contract RED | 0 | 1 | 0 | expected failure before workflow change |
+| Wheel workflow module after proxy repair | 17 | 0 | 0 | passed |
+| Workflow YAML parse after proxy repair | 1 | 0 | 0 | passed |
+| Packaging/workflow/self-hosted relevant suite after proxy repair | 54 | 0 | 0 | passed |
 
 ### Failed validation and repair authorization 2026-08-21
 
@@ -60,6 +64,10 @@
 - A broad local invocation of the entire cross-platform runtime module reached four Linux-only fixture errors because Windows lacks `ldd`/`readelf`; the Windows PE-focused cases passed and the hosted Linux lanes were already green remotely.
 - GitHub rejected the first optimized dispatch at commit `0754f87f` before creating a run because the `runner` context is unavailable in job-level `env`. Cache paths now resolve from `RUNNER_TOOL_CACHE` inside runner shell steps and flow through `GITHUB_ENV`.
 - Run `32436286625` reached `pyisis-ubuntu26`, but both manylinux jobs failed before checkout with `docker: command not found`. The replacement workflow probes Docker command/daemon access on the requested runner and automatically selects hosted `ubuntu-24.04` when the self-hosted machine cannot launch job containers.
+- Run `32436488892` proved the Linux capability fallback works, then the Windows ISIS 10 self-hosted job stalled in `actions/checkout@v7`. The run was cancelled so its serial Windows runner slot could be reused.
+- Added job-level `HTTP_PROXY` and `HTTPS_PROXY` for both Windows wheel jobs, conditional on the self-hosted scope output, with `NO_PROXY` for localhost. The focused contract was RED before the edit and the complete 17-test workflow module is GREEN afterward; YAML parsing and `git diff --check` also pass.
+- One combined local validation wrapper timed out after the 17 tests had already reported `OK`; the remaining YAML and whitespace checks were rerun separately and passed immediately.
+- An over-broad 59-test command also included five Linux account-setup shell tests that cannot decode Git Bash output under the Windows GBK locale; those five failed in the subprocess reader before assertions. They do not cover this workflow edit. The intended four-module packaging/workflow/self-hosted suite was rerun separately and passed 54/54.
 
 ## 5-Question Reboot Check
 

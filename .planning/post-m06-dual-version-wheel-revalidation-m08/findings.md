@@ -13,6 +13,8 @@
 - Local `System32` verification confirms all six newly classified imports are provided by Windows: `authz.dll`, `d3d12.dll`, `dwrite.dll`, `odbc32.dll`, `psapi.dll`, and `winhttp.dll`.
 - Windows build helpers already defaulted to `min(24, ProcessorCount)`, but `wheels.yml` overrode the ISIS 10 and SpiceQL builds with `-Jobs 2`. The Windows workstation exposes 16 logical processors.
 - The approved balanced design keeps clean-install portability jobs GitHub-hosted while routing only build jobs to the dedicated Linux/Windows runners and preserving hosted runner fallbacks.
+- Run `32436488892` confirmed the Linux capability probe selects hosted Ubuntu when the dedicated Linux runner lacks Docker. Its Windows ISIS 10 job then stalled in `actions/checkout@v7`; the local runner worker log showed the checkout Node process remained alive while GitHub traffic was not completing.
+- The Windows workstation proxy at `http://127.0.0.1:7890` is already proven for repository pushes. Job-level `HTTP_PROXY` and `HTTPS_PROXY` now apply only when `windows_is_self_hosted` is true, so checkout, Miniconda setup, and build downloads share the working route without changing hosted Windows behavior.
 
 ## Unresolved Items
 
@@ -36,3 +38,4 @@
 | Use runtime-detected build parallelism capped at 24 | It uses all logical processors on smaller machines and prevents excessive parallelism on larger hosts. Explicit `-Jobs 2` overrides were removed. |
 | Use local self-hosted caches but retain hosted fallbacks | Linux reuses ccache and version-separated scikit-build trees under the runner tool cache. Windows reuses fingerprinted ISIS prefixes locally; `windows-2022` retains `actions/cache`. |
 | Keep Ubuntu clean-install matrices hosted | A wheel built on the dedicated Linux host still receives independent portability evidence on Ubuntu 22.04/24.04/26.04. |
+| Inject the workstation proxy at Windows self-hosted job scope | Bootstrap actions run before repository scripts, so job-level environment is the earliest workflow-controlled point that covers checkout and dependency setup. The expression resolves to an empty string on `windows-2022`. |

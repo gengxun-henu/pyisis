@@ -572,6 +572,9 @@ jobs:
       PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis-prefix
       WHEELHOUSE: ${{ github.workspace }}\wheelhouse
       PYTHONUNBUFFERED: "1"
+      HTTP_PROXY: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'http://127.0.0.1:7890' || '' }}
+      HTTPS_PROXY: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'http://127.0.0.1:7890' || '' }}
+      NO_PROXY: 127.0.0.1,localhost
 
     steps:
       - name: Checkout repository
@@ -776,6 +779,9 @@ jobs:
       PYISIS_WINDOWS_ISIS_BUILD: ${{ github.workspace }}\build\windows\isis10-build
       WHEELHOUSE: ${{ github.workspace }}\wheelhouse-isis10-windows
       PYTHONUNBUFFERED: "1"
+      HTTP_PROXY: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'http://127.0.0.1:7890' || '' }}
+      HTTPS_PROXY: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'http://127.0.0.1:7890' || '' }}
+      NO_PROXY: 127.0.0.1,localhost
 
     steps:
       - name: Checkout repository

@@ -24,6 +24,7 @@ Updated: 2026-08-02  Geng Xun added Ubuntu 26.04 wheel installation coverage.
 Updated: 2026-08-05  Geng Xun covered trusted Windows 11 runner routing and readiness.
 Updated: 2026-08-21  Geng Xun removed redundant Windows Python bootstrap downloads and preserved runtime metadata checks.
 Updated: 2026-08-21  Geng Xun added self-hosted cache and resource-aware parallel-build coverage.
+Updated: 2026-08-21  Geng Xun covered proxy routing for self-hosted Windows bootstrap traffic.
 """
 
 from __future__ import annotations
@@ -172,6 +173,21 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("$env:RUNNER_TOOL_CACHE", workflow)
         self.assertNotIn("runner.tool_cache", workflow)
         self.assertIn("needs.scope.outputs.windows_is_self_hosted != 'true'", workflow)
+
+    def test_workflow_routes_self_hosted_windows_bootstrap_through_local_proxy(self):
+        workflow = self._workflow_text()
+
+        for job_name in ("windows-cp312", "windows-isis10-cp313"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn(
+                "HTTP_PROXY: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'http://127.0.0.1:7890' || '' }}",
+                job,
+            )
+            self.assertIn(
+                "HTTPS_PROXY: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'http://127.0.0.1:7890' || '' }}",
+                job,
+            )
+            self.assertIn("NO_PROXY: 127.0.0.1,localhost", job)
 
     def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):
         workflow = self._workflow_text()

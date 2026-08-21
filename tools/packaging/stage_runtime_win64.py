@@ -3,14 +3,25 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import re
 import shutil
 from pathlib import Path
 
 try:
     from tools.packaging import windows_pe_dependencies as _pe_dependencies
-except ModuleNotFoundError:
-    import windows_pe_dependencies as _pe_dependencies
+except ModuleNotFoundError as error:
+    if error.name != "tools":
+        raise
+    dependency_module_path = Path(__file__).with_name("windows_pe_dependencies.py")
+    dependency_spec = importlib.util.spec_from_file_location(
+        "windows_pe_dependencies",
+        dependency_module_path,
+    )
+    if dependency_spec is None or dependency_spec.loader is None:
+        raise ImportError(f"Unable to load {dependency_module_path}") from error
+    _pe_dependencies = importlib.util.module_from_spec(dependency_spec)
+    dependency_spec.loader.exec_module(_pe_dependencies)
 
 
 copy_dependency_closure = _pe_dependencies.copy_dependency_closure

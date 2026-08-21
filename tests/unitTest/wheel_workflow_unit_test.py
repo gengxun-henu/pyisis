@@ -240,6 +240,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
             job = self._job_block(workflow, job_name)
             self.assertIn(f"activate-environment: {environment_path}", job)
             self.assertIn(f"pkgs-dirs: {package_path}", job)
+            self.assertIn(f"$prefix = '{environment_path}'", job)
             self.assertIn('CONDA_ALWAYS_COPY: "true"', job)
             self.assertIn('PYTHON_CPU_COUNT: "1"', job)
             self.assertIn(

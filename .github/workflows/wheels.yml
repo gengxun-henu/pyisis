@@ -642,7 +642,15 @@ jobs:
 
       - name: Resolve Windows dependency prefix
         run: |
-          $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          if ('${{ needs.scope.outputs.windows_is_self_hosted }}' -eq 'true') {
+            $prefix = 'D:\pyisis-conda\envs\isis9-v3'
+          }
+          else {
+            $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          }
+          if (-not (Test-Path -LiteralPath "$prefix\python.exe")) {
+            throw "Conda environment Python is missing: $prefix\python.exe"
+          }
           $env:CONDA_PREFIX = $prefix
           "CONDA_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
           "PYISIS_WINDOWS_DEP_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -891,7 +899,15 @@ jobs:
 
       - name: Resolve Windows ISIS 10 dependency prefix
         run: |
-          $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          if ('${{ needs.scope.outputs.windows_is_self_hosted }}' -eq 'true') {
+            $prefix = 'D:\pyisis-conda\envs\isis10-v3'
+          }
+          else {
+            $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          }
+          if (-not (Test-Path -LiteralPath "$prefix\python.exe")) {
+            throw "Conda environment Python is missing: $prefix\python.exe"
+          }
           $env:CONDA_PREFIX = $prefix
           "CONDA_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
           "PYISIS_WINDOWS_DEP_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append

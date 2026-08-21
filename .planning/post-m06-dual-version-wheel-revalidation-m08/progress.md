@@ -86,6 +86,7 @@
 - Run `32441175716` reproduced the DLL/archive errors in a brand-new ISIS 10 cache, proving the remaining trigger is within concurrent extraction rather than cross-version cache reuse. Verified the preinstalled Python 3.14 reports one CPU under `PYTHON_CPU_COUNT=1`; scoped that override only to setup-miniconda, leaving dependency solving and all compilation parallel.
 - Moved the serial-extraction validation to `isis9-v2`/`isis10-v2` cache and environment namespaces so it starts clean without depending on deletion of the failed partial caches; successful v2 state remains reusable by later runs.
 - Run `32441886921` still failed on the same three archive paths. A current-user prewarm reused the cache without the DLL failures, isolating the remaining Viskores path at 263 characters despite system long paths being enabled. Switched fresh v3 cache/environment namespaces to the short persistent `D:\pyisis-conda` root.
+- Run `32444182125` passed the self-hosted Conda setup, then the generic prefix resolver selected global `C:\Python312` because auto-activation is intentionally disabled. The self-hosted resolver now uses and validates its explicit versioned D: prefix; hosted Windows retains runtime Python discovery.
 
 ## 5-Question Reboot Check
 

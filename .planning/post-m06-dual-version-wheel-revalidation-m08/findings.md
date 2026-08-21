@@ -27,7 +27,22 @@
 
 ## Unresolved Items
 
-- Fresh four-lane outcomes and artifacts for the repaired commit.
+- None. M08 completed; Linux self-hosted Docker installation remains an operational optimization for later runs, not an M08 release blocker.
+
+## Final Outcome
+
+- PR #371 head `423a1d6d2f14e2a911fc91579496708f2a9e8edf` completed non-publishing wheels run `32447419640` successfully.
+- Windows ISIS 9/cp312, Windows ISIS 10/cp313, Linux ISIS 9/cp312, and Linux ISIS 10/cp313 all passed build and packaging gates.
+- Linux ISIS 9/10 each passed clean installation on Ubuntu 22.04, 24.04, and 26.04.
+- GitHub Release publication was skipped as designed.
+- Retained GitHub artifact digests:
+  - ISIS 9 Windows: `37bd6dc93ef5dd5bea0381647ca77c2c8d828fcc401195303828e6f6bdcbc369`
+  - ISIS 10 Windows: `07e16034da48d74d6c90f9de1f3f2ed853c0b2f295e6d52605ee988c49b2541e`
+  - ISIS 9 Linux wheelhouse: `821a465b063c5db48d798106cd6e48e0902afda767d8989b8b1a885d52921762`
+  - ISIS 10 Linux wheelhouse: `03405269afdfc69a6c48587d8e9ef26949a8907042f0779826b7c7cd39e4db37`
+  - ISIS 9 Linux ABI report: `1e21dd7a1140dcf508662a5716867f8243432f1ec9ea0c7f4dbd4a7a784d7096`
+  - ISIS 10 Linux ABI report: `d8ddea92345db98cd960b72b980539680a8d5bb0a316c3120599ff4926cbf53e`
+- Readiness decision: ready for a new, non-conflicting prerelease identity; M09 published rc3 rather than overwriting the archived rc2 releases.
 
 ## Failed-run evidence (run 32373382592)
 

@@ -25,6 +25,14 @@
 - Created branch `release/m09-dual-version-rc3` from merged `main`.
 - Mechanically updated current build/package/release contracts and tests from rc2 to rc3 while excluding historical plans/specs and archived rc2 notes.
 - Added new ISIS 9 and ISIS 10 rc3 release notes describing the validated M08 changes and supported matrices.
+- PR #372 merged the rc3 release contract to `main` as `977b106c9321f2154684f1a8fa10e0e72b9d1229`.
+- Formal ISIS 9 run `32474949786` completed successfully and published `v1.3.0rc3-isis9.0.0`.
+- Formal ISIS 10 run `32477095364` completed successfully and published `v1.4.0rc3-isis10.0.0`.
+- Both runs passed four platform/version build lanes and six Ubuntu clean-install jobs before their release jobs executed.
+- Downloaded all four published ZIP assets; each SHA-256 matched its release checksum and GitHub digest.
+- Published Windows ISIS 9 install report: 330 passed, 0 failed, 0 skipped, 1 expected failure; report SHA-256 `77b058693d4dec4fa539a48f0ccd73e6cbd2def72ef4b116e57ac63ddd7a0214`.
+- Published Windows ISIS 10 install report: 330 passed, 0 failed, 0 skipped, 1 expected failure; report SHA-256 `48c427d9cc1418dce0d3751a50820b4ef46920340543626685b3106bd0b44517`.
+- Temporary downloaded ZIPs, extracted wheelhouses, venvs, logs, and reports are under `D:\actions-runner-pyisis\_work\_temp\m09-release-verify` and are disposable after this evidence commit.
 
 ## Git Classification
 
@@ -33,8 +41,8 @@
 
 ## Reboot Check
 
-- **Where am I?** Phase 2, publishing the verified release contract and dispatching releases.
-- **Where am I going?** Publish and independently verify the dual-version release.
+- **Where am I?** M09 complete.
+- **Where am I going?** No remaining M09 work.
 - **Goal?** A verified GitHub release with retained hashes and install evidence.
-- **What have I learned?** The canonical registry cannot safely own M09; successful M08 evidence exists at run `32447419640`.
-- **Next step?** Commit, PR, and merge the rc3 release contract, then dispatch ISIS 9 first.
+- **What have I learned?** Sequential full-matrix runs safely published both release lines; downloaded public assets reproduce their declared digests and install cleanly on Windows.
+- **Next step?** None for M09; Linux runner Docker maintenance is separate.

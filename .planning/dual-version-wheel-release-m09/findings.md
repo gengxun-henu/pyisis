@@ -24,9 +24,7 @@
 
 ## Unresolved Items
 
-- Exact next package versions/tags and all files that encode them.
-- Whether to publish GitHub Release only or additionally TestPyPI; M09 currently defaults to GitHub Release only.
-- The workflow requires two dispatches, one for ISIS 9 and one for ISIS 10, because `release_line` is singular.
+- None for M09. Installing Docker on `pyisis-ubuntu26` remains a separate runner-maintenance improvement.
 
 ## Decisions
 
@@ -34,6 +32,21 @@
 - Do not overwrite or mutate the existing rc2 releases.
 - Freeze M09 identities as `v1.3.0rc3-isis9.0.0` and `v1.4.0rc3-isis10.0.0`; freeze the shared minimal-data version as `1.3.0rc3`.
 - Retain old rc2 release-note files unchanged and add new rc3 release notes.
+- Publish GitHub prereleases only; keep TestPyPI disabled.
+- Bind both releases to merge commit `977b106c9321f2154684f1a8fa10e0e72b9d1229` and execute the two release lines sequentially.
+
+## Published Outcome
+
+- ISIS 9: https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc3-isis9.0.0
+- ISIS 10: https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc3-isis10.0.0
+- Formal workflow runs `32474949786` and `32477095364` both completed successfully at the exact release commit.
+- Published ZIP SHA-256 values:
+  - ISIS 9 Linux: `c110eb967bf9d5388357d2d26488999b24d6bce786c2b4415c8d66f28519daec`
+  - ISIS 9 Windows: `57c761463cb6db967e90a743848ad7f76dded3d4055365119fa0a9951ade2fc2`
+  - ISIS 10 Linux: `f2891770a13cf2bf8215c89358746ac594f11cb724e3ff5c79ac8cc6ca712ef6`
+  - ISIS 10 Windows: `ed2da3c371c4924e9b50880fca18c0656732db3d36cf036e2b2738bb5c48be34`
+- Downloaded hashes matched both `SHA256SUMS.txt` files and GitHub's asset digests.
+- Fresh installation from each published Windows ZIP passed 330 checks, 0 failed, 0 skipped, and 1 expected failure.
 
 ## Resources
 

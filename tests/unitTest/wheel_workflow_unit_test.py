@@ -70,6 +70,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
     def test_workflow_routes_linux_and_windows_packaging_changes_separately(self):
         workflow = self._workflow_text()
         scope = self._job_block(workflow, "scope")
+        capability = self._job_block(workflow, "linux-runner-capability")
         linux = self._job_block(workflow, "linux-cp312-build")
         linux10 = self._job_block(workflow, "linux-isis10-cp313-build")
         windows = self._job_block(workflow, "windows-cp312")
@@ -80,11 +81,15 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("run_linux", scope)
         self.assertIn("run_windows", scope)
         for job in (linux, linux10):
-            self.assertIn("needs: scope", job)
+            self.assertIn("- scope", job)
+            self.assertIn("- linux-runner-capability", job)
             self.assertIn("needs.scope.outputs.run_linux == 'true'", job)
         for job in (windows, windows10):
             self.assertIn("needs: scope", job)
             self.assertIn("needs.scope.outputs.run_windows == 'true'", job)
+        self.assertIn("command -v docker", capability)
+        self.assertIn("timeout 15 docker info", capability)
+        self.assertIn("falling back to ubuntu-24.04", capability)
 
     def test_workflow_uses_windows_runner_and_isis_prefix_resolution(self):
         workflow = self._workflow_text()
@@ -146,7 +151,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         for job_name in ("linux-cp312-build", "linux-isis10-cp313-build"):
             job = self._job_block(workflow, job_name)
             self.assertIn(
-                "runs-on: ${{ fromJSON(needs.scope.outputs.linux_runs_on_json) }}",
+                "runs-on: ${{ fromJSON(needs.linux-runner-capability.outputs.linux_runs_on_json) }}",
                 job,
             )
 

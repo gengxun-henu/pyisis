@@ -59,6 +59,7 @@
 - Verification passed: YAML parsing, Bash syntax, `git diff --check`, the 50-test packaging/workflow/self-hosted suite, and five focused Windows PE closure tests.
 - A broad local invocation of the entire cross-platform runtime module reached four Linux-only fixture errors because Windows lacks `ldd`/`readelf`; the Windows PE-focused cases passed and the hosted Linux lanes were already green remotely.
 - GitHub rejected the first optimized dispatch at commit `0754f87f` before creating a run because the `runner` context is unavailable in job-level `env`. Cache paths now resolve from `RUNNER_TOOL_CACHE` inside runner shell steps and flow through `GITHUB_ENV`.
+- Run `32436286625` reached `pyisis-ubuntu26`, but both manylinux jobs failed before checkout with `docker: command not found`. The replacement workflow probes Docker command/daemon access on the requested runner and automatically selects hosted `ubuntu-24.04` when the self-hosted machine cannot launch job containers.
 
 ## 5-Question Reboot Check
 

@@ -148,11 +148,64 @@ jobs:
               .addCodeBlock(changedFiles.join('\n'), 'text')
               .write();
 
-  linux-cp312-build:
-    name: Build Linux cp312 manylinux_2_35 wheels
+  linux-runner-capability:
+    name: Resolve effective Linux wheel runner
     needs: scope
     if: ${{ needs.scope.outputs.run_linux == 'true' }}
     runs-on: ${{ fromJSON(needs.scope.outputs.linux_runs_on_json) }}
+    permissions:
+      contents: read
+    outputs:
+      linux_runs_on_json: ${{ steps.capability.outputs.linux_runs_on_json }}
+      linux_is_self_hosted: ${{ steps.capability.outputs.linux_is_self_hosted }}
+
+    steps:
+      - name: Probe manylinux container support
+        id: capability
+        shell: bash
+        env:
+          REQUESTED_RUNS_ON_JSON: ${{ needs.scope.outputs.linux_runs_on_json }}
+          REQUESTED_SELF_HOSTED: ${{ needs.scope.outputs.linux_is_self_hosted }}
+        run: |
+          set -euo pipefail
+          selected_runs_on="$REQUESTED_RUNS_ON_JSON"
+          use_self_hosted="$REQUESTED_SELF_HOSTED"
+          reason="requested runner is ready"
+
+          if [ "$REQUESTED_SELF_HOSTED" = "true" ]; then
+            if ! command -v docker >/dev/null 2>&1; then
+              selected_runs_on='"ubuntu-24.04"'
+              use_self_hosted=false
+              reason="self-hosted runner has no docker command"
+            elif ! timeout 15 docker info >/dev/null 2>&1; then
+              selected_runs_on='"ubuntu-24.04"'
+              use_self_hosted=false
+              reason="self-hosted runner cannot access a running Docker daemon"
+            fi
+          fi
+
+          echo "linux_runs_on_json=$selected_runs_on" >> "$GITHUB_OUTPUT"
+          echo "linux_is_self_hosted=$use_self_hosted" >> "$GITHUB_OUTPUT"
+          {
+            echo "## Effective Linux wheel runner"
+            echo ""
+            echo "- runs-on: \`$selected_runs_on\`"
+            echo "- self-hosted cache enabled: \`$use_self_hosted\`"
+            echo "- decision: $reason"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$REQUESTED_SELF_HOSTED" = "true" ] && [ "$use_self_hosted" != "true" ]; then
+            echo "::warning::$reason; falling back to ubuntu-24.04 for manylinux builds."
+          fi
+
+  linux-cp312-build:
+    name: Build Linux cp312 manylinux_2_35 wheels
+    needs:
+      - scope
+      - linux-runner-capability
+    if: ${{ needs.scope.outputs.run_linux == 'true' }}
+    runs-on: ${{ fromJSON(needs.linux-runner-capability.outputs.linux_runs_on_json) }}
     container:
       image: quay.io/pypa/manylinux_2_28_x86_64
     timeout-minutes: 180
@@ -207,7 +260,7 @@ jobs:
           echo "CXX=$compiler" >> "$GITHUB_ENV"
 
       - name: Configure Linux self-hosted build cache
-        if: ${{ needs.scope.outputs.linux_is_self_hosted == 'true' }}
+        if: ${{ needs.linux-runner-capability.outputs.linux_is_self_hosted == 'true' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -322,9 +375,11 @@ jobs:
 
   linux-isis10-cp313-build:
     name: Build ISIS 10 Linux cp313 manylinux_2_35 wheels
-    needs: scope
+    needs:
+      - scope
+      - linux-runner-capability
     if: ${{ needs.scope.outputs.run_linux == 'true' }}
-    runs-on: ${{ fromJSON(needs.scope.outputs.linux_runs_on_json) }}
+    runs-on: ${{ fromJSON(needs.linux-runner-capability.outputs.linux_runs_on_json) }}
     container:
       image: quay.io/pypa/manylinux_2_28_x86_64
     timeout-minutes: 180
@@ -381,7 +436,7 @@ jobs:
           echo "CXX=$compiler" >> "$GITHUB_ENV"
 
       - name: Configure Linux self-hosted build cache
-        if: ${{ needs.scope.outputs.linux_is_self_hosted == 'true' }}
+        if: ${{ needs.linux-runner-capability.outputs.linux_is_self_hosted == 'true' }}
         shell: bash
         run: |
           set -euo pipefail

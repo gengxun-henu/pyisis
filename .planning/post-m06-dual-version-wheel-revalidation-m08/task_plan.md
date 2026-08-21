@@ -69,3 +69,4 @@ Phase 2: Diagnose and repair failed validation
 | Run `32373382592`: Windows cp313 checkout failed | 1 | Replacement validation will use supported GitHub-hosted `windows-2022`; self-hosted network remediation remains operational, outside product code. |
 | Run `32433373707`: Windows ISIS 10 runtime staging rejected six SDK DLLs | 2 | Classified `authz.dll`, `d3d12.dll`, `dwrite.dll`, `odbc32.dll`, `psapi.dll`, and `winhttp.dll` as Windows system dependencies; focused regression passes. |
 | Dispatch at `0754f87f`: workflow parser rejected `runner.tool_cache` in job-level `env` | 3 | Resolve `RUNNER_TOOL_CACHE` inside runner shell steps and export derived paths through `GITHUB_ENV`; no workflow run was created. |
+| Run `32436286625`: Linux self-hosted jobs failed at setup | 4 | Runner log proved `docker: command not found`; add a capability probe that falls back to hosted Ubuntu while preserving the manylinux container and future automatic self-hosted enablement. |

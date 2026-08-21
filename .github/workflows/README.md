@@ -394,8 +394,11 @@ The wheel workflow also defaults its Linux build-only jobs to
 `pyisis-ubuntu26`. Those jobs remain inside the manylinux build container and
 store ccache plus version-separated scikit-build trees below the runner tool
 cache; build trees unused for more than seven days are removed after the cache
-root is verified. Ubuntu 22.04/24.04/26.04 clean-install jobs remain GitHub-hosted so the
-wheel portability evidence does not depend on the build workstation. Both
+root is verified. A lightweight probe checks that Docker is installed, running,
+and accessible to the runner service account; otherwise the manylinux build
+automatically falls back to `ubuntu-24.04`. Ubuntu 22.04/24.04/26.04
+clean-install jobs remain GitHub-hosted so the wheel portability evidence does
+not depend on the build workstation. Both
 Linux and Windows builds select `min(24, available logical processors)` at run
 time. The Windows self-hosted runner keeps fingerprinted ISIS 9/10 install
 prefixes below its runner tool cache; `windows-2022` continues to use the

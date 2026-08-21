@@ -6,7 +6,7 @@ param(
     [string]$BindingProjectDir = ".",
     [string]$DistributionName = "usgs-pyisis",
     [string]$RuntimeDistribution = "usgs-pyisis-runtime-win64",
-    [string]$PackageVersion = "1.3.0rc2"
+    [string]$PackageVersion = "1.3.0rc3"
 )
 
 $ErrorActionPreference = "Stop"

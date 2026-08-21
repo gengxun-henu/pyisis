@@ -24,8 +24,8 @@ Python ABI，必须安装到不同的虚拟环境中。
 
 | ISIS 版本 | 发布状态 | Python | Linux | Windows |
 | --- | --- | --- | --- | --- |
-| ISIS 9.0.0 | **已发布：**[`v1.3.0rc2-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc2-isis9.0.0) | CPython 3.12 | x86_64，`manylinux_2_35` | x64，`win_amd64` |
-| ISIS 10.0.0 | **已发布：**[`v1.4.0rc2-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc2-isis10.0.0) | CPython 3.13 | x86_64，`manylinux_2_35` | x64，`win_amd64` |
+| ISIS 9.0.0 | **已发布：**[`v1.3.0rc3-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc3-isis9.0.0) | CPython 3.12 | x86_64，`manylinux_2_35` | x64，`win_amd64` |
+| ISIS 10.0.0 | **已发布：**[`v1.4.0rc3-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc3-isis10.0.0) | CPython 3.13 | x86_64，`manylinux_2_35` | x64，`win_amd64` |
 
 当前平台验证范围：
 
@@ -38,12 +38,12 @@ Python ABI，必须安装到不同的虚拟环境中。
 ### 1. 下载并解压 wheelhouse
 
 打开
-[`v1.3.0rc2-isis9.0.0` Release](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc2-isis9.0.0)，
+[`v1.3.0rc3-isis9.0.0` Release](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc3-isis9.0.0)，
 根据操作系统下载一个压缩包：
 
-- [Linux x86_64，CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/pyisis-v1.3.0rc2-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip)
-- [Windows x64，CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/pyisis-v1.3.0rc2-isis9.0.0-windows-x64-cp312-wheelhouse.zip)
-- [SHA256 校验和](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/SHA256SUMS.txt)
+- [Linux x86_64，CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc3-isis9.0.0/pyisis-v1.3.0rc3-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip)
+- [Windows x64，CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc3-isis9.0.0/pyisis-v1.3.0rc3-isis9.0.0-windows-x64-cp312-wheelhouse.zip)
+- [SHA256 校验和](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc3-isis9.0.0/SHA256SUMS.txt)
 
 解压后，以下命令默认当前目录中存在 `wheelhouse/` 子目录。
 
@@ -54,7 +54,7 @@ python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse \
-  usgs-pyisis==1.3.0rc2
+  usgs-pyisis==1.3.0rc3
 ```
 
 ### 3. Windows 安装
@@ -66,14 +66,14 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse `
-  usgs-pyisis==1.3.0rc2
+  usgs-pyisis==1.3.0rc3
 ```
 
 如果本机策略不允许执行 PowerShell 激活脚本，可以直接调用虚拟环境中的 Python：
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install --no-index `
-  --find-links wheelhouse usgs-pyisis==1.3.0rc2
+  --find-links wheelhouse usgs-pyisis==1.3.0rc3
 ```
 
 ### 4. 验证
@@ -82,13 +82,13 @@ python -m pip install --no-index --find-links wheelhouse `
 python -c "import pyisis, isis_pybind as ip; print(ip.__version__, ip.__isis_version__); print(pyisis.data_status().message)"
 ```
 
-版本信息应显示 PyISIS `1.3.0rc2` 和 ISIS `9.0.0`。
+版本信息应显示 PyISIS `1.3.0rc3` 和 ISIS `9.0.0`。
 
 详细文档：
 
 - [Linux / ISIS 9 安装说明](docs/releases/INSTALL-LINUX-ISIS9.0.0.md)
 - [Windows / ISIS 9 安装说明](docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md)
-- [ISIS 9 发布说明](docs/releases/v1.3.0rc2-isis9.0.0.md)
+- [ISIS 9 发布说明](docs/releases/v1.3.0rc3-isis9.0.0.md)
 
 ## 安装 ISIS 10.0.0 版本
 
@@ -96,14 +96,14 @@ ISIS 10 使用独立分发包和 Python ABI：
 
 | 项目 | ISIS 10 版本 |
 | --- | --- |
-| Release | [`v1.4.0rc2-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc2-isis10.0.0) |
+| Release | [`v1.4.0rc3-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc3-isis10.0.0) |
 | 顶层分发包 | `usgs-pyisis-isis10` |
 | Python | CPython 3.13 |
-| Linux 安装包 | [`pyisis-v1.4.0rc2-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/pyisis-v1.4.0rc2-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip) |
-| Windows 安装包 | [`pyisis-v1.4.0rc2-isis10.0.0-windows-x64-cp313-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/pyisis-v1.4.0rc2-isis10.0.0-windows-x64-cp313-wheelhouse.zip) |
+| Linux 安装包 | [`pyisis-v1.4.0rc3-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc3-isis10.0.0/pyisis-v1.4.0rc3-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip) |
+| Windows 安装包 | [`pyisis-v1.4.0rc3-isis10.0.0-windows-x64-cp313-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc3-isis10.0.0/pyisis-v1.4.0rc3-isis10.0.0-windows-x64-cp313-wheelhouse.zip) |
 
 下载并解压对应操作系统的压缩包。Release 同时提供
-[`SHA256SUMS.txt`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/SHA256SUMS.txt)。
+[`SHA256SUMS.txt`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc3-isis10.0.0/SHA256SUMS.txt)。
 
 Linux：
 
@@ -112,7 +112,7 @@ python3.13 -m venv .venv-isis10
 source .venv-isis10/bin/activate
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse \
-  usgs-pyisis-isis10==1.4.0rc2
+  usgs-pyisis-isis10==1.4.0rc3
 ```
 
 Windows PowerShell：
@@ -122,7 +122,7 @@ py -3.13 -m venv .venv-isis10
 .\.venv-isis10\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse `
-  usgs-pyisis-isis10==1.4.0rc2
+  usgs-pyisis-isis10==1.4.0rc3
 ```
 
 ISIS 10 包继续使用相同的导入名称：
@@ -140,7 +140,7 @@ import isis_pybind
 - [ISIS 9/10 绑定兼容方案](docs/isis9-isis10-binding-compatibility-plan.md)
 - [Linux / ISIS 10 安装说明](docs/releases/INSTALL-LINUX-ISIS10.0.0.md)
 - [Windows / ISIS 10 安装说明](docs/releases/INSTALL-WINDOWS-ISIS10.0.0.md)
-- [ISIS 10 发布说明](docs/releases/v1.4.0rc2-isis10.0.0.md)
+- [ISIS 10 发布说明](docs/releases/v1.4.0rc3-isis10.0.0.md)
 
 ## ISISDATA
 

@@ -333,7 +333,7 @@ def stage_runtime(
     dependency_copy_mode: str = "closure",
     max_runtime_bytes: int | None = None,
     distribution_name: str = "usgs-pyisis-runtime-linux-x86_64",
-    package_version: str = "1.3.0rc2",
+    package_version: str = "1.3.0rc3",
 ) -> Path:
     """Copy redistributable Linux runtime files into a generated package stage."""
 
@@ -411,7 +411,7 @@ def main() -> int:
         "--distribution-name",
         default="usgs-pyisis-runtime-linux-x86_64",
     )
-    parser.add_argument("--package-version", default="1.3.0rc2")
+    parser.add_argument("--package-version", default="1.3.0rc3")
     args = parser.parse_args()
 
     stage_runtime(

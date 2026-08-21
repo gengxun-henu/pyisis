@@ -1,4 +1,4 @@
-# Install PyISIS v1.4.0rc2 for ISIS 10 on Linux x86_64
+# Install PyISIS v1.4.0rc3 for ISIS 10 on Linux x86_64
 
 ## Requirements
 
@@ -17,7 +17,7 @@ python3.13 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse \
-  usgs-pyisis-isis10==1.4.0rc2
+  usgs-pyisis-isis10==1.4.0rc3
 ```
 
 Do not install `usgs-pyisis` (the ISIS 9 line) in this environment.
@@ -28,7 +28,7 @@ Do not install `usgs-pyisis` (the ISIS 9 line) in this environment.
 python -c "import pyisis, isis_pybind as ip; print(ip.__version__, ip.__isis_version__); print(pyisis.data_status().message)"
 ```
 
-The expected output starts with `1.4.0rc2 10.0.0`.
+The expected output starts with `1.4.0rc3 10.0.0`.
 
 ## Real mission data
 

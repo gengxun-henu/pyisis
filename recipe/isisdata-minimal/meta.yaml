@@ -1,6 +1,6 @@
 package:
   name: pyisis-isisdata-minimal
-  version: 1.3.0rc2
+  version: 1.3.0rc3
 
 source:
   path: ../../tests/data/isisdata/mockup

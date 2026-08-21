@@ -25,6 +25,7 @@ Updated: 2026-08-05  Geng Xun covered trusted Windows 11 runner routing and read
 Updated: 2026-08-21  Geng Xun removed redundant Windows Python bootstrap downloads and preserved runtime metadata checks.
 Updated: 2026-08-21  Geng Xun added self-hosted cache and resource-aware parallel-build coverage.
 Updated: 2026-08-21  Geng Xun covered proxy routing for self-hosted Windows bootstrap traffic.
+Updated: 2026-08-21  Geng Xun aligned release workflow expectations with both rc3 package lines.
 """
 
 from __future__ import annotations
@@ -451,11 +452,11 @@ class WheelWorkflowUnitTest(unittest.TestCase):
             "-RuntimeDistribution usgs-pyisis-runtime-isis10-win64",
             workflow,
         )
-        self.assertIn("-PackageVersion 1.4.0rc2", workflow)
+        self.assertIn("-PackageVersion 1.4.0rc3", workflow)
         self.assertIn("--package usgs-pyisis-isis10", workflow)
-        self.assertIn("-ExpectedVersion 1.4.0rc2", workflow)
+        self.assertIn("-ExpectedVersion 1.4.0rc3", workflow)
         self.assertIn("-PythonTag cp313-cp313", workflow)
-        self.assertIn("-IsisDataVersion 1.3.0rc2", workflow)
+        self.assertIn("-IsisDataVersion 1.3.0rc3", workflow)
         self.assertIn("usgs-pyisis-isis10-windows-cp313-wheels", workflow)
 
     def test_workflow_can_publish_configured_release_after_platform_gates(self):

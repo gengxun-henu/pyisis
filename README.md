@@ -27,8 +27,8 @@ separate virtual environments.
 
 | ISIS line | Release status | Python | Linux | Windows |
 | --- | --- | --- | --- | --- |
-| ISIS 9.0.0 | **Available:** [`v1.3.0rc2-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc2-isis9.0.0) | CPython 3.12 | x86_64, `manylinux_2_35` | x64, `win_amd64` |
-| ISIS 10.0.0 | **Available:** [`v1.4.0rc2-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc2-isis10.0.0) | CPython 3.13 | x86_64, `manylinux_2_35` | x64, `win_amd64` |
+| ISIS 9.0.0 | **Available:** [`v1.3.0rc3-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc3-isis9.0.0) | CPython 3.12 | x86_64, `manylinux_2_35` | x64, `win_amd64` |
+| ISIS 10.0.0 | **Available:** [`v1.4.0rc3-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc3-isis10.0.0) | CPython 3.13 | x86_64, `manylinux_2_35` | x64, `win_amd64` |
 
 Current platform validation targets:
 
@@ -41,12 +41,12 @@ Current platform validation targets:
 ### 1. Download and extract a wheelhouse
 
 Open the
-[`v1.3.0rc2-isis9.0.0` release](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc2-isis9.0.0)
+[`v1.3.0rc3-isis9.0.0` release](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc3-isis9.0.0)
 and download exactly one platform archive:
 
-- [Linux x86_64, CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/pyisis-v1.3.0rc2-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip)
-- [Windows x64, CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/pyisis-v1.3.0rc2-isis9.0.0-windows-x64-cp312-wheelhouse.zip)
-- [SHA256 checksums](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc2-isis9.0.0/SHA256SUMS.txt)
+- [Linux x86_64, CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc3-isis9.0.0/pyisis-v1.3.0rc3-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip)
+- [Windows x64, CPython 3.12](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc3-isis9.0.0/pyisis-v1.3.0rc3-isis9.0.0-windows-x64-cp312-wheelhouse.zip)
+- [SHA256 checksums](https://github.com/gengxun-henu/pyisis/releases/download/v1.3.0rc3-isis9.0.0/SHA256SUMS.txt)
 
 Extract the archive. The commands below assume the extracted directory contains
 a `wheelhouse/` subdirectory.
@@ -58,7 +58,7 @@ python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse \
-  usgs-pyisis==1.3.0rc2
+  usgs-pyisis==1.3.0rc3
 ```
 
 ### 3. Install on Windows
@@ -70,7 +70,7 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse `
-  usgs-pyisis==1.3.0rc2
+  usgs-pyisis==1.3.0rc3
 ```
 
 If PowerShell activation is disabled by local policy, call the environment's
@@ -78,7 +78,7 @@ Python directly:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install --no-index `
-  --find-links wheelhouse usgs-pyisis==1.3.0rc2
+  --find-links wheelhouse usgs-pyisis==1.3.0rc3
 ```
 
 ### 4. Verify the installation
@@ -87,13 +87,13 @@ Python directly:
 python -c "import pyisis, isis_pybind as ip; print(ip.__version__, ip.__isis_version__); print(pyisis.data_status().message)"
 ```
 
-The version line should report PyISIS `1.3.0rc2` and ISIS `9.0.0`.
+The version line should report PyISIS `1.3.0rc3` and ISIS `9.0.0`.
 
 Detailed instructions:
 
 - [Linux / ISIS 9 installation](docs/releases/INSTALL-LINUX-ISIS9.0.0.md)
 - [Windows / ISIS 9 installation](docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md)
-- [ISIS 9 release notes](docs/releases/v1.3.0rc2-isis9.0.0.md)
+- [ISIS 9 release notes](docs/releases/v1.3.0rc3-isis9.0.0.md)
 
 ## Install ISIS 10.0.0
 
@@ -101,15 +101,15 @@ ISIS 10 support uses a separate distribution and Python ABI:
 
 | Item | ISIS 10 release |
 | --- | --- |
-| Release tag | [`v1.4.0rc2-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc2-isis10.0.0) |
+| Release tag | [`v1.4.0rc3-isis10.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc3-isis10.0.0) |
 | Top-level distribution | `usgs-pyisis-isis10` |
 | Python | CPython 3.13 |
-| Linux asset | [`pyisis-v1.4.0rc2-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/pyisis-v1.4.0rc2-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip) |
-| Windows asset | [`pyisis-v1.4.0rc2-isis10.0.0-windows-x64-cp313-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/pyisis-v1.4.0rc2-isis10.0.0-windows-x64-cp313-wheelhouse.zip) |
+| Linux asset | [`pyisis-v1.4.0rc3-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc3-isis10.0.0/pyisis-v1.4.0rc3-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip) |
+| Windows asset | [`pyisis-v1.4.0rc3-isis10.0.0-windows-x64-cp313-wheelhouse.zip`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc3-isis10.0.0/pyisis-v1.4.0rc3-isis10.0.0-windows-x64-cp313-wheelhouse.zip) |
 
 Download and extract the archive for your operating system. Installation from
 the extracted wheelhouse uses the commands below. The release also provides
-[`SHA256SUMS.txt`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc2-isis10.0.0/SHA256SUMS.txt).
+[`SHA256SUMS.txt`](https://github.com/gengxun-henu/pyisis/releases/download/v1.4.0rc3-isis10.0.0/SHA256SUMS.txt).
 
 Linux:
 
@@ -118,7 +118,7 @@ python3.13 -m venv .venv-isis10
 source .venv-isis10/bin/activate
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse \
-  usgs-pyisis-isis10==1.4.0rc2
+  usgs-pyisis-isis10==1.4.0rc3
 ```
 
 Windows PowerShell:
@@ -128,7 +128,7 @@ py -3.13 -m venv .venv-isis10
 .\.venv-isis10\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install --no-index --find-links wheelhouse `
-  usgs-pyisis-isis10==1.4.0rc2
+  usgs-pyisis-isis10==1.4.0rc3
 ```
 
 The ISIS 10 package keeps the same import names:
@@ -147,7 +147,7 @@ Planning and installation references:
 - [ISIS 9/10 compatibility plan](docs/isis9-isis10-binding-compatibility-plan.md)
 - [Linux / ISIS 10 installation](docs/releases/INSTALL-LINUX-ISIS10.0.0.md)
 - [Windows / ISIS 10 installation](docs/releases/INSTALL-WINDOWS-ISIS10.0.0.md)
-- [ISIS 10 release notes](docs/releases/v1.4.0rc2-isis10.0.0.md)
+- [ISIS 10 release notes](docs/releases/v1.4.0rc3-isis10.0.0.md)
 
 ## ISISDATA
 

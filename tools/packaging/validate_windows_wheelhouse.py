@@ -365,7 +365,7 @@ def _require_payload(
 def validate_wheelhouse(
     wheelhouse: Path,
     clean_install_report: Path,
-    package_version: str = "1.3.0rc2",
+    package_version: str = "1.3.0rc3",
     python_abi: str = "cp312",
     platform_tag: str = "win_amd64",
     expected_isis_version: str = "9.0.0",
@@ -458,7 +458,7 @@ def main() -> int:
     parser.add_argument("--wheelhouse", required=True, type=Path)
     parser.add_argument("--clean-install-report", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
-    parser.add_argument("--package-version", default="1.3.0rc2")
+    parser.add_argument("--package-version", default="1.3.0rc3")
     parser.add_argument("--python-abi", default="cp312")
     parser.add_argument("--platform-tag", default="win_amd64")
     parser.add_argument("--expected-isis-version", default="9.0.0")

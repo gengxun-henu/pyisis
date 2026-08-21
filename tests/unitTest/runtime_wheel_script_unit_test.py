@@ -20,6 +20,7 @@ Updated: 2026-08-18  Geng Xun made PE closure evidence order and case determinis
 Updated: 2026-08-18  Geng Xun classified the Qt WTS dependency as a Windows system DLL.
 Updated: 2026-08-18  Geng Xun covered embedded Python DLLs for native APP archives.
 Updated: 2026-08-21  Geng Xun classified ISIS 10 Windows SDK imports as system DLLs.
+Updated: 2026-08-21  Geng Xun aligned runtime staging fixtures with both rc3 package lines.
 """
 
 from __future__ import annotations
@@ -436,7 +437,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     "--distribution-name",
                     "usgs-pyisis-runtime-isis10-win64",
                     "--package-version",
-                    "1.4.0rc2",
+                    "1.4.0rc3",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -469,7 +470,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 'name = "usgs-pyisis-runtime-isis10-win64"',
                 runtime_pyproject,
             )
-            self.assertIn('version = "1.4.0rc2"', runtime_pyproject)
+            self.assertIn('version = "1.4.0rc3"', runtime_pyproject)
 
             sys.path.insert(0, str(stage / "src"))
             sys.modules.pop("pyisis_runtime", None)
@@ -648,8 +649,8 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 return ("openblas.dll",) if binary.name == "libcblas.dll" else ()
 
             releases = (
-                ("usgs-pyisis-runtime-win64", "1.3.0rc2"),
-                ("usgs-pyisis-runtime-isis10-win64", "1.4.0rc2"),
+                ("usgs-pyisis-runtime-win64", "1.3.0rc3"),
+                ("usgs-pyisis-runtime-isis10-win64", "1.4.0rc3"),
             )
             for distribution_name, package_version in releases:
                 with self.subTest(distribution_name=distribution_name):
@@ -739,7 +740,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     "--distribution-name",
                     "usgs-pyisis-runtime-isis10-linux-x86_64",
                     "--package-version",
-                    "1.4.0rc2",
+                    "1.4.0rc3",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -768,7 +769,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 'name = "usgs-pyisis-runtime-isis10-linux-x86_64"',
                 runtime_pyproject,
             )
-            self.assertIn('version = "1.4.0rc2"', runtime_pyproject)
+            self.assertIn('version = "1.4.0rc3"', runtime_pyproject)
 
             sys.path.insert(0, str(stage / "src"))
             sys.modules.pop("pyisis_runtime", None)

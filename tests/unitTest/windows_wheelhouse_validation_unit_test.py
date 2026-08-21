@@ -2,11 +2,12 @@
 
 Author: Geng Xun
 Created: 2026-08-16
-Last Modified: 2026-08-16
+Last Modified: 2026-08-21
 Updated: 2026-08-16  Geng Xun added exact wheel, DLL closure, payload-boundary, and hash-report coverage.
 Updated: 2026-08-16  Geng Xun added fail-closed clean-install check evidence coverage.
 Updated: 2026-08-16  Geng Xun aligned the valid runtime fixture with the canonical ISIS library layout.
 Updated: 2026-08-16  Geng Xun added strict evidence binding, ZIP safety, dependency-schema, and stale-report coverage.
+Updated: 2026-08-21  Geng Xun aligned Windows wheelhouse fixtures with the rc3 release identity.
 """
 
 from __future__ import annotations
@@ -27,7 +28,7 @@ import zipfile
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 VALIDATOR_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "validate_windows_wheelhouse.py"
 BASIC_TEST_LIST = PROJECT_ROOT / "tools" / "packaging" / "basic_tests.txt"
-PACKAGE_VERSION = "1.3.0rc2"
+PACKAGE_VERSION = "1.3.0rc3"
 
 
 class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
@@ -56,9 +57,9 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
             "pyisis_isisdata_minimal/data/base/kernels/lsk/naif0012.tls",
         ]
         wheels = {
-            "usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl": main_members,
-            "usgs_pyisis_runtime_win64-1.3.0rc2-py3-none-win_amd64.whl": runtime_members,
-            "usgs_pyisis_isisdata_minimal-1.3.0rc2-py3-none-any.whl": data_members,
+            "usgs_pyisis-1.3.0rc3-cp312-cp312-win_amd64.whl": main_members,
+            "usgs_pyisis_runtime_win64-1.3.0rc3-py3-none-win_amd64.whl": runtime_members,
+            "usgs_pyisis_isisdata_minimal-1.3.0rc3-py3-none-any.whl": data_members,
         }
         for filename, members in wheels.items():
             with zipfile.ZipFile(wheelhouse / filename, "w") as archive:
@@ -155,7 +156,7 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
         if check_id == "wheel-install":
             command = (
                 "python -m pip --isolated install --no-cache-dir --no-index "
-                "--find-links wheelhouse usgs-pyisis==1.3.0rc2"
+                "--find-links wheelhouse usgs-pyisis==1.3.0rc3"
             )
         return {
             "id": check_id,
@@ -190,7 +191,7 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
     def test_validate_wheelhouse_rejects_missing_or_unexpected_wheels(self):
         with TemporaryDirectory() as temp_dir:
             wheelhouse, clean_report = self._write_valid_fixture(Path(temp_dir))
-            (wheelhouse / "usgs_pyisis_isisdata_minimal-1.3.0rc2-py3-none-any.whl").unlink()
+            (wheelhouse / "usgs_pyisis_isisdata_minimal-1.3.0rc3-py3-none-any.whl").unlink()
             with self.assertRaisesRegex(FileNotFoundError, "exactly three wheels"):
                 self.validator.validate_wheelhouse(wheelhouse, clean_report)
             (wheelhouse / "unexpected-1.0-py3-none-any.whl").write_bytes(b"unexpected")
@@ -212,14 +213,14 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
 
     def test_validate_wheelhouse_rejects_app_executables_and_xml(self):
         cases = (
-            ("usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl", "isis_pybind/reduce.exe"),
-            ("usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl", "bin/xml/reduce.par"),
+            ("usgs_pyisis-1.3.0rc3-cp312-cp312-win_amd64.whl", "isis_pybind/reduce.exe"),
+            ("usgs_pyisis-1.3.0rc3-cp312-cp312-win_amd64.whl", "bin/xml/reduce.par"),
             (
-                "usgs_pyisis_runtime_win64-1.3.0rc2-py3-none-win_amd64.whl",
+                "usgs_pyisis_runtime_win64-1.3.0rc3-py3-none-win_amd64.whl",
                 "pyisis_runtime/vendor/isis/bin/xml/reduce.xml",
             ),
             (
-                "usgs_pyisis_isisdata_minimal-1.3.0rc2-py3-none-any.whl",
+                "usgs_pyisis_isisdata_minimal-1.3.0rc3-py3-none-any.whl",
                 "pyisis_isisdata_minimal/reduce.xml",
             ),
         )
@@ -240,7 +241,7 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
             ("isis_pybind/./escape", "unsafe wheel member"),
             ("isis_pybind//escape", "unsafe wheel member"),
         )
-        binding_name = "usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl"
+        binding_name = "usgs_pyisis-1.3.0rc3-cp312-cp312-win_amd64.whl"
         for member, message in cases:
             with self.subTest(member=member), TemporaryDirectory() as temp_dir:
                 wheelhouse, clean_report = self._write_valid_fixture(Path(temp_dir))
@@ -266,7 +267,7 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
     def test_validate_wheelhouse_requires_payload_exactly_once_as_file(self):
         with TemporaryDirectory() as temp_dir:
             wheelhouse, clean_report = self._write_valid_fixture(Path(temp_dir))
-            binding = wheelhouse / "usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl"
+            binding = wheelhouse / "usgs_pyisis-1.3.0rc3-cp312-cp312-win_amd64.whl"
             with zipfile.ZipFile(binding, "a") as archive:
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", UserWarning)
@@ -404,7 +405,7 @@ class WindowsWheelhouseValidationUnitTest(unittest.TestCase):
         with TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             wheelhouse, clean_report = self._write_valid_fixture(root)
-            (wheelhouse / "usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl").unlink()
+            (wheelhouse / "usgs_pyisis-1.3.0rc3-cp312-cp312-win_amd64.whl").unlink()
             final_report = root / "final-report.json"
             final_report.write_text('{"status": "passed"}\n', encoding="utf-8")
 

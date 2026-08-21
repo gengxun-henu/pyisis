@@ -283,7 +283,7 @@ Key fields:
 - `profiles.<name>.environment_strategy`: environment setup hint for that profile
 - `profiles.<name>.network_profile`: human-readable network hint such as `plain-http`, `watt-hosts`, or `ssh-fallback`
 - `profiles.<name>.use_watt`: whether the profile is explicitly marked as using WATT/Hosts routing
-- `profiles.<name>.build_jobs`: positive self-hosted CMake/Ninja parallelism
+- `profiles.<name>.build_jobs`: positive override or `auto`; `auto` uses `min(24, available logical processors)` on the selected runner
 - `profiles.<name>.ccache_max_size`: compiler-cache capacity limit
 - `profiles.<name>.isis_major`: selected ISIS major line
 - `profiles.<name>.python_abi`: selected CPython ABI
@@ -311,7 +311,7 @@ Runner HOME/cache root: /var/lib/pyisis-runner
 Conda prefix: /home/gengxun/miniconda3/envs/asp360_new
 ISIS 10 prefix: /home/gengxun/miniconda3/envs/asp370
 Labels: self-hosted,linux,x64,pyisis,ubuntu-26.04,isis9,isis10
-Build jobs: 16
+Build jobs: auto (`min(24, available logical processors)`, currently 16)
 ccache max size: 20G
 Build-cache retention: 7 days
 ```
@@ -389,6 +389,20 @@ Pull requests from forks, Dependabot, or any actor other than
 `gengxun-henu` are forced onto `windows-2022`. Manual maintainers can also
 select `windows-2022` when the local workstation is offline. Do not weaken the
 repository-and-actor checks or use `pull_request_target` to run PR code.
+
+The wheel workflow also defaults its Linux build-only jobs to
+`pyisis-ubuntu26`. Those jobs remain inside the manylinux build container and
+store ccache plus version-separated scikit-build trees below the runner tool
+cache; build trees unused for more than seven days are removed after the cache
+root is verified. A lightweight probe checks that Docker is installed, running,
+and accessible to the runner service account; otherwise the manylinux build
+automatically falls back to `ubuntu-24.04`. Ubuntu 22.04/24.04/26.04
+clean-install jobs remain GitHub-hosted so the wheel portability evidence does
+not depend on the build workstation. Both
+Linux and Windows builds select `min(24, available logical processors)` at run
+time. The Windows self-hosted runner keeps fingerprinted ISIS 9/10 install
+prefixes below its runner tool cache; `windows-2022` continues to use the
+GitHub Actions prefix cache as a clean-host fallback.
 
 Run the readiness check from PowerShell 7 after the Conda build environment is
 active:

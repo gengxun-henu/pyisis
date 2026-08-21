@@ -6,6 +6,7 @@ dependencies:
   - python=3.13
   - cmake
   - ninja
+  - ccache
   - pybind11
   - scikit-build-core
   - python-build

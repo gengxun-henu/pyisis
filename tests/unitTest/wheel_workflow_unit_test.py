@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-05
+Last Modified: 2026-08-21
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
@@ -22,6 +22,9 @@ Updated: 2026-07-25  Geng Xun aligned the four-matrix workflow with the rc2 rele
 Updated: 2026-08-02  Geng Xun separated daily PyISIS checks from platform release matrices.
 Updated: 2026-08-02  Geng Xun added Ubuntu 26.04 wheel installation coverage.
 Updated: 2026-08-05  Geng Xun covered trusted Windows 11 runner routing and readiness.
+Updated: 2026-08-21  Geng Xun removed redundant Windows Python bootstrap downloads and preserved runtime metadata checks.
+Updated: 2026-08-21  Geng Xun added self-hosted cache and resource-aware parallel-build coverage.
+Updated: 2026-08-21  Geng Xun covered proxy routing for self-hosted Windows bootstrap traffic.
 """
 
 from __future__ import annotations
@@ -33,6 +36,7 @@ import unittest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WHEEL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "wheels.yml"
+LINUX_WHEEL_BUILDER = PROJECT_ROOT / "tools" / "packaging" / "build_wheels_linux.sh"
 ISIS10_LINUX_ENV = (
     PROJECT_ROOT / "ports" / "linux" / "env" / "pyisis-isis10-linux-64.yml"
 )
@@ -67,6 +71,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
     def test_workflow_routes_linux_and_windows_packaging_changes_separately(self):
         workflow = self._workflow_text()
         scope = self._job_block(workflow, "scope")
+        capability = self._job_block(workflow, "linux-runner-capability")
         linux = self._job_block(workflow, "linux-cp312-build")
         linux10 = self._job_block(workflow, "linux-isis10-cp313-build")
         windows = self._job_block(workflow, "windows-cp312")
@@ -77,11 +82,15 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("run_linux", scope)
         self.assertIn("run_windows", scope)
         for job in (linux, linux10):
-            self.assertIn("needs: scope", job)
+            self.assertIn("- scope", job)
+            self.assertIn("- linux-runner-capability", job)
             self.assertIn("needs.scope.outputs.run_linux == 'true'", job)
         for job in (windows, windows10):
             self.assertIn("needs: scope", job)
             self.assertIn("needs.scope.outputs.run_windows == 'true'", job)
+        self.assertIn("command -v docker", capability)
+        self.assertIn("timeout 15 docker info", capability)
+        self.assertIn("falling back to ubuntu-24.04", capability)
 
     def test_workflow_uses_windows_runner_and_isis_prefix_resolution(self):
         workflow = self._workflow_text()
@@ -110,6 +119,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
                 job,
             )
             self.assertIn("check_windows_runner.ps1", job)
+            self.assertNotIn("actions/setup-python", job)
         self.assertIn("shell: pwsh", workflow)
         self.assertIn("actions/checkout@v7", workflow)
         self.assertIn("actions/setup-python@v7", workflow)
@@ -121,6 +131,151 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("ports\\windows\\isis\\verify_isis_prefix.ps1", workflow)
         self.assertIn("PYISIS_WINDOWS_ISIS_PREFIX", workflow)
         self.assertIn("PYISIS_WINDOWS_DEP_PREFIX", workflow)
+        self.assertGreaterEqual(
+            workflow.count("-Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX"),
+            4,
+        )
+
+    def test_workflow_routes_linux_builds_to_the_dedicated_runner(self):
+        workflow = self._workflow_text()
+        scope = self._job_block(workflow, "scope")
+
+        self.assertIn("linux_runner:", workflow)
+        self.assertIn("default: ubuntu26-self-hosted", workflow)
+        self.assertIn("ubuntu-24.04", workflow)
+        self.assertIn("linux_runs_on_json", scope)
+        self.assertIn("linux_is_self_hosted", scope)
+        self.assertIn(
+            '["self-hosted", "Linux", "X64", "pyisis", "ubuntu-26.04"]',
+            scope,
+        )
+        for job_name in ("linux-cp312-build", "linux-isis10-cp313-build"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn(
+                "runs-on: ${{ fromJSON(needs.linux-runner-capability.outputs.linux_runs_on_json) }}",
+                job,
+            )
+
+        for job_name in ("linux-cp312-clean-install", "linux-isis10-cp313-clean-install"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn("runs-on: ${{ matrix.os }}", job)
+
+    def test_workflow_uses_local_self_hosted_build_caches(self):
+        workflow = self._workflow_text()
+
+        self.assertIn('$RUNNER_TOOL_CACHE/pyisis-wheel-cache', workflow)
+        self.assertIn("CCACHE_DIR", workflow)
+        self.assertIn("PYISIS_PERSISTENT_BUILD_ROOT", workflow)
+        self.assertIn("ccache --max-size 20G", workflow)
+        self.assertIn("-mtime +7", workflow)
+        self.assertIn("Refusing cache maintenance outside runner tool cache", workflow)
+        self.assertIn("windows-local-prefix-cache", workflow)
+        self.assertIn("$env:RUNNER_TOOL_CACHE", workflow)
+        self.assertNotIn("PYISIS_CACHE_ROOT: ${{ runner.tool_cache", workflow)
+        self.assertNotIn(
+            "PYISIS_WINDOWS_ISIS_PREFIX: ${{ needs.scope.outputs.windows_is_self_hosted",
+            workflow,
+        )
+        self.assertIn("needs.scope.outputs.windows_is_self_hosted != 'true'", workflow)
+
+    def test_workflow_routes_self_hosted_windows_bootstrap_through_local_proxy(self):
+        workflow = self._workflow_text()
+
+        for job_name in ("windows-cp312", "windows-isis10-cp313"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn(
+                "HTTP_PROXY: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'http://127.0.0.1:7890' || '' }}",
+                job,
+            )
+            self.assertIn(
+                "HTTPS_PROXY: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && 'http://127.0.0.1:7890' || '' }}",
+                job,
+            )
+            self.assertIn("NO_PROXY: 127.0.0.1,localhost", job)
+
+    def test_windows_miniforge_installs_on_the_runner_tool_volume(self):
+        workflow = self._workflow_text()
+
+        for job_name in ("windows-cp312", "windows-isis10-cp313"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn(
+                "installation-dir: ${{ runner.tool_cache }}\\pyisis-miniforge3",
+                job,
+            )
+
+    def test_self_hosted_windows_reuses_the_preinstalled_conda(self):
+        workflow = self._workflow_text()
+
+        for job_name in ("windows-cp312", "windows-isis10-cp313"):
+            job = self._job_block(workflow, job_name)
+            self.assertEqual(job.count("conda-incubator/setup-miniconda@v4"), 2)
+            self.assertIn("CONDA: C:\\Users\\gx\\miniconda3", job)
+            self.assertIn("run-init: false", job)
+            self.assertIn("conda-solver: libmamba", job)
+            self.assertIn(
+                "if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}",
+                job,
+            )
+            self.assertIn(
+                "if: ${{ needs.scope.outputs.windows_is_self_hosted != 'true' }}",
+                job,
+            )
+            self.assertIn("miniforge-version: latest", job)
+            self.assertNotIn("&& '' || 'latest'", job)
+
+    def test_self_hosted_windows_conda_storage_stays_on_the_tool_volume(self):
+        workflow = self._workflow_text()
+
+        expected_envs = {
+            "windows-cp312": (
+                "D:\\pyisis-conda\\envs\\isis9-v3",
+                "D:\\pyisis-conda\\pkgs\\isis9-v3",
+            ),
+            "windows-isis10-cp313": (
+                "D:\\pyisis-conda\\envs\\isis10-v3",
+                "D:\\pyisis-conda\\pkgs\\isis10-v3",
+            ),
+        }
+        for job_name, (environment_path, package_path) in expected_envs.items():
+            job = self._job_block(workflow, job_name)
+            self.assertIn(f"activate-environment: {environment_path}", job)
+            self.assertIn(f"pkgs-dirs: {package_path}", job)
+            self.assertIn(f"$prefix = '{environment_path}'", job)
+            self.assertIn('CONDA_ALWAYS_COPY: "true"', job)
+            self.assertIn('PYTHON_CPU_COUNT: "1"', job)
+            self.assertIn(
+                "System32\\config\\systemprofile\\conda_pkgs_dir",
+                job,
+            )
+            self.assertIn(
+                "Remove-Item -LiteralPath $legacyCache -Recurse -Force -ErrorAction Stop",
+                job,
+            )
+            self.assertIn("Deferred locked legacy Conda cache cleanup", job)
+
+    def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):
+        workflow = self._workflow_text()
+        builder = LINUX_WHEEL_BUILDER.read_text(encoding="utf-8")
+
+        self.assertNotIn("-Jobs 2", workflow)
+        self.assertIn("PYISIS_BUILD_JOBS", builder)
+        self.assertIn("getconf _NPROCESSORS_ONLN", builder)
+        self.assertIn('if [ "$build_jobs" -gt 24 ]', builder)
+        self.assertIn("CMAKE_BUILD_PARALLEL_LEVEL", builder)
+
+    def test_windows_clean_installs_verify_their_runtime_distributions(self):
+        workflow = self._workflow_text()
+        windows = self._job_block(workflow, "windows-cp312")
+        windows10 = self._job_block(workflow, "windows-isis10-cp313")
+
+        self.assertIn(
+            "--additional-distribution usgs-pyisis-runtime-win64",
+            windows,
+        )
+        self.assertIn(
+            "--additional-distribution usgs-pyisis-runtime-isis10-win64",
+            windows10,
+        )
 
     def test_workflow_builds_tests_checks_and_uploads_wheels(self):
         workflow = self._workflow_text()
@@ -170,11 +325,11 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertNotIn("'ports/windows/isis/patches/*.patch'", isis10_cache)
         self.assertEqual(
             workflow.count("'ports/windows/isis/common.ps1'"),
-            2,
+            4,
         )
         self.assertEqual(
             workflow.count("'ports/windows/isis/build_spiceql.ps1'"),
-            1,
+            2,
         )
         self.assertIn(
             "steps.windows-isis-prefix-cache.outputs.cache-hit != 'true'",

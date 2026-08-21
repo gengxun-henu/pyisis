@@ -48,9 +48,9 @@ on:
         default: true
         type: boolean
       build_jobs:
-        description: "Positive build parallelism for compilation"
+        description: "Positive build parallelism or auto for min(24, logical processors)"
         required: false
-        default: "16"
+        default: "auto"
         type: string
       ccache_max_size:
         description: "Maximum size for the self-hosted ccache directory"
@@ -731,8 +731,13 @@ jobs:
           set -euo pipefail
           set -o pipefail
           build_jobs="$BUILD_JOBS_INPUT"
-          if ! [[ "$build_jobs" =~ ^[1-9][0-9]*$ ]]; then
-            echo "::error::build_jobs must be a positive integer; got: $build_jobs"
+          if [ "$build_jobs" = "auto" ]; then
+            build_jobs="$(getconf _NPROCESSORS_ONLN 2>/dev/null || nproc)"
+            if [ "$build_jobs" -gt 24 ]; then
+              build_jobs=24
+            fi
+          elif ! [[ "$build_jobs" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error::build_jobs must be auto or a positive integer; got: $build_jobs"
             exit 2
           fi
           cmake --build "$BUILD_DIR" --parallel "$build_jobs" --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"

@@ -43,7 +43,7 @@ outputs:
     description: Whether the selected profile uses WATT host routing.
     value: ${{ steps.resolve.outputs.use_watt }}
   build_jobs:
-    description: Positive self-hosted CMake build parallelism.
+    description: Positive self-hosted CMake build parallelism or auto.
     value: ${{ steps.resolve.outputs.build_jobs }}
   ccache_max_size:
     description: Maximum compiler cache size.

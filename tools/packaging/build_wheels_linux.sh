@@ -13,6 +13,7 @@ distribution_name="${PYISIS_DISTRIBUTION_NAME:-usgs-pyisis}"
 runtime_distribution="${PYISIS_RUNTIME_DISTRIBUTION:-usgs-pyisis-runtime-linux-x86_64}"
 package_version="${PYISIS_PACKAGE_VERSION:-1.3.0rc2}"
 vendor_toolchain_runtime="${PYISIS_VENDOR_TOOLCHAIN_RUNTIME:-OFF}"
+build_jobs="${PYISIS_BUILD_JOBS:-auto}"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -91,6 +92,25 @@ if [ ! -d "$dependency_prefix" ]; then
 fi
 
 mkdir -p "$output_dir"
+
+if [ "$build_jobs" = "auto" ]; then
+  build_jobs="$(getconf _NPROCESSORS_ONLN 2>/dev/null || nproc)"
+  if [ "$build_jobs" -gt 24 ]; then
+    build_jobs=24
+  fi
+fi
+if ! [[ "$build_jobs" =~ ^[1-9][0-9]*$ ]]; then
+  echo "PYISIS_BUILD_JOBS must be auto or a positive integer; got: $build_jobs" >&2
+  exit 2
+fi
+export CMAKE_BUILD_PARALLEL_LEVEL="$build_jobs"
+echo "Using Linux wheel build parallelism: $CMAKE_BUILD_PARALLEL_LEVEL"
+
+if [ -n "${PYISIS_PERSISTENT_BUILD_ROOT:-}" ]; then
+  mkdir -p "$PYISIS_PERSISTENT_BUILD_ROOT"
+  export SKBUILD_BUILD_DIR="$PYISIS_PERSISTENT_BUILD_ROOT/${distribution_name}/{wheel_tag}"
+  echo "Using persistent scikit-build directory: $SKBUILD_BUILD_DIR"
+fi
 
 "$python_executable" -c "import build, pybind11, scikit_build_core, wheel"
 

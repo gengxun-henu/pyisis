@@ -27,6 +27,10 @@ if (Test-Path -LiteralPath $MsvcActivationScript) {
     . $MsvcActivationScript
 }
 
+$BuildJobs = [Math]::Min(24, [Environment]::ProcessorCount)
+$env:CMAKE_GENERATOR = "Ninja"
+$env:CMAKE_BUILD_PARALLEL_LEVEL = "$BuildJobs"
+
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 
 & $PythonExecutable -m pip install -U build scikit-build-core pybind11 "setuptools>=77" wheel
@@ -61,7 +65,8 @@ if ($RuntimeAnyWheel) {
 & $PythonExecutable -m build packaging\isisdata-minimal --wheel --no-isolation --outdir $OutputDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-& $PythonExecutable -m build $BindingProjectDir --wheel --no-isolation --skip-dependency-check --outdir $OutputDir
+& $PythonExecutable -m build $BindingProjectDir --wheel --no-isolation --skip-dependency-check `
+    --config-setting "build-dir=build/{wheel_tag}-ninja" --outdir $OutputDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $BindingWheelPrefix = $DistributionName.Replace("-", "_")

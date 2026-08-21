@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-18
+Last Modified: 2026-08-21
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
@@ -19,6 +19,7 @@ Updated: 2026-08-18  Geng Xun covered shared Windows PE closure provenance.
 Updated: 2026-08-18  Geng Xun made PE closure evidence order and case deterministic.
 Updated: 2026-08-18  Geng Xun classified the Qt WTS dependency as a Windows system DLL.
 Updated: 2026-08-18  Geng Xun covered embedded Python DLLs for native APP archives.
+Updated: 2026-08-21  Geng Xun classified ISIS 10 Windows SDK imports as system DLLs.
 """
 
 from __future__ import annotations
@@ -191,6 +192,23 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     }
                 ],
             )
+
+    def test_shared_pe_closure_classifies_isis10_windows_sdk_imports_as_system(self):
+        module = self._load_module(
+            "windows_pe_dependencies_isis10_system_dlls",
+            WINDOWS_PE_SCRIPT,
+        )
+
+        for dependency in (
+            "authz.dll",
+            "d3d12.dll",
+            "dwrite.dll",
+            "odbc32.dll",
+            "psapi.dll",
+            "winhttp.dll",
+        ):
+            with self.subTest(dependency=dependency):
+                self.assertTrue(module._is_system_dependency(dependency))
 
     def test_shared_pe_closure_can_bundle_prefix_root_python_runtime(self):
         module = self._load_module(

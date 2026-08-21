@@ -69,6 +69,7 @@ Verify a clean offline installation with:
   --wheelhouse "$PWD\build\windows\wheelhouse-isis9" `
   --venv "$PWD\build\windows\pyisis-wheel-install-venv-20260816" `
   --package "usgs-pyisis==1.3.0rc2" `
+  --additional-distribution usgs-pyisis-runtime-win64 `
   --expected-isis-version "9.0.0" `
   --test-list tools\packaging\basic_tests.txt `
   --report "$PWD\build\windows\reports\pyisis-wheel-install-isis9.json"

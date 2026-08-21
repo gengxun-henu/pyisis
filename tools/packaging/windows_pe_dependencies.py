@@ -12,14 +12,17 @@ from pathlib import Path
 SYSTEM_DLL_PREFIXES = ("api-ms-", "ext-ms-")
 SYSTEM_DLL_NAMES = {
     "advapi32.dll",
+    "authz.dll",
     "bcrypt.dll",
     "cfgmgr32.dll",
     "comdlg32.dll",
     "crypt32.dll",
     "d3d11.dll",
+    "d3d12.dll",
     "dbghelp.dll",
     "dnsapi.dll",
     "dwmapi.dll",
+    "dwrite.dll",
     "dxgi.dll",
     "gdi32.dll",
     "imm32.dll",
@@ -30,8 +33,10 @@ SYSTEM_DLL_NAMES = {
     "netapi32.dll",
     "normaliz.dll",
     "ntdll.dll",
+    "odbc32.dll",
     "ole32.dll",
     "oleaut32.dll",
+    "psapi.dll",
     "rpcrt4.dll",
     "secur32.dll",
     "setupapi.dll",
@@ -42,6 +47,7 @@ SYSTEM_DLL_NAMES = {
     "uxtheme.dll",
     "uuid.dll",
     "version.dll",
+    "winhttp.dll",
     "winmm.dll",
     "winspool.drv",
     "wldap32.dll",
@@ -76,7 +82,11 @@ def _dependency_index(
     index: dict[str, tuple[Path, Path]] = {}
     for dependency_prefix in dependency_prefixes:
         for source in sorted(
-            dependency_prefix.glob("*.dll"),
+            (
+                path
+                for path in dependency_prefix.glob("*")
+                if path.suffix.lower() == ".dll"
+            ),
             key=lambda path: (str(path).lower(), str(path)),
         ):
             if source.is_file():
@@ -85,7 +95,7 @@ def _dependency_index(
             if not root.exists():
                 continue
             for source in sorted(
-                root.rglob("*.dll"),
+                (path for path in root.rglob("*") if path.suffix.lower() == ".dll"),
                 key=lambda path: (str(path).lower(), str(path)),
             ):
                 if source.is_file():

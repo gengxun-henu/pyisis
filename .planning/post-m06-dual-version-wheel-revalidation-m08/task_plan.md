@@ -1,0 +1,87 @@
+# Task Plan: Post-M06 dual-version wheel revalidation (M08)
+
+## Goal
+
+Validate and repair current HEAD across Linux/Windows × ISIS 9/10 wheels without publishing a release.
+
+## Scope
+
+- Execute only the approved workflow and collect its current-HEAD evidence.
+- Diagnose the failed M08 run, implement the smallest tested repair authorized by the user, and revalidate without publishing.
+- Apply the approved balanced self-hosted performance design without weakening clean-host portability gates.
+
+## Dependencies
+
+- M06 is complete.
+- M07 reconciliation is recorded in `.planning/release-evidence-reconciliation-m07/`.
+
+## Completion Gate
+
+Four successful workflow lanes with retained hashes, install/import/test evidence, and no release publication.
+
+## Next Step
+
+Commit and normally push the tested repair, freeze its exact SHA, then dispatch one replacement `wheels.yml` run using both dedicated self-hosted build runners, `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
+
+## Current Phase
+
+Phase 2: Diagnose and repair failed validation
+
+## Phases
+
+### Phase 1: Freeze inputs
+
+- [x] Record exact HEAD and classified Git state.
+- [x] Run workflow contract tests.
+- [x] Record four-lane workflow-job mapping.
+- **Status:** completed 2026-08-20
+
+### Frozen workflow-job mapping
+
+| Required lane | Committed `wheels.yml` job ID(s) |
+|---|---|
+| `linux-isis9` | `linux-cp312-build`, `linux-cp312-clean-install` |
+| `linux-isis10-cp313` | `linux-isis10-cp313-build`, `linux-isis10-cp313-clean-install` |
+| `windows-cp312` | `windows-cp312` |
+| `windows-isis10-cp313` | `windows-isis10-cp313` |
+
+### Phase 2: Dispatch and monitor
+
+- [x] Push the frozen commit normally and dispatch `wheels.yml` at that ref with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
+- [x] Record workflow run `32373382592` and its job outcomes.
+- [x] Repair deterministic Linux metadata validation and Windows bootstrap/network resilience with focused tests (35 passed).
+- [x] Diagnose replacement run `32433373707`: Linux passed; Windows ISIS 10 failed because six Windows SDK DLLs were missing from the system-DLL allowlist.
+- [x] Implement the approved runner optimization: runtime `min(24, logical processors)`, Linux ccache/scikit-build reuse, and fingerprinted Windows local prefix reuse.
+- [ ] Dispatch and monitor a replacement non-publishing run.
+- **Status:** in progress
+
+### Phase 3: Evidence and outcome
+
+- [ ] Retain four-lane hashes and report a non-publishing readiness decision.
+- **Status:** pending
+
+## Errors Encountered
+
+| Error | Attempt | Resolution |
+|---|---:|---|
+| Run `32373382592`: six Linux clean-install jobs failed | 1 | Replaced hard-coded distribution names with package-derived expectations plus explicit additional runtime distributions; regression passed. |
+| Run `32373382592`: Windows cp312 setup-python failed | 1 | Removed the redundant Windows `setup-python`; conda environment supplies the target interpreter. |
+| Run `32373382592`: Windows cp313 checkout failed | 1 | Replacement validation will use supported GitHub-hosted `windows-2022`; self-hosted network remediation remains operational, outside product code. |
+| Run `32433373707`: Windows ISIS 10 runtime staging rejected six SDK DLLs | 2 | Classified `authz.dll`, `d3d12.dll`, `dwrite.dll`, `odbc32.dll`, `psapi.dll`, and `winhttp.dll` as Windows system dependencies; focused regression passes. |
+| Dispatch at `0754f87f`: workflow parser rejected `runner.tool_cache` in job-level `env` | 3 | Resolve `RUNNER_TOOL_CACHE` inside runner shell steps and export derived paths through `GITHUB_ENV`; no workflow run was created. |
+| Run `32436286625`: Linux self-hosted jobs failed at setup | 4 | Runner log proved `docker: command not found`; add a capability probe that falls back to hosted Ubuntu while preserving the manylinux container and future automatic self-hosted enablement. |
+| Run `32436488892`: Windows self-hosted checkout stalled | 5 | Runner diagnostics showed the checkout Node process remained active while direct GitHub traffic was unreliable; route all Windows self-hosted job bootstrap traffic through the workstation proxy, leaving hosted fallback proxy values empty. |
+| Run `32437219483`: both Windows Miniforge installations failed during package extraction | 6 | Checkout succeeded through the job proxy, isolating the next failure. `setup-miniconda` selected the service account's system-profile directory on C:, while the runner tool cache is on capacious D:. Pin `installation-dir` to `${{ runner.tool_cache }}\pyisis-miniforge3` for both Windows jobs. |
+| Run `32437828115`: Miniforge installer also failed extracting on D: | 7 | The installation-volume hypothesis was disproved. Use setup-miniconda's documented bundled-Conda path on the self-hosted runner by supplying the preinstalled `C:\Users\gx\miniconda3` and an empty Miniforge version; keep latest Miniforge installation for hosted Windows. |
+| Run `32438209261`: conditional empty Miniforge version evaluated to `latest` | 8 | GitHub's `condition && value || fallback` idiom cannot select a falsy empty string. Replace it with two explicit, mutually exclusive setup-miniconda steps for self-hosted bundled Conda and hosted Miniforge. |
+| Run `32438639372`: bundled Conda selected, then `conda init` failed | 9 | The service account cannot persist all user shell initialization changes. CI uses explicit interpreter paths, so disable `run-init` only for the self-hosted bundled-Conda steps. |
+| Run `32439037432`: classic dependency solve consumed over 10 minutes | 10 | The active Conda 26.5.3 base includes conda-libmamba-solver 26.7.0 and defaults to libmamba. Use libmamba only on the self-hosted setup path; retain hosted classic behavior. |
+| Run `32439954637`: self-hosted Conda consumed system-disk package cache | 11 | C: free space fell from 6.50 GiB to 2.69 GiB during package extraction. Put package cache and both environments under `runner.tool_cache` on D:, and safely remove only setup-miniconda's exact legacy system-profile cache. |
+| Run `32440343067`: a locked DLL blocked legacy cache deletion | 12 | Keep exact-path validation, but make deletion best-effort with a warning. The authoritative fix is routing all new package/environment writes to D:, so stale cleanup must not block validation. |
+| Run `32440542931`: the shared D: package cache contained locked DLLs | 13 | ISIS 10 failed with `InvalidArchiveError` for cached `ucrtbase.dll` and `OpenCL.dll`. Give ISIS 9 and ISIS 10 separate package caches and set `CONDA_ALWAYS_COPY=true` so persistent environments do not hard-link cache DLLs. |
+| Run `32441175716`: fresh isolated ISIS 10 cache still hit DLL locks | 14 | The new cache disproved cross-version reuse as the sole cause. Conda 26 hard-codes up to three extraction threads from `os.cpu_count()`; scope `PYTHON_CPU_COUNT=1` to setup-miniconda so extraction is serial while libmamba solving and later compilation remain parallel. |
+| Run `32441886921`: serial extraction retained a Viskores long-path failure | 15 | Current-user prewarming eliminated the DLL access failures but reproduced the 263-character Viskores header path failure. Use the short persistent `D:\pyisis-conda` root with fresh v3 namespaces. |
+| Run `32444182125`: readiness used global `C:\Python312` instead of Conda | 16 | The Conda update passed, proving the storage repair. With `auto-activate: false`, resolve the known self-hosted environment path explicitly and verify its `python.exe`; retain interpreter discovery for hosted Windows. |
+| PR gate run `32444645945`: direct module loading could not import the PE helper | 17 | Both ISIS versions failed the same five tests because `stage_runtime_win64.py` was loaded by file path while neither the repository root nor script directory was importable. Load the sibling helper explicitly from `__file__` when the package import is unavailable. |
+| PR gate run `32445126192`: PE index used case-sensitive Linux globbing | 18 | Import repair exposed the final deterministic test: `*.dll` did not match fixture `Isis.DLL` on Linux. Enumerate candidates and compare the suffix case-insensitively to model Windows DLL semantics on every test host. |
+| Wheels run `32445495106` attempt 2: stale Visual Studio build dir had no compiler | 19 | ISIS 10 prefix and runtime wheels built, but the binding CMake cache retained `CMAKE_CXX_COMPILER=NOTFOUND`. Force the available Ninja generator, use a generator-specific scikit-build directory, and cap binding compilation at `min(24, logical processors)`. |

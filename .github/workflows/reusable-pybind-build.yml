@@ -51,9 +51,9 @@ on:
         default: true
         type: boolean
       build_jobs:
-        description: Positive CMake build parallelism for self-hosted builds.
+        description: Positive CMake build parallelism or auto for min(24, logical processors).
         required: false
-        default: "16"
+        default: "auto"
         type: string
       ccache_max_size:
         description: Maximum size for the self-hosted ccache directory.

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-17
+Last Modified: 2026-08-21
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -35,6 +35,7 @@ Updated: 2026-08-16  Geng Xun added isolated-install, stale-report, unittest-cou
 Updated: 2026-08-17  Geng Xun aligned Windows APP inventory coverage with the csv2table 150-APP manifest.
 Updated: 2026-08-17  Geng Xun covered manifest-only Windows APP priority refresh integrity.
 Updated: 2026-08-18  Geng Xun recorded csv2table's verified four-cell native APP status.
+Updated: 2026-08-21  Geng Xun covered platform-specific clean-install distribution metadata.
 """
 
 from __future__ import annotations
@@ -95,6 +96,11 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn('$DistributionName.Replace("-", "_")', script)
         self.assertIn("--distribution-name $RuntimeDistribution", script)
         self.assertIn("--package-version $PackageVersion", script)
+        self.assertIn('$env:CMAKE_GENERATOR = "Ninja"', script)
+        self.assertIn(
+            "[Math]::Min(24, [Environment]::ProcessorCount)", script
+        )
+        self.assertIn('build-dir=build/{wheel_tag}-ninja', script)
 
     def test_windows_runner_readiness_script_checks_required_host_tools(self):
         self.assertTrue(WINDOWS_RUNNER_CHECK.is_file())
@@ -749,6 +755,36 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("--expected-isis-version", script)
         self.assertIn("__isis_version__", script)
         self.assertIn('"-m", "unittest"', script)
+
+    def test_clean_venv_distribution_metadata_matches_requested_package(self):
+        """Linux installs must not require a Windows runtime distribution."""
+        spec = importlib.util.spec_from_file_location(
+            "test_wheel_install_distributions",
+            TEST_WHEEL_INSTALL_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        self.assertEqual(
+            module._expected_distributions("usgs-pyisis-isis10==1.4.0rc2", ()),
+            (
+                "usgs-pyisis-isis10",
+                "usgs-pyisis-isisdata-minimal",
+            ),
+        )
+        self.assertEqual(
+            module._expected_distributions(
+                "usgs-pyisis==1.3.0rc2",
+                ("usgs-pyisis-runtime-win64",),
+            ),
+            (
+                "usgs-pyisis",
+                "usgs-pyisis-isisdata-minimal",
+                "usgs-pyisis-runtime-win64",
+            ),
+        )
 
     def test_clean_venv_install_invalidates_stale_report_before_venv_check(self):
         with TemporaryDirectory() as temp_dir:

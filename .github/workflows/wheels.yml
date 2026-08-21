@@ -599,6 +599,7 @@ jobs:
           environment-file: ports/windows/env/pyisis-isis-win64.yml
           conda-solver: classic
           auto-activate: false
+          run-init: false
 
       - name: Set up Windows ISIS build environment with Miniforge
         if: ${{ needs.scope.outputs.windows_is_self_hosted != 'true' }}
@@ -819,6 +820,7 @@ jobs:
           environment-file: ports/windows/env/pyisis-isis10-win64.yml
           conda-solver: classic
           auto-activate: false
+          run-init: false
 
       - name: Set up Windows ISIS 10 build environment with Miniforge
         if: ${{ needs.scope.outputs.windows_is_self_hosted != 'true' }}

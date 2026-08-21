@@ -210,6 +210,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
             job = self._job_block(workflow, job_name)
             self.assertEqual(job.count("conda-incubator/setup-miniconda@v4"), 2)
             self.assertIn("CONDA: C:\\Users\\gx\\miniconda3", job)
+            self.assertIn("run-init: false", job)
             self.assertIn(
                 "if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}",
                 job,

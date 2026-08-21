@@ -77,6 +77,7 @@
 - Run `32437219483` confirmed checkout now succeeds, then both Windows jobs failed extracting Miniforge into the SYSTEM profile on C:. Added the action-supported `installation-dir` input pointing at `${{ runner.tool_cache }}\pyisis-miniforge3`; focused contract was RED first, then the complete workflow module passed 18/18 with YAML and whitespace checks also passing.
 - Run `32437828115` showed the same installer failure with an explicit D: target, so the volume hypothesis was rejected. The self-hosted setup step now supplies the existing SYSTEM-accessible Conda base and leaves `miniforge-version` empty, activating setup-miniconda's documented bundled provider; hosted Windows still requests latest Miniforge. The new contract was RED first, then workflow tests passed 19/19 and the relevant suite passed 56/56.
 - Run `32438209261` exposed a GitHub expression error in that repair: selecting `''` through `&& ... || ...` fell through to `latest`, so the installer ran again. Replaced the expression with separate self-hosted and hosted setup steps guarded by opposite `if` conditions; the self-hosted step has no installer input at all.
+- Run `32438639372` confirmed the bundled provider, then failed because setup-miniconda's default `conda init` tried to persist shell configuration from the runner service account. Added `run-init: false` only to the two self-hosted setup steps; the relevant 56-test suite, YAML parse, and whitespace check pass.
 
 ## 5-Question Reboot Check
 

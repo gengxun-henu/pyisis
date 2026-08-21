@@ -53,14 +53,14 @@ $env:PATH = "D:\pyisis-win-env;D:\pyisis-win-env\Scripts;D:\pyisis-win-env\Libra
   -PythonExecutable "D:\pyisis-win-env\python.exe" `
   -DependencyPrefix "D:\pyisis-win-env" `
   -BindingProjectDir "$PWD" `
-  -PackageVersion "1.3.0rc2"
+  -PackageVersion "1.3.0rc3"
 ```
 
 The wheelhouse contains these three wheels:
 
-- `usgs_pyisis-1.3.0rc2-cp312-cp312-win_amd64.whl`
-- `usgs_pyisis_runtime_win64-1.3.0rc2-py3-none-win_amd64.whl`
-- `usgs_pyisis_isisdata_minimal-1.3.0rc2-py3-none-any.whl`
+- `usgs_pyisis-1.3.0rc3-cp312-cp312-win_amd64.whl`
+- `usgs_pyisis_runtime_win64-1.3.0rc3-py3-none-win_amd64.whl`
+- `usgs_pyisis_isisdata_minimal-1.3.0rc3-py3-none-any.whl`
 
 Verify a clean offline installation with:
 
@@ -68,7 +68,7 @@ Verify a clean offline installation with:
 & "D:\pyisis-win-env\python.exe" tools\packaging\test_wheel_install.py `
   --wheelhouse "$PWD\build\windows\wheelhouse-isis9" `
   --venv "$PWD\build\windows\pyisis-wheel-install-venv-20260816" `
-  --package "usgs-pyisis==1.3.0rc2" `
+  --package "usgs-pyisis==1.3.0rc3" `
   --additional-distribution usgs-pyisis-runtime-win64 `
   --expected-isis-version "9.0.0" `
   --test-list tools\packaging\basic_tests.txt `
@@ -83,7 +83,7 @@ evidence and the current wheel bytes:
   --wheelhouse "$PWD\build\windows\wheelhouse-isis9" `
   --clean-install-report "$PWD\build\windows\reports\pyisis-wheel-install-isis9.json" `
   --report "$PWD\build\windows\reports\pyisis-wheelhouse-isis9-validation.json" `
-  --package-version "1.3.0rc2" `
+  --package-version "1.3.0rc3" `
   --python-abi "cp312" `
   --platform-tag "win_amd64" `
   --expected-isis-version "9.0.0"

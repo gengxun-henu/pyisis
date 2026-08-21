@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-25
+Last Modified: 2026-08-21
 Updated: 2026-06-18  Geng Xun added conda recipe coverage for package metadata, build scripts, and smoke-test commands.
 Updated: 2026-06-18  Geng Xun added git source coverage to keep local build artifacts out of conda-build work copies.
 Updated: 2026-06-18  Geng Xun added compiler variant coverage for Windows conda-build packaging.
@@ -11,6 +11,7 @@ Updated: 2026-06-18  Geng Xun added regression coverage to keep conda-build help
 Updated: 2026-06-18  Geng Xun added package-test coverage for ISISDATA activation.
 Updated: 2026-07-23  Geng Xun aligned conda recipes with the 1.3.0rc1 release identity.
 Updated: 2026-07-25  Geng Xun aligned conda recipes with the 1.3.0rc2 release identity.
+Updated: 2026-08-21  Geng Xun aligned conda recipes with the rc3 dual-version release identity.
 """
 
 from __future__ import annotations
@@ -40,7 +41,7 @@ class CondaRecipeUnitTest(unittest.TestCase):
         meta_yaml = recipe_file.read_text(encoding="utf-8")
 
         self.assertIn("{% set name = \"pyisis\" %}", meta_yaml)
-        self.assertIn("{% set version = \"1.3.0rc2\" %}", meta_yaml)
+        self.assertIn("{% set version = \"1.3.0rc3\" %}", meta_yaml)
         self.assertIn("name: {{ name|lower }}", meta_yaml)
         self.assertIn("source:", meta_yaml)
         self.assertIn("git_url: ..", meta_yaml)
@@ -138,7 +139,7 @@ class CondaRecipeUnitTest(unittest.TestCase):
         meta_yaml = (ISISDATA_RECIPE_DIR / "meta.yaml").read_text(encoding="utf-8")
 
         self.assertIn("name: pyisis-isisdata-minimal", meta_yaml)
-        self.assertIn("version: 1.3.0rc2", meta_yaml)
+        self.assertIn("version: 1.3.0rc3", meta_yaml)
         self.assertIn("path: ../../tests/data/isisdata/mockup", meta_yaml)
         self.assertIn("noarch: generic", meta_yaml)
         self.assertIn("share/isisdata", meta_yaml)

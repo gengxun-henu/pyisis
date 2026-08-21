@@ -97,7 +97,7 @@ def stage_runtime(
     dependency_prefixes: tuple[Path, ...] = (),
     dependency_copy_mode: str = "closure",
     distribution_name: str = "usgs-pyisis-runtime-win64",
-    package_version: str = "1.3.0rc2",
+    package_version: str = "1.3.0rc3",
     dependency_report: Path | None = None,
 ) -> Path:
     """Copy redistributable runtime files into a generated package stage."""
@@ -162,7 +162,7 @@ def main() -> int:
         "--distribution-name",
         default="usgs-pyisis-runtime-win64",
     )
-    parser.add_argument("--package-version", default="1.3.0rc2")
+    parser.add_argument("--package-version", default="1.3.0rc3")
     parser.add_argument("--dependency-report", type=Path)
     args = parser.parse_args()
 

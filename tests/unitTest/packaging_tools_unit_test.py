@@ -36,6 +36,7 @@ Updated: 2026-08-17  Geng Xun aligned Windows APP inventory coverage with the cs
 Updated: 2026-08-17  Geng Xun covered manifest-only Windows APP priority refresh integrity.
 Updated: 2026-08-18  Geng Xun recorded csv2table's verified four-cell native APP status.
 Updated: 2026-08-21  Geng Xun covered platform-specific clean-install distribution metadata.
+Updated: 2026-08-21  Geng Xun aligned packaging-tool fixtures with both rc3 package lines.
 """
 
 from __future__ import annotations
@@ -768,7 +769,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         spec.loader.exec_module(module)
 
         self.assertEqual(
-            module._expected_distributions("usgs-pyisis-isis10==1.4.0rc2", ()),
+            module._expected_distributions("usgs-pyisis-isis10==1.4.0rc3", ()),
             (
                 "usgs-pyisis-isis10",
                 "usgs-pyisis-isisdata-minimal",
@@ -776,7 +777,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         )
         self.assertEqual(
             module._expected_distributions(
-                "usgs-pyisis==1.3.0rc2",
+                "usgs-pyisis==1.3.0rc3",
                 ("usgs-pyisis-runtime-win64",),
             ),
             (

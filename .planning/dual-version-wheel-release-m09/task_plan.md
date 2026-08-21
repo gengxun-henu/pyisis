@@ -29,11 +29,11 @@ The exact release commit has successful ISIS 9/10 Linux and Windows build/instal
 
 ## Next Step
 
-Commit the verified rc3 release contract, publish it through a PR, and merge it to `main` before sequential release dispatches.
+None — M09 completed; both rc3 prereleases and retained post-publication evidence are available.
 
 ## Current Phase
 
-Phase 2: Publish
+Phase 4: Close milestone
 
 ## Phases
 
@@ -45,22 +45,22 @@ Phase 2: Publish
 
 ### Phase 2: Publish
 
-- [ ] Merge the verified rc3 release contract to `main` and freeze the resulting commit.
-- [ ] Dispatch the tracked publishing workflow at the frozen commit, sequentially for ISIS 9 and ISIS 10.
-- [ ] Monitor every required build, install, and publishing job to completion.
-- **Status:** in progress
+- [x] Merge the verified rc3 release contract to `main` and freeze the resulting commit.
+- [x] Dispatch the tracked publishing workflow at the frozen commit, sequentially for ISIS 9 and ISIS 10.
+- [x] Monitor every required build, install, and publishing job to completion.
+- **Status:** completed 2026-08-21
 
 ### Phase 3: Verify published assets
 
-- [ ] Record the published release URL and complete asset inventory.
-- [ ] Download published assets, retain SHA-256 hashes, and run focused clean-install verification.
-- **Status:** pending
+- [x] Record the published release URL and complete asset inventory.
+- [x] Download published assets, retain SHA-256 hashes, and run focused clean-install verification.
+- **Status:** completed 2026-08-21
 
 ### Phase 4: Close milestone
 
-- [ ] Update M08/M09 durable evidence and classify Git state.
-- [ ] Commit and publish planning evidence without modifying guarded local files.
-- **Status:** pending
+- [x] Update M08/M09 durable evidence and classify Git state.
+- [x] Commit and publish planning evidence without modifying guarded local files.
+- **Status:** completed 2026-08-21
 
 ## Decisions
 
@@ -74,3 +74,6 @@ Phase 2: Publish
 |---|---:|---|
 | Canonical milestone registry does not include standalone M07/M08 | 1 | Preserve the verified registry and use the repository's existing standalone plan-directory convention for M09. |
 | Combined 124-test local packaging run had four Linux-runtime staging errors on Windows because `ldd`/`readelf` are unavailable | 1 | Classify as host-tool mismatch, retain the 120 passing results, and run the release-contract subset locally; Linux staging remains covered by the required Linux Actions lanes. |
+| PR wheels run remained `in_progress` after cancellation and held both self-hosted runners | 1 | Force-cancelled run `32474876967`; both runners returned online and the formal release run started. |
+| First PowerShell checksum summary used an invalid direct pipeline after `foreach` | 1 | Collected objects in an explicit array before formatting. |
+| ISIS 9 checksum file was absent after the bulk ZIP download | 1 | Re-downloaded `SHA256SUMS.txt` and reran strict four-asset checksum comparison successfully. |

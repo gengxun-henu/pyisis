@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "milestone_id": "dual-version-wheel-release-m09",
+  "verified_at": "2026-08-21T11:51:00Z",
+  "release_commit": "977b106c9321f2154684f1a8fa10e0e72b9d1229",
+  "workflow_runs": [
+    {
+      "id": 32474949786,
+      "release_line": "isis9",
+      "conclusion": "success",
+      "url": "https://github.com/gengxun-henu/pyisis/actions/runs/32474949786"
+    },
+    {
+      "id": 32477095364,
+      "release_line": "isis10",
+      "conclusion": "success",
+      "url": "https://github.com/gengxun-henu/pyisis/actions/runs/32477095364"
+    }
+  ],
+  "releases": [
+    {
+      "tag": "v1.3.0rc3-isis9.0.0",
+      "url": "https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc3-isis9.0.0",
+      "assets": [
+        {
+          "name": "pyisis-v1.3.0rc3-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip",
+          "sha256": "c110eb967bf9d5388357d2d26488999b24d6bce786c2b4415c8d66f28519daec"
+        },
+        {
+          "name": "pyisis-v1.3.0rc3-isis9.0.0-windows-x64-cp312-wheelhouse.zip",
+          "sha256": "57c761463cb6db967e90a743848ad7f76dded3d4055365119fa0a9951ade2fc2"
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "sha256": "4e028041e8914746385a4c8a6d390bb9ca9da56f1c5640073057b7f4faf8420a"
+        }
+      ]
+    },
+    {
+      "tag": "v1.4.0rc3-isis10.0.0",
+      "url": "https://github.com/gengxun-henu/pyisis/releases/tag/v1.4.0rc3-isis10.0.0",
+      "assets": [
+        {
+          "name": "pyisis-v1.4.0rc3-isis10.0.0-linux-x86_64-cp313-manylinux_2_35-wheelhouse.zip",
+          "sha256": "f2891770a13cf2bf8215c89358746ac594f11cb724e3ff5c79ac8cc6ca712ef6"
+        },
+        {
+          "name": "pyisis-v1.4.0rc3-isis10.0.0-windows-x64-cp313-wheelhouse.zip",
+          "sha256": "ed2da3c371c4924e9b50880fca18c0656732db3d36cf036e2b2738bb5c48be34"
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "sha256": "d014b3daba062324c7326a592da96361f98be69341785be17bc46d8705c1b25c"
+        }
+      ]
+    }
+  ],
+  "post_publish_windows_installs": [
+    {
+      "release_line": "isis9",
+      "package": "usgs-pyisis",
+      "passed": 330,
+      "failed": 0,
+      "skipped": 0,
+      "expected_failures": 1,
+      "report_sha256": "77b058693d4dec4fa539a48f0ccd73e6cbd2def72ef4b116e57ac63ddd7a0214"
+    },
+    {
+      "release_line": "isis10",
+      "package": "usgs-pyisis-isis10",
+      "passed": 330,
+      "failed": 0,
+      "skipped": 0,
+      "expected_failures": 1,
+      "report_sha256": "48c427d9cc1418dce0d3751a50820b4ef46920340543626685b3106bd0b44517"
+    }
+  ]
+}

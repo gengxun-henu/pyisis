@@ -90,13 +90,17 @@
 - PR #371 gate run `32444645945` exposed five identical file-path import errors in each ISIS unit lane. Added an explicit sibling-module fallback to `stage_runtime_win64.py`; all six Windows staging tests pass when the test file is invoked directly with no repository-root `PYTHONPATH`.
 - PR #371 gate run `32445126192` reduced both unit lanes to one deterministic PE-index failure. Replaced host-case-sensitive `*.dll` glob filtering with explicit case-insensitive suffix filtering; the targeted deterministic test, six staging tests, and 57 workflow/packaging tests pass locally.
 - Wheels run `32445495106` attempt 2 completed and cached the ISIS 10 Windows prefix, then the binding build reused a stale Visual Studio scikit-build directory whose compiler was `NOTFOUND`. The wheel helper now pins Ninja, caps parallelism at 24, and uses `build/{wheel_tag}-ninja` for generator-safe reuse.
+- Final replacement run `32447419640` at `423a1d6d2f14e2a911fc91579496708f2a9e8edf` completed successfully: four build lanes passed, all six Linux clean-install jobs passed, and release publication was skipped.
+- GitHub artifact API returned six retained SHA-256 digests, recorded in `findings.md`.
+- PR #371 merged to `main` as `addb839dc0b2622931926c60265c6c47aedd650f`.
+- M08 readiness was accepted and M09 continued with new rc3 identities.
 
 ## 5-Question Reboot Check
 
 | Question | Answer |
 |---|---|
-| Where am I? | M08 second repair and runner-performance phase after run `32433373707`. |
-| Where am I going? | Tested repair followed by fresh four-lane evidence. |
+| Where am I? | M08 complete. |
+| Where am I going? | M09 owns formal rc3 publication. |
 | What's the goal? | Revalidate wheels without publishing a release. |
-| What have I learned? | Linux is now remotely green; Windows ISIS compilation dominates cache misses, and runtime staging must explicitly classify OS-owned DLLs. |
-| What is next? | Commit and push the repaired/optimized SHA, then dispatch the non-publishing matrix on both dedicated self-hosted build runners. |
+| What have I learned? | All four wheel lanes and six Linux install matrices pass; persistent Windows caches remove subsequent prefix cold builds. |
+| What is next? | None for M08. |

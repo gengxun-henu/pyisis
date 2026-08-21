@@ -21,11 +21,11 @@ Four successful workflow lanes with retained hashes, install/import/test evidenc
 
 ## Next Step
 
-Commit and normally push the tested repair, freeze its exact SHA, then dispatch one replacement `wheels.yml` run using both dedicated self-hosted build runners, `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
+None — M08 completed with non-publishing run `32447419640`; publication continued in M09.
 
 ## Current Phase
 
-Phase 2: Diagnose and repair failed validation
+Phase 3: Evidence and outcome
 
 ## Phases
 
@@ -52,13 +52,13 @@ Phase 2: Diagnose and repair failed validation
 - [x] Repair deterministic Linux metadata validation and Windows bootstrap/network resilience with focused tests (35 passed).
 - [x] Diagnose replacement run `32433373707`: Linux passed; Windows ISIS 10 failed because six Windows SDK DLLs were missing from the system-DLL allowlist.
 - [x] Implement the approved runner optimization: runtime `min(24, logical processors)`, Linux ccache/scikit-build reuse, and fingerprinted Windows local prefix reuse.
-- [ ] Dispatch and monitor a replacement non-publishing run.
-- **Status:** in progress
+- [x] Dispatch and monitor a replacement non-publishing run.
+- **Status:** completed 2026-08-21
 
 ### Phase 3: Evidence and outcome
 
-- [ ] Retain four-lane hashes and report a non-publishing readiness decision.
-- **Status:** pending
+- [x] Retain four-lane hashes and report a non-publishing readiness decision.
+- **Status:** completed 2026-08-21
 
 ## Errors Encountered
 

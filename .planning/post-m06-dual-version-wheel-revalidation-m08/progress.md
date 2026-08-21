@@ -30,6 +30,8 @@
 | Repair-focused RED tests | 0 | 3 | 0 | expected failure: missing behavior |
 | Repair-focused GREEN tests | 3 | 0 | 0 | passed |
 | Full packaging/workflow modules after repair | 35 | 0 | 0 | passed |
+| Packaging/workflow/self-hosted suite after optimization | 50 | 0 | 0 | passed |
+| Windows PE closure focused suite | 5 | 0 | 0 | passed |
 
 ### Failed validation and repair authorization 2026-08-21
 
@@ -46,12 +48,23 @@
 - RED: three focused tests failed for the absent behavior. GREEN: the same three passed. Full packaging/workflow modules passed 35/35.
 - Independent review found the code fix correct and requested this planning-state correction before commit.
 
+### Replacement run and balanced runner optimization 2026-08-21
+
+- Replacement run `32433373707` proved both Linux wheel lanes and all six hosted Ubuntu clean-install jobs pass at `ea1e3627f841b124842d1e9bc0d2f3a740128693`.
+- Windows ISIS 10 successfully built and verified ISIS 10.0.0, then wheel staging failed on six unclassified Windows SDK DLL imports. A focused RED test reproduced all six; the system-DLL allowlist repair is GREEN.
+- Removed workflow-level `-Jobs 2`; Windows now uses its script default of `min(24, ProcessorCount)` (16 on this workstation).
+- Changed shared Linux runner profiles to `build_jobs: auto`; reusable builds and wheel builds compute `min(24, available logical processors)` at run time.
+- Linux wheel build jobs now default to `pyisis-ubuntu26`, retain the manylinux container, and reuse a 20 GB local ccache plus ISIS-version-specific scikit-build trees. Hosted Ubuntu clean-install jobs remain unchanged.
+- Windows self-hosted jobs now use fingerprinted local ISIS 9/10 prefixes below the runner tool cache. Hosted `windows-2022` jobs retain GitHub Actions prefix restore/save behavior.
+- Verification passed: YAML parsing, Bash syntax, `git diff --check`, the 50-test packaging/workflow/self-hosted suite, and five focused Windows PE closure tests.
+- A broad local invocation of the entire cross-platform runtime module reached four Linux-only fixture errors because Windows lacks `ldd`/`readelf`; the Windows PE-focused cases passed and the hosted Linux lanes were already green remotely.
+
 ## 5-Question Reboot Check
 
 | Question | Answer |
 |---|---|
-| Where am I? | M08 repair phase after failed run `32373382592`. |
+| Where am I? | M08 second repair and runner-performance phase after run `32433373707`. |
 | Where am I going? | Tested repair followed by fresh four-lane evidence. |
 | What's the goal? | Revalidate wheels without publishing a release. |
-| What have I learned? | Historical rc2 evidence cannot validate M06-era changes; the tracked contract maps four required lanes to existing workflow jobs and passed locally. |
-| What is next? | Commit and push the repaired SHA, then dispatch the non-publishing matrix with `windows_runner=windows-2022`. |
+| What have I learned? | Linux is now remotely green; Windows ISIS compilation dominates cache misses, and runtime staging must explicitly classify OS-owned DLLs. |
+| What is next? | Commit and push the repaired/optimized SHA, then dispatch the non-publishing matrix on both dedicated self-hosted build runners. |

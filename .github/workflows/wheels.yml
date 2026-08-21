@@ -26,6 +26,14 @@ on:
         options:
           - isis9
           - isis10
+      linux_runner:
+        description: "Linux wheel build runner"
+        required: false
+        default: ubuntu26-self-hosted
+        type: choice
+        options:
+          - ubuntu26-self-hosted
+          - ubuntu-24.04
       windows_runner:
         description: "Windows validation runner"
         required: false
@@ -60,6 +68,8 @@ jobs:
     outputs:
       run_linux: ${{ steps.scope.outputs.run_linux }}
       run_windows: ${{ steps.scope.outputs.run_windows }}
+      linux_runs_on_json: ${{ steps.scope.outputs.linux_runs_on_json }}
+      linux_is_self_hosted: ${{ steps.scope.outputs.linux_is_self_hosted }}
       windows_runs_on_json: ${{ steps.scope.outputs.windows_runs_on_json }}
       windows_is_self_hosted: ${{ steps.scope.outputs.windows_is_self_hosted }}
 
@@ -69,15 +79,23 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
+            const ubuntu26Labels = ["self-hosted", "Linux", "X64", "pyisis", "ubuntu-26.04"];
             const windows11Labels = ["self-hosted", "Windows", "X64", "pyisis", "windows-11"];
             const trustedOwnerPr = context.eventName === 'pull_request' &&
               context.payload.pull_request.head.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
               context.actor === 'gengxun-henu';
+            const requestedLinuxRunner = context.payload.inputs?.linux_runner || 'ubuntu26-self-hosted';
+            const useUbuntu26 = context.eventName === 'workflow_dispatch'
+              ? requestedLinuxRunner === 'ubuntu26-self-hosted'
+              : trustedOwnerPr;
+            const selectedLinuxRunner = useUbuntu26 ? ubuntu26Labels : 'ubuntu-24.04';
             const requestedWindowsRunner = context.payload.inputs?.windows_runner || 'windows11-self-hosted';
             const useWindows11 = context.eventName === 'workflow_dispatch'
               ? requestedWindowsRunner === 'windows11-self-hosted'
               : trustedOwnerPr;
             const selectedWindowsRunner = useWindows11 ? windows11Labels : 'windows-2022';
+            core.setOutput('linux_runs_on_json', JSON.stringify(selectedLinuxRunner));
+            core.setOutput('linux_is_self_hosted', String(useUbuntu26));
             core.setOutput('windows_runs_on_json', JSON.stringify(selectedWindowsRunner));
             core.setOutput('windows_is_self_hosted', String(useWindows11));
 
@@ -87,6 +105,7 @@ jobs:
               await core.summary
                 .addHeading('Wheel platform scope', 2)
                 .addRaw('Manual dispatch: running the complete Linux and Windows release matrix.\n')
+                .addRaw(`Linux runner: ${useUbuntu26 ? 'Ubuntu 26.04 self-hosted' : 'ubuntu-24.04'}\n`)
                 .addRaw(`Windows runner: ${useWindows11 ? 'Windows 11 self-hosted' : 'windows-2022'}\n`)
                 .write();
               return;
@@ -123,6 +142,7 @@ jobs:
               .addHeading('Wheel platform scope', 2)
               .addRaw(`Linux manylinux matrix: ${runLinux ? 'run' : 'skip'}\n\n`)
               .addRaw(`Windows wheel matrix: ${runWindows ? 'run' : 'skip'}\n\n`)
+              .addRaw(`Linux runner: ${useUbuntu26 ? 'Ubuntu 26.04 self-hosted' : 'ubuntu-24.04'}\n\n`)
               .addRaw(`Windows runner: ${useWindows11 ? 'Windows 11 self-hosted' : 'windows-2022'}\n\n`)
               .addHeading('Changed files', 3)
               .addCodeBlock(changedFiles.join('\n'), 'text')
@@ -132,7 +152,7 @@ jobs:
     name: Build Linux cp312 manylinux_2_35 wheels
     needs: scope
     if: ${{ needs.scope.outputs.run_linux == 'true' }}
-    runs-on: ubuntu-24.04
+    runs-on: ${{ fromJSON(needs.scope.outputs.linux_runs_on_json) }}
     container:
       image: quay.io/pypa/manylinux_2_28_x86_64
     timeout-minutes: 180
@@ -143,6 +163,7 @@ jobs:
       HOSTED_CONDA_PREFIX: /opt/pyisis-conda
       WHEELHOUSE: ${{ github.workspace }}/wheelhouse
       ABI_REPORT_DIR: ${{ github.workspace }}/build/packaging/linux-abi-report
+      PYISIS_CACHE_ROOT: ${{ runner.tool_cache }}/pyisis-wheel-cache
       PYTHONUNBUFFERED: "1"
 
     steps:
@@ -185,6 +206,31 @@ jobs:
           fi
           "$compiler" --version
           echo "CXX=$compiler" >> "$GITHUB_ENV"
+
+      - name: Configure Linux self-hosted build cache
+        if: ${{ needs.scope.outputs.linux_is_self_hosted == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected_cache_root="$(realpath -m "$RUNNER_TOOL_CACHE/pyisis-wheel-cache")"
+          cache_root="$(realpath -m "$PYISIS_CACHE_ROOT")"
+          if [ "$cache_root" != "$expected_cache_root" ]; then
+            echo "::error::Refusing cache maintenance outside runner tool cache: $cache_root"
+            exit 2
+          fi
+          build_cache_root="$cache_root/build/isis9-cp312"
+          mkdir -p "$cache_root/ccache" "$build_cache_root"
+          find "$build_cache_root" -mindepth 1 -maxdepth 1 -type d -mtime +7 \
+            -print -exec rm -rf -- {} +
+          {
+            echo "CCACHE_DIR=$cache_root/ccache"
+            echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE"
+            echo "CCACHE_COMPILERCHECK=content"
+            echo "CCACHE_COMPRESS=true"
+            echo "PYISIS_PERSISTENT_BUILD_ROOT=$build_cache_root"
+          } >> "$GITHUB_ENV"
+          ccache --max-size 20G
+          ccache --show-stats
 
       - name: Build Linux wheelhouse
         shell: bash
@@ -278,7 +324,7 @@ jobs:
     name: Build ISIS 10 Linux cp313 manylinux_2_35 wheels
     needs: scope
     if: ${{ needs.scope.outputs.run_linux == 'true' }}
-    runs-on: ubuntu-24.04
+    runs-on: ${{ fromJSON(needs.scope.outputs.linux_runs_on_json) }}
     container:
       image: quay.io/pypa/manylinux_2_28_x86_64
     timeout-minutes: 180
@@ -289,6 +335,7 @@ jobs:
       HOSTED_CONDA_PREFIX: /opt/pyisis-isis10-conda
       WHEELHOUSE: ${{ github.workspace }}/wheelhouse-isis10
       ABI_REPORT_DIR: ${{ github.workspace }}/build/packaging/linux-isis10-abi-report
+      PYISIS_CACHE_ROOT: ${{ runner.tool_cache }}/pyisis-wheel-cache
       PYISIS_MAX_LINUX_RUNTIME_BYTES: "1100000000"
       PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES: "550000000"
       PYTHONUNBUFFERED: "1"
@@ -333,6 +380,31 @@ jobs:
           fi
           "$compiler" --version
           echo "CXX=$compiler" >> "$GITHUB_ENV"
+
+      - name: Configure Linux self-hosted build cache
+        if: ${{ needs.scope.outputs.linux_is_self_hosted == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected_cache_root="$(realpath -m "$RUNNER_TOOL_CACHE/pyisis-wheel-cache")"
+          cache_root="$(realpath -m "$PYISIS_CACHE_ROOT")"
+          if [ "$cache_root" != "$expected_cache_root" ]; then
+            echo "::error::Refusing cache maintenance outside runner tool cache: $cache_root"
+            exit 2
+          fi
+          build_cache_root="$cache_root/build/isis10-cp313"
+          mkdir -p "$cache_root/ccache" "$build_cache_root"
+          find "$build_cache_root" -mindepth 1 -maxdepth 1 -type d -mtime +7 \
+            -print -exec rm -rf -- {} +
+          {
+            echo "CCACHE_DIR=$cache_root/ccache"
+            echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE"
+            echo "CCACHE_COMPILERCHECK=content"
+            echo "CCACHE_COMPRESS=true"
+            echo "PYISIS_PERSISTENT_BUILD_ROOT=$build_cache_root"
+          } >> "$GITHUB_ENV"
+          ccache --max-size 20G
+          ccache --show-stats
 
       - name: Build ISIS 10 Linux wheelhouse
         shell: bash
@@ -442,7 +514,7 @@ jobs:
         shell: pwsh
 
     env:
-      PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis-prefix
+      PYISIS_WINDOWS_ISIS_PREFIX: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && format('{0}\pyisis-wheel-cache\windows\isis9-prefix', runner.tool_cache) || format('{0}\build\windows\isis-prefix', github.workspace) }}
       WHEELHOUSE: ${{ github.workspace }}\wheelhouse
       PYTHONUNBUFFERED: "1"
 
@@ -476,26 +548,57 @@ jobs:
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         run: .\tools\packaging\check_windows_runner.ps1 -ExpectedWindows11
 
+      - name: Detect Windows self-hosted local ISIS 9 prefix cache
+        id: windows-local-prefix-cache
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        env:
+          PYISIS_WINDOWS_PREFIX_FINGERPRINT: ${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/patches/*.patch') }}
+        run: |
+          $versionFile = Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX "isis_version.txt"
+          $fingerprintFile = Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX ".pyisis-cache-fingerprint"
+          $cacheHit = (Test-Path -LiteralPath $versionFile) -and
+            (Test-Path -LiteralPath $fingerprintFile)
+          if ($cacheHit) {
+            $version = (Get-Content -LiteralPath $versionFile -TotalCount 1).Trim()
+            $fingerprint = (Get-Content -LiteralPath $fingerprintFile -Raw).Trim()
+            $cacheHit = ($version -match '^9\.0\.0(\D|$)') -and
+              ($fingerprint -eq $env:PYISIS_WINDOWS_PREFIX_FINGERPRINT)
+          }
+          if (-not $cacheHit -and (Test-Path -LiteralPath $env:PYISIS_WINDOWS_ISIS_PREFIX)) {
+            Remove-Item -LiteralPath $env:PYISIS_WINDOWS_ISIS_PREFIX -Recurse -Force
+          }
+          "cache-hit=$($cacheHit.ToString().ToLowerInvariant())" |
+            Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "PYISIS_WINDOWS_PREFIX_FINGERPRINT=$env:PYISIS_WINDOWS_PREFIX_FINGERPRINT" |
+            Out-File -FilePath $env:GITHUB_ENV -Append
+
       - name: Restore cached ISIS 9.0.0 Windows prefix
         id: windows-isis-prefix-cache
+        if: ${{ needs.scope.outputs.windows_is_self_hosted != 'true' }}
         uses: actions/cache/restore@v6
         with:
-          path: build/windows/isis-prefix
+          path: ${{ env.PYISIS_WINDOWS_ISIS_PREFIX }}
           # ISIS 10 and SpiceQL-only changes must not invalidate this prefix.
           key: windows-x64-isis-9.0.0-prefix-v2-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/patches/*.patch') }}
 
       - name: Build ISIS 9.0.0 Windows prefix
-        if: ${{ steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' }}
+        if: ${{ steps.windows-local-prefix-cache.outputs.cache-hit != 'true' && steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' }}
         run: |
           . .\ports\windows\activate_msvc.ps1
           .\ports\windows\isis\fetch_isis.ps1
           .\ports\windows\isis\apply_patches.ps1
-          .\ports\windows\isis\configure_isis.ps1
+          .\ports\windows\isis\configure_isis.ps1 `
+            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
           .\ports\windows\isis\build_isis.ps1
           .\ports\windows\isis\install_isis.ps1
 
       - name: Verify ISIS 9.0.0 Windows prefix
-        run: .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX -ExpectedVersion 9.0.0
+        run: |
+          .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX -ExpectedVersion 9.0.0
+          if ('${{ needs.scope.outputs.windows_is_self_hosted }}' -eq 'true') {
+            $env:PYISIS_WINDOWS_PREFIX_FINGERPRINT |
+              Set-Content -LiteralPath (Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX ".pyisis-cache-fingerprint")
+          }
 
       - name: Report ISIS 9.0.0 Windows prefix size
         run: |
@@ -512,6 +615,7 @@ jobs:
         if: >-
           ${{
             steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' &&
+            needs.scope.outputs.windows_is_self_hosted != 'true' &&
             (
               (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
               (
@@ -522,7 +626,7 @@ jobs:
           }}
         uses: actions/cache/save@v6
         with:
-          path: build/windows/isis-prefix
+          path: ${{ env.PYISIS_WINDOWS_ISIS_PREFIX }}
           key: ${{ steps.windows-isis-prefix-cache.outputs.cache-primary-key }}
 
       - name: Run optional ISIS app smoke
@@ -603,7 +707,7 @@ jobs:
         shell: pwsh
 
     env:
-      PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis10-prefix
+      PYISIS_WINDOWS_ISIS_PREFIX: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' && format('{0}\pyisis-wheel-cache\windows\isis10-prefix', runner.tool_cache) || format('{0}\build\windows\isis10-prefix', github.workspace) }}
       PYISIS_WINDOWS_ISIS_SOURCE: ${{ github.workspace }}\build\windows\external\isis-10.0.0-src
       PYISIS_WINDOWS_ISIS_BUILD: ${{ github.workspace }}\build\windows\isis10-build
       WHEELHOUSE: ${{ github.workspace }}\wheelhouse-isis10-windows
@@ -642,18 +746,43 @@ jobs:
       - name: Activate MSVC and build SpiceQL 1.4.1
         run: |
           . .\ports\windows\activate_msvc.ps1
-          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.4.1 -Jobs 2
+          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.4.1
+
+      - name: Detect Windows self-hosted local ISIS 10 prefix cache
+        id: windows-local-isis10-prefix-cache
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        env:
+          PYISIS_WINDOWS_PREFIX_FINGERPRINT: ${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/build_spiceql.ps1', 'ports/windows/isis/patches/10.0.0/*.patch', 'ports/windows/isis/patches/spiceql-1.4.1/*.patch') }}
+        run: |
+          $versionFile = Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX "isis_version.txt"
+          $fingerprintFile = Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX ".pyisis-cache-fingerprint"
+          $cacheHit = (Test-Path -LiteralPath $versionFile) -and
+            (Test-Path -LiteralPath $fingerprintFile)
+          if ($cacheHit) {
+            $version = (Get-Content -LiteralPath $versionFile -TotalCount 1).Trim()
+            $fingerprint = (Get-Content -LiteralPath $fingerprintFile -Raw).Trim()
+            $cacheHit = ($version -match '^10\.0\.0(\D|$)') -and
+              ($fingerprint -eq $env:PYISIS_WINDOWS_PREFIX_FINGERPRINT)
+          }
+          if (-not $cacheHit -and (Test-Path -LiteralPath $env:PYISIS_WINDOWS_ISIS_PREFIX)) {
+            Remove-Item -LiteralPath $env:PYISIS_WINDOWS_ISIS_PREFIX -Recurse -Force
+          }
+          "cache-hit=$($cacheHit.ToString().ToLowerInvariant())" |
+            Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "PYISIS_WINDOWS_PREFIX_FINGERPRINT=$env:PYISIS_WINDOWS_PREFIX_FINGERPRINT" |
+            Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Restore cached ISIS 10.0.0 Windows prefix
         id: windows-isis10-prefix-cache
+        if: ${{ needs.scope.outputs.windows_is_self_hosted != 'true' }}
         uses: actions/cache/restore@v6
         with:
-          path: build/windows/isis10-prefix
+          path: ${{ env.PYISIS_WINDOWS_ISIS_PREFIX }}
           # Keep ISIS 9 root patches out, while tracking the linked SpiceQL ABI.
           key: windows-x64-isis-10.0.0-prefix-v2-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/common.ps1', 'ports/windows/isis/fetch_isis.ps1', 'ports/windows/isis/apply_patches.ps1', 'ports/windows/isis/configure_isis.ps1', 'ports/windows/isis/build_isis.ps1', 'ports/windows/isis/install_isis.ps1', 'ports/windows/isis/build_spiceql.ps1', 'ports/windows/isis/patches/10.0.0/*.patch', 'ports/windows/isis/patches/spiceql-1.4.1/*.patch') }}
 
       - name: Build ISIS 10.0.0 Windows prefix
-        if: ${{ steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' }}
+        if: ${{ steps.windows-local-isis10-prefix-cache.outputs.cache-hit != 'true' && steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' }}
         run: |
           . .\ports\windows\activate_msvc.ps1
           .\ports\windows\isis\fetch_isis.ps1 `
@@ -667,8 +796,7 @@ jobs:
             -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
             -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
           .\ports\windows\isis\build_isis.ps1 `
-            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
-            -Jobs 2
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
           .\ports\windows\isis\install_isis.ps1 `
             -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
 
@@ -677,11 +805,16 @@ jobs:
           .\ports\windows\isis\verify_isis_prefix.ps1 `
             -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
             -ExpectedVersion 10.0.0
+          if ('${{ needs.scope.outputs.windows_is_self_hosted }}' -eq 'true') {
+            $env:PYISIS_WINDOWS_PREFIX_FINGERPRINT |
+              Set-Content -LiteralPath (Join-Path $env:PYISIS_WINDOWS_ISIS_PREFIX ".pyisis-cache-fingerprint")
+          }
 
       - name: Save ISIS 10.0.0 Windows prefix cache
         if: >-
           ${{
             steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' &&
+            needs.scope.outputs.windows_is_self_hosted != 'true' &&
             (
               (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
               (
@@ -692,7 +825,7 @@ jobs:
           }}
         uses: actions/cache/save@v6
         with:
-          path: build/windows/isis10-prefix
+          path: ${{ env.PYISIS_WINDOWS_ISIS_PREFIX }}
           key: ${{ steps.windows-isis10-prefix-cache.outputs.cache-primary-key }}
 
       - name: Build ISIS 10 Windows wheelhouse

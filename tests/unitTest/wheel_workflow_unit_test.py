@@ -23,6 +23,7 @@ Updated: 2026-08-02  Geng Xun separated daily PyISIS checks from platform releas
 Updated: 2026-08-02  Geng Xun added Ubuntu 26.04 wheel installation coverage.
 Updated: 2026-08-05  Geng Xun covered trusted Windows 11 runner routing and readiness.
 Updated: 2026-08-21  Geng Xun removed redundant Windows Python bootstrap downloads and preserved runtime metadata checks.
+Updated: 2026-08-21  Geng Xun added self-hosted cache and resource-aware parallel-build coverage.
 """
 
 from __future__ import annotations
@@ -34,6 +35,7 @@ import unittest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WHEEL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "wheels.yml"
+LINUX_WHEEL_BUILDER = PROJECT_ROOT / "tools" / "packaging" / "build_wheels_linux.sh"
 ISIS10_LINUX_ENV = (
     PROJECT_ROOT / "ports" / "linux" / "env" / "pyisis-isis10-linux-64.yml"
 )
@@ -123,6 +125,57 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("ports\\windows\\isis\\verify_isis_prefix.ps1", workflow)
         self.assertIn("PYISIS_WINDOWS_ISIS_PREFIX", workflow)
         self.assertIn("PYISIS_WINDOWS_DEP_PREFIX", workflow)
+        self.assertGreaterEqual(
+            workflow.count("-Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX"),
+            4,
+        )
+
+    def test_workflow_routes_linux_builds_to_the_dedicated_runner(self):
+        workflow = self._workflow_text()
+        scope = self._job_block(workflow, "scope")
+
+        self.assertIn("linux_runner:", workflow)
+        self.assertIn("default: ubuntu26-self-hosted", workflow)
+        self.assertIn("ubuntu-24.04", workflow)
+        self.assertIn("linux_runs_on_json", scope)
+        self.assertIn("linux_is_self_hosted", scope)
+        self.assertIn(
+            '["self-hosted", "Linux", "X64", "pyisis", "ubuntu-26.04"]',
+            scope,
+        )
+        for job_name in ("linux-cp312-build", "linux-isis10-cp313-build"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn(
+                "runs-on: ${{ fromJSON(needs.scope.outputs.linux_runs_on_json) }}",
+                job,
+            )
+
+        for job_name in ("linux-cp312-clean-install", "linux-isis10-cp313-clean-install"):
+            job = self._job_block(workflow, job_name)
+            self.assertIn("runs-on: ${{ matrix.os }}", job)
+
+    def test_workflow_uses_local_self_hosted_build_caches(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("${{ runner.tool_cache }}/pyisis-wheel-cache", workflow)
+        self.assertIn("CCACHE_DIR", workflow)
+        self.assertIn("PYISIS_PERSISTENT_BUILD_ROOT", workflow)
+        self.assertIn("ccache --max-size 20G", workflow)
+        self.assertIn("-mtime +7", workflow)
+        self.assertIn("Refusing cache maintenance outside runner tool cache", workflow)
+        self.assertIn("windows-local-prefix-cache", workflow)
+        self.assertIn("runner.tool_cache", workflow)
+        self.assertIn("needs.scope.outputs.windows_is_self_hosted != 'true'", workflow)
+
+    def test_wheel_build_parallelism_is_runtime_detected_and_capped(self):
+        workflow = self._workflow_text()
+        builder = LINUX_WHEEL_BUILDER.read_text(encoding="utf-8")
+
+        self.assertNotIn("-Jobs 2", workflow)
+        self.assertIn("PYISIS_BUILD_JOBS", builder)
+        self.assertIn("getconf _NPROCESSORS_ONLN", builder)
+        self.assertIn('if [ "$build_jobs" -gt 24 ]', builder)
+        self.assertIn("CMAKE_BUILD_PARALLEL_LEVEL", builder)
 
     def test_windows_clean_installs_verify_their_runtime_distributions(self):
         workflow = self._workflow_text()
@@ -186,11 +239,11 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertNotIn("'ports/windows/isis/patches/*.patch'", isis10_cache)
         self.assertEqual(
             workflow.count("'ports/windows/isis/common.ps1'"),
-            2,
+            4,
         )
         self.assertEqual(
             workflow.count("'ports/windows/isis/build_spiceql.ps1'"),
-            1,
+            2,
         )
         self.assertIn(
             "steps.windows-isis-prefix-cache.outputs.cache-hit != 'true'",

@@ -57,7 +57,7 @@ jobs:
       - name: Build SpiceQL 1.4.1
         run: |
           . .\ports\windows\activate_msvc.ps1
-          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.4.1 -Jobs 2
+          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.4.1
 
       - name: Fetch and patch ISIS 10.0.0
         run: |

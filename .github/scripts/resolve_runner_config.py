@@ -20,7 +20,7 @@ DEFAULTS = {
 }
 
 COMMON_PROFILE_DEFAULTS = {
-    "build_jobs": "16",
+    "build_jobs": "auto",
     "ccache_max_size": "20G",
     "isis_major": "9",
     "python_abi": "cp312",
@@ -185,10 +185,10 @@ def normalize_labels(value, fallback: list[str], diagnostics: list[str]) -> list
 
 
 def _normalize_resources(profile: dict[str, object], diagnostics: list[str]) -> dict[str, str]:
-    build_jobs = str(profile.get("build_jobs", "16")).strip()
-    if not build_jobs.isdigit() or int(build_jobs) < 1:
-        diagnostics.append(f"Invalid build_jobs '{build_jobs}', falling back to 16.")
-        build_jobs = "16"
+    build_jobs = str(profile.get("build_jobs", "auto")).strip().lower()
+    if build_jobs != "auto" and (not build_jobs.isdigit() or int(build_jobs) < 1):
+        diagnostics.append(f"Invalid build_jobs '{build_jobs}', falling back to auto.")
+        build_jobs = "auto"
     return {
         "build_jobs": build_jobs,
         "ccache_max_size": str(profile.get("ccache_max_size", "20G")).strip() or "20G",

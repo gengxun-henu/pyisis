@@ -8,6 +8,7 @@ Validate and repair current HEAD across Linux/Windows × ISIS 9/10 wheels withou
 
 - Execute only the approved workflow and collect its current-HEAD evidence.
 - Diagnose the failed M08 run, implement the smallest tested repair authorized by the user, and revalidate without publishing.
+- Apply the approved balanced self-hosted performance design without weakening clean-host portability gates.
 
 ## Dependencies
 
@@ -20,7 +21,7 @@ Four successful workflow lanes with retained hashes, install/import/test evidenc
 
 ## Next Step
 
-Commit and normally push the tested repair, freeze its exact SHA, then dispatch one replacement `wheels.yml` run with `windows_runner=windows-2022`, `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
+Commit and normally push the tested repair, freeze its exact SHA, then dispatch one replacement `wheels.yml` run using both dedicated self-hosted build runners, `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
 
 ## Current Phase
 
@@ -49,6 +50,8 @@ Phase 2: Diagnose and repair failed validation
 - [x] Push the frozen commit normally and dispatch `wheels.yml` at that ref with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false`.
 - [x] Record workflow run `32373382592` and its job outcomes.
 - [x] Repair deterministic Linux metadata validation and Windows bootstrap/network resilience with focused tests (35 passed).
+- [x] Diagnose replacement run `32433373707`: Linux passed; Windows ISIS 10 failed because six Windows SDK DLLs were missing from the system-DLL allowlist.
+- [x] Implement the approved runner optimization: runtime `min(24, logical processors)`, Linux ccache/scikit-build reuse, and fingerprinted Windows local prefix reuse.
 - [ ] Dispatch and monitor a replacement non-publishing run.
 - **Status:** in progress
 
@@ -64,3 +67,4 @@ Phase 2: Diagnose and repair failed validation
 | Run `32373382592`: six Linux clean-install jobs failed | 1 | Replaced hard-coded distribution names with package-derived expectations plus explicit additional runtime distributions; regression passed. |
 | Run `32373382592`: Windows cp312 setup-python failed | 1 | Removed the redundant Windows `setup-python`; conda environment supplies the target interpreter. |
 | Run `32373382592`: Windows cp313 checkout failed | 1 | Replacement validation will use supported GitHub-hosted `windows-2022`; self-hosted network remediation remains operational, outside product code. |
+| Run `32433373707`: Windows ISIS 10 runtime staging rejected six SDK DLLs | 2 | Classified `authz.dll`, `d3d12.dll`, `dwrite.dll`, `odbc32.dll`, `psapi.dll`, and `winhttp.dll` as Windows system dependencies; focused regression passes. |

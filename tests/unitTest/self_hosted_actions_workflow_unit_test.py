@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-08-01
-Last Modified: 2026-08-02
+Last Modified: 2026-08-21
 Updated: 2026-08-01  Geng Xun added dedicated runner resolution coverage.
 Updated: 2026-08-02  Geng Xun added dual ISIS self-hosted matrix coverage.
 Updated: 2026-08-02  Geng Xun required equivalent ISIS 9 and ISIS 10 test gates.
+Updated: 2026-08-21  Geng Xun required runtime CPU detection capped at 24 build jobs.
 """
 
 from __future__ import annotations
@@ -48,7 +49,7 @@ profiles:
     environment_strategy: existing-conda
     network_profile: plain-http
     use_watt: false
-    build_jobs: "16"
+    build_jobs: auto
     ccache_max_size: 20G
     isis_major: "9"
     python_abi: cp312
@@ -63,13 +64,13 @@ profiles:
             json.loads(result.outputs["runs_on_json"]),
             ["self-hosted", "linux", "x64", "pyisis", "ubuntu-26.04", "isis9"],
         )
-        self.assertEqual(result.outputs["build_jobs"], "16")
+        self.assertEqual(result.outputs["build_jobs"], "auto")
         self.assertEqual(result.outputs["ccache_max_size"], "20G")
         self.assertEqual(result.outputs["isis_major"], "9")
         self.assertEqual(result.outputs["python_abi"], "cp312")
         self.assertEqual(result.diagnostics, ())
 
-    def test_invalid_build_jobs_falls_back_to_sixteen(self):
+    def test_invalid_build_jobs_falls_back_to_auto(self):
         resolver = load_resolver()
         config_text = """\
 active_profile: invalid-jobs
@@ -84,7 +85,7 @@ profiles:
             config_path.write_text(config_text, encoding="utf-8")
             result = resolver.resolve_config(config_path)
 
-        self.assertEqual(result.outputs["build_jobs"], "16")
+        self.assertEqual(result.outputs["build_jobs"], "auto")
         self.assertTrue(
             any("Invalid build_jobs 'all'" in item for item in result.diagnostics),
             result.diagnostics,
@@ -97,7 +98,7 @@ profiles:
 
         self.assertEqual(result.outputs["runner_profile"], "pyisis-ubuntu26-isis9")
         self.assertEqual(result.outputs["runner_mode"], "self-hosted")
-        self.assertEqual(result.outputs["build_jobs"], "16")
+        self.assertEqual(result.outputs["build_jobs"], "auto")
         self.assertEqual(result.outputs["ccache_max_size"], "20G")
 
     def test_repository_isis10_profile_selects_asp370(self):
@@ -151,9 +152,10 @@ profiles:
 
         self.assertIn("build_jobs: ${{ inputs.build_jobs }}", wrapper)
         self.assertIn("ccache_max_size: ${{ inputs.ccache_max_size }}", wrapper)
-        self.assertIn('default: "16"', child)
+        self.assertIn('default: "auto"', child)
         self.assertIn('default: "20G"', child)
-        self.assertIn('[[ "$build_jobs" =~ ^[1-9][0-9]*$ ]]', child)
+        self.assertIn("getconf _NPROCESSORS_ONLN", child)
+        self.assertIn('if [ "$build_jobs" -gt 24 ]', child)
 
         for relative_path in (
             ".github/workflows/ci-pybind.yml",
@@ -238,10 +240,21 @@ profiles:
             REPO_ROOT / ".github" / "conda" / "pybind-ci-environment.yml"
         ).read_text(encoding="utf-8")
 
-        self.assertIn('default: "16"', task)
+        self.assertIn('default: "auto"', task)
         self.assertIn('default: "20G"', task)
-        self.assertIn('[[ "$build_jobs" =~ ^[1-9][0-9]*$ ]]', task)
+        self.assertIn("getconf _NPROCESSORS_ONLN", task)
+        self.assertIn('if [ "$build_jobs" -gt 24 ]', task)
         self.assertIn("  - ccache\n", conda_environment)
+
+    def test_actions_workflows_do_not_force_two_thread_windows_builds(self):
+        workflow_dir = REPO_ROOT / ".github" / "workflows"
+
+        for workflow_path in workflow_dir.glob("*.yml"):
+            with self.subTest(workflow=workflow_path.name):
+                self.assertNotIn(
+                    "-Jobs 2",
+                    workflow_path.read_text(encoding="utf-8"),
+                )
 
 
 if __name__ == "__main__":

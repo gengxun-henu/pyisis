@@ -9,6 +9,10 @@
 - Pre-remote Git classification was only the guarded pre-existing unstaged `print.prt`; `git diff --check` produced no whitespace errors.
 - Before dispatch, the workflow contract suite passed 33 tests. After the repair, `python -m unittest tests.unitTest.wheel_workflow_unit_test tests.unitTest.packaging_tools_unit_test -v` passed 35 tests (0 failed, 0 skipped), including package-specific distribution metadata and Windows bootstrap/runtime checks.
 - The four required lanes map to workflow job IDs: `linux-isis9` → `linux-cp312-build` + `linux-cp312-clean-install`; `linux-isis10-cp313` → `linux-isis10-cp313-build` + `linux-isis10-cp313-clean-install`; `windows-cp312` → `windows-cp312`; `windows-isis10-cp313` → `windows-isis10-cp313`.
+- In replacement run `32433373707`, both Linux builds and all six hosted Ubuntu clean-install jobs passed. Windows ISIS 10 built and verified its prefix, then runtime staging rejected six operating-system DLL imports that were absent from the system allowlist.
+- Local `System32` verification confirms all six newly classified imports are provided by Windows: `authz.dll`, `d3d12.dll`, `dwrite.dll`, `odbc32.dll`, `psapi.dll`, and `winhttp.dll`.
+- Windows build helpers already defaulted to `min(24, ProcessorCount)`, but `wheels.yml` overrode the ISIS 10 and SpiceQL builds with `-Jobs 2`. The Windows workstation exposes 16 logical processors.
+- The approved balanced design keeps clean-install portability jobs GitHub-hosted while routing only build jobs to the dedicated Linux/Windows runners and preserving hosted runner fallbacks.
 
 ## Unresolved Items
 
@@ -29,3 +33,6 @@
 | Dispatch with `release_line=isis10`, `publish_testpypi=false`, and `publish_github_release=false` | `release_line=none` is unsupported. These supported, explicit non-publishing inputs preserve the four-lane validation scope; the GitHub-release job is additionally restricted to `main`, so the feature-branch dispatch cannot create a release. |
 | Use `windows_runner=windows-2022` for the replacement run | The self-hosted runner failed before compilation because its GitHub route was unstable. The workflow already supports the hosted runner; this isolates product validation from workstation network state. |
 | Remove Windows `actions/setup-python` | The subsequent version-pinned setup-miniconda environments provide the interpreters actually used by build and packaging commands; the redundant action caused an unused Python download to fail. |
+| Use runtime-detected build parallelism capped at 24 | It uses all logical processors on smaller machines and prevents excessive parallelism on larger hosts. Explicit `-Jobs 2` overrides were removed. |
+| Use local self-hosted caches but retain hosted fallbacks | Linux reuses ccache and version-separated scikit-build trees under the runner tool cache. Windows reuses fingerprinted ISIS prefixes locally; `windows-2022` retains `actions/cache`. |
+| Keep Ubuntu clean-install matrices hosted | A wheel built on the dedicated Linux host still receives independent portability evidence on Ubuntu 22.04/24.04/26.04. |

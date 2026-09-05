@@ -69,7 +69,10 @@ jobs:
               pull_number: pull.number,
               per_page: 100,
             });
-            const changedFiles = files.map((file) => file.filename);
+            // Deleted tests are not present after checkout and must not be executed.
+            const changedFiles = files
+              .filter((file) => file.status !== 'removed')
+              .map((file) => file.filename);
             const changedTests = changedFiles.filter((file) =>
               /^tests\/unitTest\/.*_unit_test\.py$/.test(file)
             );

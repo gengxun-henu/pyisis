@@ -26,11 +26,11 @@ The runner is online after maintenance; a fresh workflow run on `pyisis-ubuntu26
 
 ## Current Phase
 
-Phase 3 — Maintain and verify runner (`in_progress; blocked on one-time administrator action`)
+Phase 4 — Remove temporary access path (`complete`)
 
 ## Next Step
 
-On the Ubuntu host, perform the one-time administrator Docker Engine installation and add `pyisis-runner` to the `docker` group; then tell Codex to continue M10 so it can restart/verify the runner and remove the temporary workflow.
+None — M10 completed after successful host and Actions manylinux-container verification run `32696332367`.
 
 ## Phases
 
@@ -46,17 +46,17 @@ On the Ubuntu host, perform the one-time administrator Docker Engine installatio
 - [x] Run local validation and review the diff.
 - [x] Commit, push, merge through PR, and sync local `main`.
 
-### Phase 3 — Maintain and verify runner (`in_progress`)
+### Phase 3 — Maintain and verify runner (`complete`)
 
 - [x] Dispatch probe and retain its evidence; system install is blocked by the confirmed absence of passwordless sudo.
 - [x] Determine whether official rootless Docker is viable without administrator intervention (it is not).
-- [ ] Install Docker through the safe viable route.
-- [ ] Restart the runner listener safely if group membership requires it.
-- [ ] Run a fresh Actions job using the manylinux job container without sudo.
+- [x] Install Docker through the safe viable route.
+- [x] Restart the runner listener safely if group membership requires it.
+- [x] Run a fresh Actions job using the manylinux job container without sudo.
 
-### Phase 4 — Remove temporary access path (`pending`)
+### Phase 4 — Remove temporary access path (`complete`)
 
-- [ ] Remove the temporary maintenance workflow and its temporary tests.
+- [x] Remove the temporary maintenance workflow and its temporary tests.
 - [ ] Commit, push, merge through PR, and sync local `main`.
 - [ ] Run final repository, runner, and evidence checks.
 

@@ -57,11 +57,12 @@ Phase 4，与 Windows 10 移植一起验收，不再阻塞现有绑定兼容分�
 - [ ] 用正式 `asp370` 重建并复核上述 3 个现有 ISIS 10 绑定
 - [ ] 审计并实现 OsirisRexOcamsOpenCVDistortionMap
 - [ ] 评估 GdalIoHandler/ImageIoHandler 是否应直接绑定或提供更稳定 facade
-- [ ] 为 csv2table、eisstitch、ocams2isis 设计 Python-friendly facade
+- [x] 将 `csv2table` 明确归类为 `native-app-only`；不设计 Python facade 或进程内绑定。保留原生 APP 清单与跨平台行为验证。
+- [ ] 为 `eisstitch`、`ocams2isis` 评估是否需要 Python-friendly facade
 - [ ] 为每个不适合绑定的内容记录可审计排除理由
 - [ ] 添加 ISIS 9 不导出、ISIS 10 导出的版本门测试
 - [ ] 同步 inventory、详情 CSV 和进度日志
-- 状态：partially_complete；等待 Phase 2 高风险兼容组关闭后继续
+- 状态：partially_complete；`csv2table` 已关闭（native-app-only），其余新增能力等待 Phase 2 高风险兼容组关闭后继续
 
 ### Phase 4：双版本、双平台发布验证
 

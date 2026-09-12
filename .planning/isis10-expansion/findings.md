@@ -2,6 +2,11 @@
 
 ## 当前事实
 
+- `PvlObject` 在 ISIS 9 与 ISIS 10 的公开方法签名基本一致；主要实现差异是
+  内部容器由 `QList` 改为 `QLinkedList`，因此直接暴露 `groups()`/`objects()`
+  的返回类型可能受 Qt 容器绑定影响。应在 C++ 边界归一化为稳定 Python 容器，
+  再运行双版本行为测试。
+
 - `asp360_new/include/isis` 安装 1163 个头文件。
 - 官方 `asp370/include/isis` 安装 1175 个头文件。
 - 按 `.h`/`.hpp` basename 比较，ISIS 10 新增 13 个头文件、移除 1 个。

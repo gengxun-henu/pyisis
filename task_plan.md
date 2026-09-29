@@ -6,7 +6,7 @@
 
 ## 当前阶段
 
-Phase 3：Task 3 - DOM 端到端 helper 测试，状态：pending。
+Phase 6：Task 6 - DOM match batch 聚合，状态：pending。
 
 > 2026-09-29 同步说明：代码现实已经包含 Phase 1/2 的 ORI route audit
 > 测试与实现；本次先完成该节点的验证并将计划推进到 DOM helper。
@@ -47,25 +47,25 @@ Phase 3：Task 3 - DOM 端到端 helper 测试，状态：pending。
 
 ### Phase 3：Task 3 - DOM 端到端 helper 测试
 
-- [ ] 更新测试 import
-- [ ] 添加 DOM match 成功路径测试
-- [ ] 添加 DOM match 失败边界测试
-- [ ] 运行单测并确认预期失败
-- 状态：pending
+- [x] 更新测试 import
+- [x] 添加 DOM match 成功路径测试
+- [x] 添加 DOM match 失败边界测试
+- [x] 运行 focused 单测
+- 状态：complete（代码与测试已先行存在，本次完成核验）
 
 ### Phase 4：Task 4 - DOM 端到端 helper 实现
 
-- [ ] 导入 `match_dom_pair_to_key_files`
-- [ ] 添加 `build_controlnet_for_dom_match_stereo_pair`
-- [ ] 运行 DOM helper focused tests
-- 状态：pending
+- [x] 导入 `match_dom_pair_to_key_files`
+- [x] 添加 `build_controlnet_for_dom_match_stereo_pair`
+- [x] 运行 DOM helper focused tests
+- 状态：complete（代码已先行实现，本次完成核验）
 
 ### Phase 5：Task 5 - `from-dom-match` CLI
 
-- [ ] 添加 parser/dispatch failing tests
-- [ ] 实现 parser 与 main dispatch
-- [ ] 运行 CLI focused tests
-- 状态：pending
+- [x] 添加 parser/dispatch tests
+- [x] 实现 parser 与 main dispatch
+- [x] 运行 CLI focused tests
+- 状态：complete（代码与测试已先行存在，本次完成核验）
 
 ### Phase 6：Task 6 - DOM match batch 聚合
 

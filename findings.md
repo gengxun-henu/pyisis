@@ -25,6 +25,31 @@
 
 ## 差异与风险
 
+### 2026-09-29 计划与代码现实同步
+
+- 原有 `task_plan.md` 停留在 Phase 1，但 `controlnet_stereopair.py` 已经包含
+  `_route_audit_from_match_summary()` 和 `from-ori-match` 的
+  `routing_audit` 输出。
+- `controlnet_construct_pipeline_unit_test.py` 已经包含
+  `test_controlnet_from_ori_match_writes_json_safe_route_audit`，因此没有重复添加
+  测试或修改业务代码。
+- ORI 节点的后续执行入口应从 Phase 3 DOM helper 测试开始。
+
+### 2026-09-29 DOM helper 节点核验
+
+- 代码已经包含 `match_dom_pair_to_key_files`、
+  `build_controlnet_for_dom_match_stereo_pair` 和 `from-dom-match` dispatch。
+- 测试已经覆盖成功路径、参数转发、匹配失败后不继续转换，以及 CLI 报告写出。
+- 因此本节点采用“核验并同步计划”的方式完成，没有重复添加实现。
+
+### 2026-09-29 `from-dom-match` CLI 节点核验
+
+- CLI 已注册 `from-dom-match` 子命令，包含 adaptive routing、deep preset、
+  merge、RANSAC 和 pre-RANSAC 参数。
+- `main()` 已将这些参数转发到
+  `build_controlnet_for_dom_match_stereo_pair()`，并写出 JSON report。
+- parser 和 dispatch focused tests 均已存在并通过，因此没有重复修改代码。
+
 | 项 | 影响 | 处理 |
 |---|---|---|
 | Implementation plan 的 Task 5 曾使用 `build_controlnet_stereopair_parser()` 新 alias；当前测试文件已有同名语义相近的 image_match parser alias。 | 容易误测错 parser。 | 执行时导入 `build_argument_parser as build_controlnet_stereopair_parser` from `controlnet_construct.controlnet_stereopair`，保留现有 `build_controlnet_stereopair_argument_parser` 不变。 |

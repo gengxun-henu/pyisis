@@ -6,7 +6,10 @@
 
 ## 当前阶段
 
-Phase 1：Task 1 - ORI route audit 测试，状态：pending。
+Phase 3：Task 3 - DOM 端到端 helper 测试，状态：pending。
+
+> 2026-09-29 同步说明：代码现实已经包含 Phase 1/2 的 ORI route audit
+> 测试与实现；本次先完成该节点的验证并将计划推进到 DOM helper。
 
 ## 执行基线
 
@@ -28,19 +31,19 @@ Phase 1：Task 1 - ORI route audit 测试，状态：pending。
 
 ### Phase 1：Task 1 - ORI route audit 测试
 
-- [ ] 按 implementation plan 更新 `tests/unitTest/controlnet_construct_pipeline_unit_test.py` 元数据
-- [ ] 添加 `test_controlnet_from_ori_match_writes_json_safe_route_audit`
-- [ ] 运行单测并确认预期失败
-- [ ] 记录失败输出与原因
-- 状态：pending
+- [x] 按 implementation plan 更新 `tests/unitTest/controlnet_construct_pipeline_unit_test.py` 元数据
+- [x] 添加 `test_controlnet_from_ori_match_writes_json_safe_route_audit`
+- [x] 运行 focused 单测
+- [x] 记录验证结果
+- 状态：complete（代码已先行实现，本次完成核验）
 
 ### Phase 2：Task 2 - ORI route audit 实现
 
-- [ ] 在 `examples/controlnet_construct/controlnet_stereopair.py` 添加 route audit helper
-- [ ] 改造 `from-ori-match` 使用 `match_summary` 而非原始 tuple
-- [ ] 运行 ORI focused tests
-- [ ] 记录验证结果
-- 状态：pending
+- [x] 在 `examples/controlnet_construct/controlnet_stereopair.py` 添加 route audit helper
+- [x] 改造 `from-ori-match` 使用 `match_summary` 而非原始 tuple
+- [x] 运行 ORI focused tests
+- [x] 记录验证结果
+- 状态：complete（代码已先行实现，本次完成核验）
 
 ### Phase 3：Task 3 - DOM 端到端 helper 测试
 

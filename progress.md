@@ -44,3 +44,30 @@
 | 目标是什么？ | 实现 opt-in ORI/DOM ControlNet adaptive routing matcher 选择与 route audit 汇总。 |
 | 我学到了什么？ | 见 `findings.md`。 |
 | 我做了什么？ | 创建根目录规划文件，并把已批准 SPEC/plan 转为执行阶段台账。 |
+
+## 会话：2026-09-29
+
+### Phase 1/2：ORI route audit 节点核验
+
+- 发现旧计划落后于代码现实：ORI route audit 测试与实现已经存在。
+- 未重复修改业务代码；核验了 `_route_audit_from_match_summary()`、
+  `from-ori-match` JSON `routing_audit` 输出，以及现有 ORI focused tests。
+- 运行结果：3/3 focused tests 通过。
+- 计划状态已推进到 Phase 3：DOM 端到端 helper 测试。
+
+## 测试与验证（2026-09-29）
+
+| 命令 | 结果 | 说明 |
+|---|---|---|
+| `python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.ControlNetConstructPipelineUnitTest.test_controlnet_from_ori_match_writes_json_safe_route_audit -v` | PASS | 1/1 通过 |
+| ORI 三项 focused tests | PASS | 3/3 通过 |
+
+## 五问重启测试（2026-09-29）
+
+| 问题 | 答案 |
+|---|---|
+| 我在哪里？ | ORI route audit 节点已完成，当前进入 Phase 3。 |
+| 我要去哪里？ | 验证 DOM 端到端 helper 测试并处理其缺口。 |
+| 目标是什么？ | 完成 adaptive routing ControlNet 的 ORI/DOM 工作流。 |
+| 我学到了什么？ | 旧计划落后于代码；ORI 功能已存在且 focused tests 通过。 |
+| 我做了什么？ | 同步 `task_plan.md`、`findings.md`、`progress.md` 并完成 ORI 核验。 |

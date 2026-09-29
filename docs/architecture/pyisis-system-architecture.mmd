@@ -1,0 +1,33 @@
+%% PyISIS architecture; derived from CMakeLists.txt, src/module.cpp,
+%% python/isis_pybind/__init__.py, python/pyisis/_runtime.py, and tests.
+flowchart LR
+    subgraph client ["CLIENTS"]
+        pythonApps["Python applications and examples"]
+        testSuite["Unit tests and smoke checks"]
+    end
+
+    subgraph gateway ["PACKAGE BOUNDARY"]
+        pyisisFacade["pyisis facade; runtime discovery; ISIS ABI validation"]
+    end
+
+    subgraph service ["NATIVE BINDING SERVICE"]
+        coreModule["isis_pybind._isis_core; pybind11 extension; Camera; SPICE; projection; shape; photometry; mission; cube I/O; control"]
+    end
+
+    subgraph datastore ["SCIENTIFIC DATA"]
+        imageData["ISISDATA; cubes; PVL; image products"]
+        networkData["Control networks; geometry products"]
+    end
+
+    subgraph external ["EXTERNAL ABI"]
+        isisRuntime["USGS ISIS 9 or ISIS 10; conda runtime"]
+        nativeDeps["Qt; CSM; CSPICE; GDAL; Python C ABI"]
+    end
+
+    pythonApps -->|"API calls"| pyisisFacade
+    testSuite -->|"imports and assertions"| pyisisFacade
+    pyisisFacade -->|"loads extension"| coreModule
+    coreModule -->|"reads and writes"| imageData
+    coreModule -->|"builds and updates"| networkData
+    coreModule -.->|"links and calls"| isisRuntime
+    coreModule -.->|"resolves symbols"| nativeDeps

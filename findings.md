@@ -50,6 +50,32 @@
   `build_controlnet_for_dom_match_stereo_pair()`，并写出 JSON report。
 - parser 和 dispatch focused tests 均已存在并通过，因此没有重复修改代码。
 
+### 2026-09-29 DOM batch 聚合复核
+
+- `build_controlnets_for_dom_match_overlap_list` 已存在于
+  `examples/controlnet_construct/controlnet_stereopair.py`。
+- 现有 batch 测试
+  `test_build_controlnets_for_dom_match_overlap_list_auto_assigns_pair_ids_and_writes_summary`
+  已通过，覆盖 pair ID、参数转发、单 pair report 和 batch report。
+- implementation plan 中指定的
+  `test_build_controlnets_for_dom_match_overlap_list_aggregates_routing_audit`
+  当前不存在；此前按该名称运行会得到 unittest 的测试加载错误。
+- 下一步应补充一条真实存在的多 pair routing audit 聚合测试，而不是重复实现 helper。
+
+### 2026-09-29 DOM batch 聚合节点完成
+
+- `build_controlnets_for_dom_match_overlap_list()` 现已在每个 `pairs` 摘要中写出
+  `routing_audit` 和 `match_count`，保留原有控制点数与报告路径字段。
+- 新增双 pair focused 测试，使用不同最终 matcher（FLANN、LoFTR）验证 pair 级路由审计不会串 pair。
+- 现有 batch summary 测试与新增聚合测试均通过。
+
+### 2026-10-03 Phase 7 文档与最终验证
+
+- `usage.md` 已覆盖 `from-dom-match` 的 routing audit 字段、batch pair 级结果隔离、
+  匹配失败后停止回投/写网，以及 adaptive routing 默认关闭行为。
+- 新增文档回归测试，避免实现与用户使用说明再次脱节。
+- 完整 pipeline 单测 131 项通过，1 项跳过仅因真实 LRO DOM fixture 未配置；import smoke 通过。
+
 | 项 | 影响 | 处理 |
 |---|---|---|
 | Implementation plan 的 Task 5 曾使用 `build_controlnet_stereopair_parser()` 新 alias；当前测试文件已有同名语义相近的 image_match parser alias。 | 容易误测错 parser。 | 执行时导入 `build_argument_parser as build_controlnet_stereopair_parser` from `controlnet_construct.controlnet_stereopair`，保留现有 `build_controlnet_stereopair_argument_parser` 不变。 |

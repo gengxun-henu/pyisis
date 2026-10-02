@@ -6,7 +6,7 @@
 
 ## 当前阶段
 
-Phase 6：Task 6 - DOM match batch 聚合，状态：pending。
+Phase 7：Task 7 - 文档与最终验证，状态：待执行。
 
 > 2026-09-29 同步说明：代码现实已经包含 Phase 1/2 的 ORI route audit
 > 测试与实现；本次先完成该节点的验证并将计划推进到 DOM helper。
@@ -69,19 +69,20 @@ Phase 6：Task 6 - DOM match batch 聚合，状态：pending。
 
 ### Phase 6：Task 6 - DOM match batch 聚合
 
-- [ ] 添加 batch 聚合 failing test
-- [ ] 实现 `build_controlnets_for_dom_match_overlap_list`
-- [ ] 运行 batch focused test
-- 状态：pending
+- [x] 实现 `build_controlnets_for_dom_match_overlap_list`（代码已先行存在）
+- [x] 运行现有 batch summary focused test
+- [x] 添加专门断言多 pair `routing_audit` 聚合字段的 focused test
+- [x] 运行 batch focused regression
+- 状态：complete（补齐 batch pair 摘要字段并通过回归）
 
 ### Phase 7：Task 7 - 文档与最终验证
 
-- [ ] 添加 usage 文档覆盖测试
-- [ ] 更新 `examples/controlnet_construct/usage.md`
-- [ ] 运行 focused regression set
-- [ ] 运行 `python tests/smoke_import.py`
-- [ ] 确认不提交 `print.prt`
-- 状态：pending
+- [x] 添加 usage 文档覆盖测试
+- [x] 更新 `examples/controlnet_construct/usage.md`
+- [x] 运行 focused regression set
+- [x] 运行 `python tests/smoke_import.py`
+- [x] 确认不提交 `print.prt`
+- 状态：complete
 
 ## 决策记录
 

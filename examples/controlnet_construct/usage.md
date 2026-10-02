@@ -764,6 +764,17 @@ python examples/controlnet_construct/controlnet_stereopair.py from-dom-batch \
 - `work/reports/*.summary.json`：每个 pair 的 sidecar 报告；
 - `work/reports/controlnet_batch_summary.json`：batch 总表。
 
+每个 pair 的报告和 batch 总表都会保留 `routing_audit`。其中常用字段包括
+`requested_matcher`、`effective_matcher`、`adaptive_routing_profile`、
+`selected_initial_matcher`、`selected_final_matcher`、fallback/cascade 信息和
+`match_count`。batch 总表把这些字段放在各自的 `pairs` 项中，不会把不同 pair
+的路由结果合并成一个值；因此排查某一对影像时，应优先查看对应的 pair 报告。
+
+如果匹配阶段失败，`from-dom-match` 会停止后续 DOM-to-original 回投和
+ControlNet 写出，并在返回结果或报告中保留失败原因。adaptive routing 默认关闭；
+只有传入 `--adaptive-routing`（或在 `ImageMatch` 配置中启用）时才会选择深度匹配器
+或执行 fallback/cascade。未启用时，流程保持经典 matcher 的兼容行为。
+
 ### 自动分配的 pair ID
 
 在这个 batch 模式下，脚本会自动按顺序分配：

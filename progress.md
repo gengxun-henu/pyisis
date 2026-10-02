@@ -123,3 +123,44 @@
 | 目标是什么？ | 完成 adaptive routing ControlNet 的 ORI/DOM 工作流。 |
 | 我学到了什么？ | CLI parser 和 dispatch 已存在且 focused tests 通过。 |
 | 我做了什么？ | 同步计划与进度，并完成 CLI 节点核验。 |
+
+## 会话：2026-09-29（batch 聚合复核）
+
+### Phase 6：DOM match batch 聚合
+
+- 确认 batch helper 已经存在，未重复实现。
+- 现有 batch summary focused test 通过。
+- 计划指定的 routing audit 聚合测试名不存在，记录为测试缺口与计划漂移。
+- 下一执行节点：补齐多 pair `routing_audit` 聚合断言，再进入文档覆盖和最终回归。
+
+## 测试与验证（2026-09-29，batch 节点）
+
+| 命令 | 结果 | 说明 |
+|---|---|---|
+| `test_build_controlnets_for_dom_match_overlap_list_auto_assigns_pair_ids_and_writes_summary` | PASS | 现有 batch helper 与 report 写出通过 |
+| `test_build_controlnets_for_dom_match_overlap_list_aggregates_routing_audit` | TEST NAME MISSING | unittest 找不到该计划中的测试名，非业务实现失败 |
+
+## 会话：2026-09-29（batch 聚合节点完成）
+
+- 在 DOM match batch `pairs` 摘要中补齐 `routing_audit` 与 `match_count`。
+- 新增双 pair 路由审计聚合测试，验证 FLANN 与 LoFTR 的 pair 级结果独立保留。
+- 运行结果：batch summary 既有测试 + 新增聚合测试，2/2 通过。
+- 计划状态已推进到 Phase 7：文档与最终验证。
+
+## 测试与验证（2026-09-29，batch 聚合完成）
+
+| 命令 | 结果 | 说明 |
+|---|---|---|
+| `test_build_controlnets_for_dom_match_overlap_list_auto_assigns_pair_ids_and_writes_summary` | PASS | 原有 batch 行为保持通过 |
+| `test_build_controlnets_for_dom_match_overlap_list_aggregates_routing_audit` | PASS | 双 pair routing audit 与 match_count 聚合通过 |
+
+## 会话：2026-10-03（Phase 7 文档与最终验证）
+
+- 更新 `examples/controlnet_construct/usage.md`，补充 DOM match 报告中的
+  `routing_audit` 字段、batch pair 级隔离、匹配失败边界和 adaptive routing 默认关闭说明。
+- 新增 usage 文档覆盖测试，确认 `from-dom-match`、路由审计字段、fallback/cascade
+  和 DOM-to-original 行为在文档中可发现。
+- focused regression：3/3 通过。
+- 完整 `controlnet_construct_pipeline_unit_test`：131 项通过，1 项跳过（需要外部真实 LRO DOM 数据）。
+- `python tests/smoke_import.py`：通过。
+- 未发现或提交 `print.prt`。

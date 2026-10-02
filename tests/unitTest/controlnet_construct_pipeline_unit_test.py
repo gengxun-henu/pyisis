@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-08-02
+Last Modified: 2026-10-03
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -60,6 +60,8 @@ Updated: 2026-06-18  Geng Xun skipped shell wrapper execution when only WSL bash
 Updated: 2026-06-18  Geng Xun made deep matcher path expectations portable on Windows.
 Updated: 2026-07-23  Geng Xun moved focused image-match preset coverage into a dedicated module.
 Updated: 2026-08-02  Geng Xun aligned the balanced-profile matcher regression with the established BF default.
+Updated: 2026-09-29  Geng Xun added multi-pair DOM match routing-audit aggregation coverage.
+Updated: 2026-10-03  Geng Xun added usage-document coverage for DOM matching reports and routing fallback behavior.
 """
 
 from __future__ import annotations
@@ -1977,6 +1979,19 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("examples/controlnet_construct/presets/loftr_external_outdoor.json", method_presets)
         self.assertNotIn("examples/controlnet_construct/presets/superglue_aliked.json", method_presets)
         self.assertNotIn("examples/controlnet_construct/presets/lightglue_disk.json", method_presets)
+
+    def test_usage_documents_dom_match_reports_and_routing_behavior(self):
+        usage = (PROJECT_ROOT / "examples" / "controlnet_construct" / "usage.md").read_text(encoding="utf-8")
+
+        self.assertIn("controlnet_stereopair.py from-dom-match", usage)
+        self.assertIn("routing_audit", usage)
+        self.assertIn("requested_matcher", usage)
+        self.assertIn("selected_final_matcher", usage)
+        self.assertIn("match_count", usage)
+        self.assertIn("--adaptive-routing", usage)
+        self.assertIn("fallback/cascade", usage)
+        self.assertIn("DOM-to-original 回投", usage)
+        self.assertIn("adaptive routing 默认关闭", usage)
 
     def test_deep_match_manifest_roundtrip_preserves_runtime_config_provenance_fields(self):
         runtime_config = DeepMatchRuntimeConfig(
@@ -8077,6 +8092,67 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 self.assertTrue(Path(summary["batch_report_path"]).exists())
                 self.assertTrue(Path(summary["pairs"][0]["report_path"]).exists())
                 self.assertTrue(Path(summary["pairs"][1]["report_path"]).exists())
+
+    def test_build_controlnets_for_dom_match_overlap_list_aggregates_routing_audit(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_match_batch_audit",
+            target_name="Mars",
+            user_name="zmoratto",
+            point_id_prefix="CTX",
+        )
+        fake_pair_results = [
+            {
+                "mode": "from-dom-match",
+                "match": {"point_count": 11},
+                "routing_audit": {
+                    "requested_matcher": "sift",
+                    "selected_final_matcher": "flann",
+                    "match_count": 11,
+                },
+                "controlnet": {"controlnet": {"point_count": 9}},
+            },
+            {
+                "mode": "from-dom-match",
+                "match": {"point_count": 7},
+                "routing_audit": {
+                    "requested_matcher": "flann",
+                    "selected_final_matcher": "loftr",
+                    "match_count": 7,
+                },
+                "controlnet": {"controlnet": {"point_count": 6}},
+            },
+        ]
+
+        with temporary_directory() as temp_dir:
+            overlap_list_path = temp_dir / "images_overlap.lis"
+            overlap_list_path.write_text("left1.cub,right1.cub\nleft2.cub,right2.cub\n", encoding="utf-8")
+            original_list_path = temp_dir / "original_images.lis"
+            original_list_path.write_text("left1.cub\nright1.cub\nleft2.cub\nright2.cub\n", encoding="utf-8")
+            dom_list_path = temp_dir / "doms.lis"
+            dom_list_path.write_text("left1_dom.cub\nright1_dom.cub\nleft2_dom.cub\nright2_dom.cub\n", encoding="utf-8")
+
+            with patch(
+                "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_match_stereo_pair",
+                side_effect=fake_pair_results,
+            ):
+                result = build_controlnets_for_dom_match_overlap_list(
+                    overlap_list_path,
+                    original_list_path,
+                    dom_list_path,
+                    temp_dir / "pair_nets",
+                    config,
+                    report_directory=temp_dir / "reports",
+                    enable_adaptive_routing=True,
+                )
+                self.assertTrue(Path(result["batch_report_path"]).exists())
+
+        self.assertEqual(result["mode"], "from-dom-match-batch")
+        self.assertEqual(result["pair_count"], 2)
+        self.assertEqual(result["pairs"][0]["routing_audit"]["selected_final_matcher"], "flann")
+        self.assertEqual(result["pairs"][0]["match_count"], 11)
+        self.assertEqual(result["pairs"][1]["routing_audit"]["selected_final_matcher"], "loftr")
+        self.assertEqual(result["pairs"][1]["match_count"], 7)
+        self.assertEqual(result["batch_summary"]["pair_count"], 2)
 
     def test_controlnet_stereopair_cli_from_dom_batch_dispatches(self):
         fake_summary = {

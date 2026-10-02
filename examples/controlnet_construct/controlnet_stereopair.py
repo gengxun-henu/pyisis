@@ -753,6 +753,8 @@ def build_controlnets_for_dom_match_overlap_list(
                 "pair_id": pair_id,
                 "output_net": str(pair_output_net),
                 "report_path": report_path,
+                "routing_audit": _safe_mapping(pair_result.get("routing_audit")),
+                "match_count": _safe_mapping(pair_result.get("routing_audit")).get("match_count"),
                 "control_point_count": _extract_pair_control_point_count(pair_result),
             }
         )

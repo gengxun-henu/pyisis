@@ -222,7 +222,8 @@ GitHub Release 可同时提供组合安装包和分组件压缩包。wheel 继�
 
 1. 原生 APP `.exe` 可从已激活环境直接运行；
 2. 提供跨平台通用启动器，例如
-   `pyisis.apps.run("spiceinit", from_="a.cub")`；
+   `pyisis.apps.run("spiceinit", "from=a.cub")`；当前轻量启动器已实现，
+   APP 本体仍按后续 Wave 的 allowlist 分发；
 3. 仅对高频且具有稳定 C++ 入口的应用提供具名 facade；
 4. 没有公共 C++ header 的应用通过子进程调用，不为绑定而复制实现。
 

@@ -183,7 +183,26 @@ import pyisis
 with pyisis.open_cube("image.cub") as cube:
     print(pyisis.cube_dimensions(cube))
     print(pyisis.ground_at_center(cube))
+
+# Query an arbitrary image position and inspect the configured ISISDATA tree.
+print(pyisis.ground_at("image.cub", sample=512.0, line=256.0))
+print(pyisis.data_status().message)
 ```
+
+The facade returns small dataclasses: `CubeDimensions` contains `samples`,
+`lines`, and `bands`; `GroundPoint` contains `latitude`, `longitude`, and an
+optional `radius_meters`. `ground_at()` and `ground_at_center()` accept a cube
+path, an open `Cube`, or an open `Camera`.
+
+Native ISIS applications can be launched with the same configured environment:
+
+```python
+from pyisis.apps import run
+
+run("spiceinit", "from=image.cub", check=True)
+```
+
+Arguments are passed directly to the executable without shell interpolation.
 
 Use the low-level package when direct access to a bound ISIS class is needed:
 

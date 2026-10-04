@@ -31,6 +31,7 @@
 // Updated: 2026-04-11  Geng Xun aligned BundleSolutionInfo bindings with the active conda ISIS API by using setOutputStatistics(...) and value-returning bundleResults().
 // Updated: 2026-04-11  Geng Xun replaced value-returning BundleSolutionInfo.bundleResults() exposure with a Python-safe cloned BundleResults wrapper to avoid segfaults under the active conda ISIS build.
 // Updated: 2026-10-04  Geng Xun added explicit Python iteration for bundle vector containers.
+// Updated: 2026-10-04  Geng Xun exposed BundleControlPoint measure indexing and iteration.
 // Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes
 
 #include <memory>
@@ -444,6 +445,29 @@ void bind_bundle_advanced(py::module_ &m)
          .def("format_bundle_output_detail_string", [](const Isis::BundleControlPoint &self, bool error_propagation, bool solve_radius)
               { return qStringToStdString(self.formatBundleOutputDetailString(error_propagation, solve_radius)); }, py::arg("error_propagation"), py::arg("solve_radius") = false)
          .def("__len__", &Isis::BundleControlPoint::numberOfMeasures)
+         .def("__getitem__", [](Isis::BundleControlPoint &self, int index) {
+              const int size = self.numberOfMeasures();
+              const int normalized = index < 0 ? size + index : index;
+              if (normalized < 0 || normalized >= size) {
+                   throw py::index_error("BundleControlPoint index out of range");
+              }
+              const Isis::BundleMeasureQsp &measure = self[normalized];
+              if (measure.isNull()) {
+                   throw py::value_error("BundleControlPoint contains a null measure");
+              }
+              return std::make_shared<Isis::BundleMeasure>(*measure);
+         }, py::arg("index"))
+         .def("__iter__", [](Isis::BundleControlPoint &self) {
+              py::list snapshot;
+              for (int index = 0; index < self.numberOfMeasures(); ++index) {
+                   const Isis::BundleMeasureQsp &measure = self[index];
+                   if (measure.isNull()) {
+                        throw py::value_error("BundleControlPoint contains a null measure");
+                   }
+                   snapshot.append(std::make_shared<Isis::BundleMeasure>(*measure));
+              }
+              return snapshot.attr("__iter__")();
+         })
          .def("__repr__", [](const Isis::BundleControlPoint &self)
               { return "BundleControlPoint(id='" + qStringToStdString(self.id()) +
                        "', measures=" + std::to_string(self.numberOfMeasures()) + ")"; });

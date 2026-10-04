@@ -9,6 +9,7 @@ Updated: 2026-04-10  Geng Xun re-enabled tests after bind_bundle_advanced.cpp wa
 Updated: 2026-04-11  Geng Xun aligned BundleResults observation-count expectations with upstream semantics and covered null-safe BundleSolutionInfo filename getters.
 Updated: 2026-04-11  Geng Xun fixed segfault: set_output_statistics now uses setOutputStatisticsForPyBind; bundle_settings dereferences QSharedPointer; bundle_results re-enabled via cloneBundleResultsForPyBind.
 Updated: 2026-10-04  Geng Xun added explicit Python iteration coverage for bundle vector containers.
+Updated: 2026-10-04  Geng Xun added BundleControlPoint measure indexing and iteration coverage.
 """
 
 import unittest
@@ -206,6 +207,22 @@ class BundleAdvancedUnitTest(unittest.TestCase):
         self.assertIn("BundleControlPoint", repr_str)
         self.assertIn("TEST_P1", repr_str)
         self.assertIn("measures=2", repr_str)
+
+    def test_bundle_control_point_measure_indexing_and_iteration(self):
+        settings = self.make_bundle_settings()
+        point = self.make_control_point_with_measures()
+        bundle_point = ip.BundleControlPoint(settings, point)
+
+        self.assertEqual(bundle_point[0].cube_serial_number(), "SN-001")
+        self.assertEqual(bundle_point[-1].cube_serial_number(), "SN-002")
+        self.assertEqual(
+            [measure.cube_serial_number() for measure in bundle_point],
+            ["SN-001", "SN-002"],
+        )
+        with self.assertRaises(IndexError):
+            _ = bundle_point[2]
+        with self.assertRaises(IndexError):
+            _ = bundle_point[-3]
 
     def test_bundle_control_point_adjusted_surface_point(self):
         """Test BundleControlPoint adjusted surface point management."""

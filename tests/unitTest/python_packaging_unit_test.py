@@ -3,7 +3,7 @@ Unit tests for Python packaging metadata.
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-21
+Last Modified: 2026-10-03
 Updated: 2026-06-18  Geng Xun added CMake wheel staging coverage for scikit-build-core.
 Updated: 2026-06-18  Geng Xun added packaging license metadata coverage for wheel builds.
 Updated: 2026-06-18  Geng Xun raised scikit-build-core coverage for PEP 639 license metadata.
@@ -24,6 +24,7 @@ Updated: 2026-07-23  Geng Xun covered separate ISIS 9 and ISIS 10 release manife
 Updated: 2026-07-25  Geng Xun covered Windows PCL, Eigen, CSPICE, and SDK compatibility.
 Updated: 2026-07-25  Geng Xun aligned both release lines with the rc2 package identities.
 Updated: 2026-08-21  Geng Xun aligned package metadata with both rc3 release identities.
+Updated: 2026-10-03  Geng Xun added CMake install coverage for the pyisis native application launcher.
 """
 
 import importlib
@@ -272,6 +273,13 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertIn("PYISIS_FACADE_SOURCE_RUNTIME_FILE", cmake_lists)
         self.assertIn("PYISIS_FACADE_BUILD_RUNTIME_FILE", cmake_lists)
         self.assertIn("_runtime.py", cmake_lists)
+
+    def test_cmake_installs_pyisis_native_application_launcher(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn("PYISIS_FACADE_SOURCE_APPS_FILE", cmake_lists)
+        self.assertIn("PYISIS_FACADE_BUILD_APPS_FILE", cmake_lists)
+        self.assertIn('python/${PYISIS_FACADE_PACKAGE_NAME}/apps.py', cmake_lists)
 
     def test_cmake_uses_packaged_linux_runtime_rpath_for_wheels(self):
         cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")

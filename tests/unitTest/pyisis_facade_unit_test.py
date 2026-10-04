@@ -2,11 +2,14 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-02
+Last Modified: 2026-10-03
 Updated: 2026-06-18  Geng Xun added facade API coverage for runtime configuration, cube context management, and camera helpers.
 Updated: 2026-06-18  Geng Xun added ISISDATA status coverage for missing and minimal kernel data roots.
 Updated: 2026-06-18  Geng Xun fixed facade test imports to prefer built extension packages over stale site installs.
 Updated: 2026-08-02  Geng Xun made facade imports honor the active CTest build directory.
+Updated: 2026-10-03  Geng Xun added arbitrary image-coordinate coverage for the high-level ground_at facade.
+Updated: 2026-10-03  Geng Xun added explicit error coverage when a camera rejects an image coordinate.
+Updated: 2026-10-03  Geng Xun covered passing an already-open Camera to the ground_at facade.
 """
 
 from __future__ import annotations
@@ -112,6 +115,30 @@ class PyisisFacadeUnitTest(unittest.TestCase):
         self.assertAlmostEqual(ground.latitude, -15.260663718130933, places=8)
         self.assertAlmostEqual(ground.longitude, 140.41008503563984, places=8)
         self.assertGreater(ground.radius_meters, 0.0)
+
+    def test_ground_at_returns_coordinates_for_arbitrary_image_position(self):
+        ground = self.pyisis.ground_at(self.camera_cube, sample=512.0, line=256.0)
+
+        self.assertAlmostEqual(ground.latitude, -18.31862662438759, places=8)
+        self.assertAlmostEqual(ground.longitude, 140.57251237263742, places=8)
+        self.assertAlmostEqual(ground.radius_meters, 2440000.0, places=6)
+
+    def test_ground_at_raises_when_camera_rejects_image_position(self):
+        camera = mock.Mock()
+        camera.set_image.return_value = False
+        camera_context = mock.MagicMock()
+        camera_context.__enter__.return_value = camera
+
+        with mock.patch.object(self.pyisis, "_camera_context", return_value=camera_context):
+            with self.assertRaisesRegex(self.pyisis.PyisisError, r"camera\.set_image\(1\.0, 2\.0\) failed"):
+                self.pyisis.ground_at("ignored.cub", sample=1.0, line=2.0)
+
+    def test_ground_at_accepts_an_open_camera(self):
+        with self.pyisis.open_cube(self.camera_cube) as cube:
+            ground = self.pyisis.ground_at(cube.camera(), sample=512.0, line=256.0)
+
+        self.assertAlmostEqual(ground.latitude, -18.31862662438759, places=8)
+        self.assertAlmostEqual(ground.longitude, 140.57251237263742, places=8)
 
 
 if __name__ == "__main__":

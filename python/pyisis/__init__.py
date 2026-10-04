@@ -15,6 +15,7 @@ from types import ModuleType
 from typing import Any, Iterator
 
 from ._runtime import RuntimeDiscovery, configure_runtime
+from . import apps
 
 
 _CORE_MODULE: ModuleType | None = None
@@ -321,6 +322,7 @@ __all__ = [
     "PyisisError",
     "RuntimeConfig",
     "RuntimeDiscovery",
+    "apps",
     "configure",
     "configure_runtime",
     "core",

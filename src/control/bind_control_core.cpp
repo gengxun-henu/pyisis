@@ -7,6 +7,7 @@
 // Updated: 2026-04-11  Geng Xun reused top-level Spice interpolation enums inside BundleObservationSolveSettings to avoid duplicate pybind enum registration.
 // Updated: 2026-06-18  Geng Xun skipped ControlNet::GetUserName on MSVC because the installed Windows ISIS library does not export it.
 // Updated: 2026-10-04  Geng Xun added explicit Python indexing and iteration for ControlNet and ControlPoint.
+// Updated: 2026-10-04  Geng Xun added ControlPointList indexing and iteration.
 // Purpose: pybind11 bindings for ISIS control network core classes, filters, and bundle-control helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -1105,7 +1106,22 @@ void bind_control_core(py::module_ &m)
               { return self.HasControlPoint(stdStringToQString(point_id)); }, py::arg("point_id"))
          .def("size", &Isis::ControlPointList::Size)
          .def("register_statistics", &Isis::ControlPointList::RegisterStatistics, py::arg("pvl_log"))
+         .def("__getitem__", [](Isis::ControlPointList &self, int index) {
+              const int size = self.Size();
+              const int normalized = index < 0 ? size + index : index;
+              if (normalized < 0 || normalized >= size) {
+                   throw py::index_error("ControlPointList index out of range");
+              }
+              return qStringToStdString(self.ControlPointId(normalized));
+         }, py::arg("index"))
          .def("__len__", &Isis::ControlPointList::Size)
+         .def("__iter__", [](Isis::ControlPointList &self) {
+              py::list snapshot;
+              for (int index = 0; index < self.Size(); ++index) {
+                   snapshot.append(qStringToStdString(self.ControlPointId(index)));
+              }
+              return snapshot.attr("__iter__")();
+         })
          .def("__repr__", [](Isis::ControlPointList &self)
               { return "ControlPointList(size=" + std::to_string(self.Size()) + ")"; });
 

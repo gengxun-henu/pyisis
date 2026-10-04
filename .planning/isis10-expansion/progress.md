@@ -102,6 +102,13 @@
 - ISIS 9/10 的 `control_core_unit_test` 均为 45/45 通过；两套 smoke import
   均通过。
 
+## 会话：2026-10-04（M18）
+
+- `ControlPointList` 新增显式 Python `__getitem__` 与 `__iter__`，支持正/负
+  索引、越界错误和 Python `str` 顺序迭代。
+- ISIS 9/10 的 `control_core_unit_test` 均为 45/45 通过；两套 smoke import
+  均通过。
+
 ## 会话：2026-10-04（M17）
 
 - `BundleSettings`、`BundleResults`、`BundleSolutionInfo` 的 Python facade

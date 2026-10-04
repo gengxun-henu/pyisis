@@ -9,6 +9,7 @@
 ### Actions Taken
 - Reviewed ControlPointList binding and selected sequence normalization as the next Control/Bundle API gap.
 - Added positive/negative indexing and explicit iteration returning Python strings.
+- PR #395 merged; local `main` synchronized after delivery.
 
 ### Test Results
 | Test | Expected | Actual | Status |

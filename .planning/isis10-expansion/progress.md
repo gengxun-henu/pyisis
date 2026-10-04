@@ -172,3 +172,10 @@
 - Existing versioned distortion signature checks remain active.
 - ISIS 9 Spice/OSIRIS-REx tests: 72 passed; smoke import passed.
 - ISIS 10 Spice/OSIRIS-REx tests: 72 passed; smoke import passed.
+
+## M22 — P2 low-risk binding audit (2026-10-04)
+
+- Audited Math, PolygonSeeder, Statistics, and Support focused surfaces without expanding the claimed API scope.
+- ISIS 9 suite: 206 tests, 1 skipped, 1 expected failure; smoke import passed.
+- ISIS 10 suite: 206 tests, 1 skipped, 1 expected failure; smoke import passed.
+- Remaining release and Windows coverage stays tracked separately for M23+.

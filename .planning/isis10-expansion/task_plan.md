@@ -39,8 +39,8 @@ Phase 4，与 Windows 10 移植一起验收，不再阻塞现有绑定兼容分�
 - [x] 建立共享源码优先的兼容策略和分组队列
 - [x] 首批队列：`Cube`（closed）→ `CubeAttribute`（closed）→
       `Blob`（closed）→ `Table`（closed）→ `ProcessByBrick`（closed）
-- [ ] 下一队列：`Pvl` → `PvlObject` → `PvlKeyword` → `PvlContainer`；
-      `Pvl`（closed）；当前目标：`PvlObject`
+- [x] 下一队列：`Pvl` → `PvlObject` → `PvlKeyword` → `PvlContainer`；
+      `Pvl`、`PvlObject`、`PvlKeyword`、`PvlContainer`（closed，含 Python 迭代）
 - [ ] 对 48 个头文件逐项映射“绑定实际使用签名”与 ISIS 9/10 声明
 - [ ] 优先关闭 Cube/PVL、Control/Bundle、Shape、Camera/Spice 和
       OSIRIS-REx 高风险组
@@ -54,14 +54,14 @@ Phase 4，与 Windows 10 移植一起验收，不再阻塞现有绑定兼容分�
 - [x] 以 USGS `h1f94ec8_1` 的 13 个新增头文件为正式候选基线
 - [x] 分类出 6 个公开类、3 个应用函数和 4 个排除项
 - [x] 已实现 IProj、Chandrayaan2OhrcCamera、Chandrayaan2TmcCamera
-- [ ] 用正式 `asp370` 重建并复核上述 3 个现有 ISIS 10 绑定
-- [ ] 审计并实现 OsirisRexOcamsOpenCVDistortionMap
-- [ ] 评估 GdalIoHandler/ImageIoHandler 是否应直接绑定或提供更稳定 facade
+- [x] 用正式 `asp370` 重建并复核上述 3 个现有 ISIS 10 绑定
+- [x] 审计并实现 OsirisRexOcamsOpenCVDistortionMap
+- [x] 评估并验证 GdalIoHandler/ImageIoHandler 的稳定 Python facade
 - [x] 将 `csv2table` 明确归类为 `native-app-only`；不设计 Python facade 或进程内绑定。保留原生 APP 清单与跨平台行为验证。
 - [ ] 为 `eisstitch`、`ocams2isis` 评估是否需要 Python-friendly facade
 - [ ] 为每个不适合绑定的内容记录可审计排除理由
-- [ ] 添加 ISIS 9 不导出、ISIS 10 导出的版本门测试
-- [ ] 同步 inventory、详情 CSV 和进度日志
+- [x] 添加 ISIS 9 不导出、ISIS 10 导出的版本门测试
+- [x] 同步 inventory、详情 CSV 和进度日志
 - 状态：partially_complete；`csv2table` 已关闭（native-app-only），其余新增能力等待 Phase 2 高风险兼容组关闭后继续
 
 ### Phase 4：双版本、双平台发布验证

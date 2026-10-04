@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-21
+Last Modified: 2026-10-04
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -23,6 +23,7 @@ Updated: 2026-07-25  Geng Xun covered the ISIS 10 SpiceQL 1.4.1 export and MSVC 
 Updated: 2026-07-25  Geng Xun parameterized Windows wheel-set checks for ISIS 9 and ISIS 10.
 Updated: 2026-07-25  Geng Xun covered the Windows APP manifest and allowlisted reduce target.
 Updated: 2026-07-26  Geng Xun covered the 21-APP Windows build and smoke batch.
+Updated: 2026-10-04  Geng Xun covered the SpiceQL import-library symbol preflight.
 Updated: 2026-07-26  Geng Xun covered the complete 48-APP W1 promotion.
 Updated: 2026-07-26  Geng Xun covered exact-subset Windows APP wave promotion.
 Updated: 2026-07-26  Geng Xun covered the non-GUI MSVC hist command-line path.
@@ -218,6 +219,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("SPICEQL_BUILD_TESTS=OFF", spiceql)
         self.assertIn("SpiceQL.dll", spiceql)
         self.assertIn("dumpbin /nologo /exports", spiceql)
+        self.assertIn("dumpbin /nologo /linkermember:2", spiceql)
+        self.assertIn("SpiceQL import library does not contain strSclkToEt", spiceql)
         self.assertIn("SpiceQL DLL does not export strSclkToEt", spiceql)
         self.assertIn("spiceql-link-probe.cpp", spiceql)
         self.assertIn("Invoke-CheckedCommand link", spiceql)

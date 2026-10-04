@@ -136,6 +136,21 @@ if (-not $spiceqlLibrary) {
     Fail "SpiceQL import library was not installed under $Prefix"
 }
 
+# Verify the exact import library that downstream ISIS will resolve.  A DLL
+# export check alone can pass while CMake selects a stale or incompatible
+# import library, which only surfaces later when mgs.dll is linked.
+$spiceqlLinkMembers = & dumpbin /nologo /linkermember:2 $spiceqlLibrary
+if ($LASTEXITCODE -ne 0) {
+    Fail "dumpbin could not inspect SpiceQL import library: $spiceqlLibrary"
+}
+$matchingLinkMembers = @($spiceqlLinkMembers | Where-Object { $_ -match "strSclkToEt" })
+if ($matchingLinkMembers.Count -eq 0) {
+    Fail "SpiceQL import library does not contain strSclkToEt: $spiceqlLibrary"
+}
+foreach ($matchingLinkMember in $matchingLinkMembers) {
+    Write-Step "SpiceQL import-library symbol: $($matchingLinkMember.Trim())"
+}
+
 $linkProbeSource = Join-Path $BuildDir "spiceql-link-probe.cpp"
 $linkProbeObject = Join-Path $BuildDir "spiceql-link-probe.obj"
 $linkProbeExe = Join-Path $BuildDir "spiceql-link-probe.exe"

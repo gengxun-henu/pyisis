@@ -3,11 +3,12 @@ Unit tests for ISIS advanced bundle-adjustment bindings.
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-11
+Last Modified: 2026-10-04
 Updated: 2026-03-25  Geng Xun added preserved regression coverage for temporarily disabled advanced bundle-adjustment bindings.
 Updated: 2026-04-10  Geng Xun re-enabled tests after bind_bundle_advanced.cpp was re-enabled with boost ublas lambda wrappers.
 Updated: 2026-04-11  Geng Xun aligned BundleResults observation-count expectations with upstream semantics and covered null-safe BundleSolutionInfo filename getters.
 Updated: 2026-04-11  Geng Xun fixed segfault: set_output_statistics now uses setOutputStatisticsForPyBind; bundle_settings dereferences QSharedPointer; bundle_results re-enabled via cloneBundleResultsForPyBind.
+Updated: 2026-10-04  Geng Xun added explicit Python iteration coverage for bundle vector containers.
 """
 
 import unittest
@@ -269,6 +270,12 @@ class BundleAdvancedUnitTest(unittest.TestCase):
         self.assertIn("BundleObservationVector", repr_str)
         self.assertIn("size=0", repr_str)
 
+    def test_bundle_observation_vector_is_explicitly_iterable(self):
+        obs_vector = ip.BundleObservationVector()
+
+        self.assertTrue(hasattr(obs_vector, "__iter__"))
+        self.assertEqual(list(obs_vector), [])
+
     # ─── BundleLidarRangeConstraint Tests ───────────────────────────────
 
     def test_bundle_lidar_range_constraint_copy(self):
@@ -313,6 +320,12 @@ class BundleAdvancedUnitTest(unittest.TestCase):
 
         self.assertIn("BundleLidarPointVector", repr_str)
         self.assertIn("size=0", repr_str)
+
+    def test_bundle_lidar_point_vector_is_explicitly_iterable(self):
+        lidar_vector = ip.BundleLidarPointVector()
+
+        self.assertTrue(hasattr(lidar_vector, "__iter__"))
+        self.assertEqual(list(lidar_vector), [])
 
     # ─── BundleResults Tests ────────────────────────────────────────────
 

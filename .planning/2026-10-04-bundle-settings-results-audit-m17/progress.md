@@ -9,6 +9,7 @@
 ### Actions Taken
 - Reviewed BundleSettings/BundleResults/BundleSolutionInfo bindings and confirmed existing Qt-to-Python conversions and safe clone wrappers.
 - Added stable Python list/tuple and target-body copy-isolation assertions.
+- PR #393 merged; local `main` synchronized after delivery.
 
 ### Test Results
 | Test | Expected | Actual | Status |

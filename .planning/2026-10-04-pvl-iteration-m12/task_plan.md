@@ -28,7 +28,7 @@ Python iteration over PVL values, keywords, groups, and nested objects passes fo
 
 ## Next Step
 
-Commit and push the PVL iteration changes, open the PR, and merge it when checks permit.
+None — M12 is complete and merged as `2b9e22149b564bd281ffab24b80fc8e6b987b19a`.
 
 ## Current Phase
 
@@ -56,10 +56,10 @@ Phase 4: PR integration and synchronization
 
 ### Phase 4: PR integration and synchronization
 
-- [ ] Commit and push the task-scoped changes.
-- [ ] Open and merge the PR.
-- [ ] Synchronize local `main` and record evidence.
-- **Status:** pending
+- [x] Commit and push the task-scoped changes.
+- [x] Open and merge the PR.
+- [x] Synchronize local `main` and record evidence.
+- **Status:** complete 2026-10-04
 
 ## Decisions
 
@@ -80,3 +80,11 @@ Phase 4: PR integration and synchronization
 - **Goal?** Python-friendly, version-compatible PVL collection traversal.
 - **What have I learned?** Existing count/index methods are sufficient; no new ISIS dependency is needed.
 - **Next step?** Add and run the failing focused tests.
+
+## Completion Evidence
+
+- PR #385 merged as `2b9e22149b564bd281ffab24b80fc8e6b987b19a`.
+- Focused PVL module: 85 passed, 0 failed, 0 skipped.
+- Smoke import: passed.
+- Full unit suite: 2730 run, 0 failed, 52 skipped, 1 expected failure.
+- Local `main`: synchronized with `origin/main`; `print.prt` untouched.

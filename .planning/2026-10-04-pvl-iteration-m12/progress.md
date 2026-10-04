@@ -19,4 +19,7 @@ Full PVL module: 85 passed.
 - Smoke import: passed.
 - Full unit suite: 2730 run, 0 failed, 52 skipped, 1 expected failure.
 
-Next step: commit and push the PVL iteration changes, open the PR, and merge it when checks permit.
+PR #385 merged as `2b9e22149b564bd281ffab24b80fc8e6b987b19a`; local `main` fast-forwarded to `origin/main`.
+- M12 completion evidence recorded: PVL 85 passed, full 2730 run with 0 failures, smoke import passed.
+
+Next step: none; M12 is complete.

@@ -213,6 +213,21 @@ print("PyISIS:", ip.__version__)
 print("Compiled for ISIS:", ip.__isis_version__)
 ```
 
+PVL collections support normal Python iteration. Keywords yield string values,
+containers yield `PvlKeyword` objects, and objects yield groups; use
+`objects_iter()` for nested objects:
+
+```python
+pvl = ip.Pvl()
+group = ip.PvlGroup("Instrument")
+group.add_keyword(ip.PvlKeyword("InstrumentId", "HIRISE"))
+pvl.add_group(group)
+
+for current_group in pvl:
+    for keyword in current_group:
+        print(keyword.name(), list(keyword))
+```
+
 Runnable examples are available under [`examples/`](examples/), including
 camera geometry, forward intersection, map projections, control networks, and
 image matching.

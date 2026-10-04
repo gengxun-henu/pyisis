@@ -3,7 +3,7 @@ Unit tests for ISIS PVL and PvlSequence bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-07-24
+Last Modified: 2026-10-04
 Updated: 2026-03-30  Geng Xun added PvlSequence regression coverage alongside core PVL keyword, group, object, and container tests.
 Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer focused unit tests.
 Updated: 2026-04-09  Geng Xun added PvlFormat, PvlTranslationTable, PvlFormatPds, PvlToPvlTranslationManager unit tests.
@@ -17,6 +17,7 @@ Updated: 2026-04-14  Geng Xun added regressions for set_format_template and empt
 Updated: 2026-04-15  Geng Xun added a regression ensuring PvlGroup.validate_group safely handles empty-valued template keywords.
 Updated: 2026-07-24  Geng Xun added ISIS 9/10 version-gated Pvl JSON and GDAL API coverage.
 Updated: 2026-07-24  Geng Xun added ISIS 9/10 PvlKeyword JSON helper coverage.
+Updated: 2026-10-04  Geng Xun added Python iteration coverage for PVL values, keywords, groups, and nested objects.
 """
 
 import unittest
@@ -39,6 +40,13 @@ class PvlUnitTest(unittest.TestCase):
         self.assertEqual(keyword.comments(), 1)
         self.assertEqual(keyword.comment(0), "# Primary instrument")
         self.assertIn("InstrumentId", str(keyword))
+
+    def test_pvl_keyword_iteration_preserves_value_order(self):
+        keyword = ip.PvlKeyword("Values")
+        keyword.add_value("first")
+        keyword.add_value("second")
+
+        self.assertEqual(list(keyword), ["first", "second"])
 
     def test_pvl_keyword_versioned_json_helpers(self):
         keyword = ip.PvlKeyword("Numbers")
@@ -71,6 +79,13 @@ class PvlUnitTest(unittest.TestCase):
         self.assertFalse(group.has_keyword("SpacecraftName"))
         self.assertIn("Group = Instrument", str(group))
 
+    def test_pvl_container_iteration_preserves_keyword_order(self):
+        group = ip.PvlGroup("Instrument")
+        group.add_keyword(ip.PvlKeyword("First", "1"))
+        group.add_keyword(ip.PvlKeyword("Second", "2"))
+
+        self.assertEqual([keyword.name() for keyword in group], ["First", "Second"])
+
     def test_pvl_container_versioned_default_constructor(self):
         try:
             container = ip.PvlContainer()
@@ -91,6 +106,18 @@ class PvlUnitTest(unittest.TestCase):
 
         archive.delete_group("Product")
         self.assertFalse(archive.has_group("Product"))
+
+    def test_pvl_object_iteration_exposes_groups_and_nested_objects(self):
+        pvl = ip.Pvl()
+        group = ip.PvlGroup("Instrument")
+        archive = ip.PvlObject("Archive")
+        product = ip.PvlObject("Product")
+        archive.add_object(product)
+        pvl.add_group(group)
+        pvl.add_object(archive)
+
+        self.assertEqual([item.name() for item in pvl], ["Instrument"])
+        self.assertEqual([item.name() for item in pvl.objects_iter()], ["Archive"])
 
     def test_pvl_read_write_and_terminator(self):
         pvl = make_simple_pvl()

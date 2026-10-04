@@ -30,6 +30,7 @@
 // Updated: 2026-04-11  Geng Xun fixed set_output_statistics to use setOutputStatisticsForPyBind; wrapped bundle_settings to dereference QSharedPointer; re-enabled bundle_results via cloneBundleResultsForPyBind.
 // Updated: 2026-04-11  Geng Xun aligned BundleSolutionInfo bindings with the active conda ISIS API by using setOutputStatistics(...) and value-returning bundleResults().
 // Updated: 2026-04-11  Geng Xun replaced value-returning BundleSolutionInfo.bundleResults() exposure with a Python-safe cloned BundleResults wrapper to avoid segfaults under the active conda ISIS build.
+// Updated: 2026-10-04  Geng Xun added explicit Python iteration for bundle vector containers.
 // Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes
 
 #include <memory>
@@ -494,6 +495,14 @@ void bind_bundle_advanced(py::module_ &m)
                         throw py::index_error("BundleObservationVector index out of range");
                    }
                    return self[index]; }, py::arg("index"))
+         .def("__iter__", [](Isis::BundleObservationVector &self)
+              {
+                   py::list snapshot;
+                   for (int index = 0; index < self.size(); ++index)
+                   {
+                        snapshot.append(py::cast(self[index]));
+                   }
+                   return snapshot.attr("__iter__")(); })
          .def("__repr__", [](const Isis::BundleObservationVector &self)
               { return "BundleObservationVector(size=" + std::to_string(self.size()) + ")"; });
 
@@ -549,6 +558,14 @@ void bind_bundle_advanced(py::module_ &m)
                         throw py::index_error("BundleLidarPointVector index out of range");
                    }
                    return self[index]; }, py::arg("index"))
+         .def("__iter__", [](Isis::BundleLidarPointVector &self)
+              {
+                   py::list snapshot;
+                   for (int index = 0; index < self.size(); ++index)
+                   {
+                        snapshot.append(py::cast(self[index]));
+                   }
+                   return snapshot.attr("__iter__")(); })
          .def("copy", [](const Isis::BundleLidarPointVector &self)
               { return Isis::BundleLidarPointVector(self); })
          .def("__repr__", [](const Isis::BundleLidarPointVector &self)
@@ -807,4 +824,3 @@ void bind_bundle_advanced(py::module_ &m)
                   std::to_string(isisBundleObservationNumberParametersSafe(self)) + ")";
       });
 }
-

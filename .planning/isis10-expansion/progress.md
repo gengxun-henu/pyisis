@@ -80,6 +80,14 @@
   `read_gdal(path)`；递归引用helper明确排除。双版本`PvlUnitTest`各
   17/17及smoke通过。当前目标切换为`PvlObject`。
 
+## 会话：2026-10-04（M14）
+
+- Bundle Python 容器迭代完成：`BundleObservationVector` 与
+  `BundleLidarPointVector` 新增显式 `__iter__`，通过 Python 快照列表
+  返回已有 shared-pointer 元素，Qt/ISIS 迭代器不泄漏到 Python。
+- ISIS 9/10 的 `bundle_advanced_unit_test` 均为 44 通过、1 跳过；两套
+  smoke import 均通过。
+
 ## 会话：2026-10-04（M13）
 
 - ISIS 10 专属 facade 验证完成：使用官方 USGS `asp370`（ISIS 10.0.0

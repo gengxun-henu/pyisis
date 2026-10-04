@@ -41,13 +41,12 @@ Phase 4，与 Windows 10 移植一起验收，不再阻塞现有绑定兼容分�
       `Blob`（closed）→ `Table`（closed）→ `ProcessByBrick`（closed）
 - [x] 下一队列：`Pvl` → `PvlObject` → `PvlKeyword` → `PvlContainer`；
       `Pvl`、`PvlObject`、`PvlKeyword`、`PvlContainer`（closed，含 Python 迭代）
-- [ ] 对 48 个头文件逐项映射“绑定实际使用签名”与 ISIS 9/10 声明
-- [ ] 优先关闭 Cube/PVL、Control/Bundle、Shape、Camera/Spice 和
-      OSIRIS-REx 高风险组
-- [ ] 对 Python 可见容器统一返回稳定类型，Qt 容器差异在 C++ 边界转换
-- [ ] 只有无法用公共表达式兼容的差异才增加局部能力宏
-- [ ] 在 ISIS 9 与 ISIS 10 正式环境分别编译、导入并运行对应聚焦测试
-- 状态：in_progress
+- [x] 对兼容台账中的 77 个头文件/组逐项映射“绑定实际使用签名”与 ISIS 9/10 声明
+- [x] 关闭 Cube/PVL、Control/Bundle、Shape、Camera/Spice 和 OSIRIS-REx 高风险组
+- [x] 对 Python 可见容器统一返回稳定类型，Qt 容器差异在 C++ 边界转换
+- [x] 只有无法用公共表达式兼容的差异才增加局部能力宏
+- [x] 在 ISIS 9 与 ISIS 10 正式环境分别编译、导入并运行对应聚焦测试
+- 状态：complete_for_local_linux; Windows ABI 子项仍随 Phase 4 关闭
 
 ### Phase 3：ISIS 10 新增类和函数审计与绑定
 

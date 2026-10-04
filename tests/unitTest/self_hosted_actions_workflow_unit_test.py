@@ -2,11 +2,12 @@
 
 Author: Geng Xun
 Created: 2026-08-01
-Last Modified: 2026-08-21
+Last Modified: 2026-10-04
 Updated: 2026-08-01  Geng Xun added dedicated runner resolution coverage.
 Updated: 2026-08-02  Geng Xun added dual ISIS self-hosted matrix coverage.
 Updated: 2026-08-02  Geng Xun required equivalent ISIS 9 and ISIS 10 test gates.
 Updated: 2026-08-21  Geng Xun required runtime CPU detection capped at 24 build jobs.
+Updated: 2026-10-04  Geng Xun covered checkout behavior on permission-dirty self-hosted workspaces.
 """
 
 from __future__ import annotations
@@ -169,6 +170,18 @@ profiles:
                 "ccache_max_size: ${{ needs.resolve_runner.outputs.ccache_max_size }}",
                 workflow,
             )
+
+    def test_self_hosted_checkout_preserves_permission_dirty_workspace(self):
+        workflow = (
+            REPO_ROOT
+            / ".github"
+            / "workflows"
+            / "reusable-pybind-build-self-hosted.yml"
+        ).read_text(encoding="utf-8")
+
+        checkout_block = workflow.split("- name: Define self-hosted cache roots", 1)[0]
+        self.assertIn("uses: actions/checkout@v7", checkout_block)
+        self.assertIn("clean: false", checkout_block)
 
     def test_pr_and_main_ci_include_trusted_isis10_self_hosted_lane(self):
         for relative_path in (

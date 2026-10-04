@@ -3,7 +3,8 @@ Unit tests for ISIS OSIRIS-REx mission camera bindings
 
 Author: Geng Xun
 Created: 2026-04-07
-Last Modified: 2026-07-24
+Last Modified: 2026-10-04
+Updated: 2026-10-04  Geng Xun added cross-version OSIRIS-REx hierarchy assertions.
 Updated: 2026-07-24  Geng Xun covered the versioned OCAMS distortion filter signature.
 """
 
@@ -20,6 +21,7 @@ class OsirisRexOcamsCameraBindingsUnitTest(unittest.TestCase):
 
     def test_osiris_rex_ocams_camera_inherits_framing_camera(self):
         self.assertTrue(issubclass(ip.OsirisRexOcamsCamera, ip.FramingCamera))
+        self.assertTrue(issubclass(ip.OsirisRexOcamsCamera, ip.Camera))
 
     def test_osiris_rex_ocams_camera_methods_exist(self):
         self.assertTrue(hasattr(ip.OsirisRexOcamsCamera, "shutter_open_close_times"))
@@ -76,6 +78,7 @@ class OsirisRexTagcamsCameraBindingsUnitTest(unittest.TestCase):
 
     def test_osiris_rex_tagcams_camera_inherits_framing_camera(self):
         self.assertTrue(issubclass(ip.OsirisRexTagcamsCamera, ip.FramingCamera))
+        self.assertTrue(issubclass(ip.OsirisRexTagcamsCamera, ip.Camera))
 
     def test_osiris_rex_tagcams_camera_methods_exist(self):
         self.assertTrue(hasattr(ip.OsirisRexTagcamsCamera, "shutter_open_close_times"))

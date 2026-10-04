@@ -165,3 +165,10 @@
 - Existing camera, camera-map, and UniversalGroundMap coverage remains green.
 - ISIS 9 focused suite: 146 passed; smoke import passed.
 - ISIS 10 focused suite: 146 passed; smoke import passed.
+
+## M21 — Spice / OSIRIS-REx compatibility audit (2026-10-04)
+
+- Added OCAMS and TAGCAMS assertions that the concrete cameras remain `FramingCamera` and `Camera` subclasses.
+- Existing versioned distortion signature checks remain active.
+- ISIS 9 Spice/OSIRIS-REx tests: 72 passed; smoke import passed.
+- ISIS 10 Spice/OSIRIS-REx tests: 72 passed; smoke import passed.

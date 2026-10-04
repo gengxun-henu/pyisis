@@ -10,6 +10,7 @@
 - Reviewed the Control/Bundle binding surface and selected the two vector containers as the smallest next Python-facing gap.
 - Confirmed the current runtime provides sequence fallback iteration but no explicit `__iter__` attribute.
 - Added explicit `__iter__` bindings for both vector containers and focused tests.
+- PR #388 merged; local `main` synchronized after delivery.
 
 ### Test Results
 | Test | Expected | Actual | Status |

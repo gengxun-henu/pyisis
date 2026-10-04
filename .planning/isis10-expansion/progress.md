@@ -102,6 +102,14 @@
 - ISIS 9/10 的 `control_core_unit_test` 均为 45/45 通过；两套 smoke import
   均通过。
 
+## 会话：2026-10-04（M17）
+
+- `BundleSettings`、`BundleResults`、`BundleSolutionInfo` 的 Python facade
+  审计完成：Qt list/pair 已归一化为 Python list/tuple，目标体返回副本，
+  BundleResults clone 保护保持有效。
+- ISIS 9/10 Control + Bundle 组合测试均为 90 通过、1 跳过；两套 smoke
+  import 均通过。
+
 ## 会话：2026-10-04（M13）
 
 - ISIS 10 专属 facade 验证完成：使用官方 USGS `asp370`（ISIS 10.0.0

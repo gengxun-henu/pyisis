@@ -9,6 +9,7 @@ Updated: 2026-04-08  Geng Xun added ControlNetValidMeasure configuration/query r
 Updated: 2026-04-10  Geng Xun added LidarControlPoint focused coverage testing constructor, range/sigma/time setters, simultaneous list management, and ControlPoint inheritance.
 Updated: 2026-10-04  Geng Xun added explicit ControlNet and ControlPoint indexing and iteration coverage.
 Updated: 2026-10-04  Geng Xun added BundleSettings return-type and copy-isolation audit coverage.
+Updated: 2026-10-04  Geng Xun added ControlPointList indexing and iteration coverage.
 """
 
 import gc
@@ -934,6 +935,14 @@ End
             self.assertEqual(point_list.control_point_index("P2"), 1)
             self.assertTrue(point_list.has_control_point("P3"))
             self.assertFalse(point_list.has_control_point("P4"))
+            self.assertTrue(hasattr(point_list, "__iter__"))
+            self.assertEqual(point_list[0], "P1")
+            self.assertEqual(point_list[-1], "P3")
+            self.assertEqual(list(point_list), ["P1", "P2", "P3"])
+            with self.assertRaises(IndexError):
+                _ = point_list[3]
+            with self.assertRaises(IndexError):
+                _ = point_list[-4]
 
             pvl_log = ip.Pvl()
             point_list.register_statistics(pvl_log)

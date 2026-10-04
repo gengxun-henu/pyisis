@@ -80,6 +80,18 @@
   `read_gdal(path)`；递归引用helper明确排除。双版本`PvlUnitTest`各
   17/17及smoke通过。当前目标切换为`PvlObject`。
 
+## 会话：2026-10-04（M13）
+
+- ISIS 10 专属 facade 验证完成：使用官方 USGS `asp370`（ISIS 10.0.0
+  / CPython 3.13）重新配置并编译 `build-isis10`。
+- `tests.unitTest.isis10_api_unit_test`：7/7 通过，覆盖 IProj、Chandrayaan-2
+  相机类型、OCAMS OpenCV 畸变模型、ImageIoHandler/GdalIoHandler 读写与错误输入。
+- `tests/smoke_import.py`：ISIS 10 与 ISIS 9 构建各 1 次通过；ISIS 9 的
+  `isis10_api_unit_test + pvl_unit_test` 共 92 项通过（6 项按版本跳过）。
+- M12 已关闭 PVL 迭代，因此同步将 Phase 2 PVL 四类和 Phase 3 现有
+  ISIS 10 facade 从待办改为已完成。Windows ISIS 10 prefix 的上游
+  `mgs.dll` 链接阻塞仍保留在 Phase 4。
+
 ## 测试与验证
 
 | 时间 | 命令 | 结果 | 说明 |

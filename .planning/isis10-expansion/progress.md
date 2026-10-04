@@ -150,3 +150,11 @@
 | 2026-07-24 | ISIS 9/10 Table rebuild + focused + smoke | PASS | 两套扩展均增量重建；Table/TableRecord/TableField聚焦测试各8/8，smoke均通过。 |
 | 2026-07-24 | ISIS 9/10 ProcessByBrick focused + smoke | PASS | `process_unit_test`双版本各6/6；头文件差异仅为内部QtConcurrent类型。 |
 | 2026-07-24 | ISIS 9/10 Pvl rebuild + focused + smoke | PASS | 新增ISIS 10 JSON/GDAL表面；`PvlUnitTest`双版本各17/17，smoke均通过。 |
+
+## M19 — Shape / Target compatibility audit (2026-10-04)
+
+- Existing shared ShapeModel and Target facades cover Ellipsoid, DEM, Plane, Naif DSK, Bullet, and optional Embree shapes.
+- Added cross-version assertions that all available target shape factory results are `ShapeModel` instances.
+- ISIS 9 focused tests: 12 passed, 1 skipped; smoke import passed.
+- ISIS 10 focused tests: 12 passed, 1 skipped; smoke import passed.
+- No C++ binding change was necessary; the compatibility contract is satisfied by the shared facade.

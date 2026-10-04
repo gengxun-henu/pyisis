@@ -6,6 +6,7 @@
 // Updated: 2026-04-10  Geng Xun removed private default constructor from ControlNetVersioner binding (upstream has it private).
 // Updated: 2026-04-11  Geng Xun reused top-level Spice interpolation enums inside BundleObservationSolveSettings to avoid duplicate pybind enum registration.
 // Updated: 2026-06-18  Geng Xun skipped ControlNet::GetUserName on MSVC because the installed Windows ISIS library does not export it.
+// Updated: 2026-10-04  Geng Xun added explicit Python indexing and iteration for ControlNet and ControlPoint.
 // Purpose: pybind11 bindings for ISIS control network core classes, filters, and bundle-control helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -692,8 +693,23 @@ void bind_control_core(py::module_ &m)
          .def("__getitem__", [](Isis::ControlPoint &self, const std::string &serial_number) -> Isis::ControlMeasure *
               { return self[stdStringToQString(serial_number)]; }, py::arg("serial_number"), py::return_value_policy::reference_internal)
          .def("__getitem__", [](Isis::ControlPoint &self, int index) -> Isis::ControlMeasure *
-              { return self[index]; }, py::arg("index"), py::return_value_policy::reference_internal)
+              {
+                   const int size = self.GetNumMeasures();
+                   const int normalized = index < 0 ? size + index : index;
+                   if (normalized < 0 || normalized >= size) {
+                        throw py::index_error("ControlPoint measure index out of range");
+                   }
+                   return self[normalized];
+              }, py::arg("index"), py::return_value_policy::reference_internal)
          .def("__len__", &Isis::ControlPoint::GetNumMeasures)
+         .def("__iter__", [](Isis::ControlPoint &self) {
+              py::list snapshot;
+              py::handle parent = py::cast(&self);
+              for (int index = 0; index < self.GetNumMeasures(); ++index) {
+                   snapshot.append(py::cast(self[index], py::return_value_policy::reference_internal, parent));
+              }
+              return snapshot.attr("__iter__")();
+         })
          .def("__eq__", &Isis::ControlPoint::operator==, py::arg("other"))
          .def("__ne__", &Isis::ControlPoint::operator!=, py::arg("other"))
          .def("zero_number_of_rejected_measures", &Isis::ControlPoint::ZeroNumberOfRejectedMeasures)
@@ -819,8 +835,23 @@ void bind_control_core(py::module_ &m)
          .def("__getitem__", [](Isis::ControlNet &self, const std::string &point_id) -> Isis::ControlPoint *
               { return self[stdStringToQString(point_id)]; }, py::arg("point_id"), py::return_value_policy::reference_internal)
          .def("__getitem__", [](Isis::ControlNet &self, int index) -> Isis::ControlPoint *
-              { return self[index]; }, py::arg("index"), py::return_value_policy::reference_internal)
+              {
+                   const int size = self.GetNumPoints();
+                   const int normalized = index < 0 ? size + index : index;
+                   if (normalized < 0 || normalized >= size) {
+                        throw py::index_error("ControlNet point index out of range");
+                   }
+                   return self[normalized];
+              }, py::arg("index"), py::return_value_policy::reference_internal)
          .def("__len__", &Isis::ControlNet::GetNumPoints)
+         .def("__iter__", [](Isis::ControlNet &self) {
+              py::list snapshot;
+              py::handle parent = py::cast(&self);
+              for (int index = 0; index < self.GetNumPoints(); ++index) {
+                   snapshot.append(py::cast(self[index], py::return_value_policy::reference_internal, parent));
+              }
+              return snapshot.attr("__iter__")();
+         })
          .def("copy", [](const Isis::ControlNet &self)
               { return Isis::ControlNet(self); })
          .def("__repr__", [](const Isis::ControlNet &self)

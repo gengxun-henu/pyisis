@@ -3,10 +3,11 @@ Unit tests for ISIS control-core bindings.
 
 Author: Geng Xun
 Created: 2026-04-07
-Last Modified: 2026-04-08
+Last Modified: 2026-10-04
 Updated: 2026-04-08  Geng Xun added ControlNetStatistics summary/getter regression coverage and retained control-core helper checks.
 Updated: 2026-04-08  Geng Xun added ControlNetValidMeasure configuration/query regression coverage and retained ControlNetFilter helper checks.
 Updated: 2026-04-10  Geng Xun added LidarControlPoint focused coverage testing constructor, range/sigma/time setters, simultaneous list management, and ControlPoint inheritance.
+Updated: 2026-10-04  Geng Xun added explicit ControlNet and ControlPoint indexing and iteration coverage.
 """
 
 import gc
@@ -631,6 +632,27 @@ End
         self.assertEqual(point.index_of("SN-001"), 0)
         self.assertEqual(point.get_measure(0).get_log_data_entries()[0].get_numerical_value(), 0.9)
 
+    def test_control_point_indexing_and_iteration(self):
+        point = ip.ControlPoint("ITER_POINT")
+        for serial, sample in (("SN-001", 10.0), ("SN-002", 20.0)):
+            measure = ip.ControlMeasure()
+            measure.set_cube_serial_number(serial)
+            measure.set_coordinate(sample, sample + 1.0)
+            measure.set_type(ip.ControlMeasure.MeasureType.Manual)
+            point.add_measure(measure)
+
+        self.assertTrue(hasattr(point, "__iter__"))
+        self.assertEqual(point[0].get_cube_serial_number(), "SN-001")
+        self.assertEqual(point[-1].get_cube_serial_number(), "SN-002")
+        self.assertEqual(
+            [measure.get_cube_serial_number() for measure in point],
+            ["SN-001", "SN-002"],
+        )
+        with self.assertRaises(IndexError):
+            _ = point[2]
+        with self.assertRaises(IndexError):
+            _ = point[-3]
+
     def test_control_net_basic_graph_and_io(self):
         net = ip.ControlNet()
         net.set_network_id("ExampleNet")
@@ -669,6 +691,22 @@ End
             self.assertEqual(loaded.get_num_points(), 1)
             self.assertEqual(loaded.get_num_measures(), 2)
             self.assertEqual(loaded.get_point("P1").get_ref_measure().get_cube_serial_number(), "ALPHA")
+
+    def test_control_net_indexing_and_iteration(self):
+        net = ip.ControlNet()
+        for point_id in ("POINT-A", "POINT-B"):
+            point = ip.ControlPoint(point_id)
+            point.set_type(ip.ControlPoint.PointType.Free)
+            net.add_point(point)
+
+        self.assertTrue(hasattr(net, "__iter__"))
+        self.assertEqual(net[0].get_id(), "POINT-A")
+        self.assertEqual(net[-1].get_id(), "POINT-B")
+        self.assertEqual([point.get_id() for point in net], ["POINT-A", "POINT-B"])
+        with self.assertRaises(IndexError):
+            _ = net[2]
+        with self.assertRaises(IndexError):
+            _ = net[-3]
 
     def test_control_net_filter_output_helpers_write_expected_text(self):
         net, cube_path, serial_number = self.make_control_net_filter_fixture()

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-21
+Last Modified: 2026-10-05
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
@@ -26,6 +26,7 @@ Updated: 2026-08-21  Geng Xun removed redundant Windows Python bootstrap downloa
 Updated: 2026-08-21  Geng Xun added self-hosted cache and resource-aware parallel-build coverage.
 Updated: 2026-08-21  Geng Xun covered proxy routing for self-hosted Windows bootstrap traffic.
 Updated: 2026-08-21  Geng Xun aligned release workflow expectations with both rc3 package lines.
+Updated: 2026-10-05  Geng Xun added explicit release-gate dependency and failure-policy checks.
 """
 
 from __future__ import annotations
@@ -479,6 +480,29 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn('gh release create "$RELEASE_TAG"', workflow)
         self.assertIn("--target \"$GITHUB_SHA\"", workflow)
         self.assertIn("--notes-file \"$RELEASE_NOTES_FILE\"", workflow)
+
+    def test_release_gate_has_no_softened_platform_failures(self):
+        workflow = self._workflow_text()
+        release = self._job_block(workflow, "github-release")
+
+        for job_name in (
+            "linux-cp312-build",
+            "linux-cp312-clean-install",
+            "linux-isis10-cp313-build",
+            "linux-isis10-cp313-clean-install",
+            "windows-cp312",
+            "windows-isis10-cp313",
+        ):
+            self.assertIn(job_name, release)
+
+        self.assertNotIn("continue-on-error: true", release)
+        self.assertIn("publish_github_release == 'true'", workflow)
+
+    def test_windows_isis10_job_runs_spiceql_preflight(self):
+        workflow = self._workflow_text()
+        windows10 = self._job_block(workflow, "windows-isis10-cp313")
+        self.assertIn("build_spiceql.ps1", windows10)
+        self.assertIn("-Ref 1.4.1", windows10)
 
     def _job_block(self, workflow: str, job_name: str) -> str:
         match = re.search(

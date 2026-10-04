@@ -8,6 +8,7 @@ Updated: 2026-04-08  Geng Xun added ControlNetStatistics summary/getter regressi
 Updated: 2026-04-08  Geng Xun added ControlNetValidMeasure configuration/query regression coverage and retained ControlNetFilter helper checks.
 Updated: 2026-04-10  Geng Xun added LidarControlPoint focused coverage testing constructor, range/sigma/time setters, simultaneous list management, and ControlPoint inheritance.
 Updated: 2026-10-04  Geng Xun added explicit ControlNet and ControlPoint indexing and iteration coverage.
+Updated: 2026-10-04  Geng Xun added BundleSettings return-type and copy-isolation audit coverage.
 """
 
 import gc
@@ -562,7 +563,9 @@ End
         )
 
         maximum_likelihood_models = settings.maximum_likelihood_estimator_models()
+        self.assertIsInstance(maximum_likelihood_models, list)
         self.assertEqual(len(maximum_likelihood_models), 1)
+        self.assertIsInstance(maximum_likelihood_models[0], tuple)
         self.assertEqual(
             maximum_likelihood_models[0][0],
             ip.BundleSettings.MaximumLikelihoodModel.Huber,
@@ -571,6 +574,7 @@ End
         self.assertEqual(settings.output_file_prefix(), "bundle/run_")
         self.assertEqual(settings.cube_list(), "cubes.lis")
         self.assertEqual(settings.number_solve_settings(), 1)
+        self.assertIsInstance(settings.observation_solve_settings(), list)
         self.assertEqual(settings.observation_solve_settings()[0].instrument_id(), "CTX")
         self.assertEqual(settings.observation_solve_settings(0).instrument_id(), "CTX")
         self.assertEqual(
@@ -579,6 +583,7 @@ End
         )
         bound_target_body = settings.bundle_target_body()
         self.assertIsNotNone(bound_target_body)
+        self.assertIsNot(bound_target_body, target_body)
         self.assertTrue(settings.solve_target_body())
         self.assertEqual(settings.number_target_body_parameters(), 2)
         self.assertTrue(settings.solve_pole_ra())

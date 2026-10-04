@@ -30,7 +30,7 @@ The app launcher facade and checkout-resilience change are committed on a PR bra
 
 ## Next Step
 
-Commit and push the task-scoped workflow/test/planning changes to PR #383, then monitor the resulting checks.
+None — M11 is complete and merged as `f4ddebb650543e5f332ef0acaa5ee917b2e39cac`.
 
 ## Current Phase
 
@@ -52,10 +52,10 @@ Phase 3: PR integration and synchronization
 
 ### Phase 3: PR integration and synchronization
 
-- [ ] Commit and push task-scoped changes to PR #383.
-- [ ] Monitor checks and merge through the protected PR path when allowed.
-- [ ] Synchronize local `main` and record the final merge evidence.
-- **Status:** pending
+- [x] Commit and push task-scoped changes to PR #383.
+- [x] Monitor checks and merge through the protected PR path when allowed.
+- [x] Synchronize local `main` and record the final merge evidence.
+- **Status:** complete 2026-10-04
 
 ## Decisions
 
@@ -77,3 +77,13 @@ Phase 3: PR integration and synchronization
 - **Goal?** A merged, locally synchronized PR with fresh validation evidence.
 - **What have I learned?** Local code is healthy; current remote failures are infrastructure-related.
 - **Next step?** Add the checkout cleanup regression test.
+
+## Completion Evidence
+
+- Merge commit: `f4ddebb650543e5f332ef0acaa5ee917b2e39cac`.
+- Focused tests: 50 passed, 0 failed, 0 skipped.
+- Smoke import: passed.
+- Full unit suite: 2727 run, 0 failed, 52 skipped, 1 expected failure.
+- `git diff --check`: passed.
+- Local `main`: synchronized with `origin/main` at `f4ddebb6`; guarded `print.prt` remained untouched.
+- Remaining environment note: Windows wheel jobs were queued because no Windows runner was online; the PR merge did not bypass a failed check.

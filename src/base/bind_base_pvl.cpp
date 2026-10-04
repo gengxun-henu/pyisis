@@ -12,6 +12,7 @@
 // Updated: 2026-04-15  Geng Xun routed PvlGroup.validate_group through the same empty-template-safe wrapper used by validate_pvl.
 // Updated: 2026-07-24  Geng Xun exposed ISIS 10 PvlKeyword JSON value/array helpers through Python JSON conversion.
 // Updated: 2026-07-24  Geng Xun exposed ISIS 10 Pvl JSON conversion and GDAL label reading behind the version capability gate.
+// Updated: 2026-10-04  Geng Xun added stable Python iteration helpers for PVL values, keywords, groups, and objects.
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -452,6 +453,13 @@ void bind_base_pvl(py::module_ &m) {
       .def("clear_comment", &Isis::PvlKeyword::clearComment)
       .def("__len__", &Isis::PvlKeyword::size)
       .def("__getitem__", [](const Isis::PvlKeyword &self, int index) { return qStringToStdString(self[index]); }, py::arg("index"))
+      .def("__iter__", [](const Isis::PvlKeyword &self) {
+        py::list values;
+        for (int index = 0; index < self.size(); ++index) {
+          values.append(qStringToStdString(self[index]));
+        }
+        return py::iter(values);
+      })
       .def("__str__", &keywordToString)
       .def("__repr__", [](Isis::PvlKeyword &self) {
         return "PvlKeyword(" + keywordToString(self) + ")";
@@ -523,7 +531,14 @@ void bind_base_pvl(py::module_ &m) {
              return self.findKeyword(stdStringToQString(name));
            },
            py::arg("name"),
-           py::return_value_policy::reference_internal);
+           py::return_value_policy::reference_internal)
+      .def("__iter__", [](const Isis::PvlContainer &self) {
+        py::list keywords;
+        for (int index = 0; index < self.keywords(); ++index) {
+          keywords.append(self[index]);
+        }
+        return py::iter(keywords);
+      });
 
            /**
             * @brief Bindings for the Isis::PvlGroup class
@@ -620,6 +635,20 @@ void bind_base_pvl(py::module_ &m) {
       .def("delete_object_at",
            [](Isis::PvlObject &self, int index) { self.deleteObject(index); },
            py::arg("index"))
+      .def("__iter__", [](const Isis::PvlObject &self) {
+        py::list groups;
+        for (int index = 0; index < self.groups(); ++index) {
+          groups.append(self.group(index));
+        }
+        return py::iter(groups);
+      })
+      .def("objects_iter", [](const Isis::PvlObject &self) {
+        py::list objects;
+        for (int index = 0; index < self.objects(); ++index) {
+          objects.append(self.object(index));
+        }
+        return py::iter(objects);
+      })
       .def("find_keyword_recursive",
            [](Isis::PvlObject &self, const std::string &name) -> Isis::PvlKeyword & {
              return self.findKeyword(stdStringToQString(name), Isis::PvlObject::Traverse);

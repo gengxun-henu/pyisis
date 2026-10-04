@@ -79,6 +79,12 @@ jobs:
           print_block "git config --global insteadof" git config --global --get-regexp '^url\..*\.insteadof$'
           print_block "git config --system insteadof" git config --system --get-regexp '^url\..*\.insteadof$'
           print_block "git config origins" git config --list --show-origin
+          if [ -d "${GITHUB_WORKSPACE:-}/.git" ]; then
+            print_block "existing workspace submodule status" git -C "$GITHUB_WORKSPACE" submodule status
+            if ! git -C "$GITHUB_WORKSPACE" submodule status >/dev/null 2>&1; then
+              note_finding 'Existing workspace has invalid or stale submodule metadata; checkout may fail before the build starts.'
+            fi
+          fi
           print_block "ssh config github matches" grep -nE 'github\.com|ssh\.github\.com|Host[[:space:]]+github\.com|ProxyCommand|IdentityFile' "$HOME/.ssh/config"
           print_block "service environment (if available)" sh -c 'systemctl show actions.runner.* --property=Environment 2>/dev/null || true'
           print_block "git ssh environment variables" sh -c 'env | grep -E "^(GIT_SSH|GIT_SSH_COMMAND|SSH_AUTH_SOCK)=" || true'

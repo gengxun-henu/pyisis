@@ -3,9 +3,10 @@ Unit tests for ISIS Target and shape-model bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-06-18
+Last Modified: 2026-10-04
 Updated: 2026-04-09  Geng Xun added focused Target tests for camera-derived NAIF metadata and body-rotation coefficient accessors.
 Updated: 2026-06-18  Geng Xun made Embree shape expectations conditional on optional PCL-backed bindings.
+Updated: 2026-10-04  Geng Xun added cross-version ShapeModel hierarchy and factory return-type audit coverage.
 """
 
 import unittest
@@ -162,6 +163,11 @@ End
             self.assertEqual(embree_shape.name(), "Embree")
             self.assertFalse(embree_shape.is_dem())
             self.assertAlmostEqual(embree_shape.get_tolerance(), 0.25)
+
+        for shape in (ellipsoid, dem_shape, plane_shape, naif_shape, bullet_shape):
+            self.assertIsInstance(shape, ip.ShapeModel)
+        if HAS_EMBREE_BINDINGS:
+            self.assertIsInstance(embree_shape, ip.ShapeModel)
         self.assertAlmostEqual(bullet_shape.get_tolerance(), 0.5)
 
     def test_shape_surface_point_lifecycle(self):

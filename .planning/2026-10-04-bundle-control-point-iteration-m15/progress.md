@@ -10,6 +10,7 @@
 - Reviewed `BundleControlPoint` inheritance and selected measure indexing/iteration as the next focused Python API gap.
 - Confirmed the existing test fixture provides two ordered BundleMeasure objects.
 - Added bounds-checked positive/negative indexing and explicit iteration over copied BundleMeasure wrappers.
+- PR #390 merged; local `main` synchronized after delivery.
 
 ### Test Results
 | Test | Expected | Actual | Status |

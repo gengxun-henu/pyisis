@@ -158,3 +158,10 @@
 - ISIS 9 focused tests: 12 passed, 1 skipped; smoke import passed.
 - ISIS 10 focused tests: 12 passed, 1 skipped; smoke import passed.
 - No C++ binding change was necessary; the compatibility contract is satisfied by the shared facade.
+
+## M20 — Camera / Projection / Map compatibility audit (2026-10-04)
+
+- Added `ProjectionFactory` base-class assertions for both label construction paths.
+- Existing camera, camera-map, and UniversalGroundMap coverage remains green.
+- ISIS 9 focused suite: 146 passed; smoke import passed.
+- ISIS 10 focused suite: 146 passed; smoke import passed.

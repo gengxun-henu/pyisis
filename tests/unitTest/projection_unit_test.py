@@ -3,7 +3,8 @@ Unit tests for ISIS projection and ProjectionFactory bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-12
+Last Modified: 2026-10-04
+Updated: 2026-10-04  Geng Xun added cross-version ProjectionFactory return-type audit coverage.
 Updated: 2026-04-12  Geng Xun added focused tests for all concrete projection type bindings
   (Sinusoidal, Mercator, Robinson, Orthographic, Mollweide, LambertConformal,
   LambertAzimuthalEqualArea, ObliqueCylindrical, PointPerspective,
@@ -204,6 +205,7 @@ class ProjectionUnitTest(unittest.TestCase):
 
         label = make_simple_cylindrical_label(include_pixel_resolution=True, include_upper_left=True)
         projection = ip.ProjectionFactory.create_from_cube_label(label)
+        self.assertIsInstance(projection, ip.Projection)
         self.assertEqual(projection.name(), "SimpleCylindrical")
         self.assertTrue(projection.set_world(245.0, 355.0))
         self.assertAlmostEqual(projection.latitude(), 22.82592837302989, places=8)
@@ -214,6 +216,7 @@ class ProjectionUnitTest(unittest.TestCase):
 
         projection, samples, lines = ip.ProjectionFactory.create_for_cube(label)
 
+        self.assertIsInstance(projection, ip.Projection)
         self.assertEqual(projection.name(), "SimpleCylindrical")
         self.assertGreater(samples, 0)
         self.assertGreater(lines, 0)

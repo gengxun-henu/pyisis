@@ -58,3 +58,12 @@ ISISDATA needed for import/smoke checks. Native ISIS applications such as
   GitHub-hosted `windows-2022` and `ubuntu-24.04`/22.04/26.04 runners.
 - Stable publication is still a separate action; this run intentionally left
   `publish_github_release=false`.
+
+## Existing prereleases
+
+The configured prerelease tags already exist and contain the expected assets:
+
+- `v1.3.0rc3-isis9.0.0`: Linux wheelhouse, Windows wheelhouse, and `SHA256SUMS.txt`.
+- `v1.4.0rc3-isis10.0.0`: Linux wheelhouse, Windows wheelhouse, and `SHA256SUMS.txt`.
+
+The M38 publication step safely refused to overwrite the existing ISIS 9 tag.

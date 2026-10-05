@@ -79,3 +79,7 @@ Sanity run `37266087196` still fails before checkout on the self-hosted pyisis r
 ## M41 post-release regression audit (2026-10-05)
 
 Both configured prereleases remain present and version-isolated. `v1.3.0rc3-isis9.0.0` exposes Linux/Windows CPython 3.12 wheelhouses; `v1.4.0rc3-isis10.0.0` exposes Linux/Windows CPython 3.13 wheelhouses. Each release is non-draft, marked prerelease, and has a two-entry `SHA256SUMS.txt` with valid SHA-256 records. The release manifests still point to their matching tags and retain prerelease mode.
+
+## M42 Windows APP contract closure (2026-10-05)
+
+The repository-side Windows APP contract is closed: 49 focused manifest, native validation, and wheel workflow tests passed under `asp360_new`; the CLI manifest has exactly 150 unique entries; and the release contract retains `qnet` as the public GUI app, `isisui` as the runtime helper, and `reduce`/`jigsaw`/`qnet` as mandatory inventory. The remaining clean-host ISIS 9 runtime check depends on repairing the self-hosted runner documented in M40.

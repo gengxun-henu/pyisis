@@ -71,3 +71,7 @@ The M38 publication step safely refused to overwrite the existing ISIS 9 tag.
 ## M39 Windows native APP validation (2026-10-05)
 
 The GitHub-hosted `windows-isis-apps.yml` run `37260728860` passed on `windows-2022`. It built and installed the ISIS 10.0.0 allowlisted APP batch, smoke-tested all 150 configured applications, and passed the csv2table native behavior matrix (`3 passed, 0 failed, 0 skipped`). The run uploaded `windows-isis10-app-batch-smoke-logs` and `csv2table-native-app-isis10-windows`; both artifacts were unexpired when recorded.
+
+## M40 self-hosted runner status (2026-10-05)
+
+Sanity run `37266087196` still fails before checkout on the self-hosted pyisis runner. The workflow can detect the stale checkout, but the runner account cannot remove files under `/opt/actions-runner-pyisis/_work/pyisis/pyisis` because of host-level permissions. A host administrator must repair ownership/permissions or recreate the runner workspace before self-hosted validation can resume; GitHub-hosted M36/M38/M39 validation remains unaffected.

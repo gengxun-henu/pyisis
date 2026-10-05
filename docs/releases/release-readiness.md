@@ -10,12 +10,13 @@ publish release assets.
 
 | ISIS | Python | Linux | Windows | Current state |
 |---|---|---|---|---|
-| 9.0.0 | CPython 3.12 | manylinux wheel and clean-install evidence available | historical wheel evidence available | ready for revalidation |
-| 10.0.0 | CPython 3.13 | manylinux wheel and clean-install evidence available | blocked in `mgs.dll` link (`SpiceQL::strSclkToEt`) | blocked |
+| 9.0.0 | CPython 3.12 | manylinux wheel and clean-install evidence available | passed in fallback run `37215760300` | matrix passed |
+| 10.0.0 | CPython 3.13 | manylinux wheel and clean-install evidence available | passed in fallback run `37215760300` | matrix passed |
 
 A stable dual-version release requires all four platform/version cells to pass
-in the same release cycle. Local Linux smoke tests do not replace the Windows
-cells.
+in the same release cycle. Run `37215760300` passed all four build cells and
+all six Linux clean-install jobs. The formal GitHub Release step was skipped
+because publication was disabled for this validation run.
 
 ## Artifact identity
 
@@ -50,12 +51,10 @@ The PyISIS wheelhouse contains Python bindings, runtime libraries, and minimal
 ISISDATA needed for import/smoke checks. Native ISIS applications such as
 `reduce`, `jigsaw`, and `qnet` are distributed separately.
 
-## Current blockers
+## Current status
 
-1. The Windows ISIS 10 prefix must link `mgs.dll` successfully. The current
-   failure is an unresolved decorated `SpiceQL::strSclkToEt` symbol.
-2. The self-hosted runner workspace must be repaired or recreated. Strict
-   sanity run `37190432546` reported missing `HEAD` and stale submodule metadata.
-
-Do not tag or publish a stable dual-version release until both blockers are
-cleared and the four matrix cells pass together.
+- The Windows ISIS 10 `mgs.dll` link gate passed in fallback run `37215760300`.
+- The self-hosted runner remains unhealthy, but the matrix was verified on
+  GitHub-hosted `windows-2022` and `ubuntu-24.04`/22.04/26.04 runners.
+- Stable publication is still a separate action; this run intentionally left
+  `publish_github_release=false`.

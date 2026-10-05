@@ -614,6 +614,10 @@ jobs:
 
       - name: Set up Windows ISIS build environment with Micromamba
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: Add-Content -Path $env:GITHUB_PATH -Value 'C:\Program Files\Git\usr\bin'
+
+      - name: Create Windows ISIS build environment with Micromamba
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
           MAMBA_ROOT_PREFIX: D:\pyisis-conda
         uses: mamba-org/setup-micromamba@v3
@@ -864,6 +868,10 @@ jobs:
             -Path "D:\pyisis-conda\pkgs\isis10-v3" | Out-Null
 
       - name: Set up Windows ISIS 10 build environment with Micromamba
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: Add-Content -Path $env:GITHUB_PATH -Value 'C:\Program Files\Git\usr\bin'
+
+      - name: Create Windows ISIS 10 build environment with Micromamba
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
           MAMBA_ROOT_PREFIX: D:\pyisis-conda

@@ -75,3 +75,7 @@ The GitHub-hosted `windows-isis-apps.yml` run `37260728860` passed on `windows-2
 ## M40 self-hosted runner status (2026-10-05)
 
 Sanity run `37266087196` still fails before checkout on the self-hosted pyisis runner. The workflow can detect the stale checkout, but the runner account cannot remove files under `/opt/actions-runner-pyisis/_work/pyisis/pyisis` because of host-level permissions. A host administrator must repair ownership/permissions or recreate the runner workspace before self-hosted validation can resume; GitHub-hosted M36/M38/M39 validation remains unaffected.
+
+## M41 post-release regression audit (2026-10-05)
+
+Both configured prereleases remain present and version-isolated. `v1.3.0rc3-isis9.0.0` exposes Linux/Windows CPython 3.12 wheelhouses; `v1.4.0rc3-isis10.0.0` exposes Linux/Windows CPython 3.13 wheelhouses. Each release is non-draft, marked prerelease, and has a two-entry `SHA256SUMS.txt` with valid SHA-256 records. The release manifests still point to their matching tags and retain prerelease mode.

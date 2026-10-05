@@ -115,9 +115,9 @@ jobs:
           path: build/windows/native-clean-host-output/usgs-isis-native-apps-9.0.0-win64-dll-dependencies.json
 
   clean-runtime:
-    name: Validate on clean GitHub-hosted Windows 2022 x64
+    name: Validate on clean GitHub-hosted Windows 2025 x64
     needs: build-package
-    runs-on: windows-2022
+    runs-on: windows-2025
     timeout-minutes: 90
     defaults:
       run:

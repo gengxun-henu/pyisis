@@ -205,13 +205,16 @@ class WheelWorkflowUnitTest(unittest.TestCase):
                 job,
             )
 
-    def test_self_hosted_windows_reuses_the_preinstalled_conda(self):
+    def test_self_hosted_windows_bootstraps_cached_miniforge(self):
         workflow = self._workflow_text()
 
         for job_name in ("windows-cp312", "windows-isis10-cp313"):
             job = self._job_block(workflow, job_name)
             self.assertEqual(job.count("conda-incubator/setup-miniconda@v4"), 2)
-            self.assertIn("CONDA: C:\\Users\\gx\\miniconda3", job)
+            self.assertIn(
+                "installation-dir: ${{ runner.tool_cache }}\\pyisis-miniforge3",
+                job,
+            )
             self.assertIn("run-init: false", job)
             self.assertIn("conda-solver: libmamba", job)
             self.assertIn(

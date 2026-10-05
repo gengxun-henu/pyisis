@@ -615,13 +615,14 @@ jobs:
       - name: Set up Windows ISIS build environment from preinstalled Conda
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
-          CONDA: C:\Users\gx\miniconda3
           CONDA_ALWAYS_COPY: "true"
           # Conda hard-codes extraction concurrency from os.cpu_count().
           # Serial extraction avoids transient Windows DLL/file scanner locks.
           PYTHON_CPU_COUNT: "1"
         uses: conda-incubator/setup-miniconda@v4
         with:
+          miniforge-version: latest
+          installation-dir: ${{ runner.tool_cache }}\pyisis-miniforge3
           activate-environment: D:\pyisis-conda\envs\isis9-v3
           environment-file: ports/windows/env/pyisis-isis-win64.yml
           conda-solver: libmamba
@@ -872,13 +873,14 @@ jobs:
       - name: Set up Windows ISIS 10 build environment from preinstalled Conda
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
-          CONDA: C:\Users\gx\miniconda3
           CONDA_ALWAYS_COPY: "true"
           # Conda hard-codes extraction concurrency from os.cpu_count().
           # Serial extraction avoids transient Windows DLL/file scanner locks.
           PYTHON_CPU_COUNT: "1"
         uses: conda-incubator/setup-miniconda@v4
         with:
+          miniforge-version: latest
+          installation-dir: ${{ runner.tool_cache }}\pyisis-miniforge3
           activate-environment: D:\pyisis-conda\envs\isis10-v3
           environment-file: ports/windows/env/pyisis-isis10-win64.yml
           conda-solver: libmamba

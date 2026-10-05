@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "workflow": "wheels.yml",
+  "run_id": 37215760300,
+  "commit": "185fb6ce8831f861591d48bd9e0bac7b255e5a06",
+  "status": "success",
+  "publication": "skipped",
+  "artifacts": [
+    {
+      "name": "usgs-pyisis-isis10-linux-cp313-abi-report",
+      "size_in_bytes": 836,
+      "expired": false
+    },
+    {
+      "name": "usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse",
+      "size_in_bytes": 315305131,
+      "expired": false
+    },
+    {
+      "name": "usgs-pyisis-isis10-windows-cp313-wheels",
+      "size_in_bytes": 109019179,
+      "expired": false
+    },
+    {
+      "name": "usgs-pyisis-linux-cp312-abi-report",
+      "size_in_bytes": 1737,
+      "expired": false
+    },
+    {
+      "name": "usgs-pyisis-linux-cp312-manylinux-wheelhouse",
+      "size_in_bytes": 229484396,
+      "expired": false
+    },
+    {
+      "name": "usgs-pyisis-windows-cp312-wheels",
+      "size_in_bytes": 94129887,
+      "expired": false
+    }
+  ]
+}

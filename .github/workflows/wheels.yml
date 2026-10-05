@@ -614,6 +614,14 @@ jobs:
 
       - name: Set up Windows ISIS build environment from preinstalled Conda
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: |
+          $bootstrap = Join-Path $env:RUNNER_TOOL_CACHE "pyisis-miniforge3"
+          if (Test-Path -LiteralPath $bootstrap) {
+            Remove-Item -LiteralPath $bootstrap -Recurse -Force
+          }
+
+      - name: Bootstrap Windows ISIS build environment with Miniforge
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
           CONDA_ALWAYS_COPY: "true"
           # Conda hard-codes extraction concurrency from os.cpu_count().
@@ -871,6 +879,14 @@ jobs:
             -Path "D:\pyisis-conda\pkgs\isis10-v3" | Out-Null
 
       - name: Set up Windows ISIS 10 build environment from preinstalled Conda
+        if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
+        run: |
+          $bootstrap = Join-Path $env:RUNNER_TOOL_CACHE "pyisis-miniforge3"
+          if (Test-Path -LiteralPath $bootstrap) {
+            Remove-Item -LiteralPath $bootstrap -Recurse -Force
+          }
+
+      - name: Bootstrap Windows ISIS 10 build environment with Miniforge
         if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}
         env:
           CONDA_ALWAYS_COPY: "true"

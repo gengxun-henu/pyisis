@@ -83,3 +83,7 @@ Both configured prereleases remain present and version-isolated. `v1.3.0rc3-isis
 ## M42 Windows APP contract closure (2026-10-05)
 
 The repository-side Windows APP contract is closed: 49 focused manifest, native validation, and wheel workflow tests passed under `asp360_new`; the CLI manifest has exactly 150 unique entries; and the release contract retains `qnet` as the public GUI app, `isisui` as the runtime helper, and `reduce`/`jigsaw`/`qnet` as mandatory inventory. The remaining clean-host ISIS 9 runtime check depends on repairing the self-hosted runner documented in M40.
+
+## M43 hosted Windows clean-runtime validation (2026-10-05)
+
+The ISIS 9 native APP clean-runtime path now uses GitHub-hosted `windows-2025` instead of the unavailable self-hosted runner. Run `37274861782` confirmed that `windows-2022` is Windows Server 2022 and correctly failed the package's Windows 11 host check. Corrected run `37280009059` passed ISIS 9 package construction, the Windows 2025 clean-runtime matrix, and final evidence binding. The retained final evidence artifact is `native-app-final-evidence-37280009059`; all four run artifacts were unexpired when recorded.

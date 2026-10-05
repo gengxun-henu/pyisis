@@ -128,7 +128,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         for job in (windows, windows10):
             self.assertIn("conda-incubator/setup-miniconda@v4", job)
             self.assertIn("conda-solver: classic", job)
-            self.assertNotIn("mamba-org/setup-micromamba", job)
+            self.assertIn("mamba-org/setup-micromamba@v3", job)
         self.assertIn("ports\\windows\\activate_msvc.ps1", workflow)
         self.assertIn("ports\\windows\\isis\\verify_isis_prefix.ps1", workflow)
         self.assertIn("PYISIS_WINDOWS_ISIS_PREFIX", workflow)
@@ -210,13 +210,10 @@ class WheelWorkflowUnitTest(unittest.TestCase):
 
         for job_name in ("windows-cp312", "windows-isis10-cp313"):
             job = self._job_block(workflow, job_name)
-            self.assertEqual(job.count("conda-incubator/setup-miniconda@v4"), 2)
-            self.assertIn(
-                "installation-dir: ${{ runner.tool_cache }}\\pyisis-miniforge3",
-                job,
-            )
-            self.assertIn("run-init: false", job)
-            self.assertIn("conda-solver: libmamba", job)
+            self.assertIn("mamba-org/setup-micromamba@v3", job)
+            self.assertIn("MAMBA_ROOT_PREFIX: D:\\pyisis-conda", job)
+            self.assertIn("environment-name: isis9-v3" if job_name == "windows-cp312" else "environment-name: isis10-v3", job)
+            self.assertIn("cache-environment: true", job)
             self.assertIn(
                 "if: ${{ needs.scope.outputs.windows_is_self_hosted == 'true' }}",
                 job,
@@ -243,11 +240,10 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         }
         for job_name, (environment_path, package_path) in expected_envs.items():
             job = self._job_block(workflow, job_name)
-            self.assertIn(f"activate-environment: {environment_path}", job)
-            self.assertIn(f"pkgs-dirs: {package_path}", job)
+            self.assertIn(f"environment-name: {environment_path.rsplit('\\', 1)[-1]}", job)
+            self.assertIn(f'"{package_path}"', job)
             self.assertIn(f"$prefix = '{environment_path}'", job)
-            self.assertIn('CONDA_ALWAYS_COPY: "true"', job)
-            self.assertIn('PYTHON_CPU_COUNT: "1"', job)
+            self.assertIn("MAMBA_ROOT_PREFIX: D:\\pyisis-conda", job)
             self.assertIn(
                 "System32\\config\\systemprofile\\conda_pkgs_dir",
                 job,

@@ -85,14 +85,19 @@ jobs:
               context.payload.pull_request.head.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
               context.actor === 'gengxun-henu';
             const requestedLinuxRunner = context.payload.inputs?.linux_runner || 'ubuntu26-self-hosted';
+            // Pull requests always use hosted Linux. A trusted PR must not
+            // queue on a self-hosted runner that may be offline or stale.
             const useUbuntu26 = context.eventName === 'workflow_dispatch'
               ? requestedLinuxRunner === 'ubuntu26-self-hosted'
-              : trustedOwnerPr;
+              : false;
             const selectedLinuxRunner = useUbuntu26 ? ubuntu26Labels : 'ubuntu-24.04';
             const requestedWindowsRunner = context.payload.inputs?.windows_runner || 'windows11-self-hosted';
+            // Pull requests always use hosted Windows for deterministic
+            // fallback behavior; self-hosted Windows remains an explicit
+            // manual-dispatch choice.
             const useWindows11 = context.eventName === 'workflow_dispatch'
               ? requestedWindowsRunner === 'windows11-self-hosted'
-              : trustedOwnerPr;
+              : false;
             const selectedWindowsRunner = useWindows11 ? windows11Labels : 'windows-2022';
             core.setOutput('linux_runs_on_json', JSON.stringify(selectedLinuxRunner));
             core.setOutput('linux_is_self_hosted', String(useUbuntu26));

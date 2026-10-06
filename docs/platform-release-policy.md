@@ -22,6 +22,8 @@ ISIS 9 和 ISIS 10 必须使用独立的运行时、wheelhouse、native package 
 4. self-hosted runner 只允许受信任的 push、手动 dispatch 或受信任分支使用；不受信任的外部 PR 必须使用 GitHub-hosted。
 5. 每次运行必须记录 runner 名称、OS、架构、ISIS 版本/build、Python ABI、commit SHA、artifact 名称和哈希。没有这些字段的运行不能作为发布证据。
 
+2026-10-06 hosted fallback run `37403508140` 已验证 ISIS 9/10 Linux wheel、Windows wheel，以及 Ubuntu 22.04/24.04/26.04 安装矩阵。
+
 ## 发布门禁
 
 - Linux wheelhouse 必须在 Ubuntu 22.04、24.04、26.04 完成 clean-install；同一 wheelhouse 必须通过 ABI 和哈希检查。

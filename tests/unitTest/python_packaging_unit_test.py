@@ -75,7 +75,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
 
         project = pyproject["project"]
         self.assertEqual("usgs-pyisis", project["name"])
-        self.assertEqual("1.3.0rc3", project["version"])
+        self.assertEqual("1.3.0rc4", project["version"])
         self.assertIn("README.md", project["readme"])
         self.assertIn(">=3.10", project["requires-python"])
 
@@ -93,14 +93,14 @@ class PythonPackagingMetadataTest(unittest.TestCase):
 
         dependencies = pyproject["project"]["dependencies"]
         self.assertIn(
-            'usgs-pyisis-runtime-win64==1.3.0rc3; platform_system == "Windows" and platform_machine == "AMD64"',
+            'usgs-pyisis-runtime-win64==1.3.0rc4; platform_system == "Windows" and platform_machine == "AMD64"',
             dependencies,
         )
         self.assertIn(
-            'usgs-pyisis-runtime-linux-x86_64==1.3.0rc3; platform_system == "Linux" and platform_machine == "x86_64"',
+            'usgs-pyisis-runtime-linux-x86_64==1.3.0rc4; platform_system == "Linux" and platform_machine == "x86_64"',
             dependencies,
         )
-        self.assertIn("usgs-pyisis-isisdata-minimal==1.3.0rc3", dependencies)
+        self.assertIn("usgs-pyisis-isisdata-minimal==1.3.0rc4", dependencies)
 
     def test_isis10_distribution_uses_shared_cmake_source_and_cp313(self):
         manifest_path = (
@@ -109,14 +109,14 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         manifest = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
 
         self.assertEqual("usgs-pyisis-isis10", manifest["project"]["name"])
-        self.assertEqual("1.4.0rc3", manifest["project"]["version"])
+        self.assertEqual("1.4.0rc4", manifest["project"]["version"])
         self.assertEqual(">=3.13", manifest["project"]["requires-python"])
         self.assertEqual(
             "../..",
             manifest["tool"]["scikit-build"]["cmake"]["source-dir"],
         )
         self.assertIn(
-            'usgs-pyisis-runtime-isis10-linux-x86_64==1.4.0rc3; platform_system == "Linux" and platform_machine == "x86_64"',
+            'usgs-pyisis-runtime-isis10-linux-x86_64==1.4.0rc4; platform_system == "Linux" and platform_machine == "x86_64"',
             manifest["project"]["dependencies"],
         )
 
@@ -125,16 +125,16 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         release_path = self.repo_root / "packaging" / "release.toml"
         release = tomllib.loads(release_path.read_text(encoding="utf-8"))["release"]
 
-        self.assertEqual("1.3.0rc3", release["package_version"])
+        self.assertEqual("1.3.0rc4", release["package_version"])
         self.assertEqual("9.0.0", release["isis_version"])
-        self.assertEqual("v1.3.0rc3-isis9.0.0", release["tag"])
+        self.assertEqual("v1.3.0rc4-isis9.0.0", release["tag"])
         self.assertEqual(pyproject["project"]["version"], release["package_version"])
         self.assertTrue(release["prerelease"])
 
         package_init = (
             self.repo_root / "python" / "isis_pybind" / "__init__.py"
         ).read_text(encoding="utf-8")
-        self.assertIn('__version__ = "1.3.0rc3"', package_init)
+        self.assertIn('__version__ = "1.3.0rc4"', package_init)
 
     def test_versioned_release_manifests_match_both_package_lines(self):
         release_root = self.repo_root / "packaging" / "releases"
@@ -154,7 +154,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         )["project"]
 
         self.assertEqual("usgs-pyisis", isis9["distribution"])
-        self.assertEqual("1.3.0rc3", isis9["package_version"])
+        self.assertEqual("1.3.0rc4", isis9["package_version"])
         self.assertEqual("9.0.0", isis9["isis_version"])
         self.assertEqual("cp312", isis9["python_abi"])
 
@@ -297,7 +297,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         config = tomllib.loads(data_pyproject.read_text(encoding="utf-8"))
         project = config["project"]
         self.assertEqual(project["name"], "usgs-pyisis-isisdata-minimal")
-        self.assertEqual(project["version"], "1.3.0rc3")
+        self.assertEqual(project["version"], "1.3.0rc4")
         self.assertEqual(project["license"], "MIT")
         self.assertIn("setuptools>=77", config["build-system"]["requires"])
         self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")
@@ -334,7 +334,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         config = tomllib.loads(runtime_pyproject.read_text(encoding="utf-8"))
         project = config["project"]
         self.assertEqual(project["name"], "usgs-pyisis-runtime-win64")
-        self.assertEqual(project["version"], "1.3.0rc3")
+        self.assertEqual(project["version"], "1.3.0rc4")
         self.assertEqual(project["license"], "MIT")
         self.assertIn("setuptools>=77", config["build-system"]["requires"])
         self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")
@@ -354,7 +354,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         config = tomllib.loads(runtime_pyproject.read_text(encoding="utf-8"))
         project = config["project"]
         self.assertEqual(project["name"], "usgs-pyisis-runtime-linux-x86_64")
-        self.assertEqual(project["version"], "1.3.0rc3")
+        self.assertEqual(project["version"], "1.3.0rc4")
         self.assertEqual(project["license"], "MIT")
         self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")
         self.assertIn("setuptools>=77", config["build-system"]["requires"])

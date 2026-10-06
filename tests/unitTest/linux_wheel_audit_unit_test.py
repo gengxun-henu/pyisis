@@ -107,7 +107,7 @@ class LinuxWheelAuditUnitTest(unittest.TestCase):
             wheelhouse.mkdir()
             _write_wheel(
                 wheelhouse
-                / "usgs_pyisis_isis10-1.4.0rc3-cp313-cp313-manylinux_2_35_x86_64.whl",
+                / "usgs_pyisis_isis10-1.4.0rc4-cp313-cp313-manylinux_2_35_x86_64.whl",
                 {"isis_pybind/_isis_core.so": b"\x7fELF\x00GLIBC_2.34\x00"},
             )
 

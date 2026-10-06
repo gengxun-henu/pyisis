@@ -3,7 +3,7 @@ param(
     [string]$PythonExecutable = "python",
     [ValidateSet("testpypi")]
     [string]$Repository = "testpypi",
-    [string]$ExpectedVersion = "1.3.0rc3",
+    [string]$ExpectedVersion = "1.3.0rc4",
     [string]$DistributionName = "usgs-pyisis",
     [string]$RuntimeDistribution = "usgs-pyisis-runtime-win64",
     [string]$PythonTag = "cp312-cp312",

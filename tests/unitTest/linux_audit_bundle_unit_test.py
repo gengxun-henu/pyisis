@@ -107,8 +107,8 @@ class LinuxAuditBundleUnitTest(unittest.TestCase):
     def test_bundle_removes_selected_isis10_runtime_dependency(self):
         metadata = (
             b"Metadata-Version: 2.4\n"
-            b"Requires-Dist: usgs-pyisis-runtime-isis10-linux-x86_64==1.4.0rc3\n"
-            b"Requires-Dist: usgs-pyisis-isisdata-minimal==1.3.0rc3\n"
+            b"Requires-Dist: usgs-pyisis-runtime-isis10-linux-x86_64==1.4.0rc4\n"
+            b"Requires-Dist: usgs-pyisis-isisdata-minimal==1.3.0rc4\n"
         )
 
         filtered = self.module._metadata_without_runtime_dependency(

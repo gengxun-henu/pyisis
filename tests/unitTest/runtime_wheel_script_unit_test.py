@@ -437,7 +437,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     "--distribution-name",
                     "usgs-pyisis-runtime-isis10-win64",
                     "--package-version",
-                    "1.4.0rc3",
+                    "1.4.0rc4",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -470,7 +470,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 'name = "usgs-pyisis-runtime-isis10-win64"',
                 runtime_pyproject,
             )
-            self.assertIn('version = "1.4.0rc3"', runtime_pyproject)
+            self.assertIn('version = "1.4.0rc4"', runtime_pyproject)
 
             sys.path.insert(0, str(stage / "src"))
             sys.modules.pop("pyisis_runtime", None)
@@ -649,8 +649,8 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 return ("openblas.dll",) if binary.name == "libcblas.dll" else ()
 
             releases = (
-                ("usgs-pyisis-runtime-win64", "1.3.0rc3"),
-                ("usgs-pyisis-runtime-isis10-win64", "1.4.0rc3"),
+                ("usgs-pyisis-runtime-win64", "1.3.0rc4"),
+                ("usgs-pyisis-runtime-isis10-win64", "1.4.0rc4"),
             )
             for distribution_name, package_version in releases:
                 with self.subTest(distribution_name=distribution_name):
@@ -740,7 +740,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     "--distribution-name",
                     "usgs-pyisis-runtime-isis10-linux-x86_64",
                     "--package-version",
-                    "1.4.0rc3",
+                    "1.4.0rc4",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -769,7 +769,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 'name = "usgs-pyisis-runtime-isis10-linux-x86_64"',
                 runtime_pyproject,
             )
-            self.assertIn('version = "1.4.0rc3"', runtime_pyproject)
+            self.assertIn('version = "1.4.0rc4"', runtime_pyproject)
 
             sys.path.insert(0, str(stage / "src"))
             sys.modules.pop("pyisis_runtime", None)

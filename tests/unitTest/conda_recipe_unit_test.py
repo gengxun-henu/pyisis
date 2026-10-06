@@ -41,7 +41,7 @@ class CondaRecipeUnitTest(unittest.TestCase):
         meta_yaml = recipe_file.read_text(encoding="utf-8")
 
         self.assertIn("{% set name = \"pyisis\" %}", meta_yaml)
-        self.assertIn("{% set version = \"1.3.0rc3\" %}", meta_yaml)
+        self.assertIn("{% set version = \"1.3.0rc4\" %}", meta_yaml)
         self.assertIn("name: {{ name|lower }}", meta_yaml)
         self.assertIn("source:", meta_yaml)
         self.assertIn("git_url: ..", meta_yaml)
@@ -139,7 +139,7 @@ class CondaRecipeUnitTest(unittest.TestCase):
         meta_yaml = (ISISDATA_RECIPE_DIR / "meta.yaml").read_text(encoding="utf-8")
 
         self.assertIn("name: pyisis-isisdata-minimal", meta_yaml)
-        self.assertIn("version: 1.3.0rc3", meta_yaml)
+        self.assertIn("version: 1.3.0rc4", meta_yaml)
         self.assertIn("path: ../../tests/data/isisdata/mockup", meta_yaml)
         self.assertIn("noarch: generic", meta_yaml)
         self.assertIn("share/isisdata", meta_yaml)

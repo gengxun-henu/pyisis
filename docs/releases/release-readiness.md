@@ -63,8 +63,8 @@ ISISDATA needed for import/smoke checks. Native ISIS applications such as
 
 The configured prerelease tags already exist and contain the expected assets:
 
-- `v1.3.0rc3-isis9.0.0`: Linux wheelhouse, Windows wheelhouse, and `SHA256SUMS.txt`.
-- `v1.4.0rc3-isis10.0.0`: Linux wheelhouse, Windows wheelhouse, and `SHA256SUMS.txt`.
+- `v1.3.0rc4-isis9.0.0`: Linux wheelhouse, Windows wheelhouse, and `SHA256SUMS.txt`.
+- `v1.4.0rc4-isis10.0.0`: Linux wheelhouse, Windows wheelhouse, and `SHA256SUMS.txt`.
 
 The M38 publication step safely refused to overwrite the existing ISIS 9 tag.
 
@@ -78,7 +78,7 @@ Sanity run `37266087196` still fails before checkout on the self-hosted pyisis r
 
 ## M41 post-release regression audit (2026-10-05)
 
-Both configured prereleases remain present and version-isolated. `v1.3.0rc3-isis9.0.0` exposes Linux/Windows CPython 3.12 wheelhouses; `v1.4.0rc3-isis10.0.0` exposes Linux/Windows CPython 3.13 wheelhouses. Each release is non-draft, marked prerelease, and has a two-entry `SHA256SUMS.txt` with valid SHA-256 records. The release manifests still point to their matching tags and retain prerelease mode.
+Both configured prereleases remain present and version-isolated. `v1.3.0rc4-isis9.0.0` exposes Linux/Windows CPython 3.12 wheelhouses; `v1.4.0rc4-isis10.0.0` exposes Linux/Windows CPython 3.13 wheelhouses. Each release is non-draft, marked prerelease, and has a two-entry `SHA256SUMS.txt` with valid SHA-256 records. The release manifests still point to their matching tags and retain prerelease mode.
 
 ## M42 Windows APP contract closure (2026-10-05)
 

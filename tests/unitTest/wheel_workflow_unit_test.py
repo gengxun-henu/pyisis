@@ -453,11 +453,11 @@ class WheelWorkflowUnitTest(unittest.TestCase):
             "-RuntimeDistribution usgs-pyisis-runtime-isis10-win64",
             workflow,
         )
-        self.assertIn("-PackageVersion 1.4.0rc3", workflow)
+        self.assertIn("-PackageVersion 1.4.0rc4", workflow)
         self.assertIn("--package usgs-pyisis-isis10", workflow)
-        self.assertIn("-ExpectedVersion 1.4.0rc3", workflow)
+        self.assertIn("-ExpectedVersion 1.4.0rc4", workflow)
         self.assertIn("-PythonTag cp313-cp313", workflow)
-        self.assertIn("-IsisDataVersion 1.3.0rc3", workflow)
+        self.assertIn("-IsisDataVersion 1.3.0rc4", workflow)
         self.assertIn("usgs-pyisis-isis10-windows-cp313-wheels", workflow)
 
     def test_workflow_can_publish_configured_release_after_platform_gates(self):

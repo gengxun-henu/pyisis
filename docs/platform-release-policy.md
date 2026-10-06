@@ -37,4 +37,4 @@ ISIS 9 和 ISIS 10 必须使用独立的运行时、wheelhouse、native package 
 - Linux ISIS 9/10 wheelhouse：Ubuntu 22.04/24.04/26.04 fallback 矩阵已通过。
 - Windows ISIS 9 native APP/GUI：已在 Windows 2025 hosted clean-runtime 通过 M43；真实 Windows 11 self-hosted 复验仍建议保留。
 - Windows ISIS 9/10 PyISIS wheelhouse：已有构建、安装和导入验证。
-- Windows ISIS 10 native APP/GUI：APP 构建和批量 smoke 已通过；仍需按本规则生成并验证包含 `qnet`、`reduce -gui`、`jigsaw -gui` 的版本隔离 native package，之后才能声明 ISIS 10 Windows GUI 发布支持。
+- Windows ISIS 10 native APP/GUI：M47 生成并验证 `usgs-isis-native-apps-10.0.0-win64.zip` 后，才可在 RC4 中声明 ISIS 10 Windows GUI 发布支持。

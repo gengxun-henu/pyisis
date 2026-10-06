@@ -772,7 +772,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         spec.loader.exec_module(module)
 
         self.assertEqual(
-            module._expected_distributions("usgs-pyisis-isis10==1.4.0rc3", ()),
+            module._expected_distributions("usgs-pyisis-isis10==1.4.0rc4", ()),
             (
                 "usgs-pyisis-isis10",
                 "usgs-pyisis-isisdata-minimal",
@@ -780,7 +780,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         )
         self.assertEqual(
             module._expected_distributions(
-                "usgs-pyisis==1.3.0rc3",
+                "usgs-pyisis==1.3.0rc4",
                 ("usgs-pyisis-runtime-win64",),
             ),
             (

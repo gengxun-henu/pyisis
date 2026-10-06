@@ -15,7 +15,7 @@ diff --git a/isis/src/CMakeLists.txt b/isis/src/CMakeLists.txt
 index 4989f0a85..c7d8ad9d2 100644
 --- a/isis/src/CMakeLists.txt
 +++ b/isis/src/CMakeLists.txt
-@@ -1,7 +1,11 @@
+@@ -1,7 +1,10 @@
  #===============================================================================
 -if(MSVC)
 +if(MSVC AND "qnet" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST)
@@ -27,7 +27,7 @@ index 4989f0a85..c7d8ad9d2 100644
  else()
    set(CORE_LIST base database control qisis system socet dev)
  endif()
-@@ -20,7 +24,7 @@ endforeach(core)
+@@ -20,6 +24,6 @@ endforeach(core)
  
  list(REMOVE_ITEM modules "${CMAKE_CURRENT_LIST_DIR}/core")
 -if(MSVC)

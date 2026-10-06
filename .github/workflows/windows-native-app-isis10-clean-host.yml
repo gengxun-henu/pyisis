@@ -66,7 +66,25 @@ jobs:
           $manifest = Get-Content .\ports\windows\isis\windows-app-manifest.json -Raw | ConvertFrom-Json
           $apps = @($manifest.apps | ForEach-Object { $_.name })
           if ($apps.Count -lt 150) { throw "Expected at least 150 allowlisted APPs, found $($apps.Count)" }
-          .\ports\windows\isis\configure_isis.ps1 -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX -IsisVersion 10.0.0 -WindowsApps $apps
+          # qnet is the public GUI entry point and is intentionally outside
+          # the 150-CLI manifest. Add it only to the build-time manifest;
+          # staging and release validation continue to use the pinned CLI
+          # manifest and its SHA-256 contract.
+          $manifest.apps += [pscustomobject]@{
+            name = "qnet"
+            source_dir = "isis/src/qisis/apps/qnet"
+            xml = "isis/src/qisis/apps/qnet/qnet.xml"
+            versions = [pscustomobject]@{
+              "10.0.0" = [pscustomobject]@{
+                status = "experimental"
+                build_status = "compiled_installed"
+              }
+            }
+          }
+          $buildManifest = Join-Path $env:RUNNER_TEMP "windows-app-build-manifest.json"
+          $manifest | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $buildManifest -Encoding UTF8
+          $apps += "qnet"
+          .\ports\windows\isis\configure_isis.ps1 -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX -IsisVersion 10.0.0 -WindowsApps $apps -WindowsAppManifest $buildManifest
           .\ports\windows\isis\build_isis.ps1 -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD -Jobs 1
           .\ports\windows\isis\install_isis.ps1 -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
 

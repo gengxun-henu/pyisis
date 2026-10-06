@@ -41,6 +41,7 @@ _STRING_LIST_FIELDS = {
     "qt_plugin_globs",
     "forbidden_globs",
 }
+_SUPPORTED_ISIS_VERSIONS = {"9.0.0", "10.0.0"}
 
 
 @dataclass(frozen=True)
@@ -116,8 +117,11 @@ def _validate_release_data(value: dict[str, Any]) -> dict[str, Any]:
     for field in _STRING_FIELDS:
         if type(value[field]) is not str or not value[field]:
             raise ValueError(f"{field} must be a non-empty string")
-    if value["isis_version"] != "9.0.0":
-        raise ValueError("isis_version must be 9.0.0")
+    if value["isis_version"] not in _SUPPORTED_ISIS_VERSIONS:
+        raise ValueError(
+            "isis_version must be one of "
+            + ", ".join(sorted(_SUPPORTED_ISIS_VERSIONS))
+        )
     if value["platform"] != "win64":
         raise ValueError("platform must be win64")
     for field in _STRING_LIST_FIELDS:
@@ -149,11 +153,21 @@ def _manifest_cli_apps(value: dict[str, Any], isis_version: str) -> tuple[str, .
         version = versions.get(isis_version)
         if type(version) is not dict:
             raise ValueError(f"CLI manifest APP {name} lacks ISIS {isis_version} status")
-        if version.get("status") != "supported":
-            raise ValueError(f"CLI manifest APP {name} is not supported for ISIS {isis_version}")
-        if version.get("build_status") != "compiled_installed":
+        allowed_statuses = {"supported"}
+        allowed_build_statuses = {"compiled_installed"}
+        if isis_version == "10.0.0":
+            # ISIS 10's Windows APP inventory is published as an RC surface:
+            # the build and clean-host smoke gates establish the executable
+            # contract while the manifest retains its experimental status.
+            allowed_statuses.add("experimental")
+            allowed_build_statuses.add("implementation_ready")
+        if version.get("status") not in allowed_statuses:
             raise ValueError(
-                f"CLI manifest APP {name} is not compiled_installed for ISIS {isis_version}"
+                f"CLI manifest APP {name} has an invalid status for ISIS {isis_version}"
+            )
+        if version.get("build_status") not in allowed_build_statuses:
+            raise ValueError(
+                f"CLI manifest APP {name} is not buildable for ISIS {isis_version}"
             )
         names.append(name)
 

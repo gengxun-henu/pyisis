@@ -10,8 +10,8 @@ Validate the dual-version wheel matrix with GitHub-hosted Linux and Windows runn
 - [x] Verify Ubuntu 22.04, 24.04, and 26.04 clean-install jobs
 - [x] Verify Windows wheel build and isolated install jobs
 - [x] Record artifact and workflow evidence
-- [ ] Commit, PR, merge, and sync local main
+- [x] Commit, PR, merge, and sync local main
 
 ## Next Step
 
-Commit this evidence, open the M46 PR, merge it, and synchronize local `main`.
+M46 is complete; the next release gate is the version-isolated ISIS 10 native GUI package.

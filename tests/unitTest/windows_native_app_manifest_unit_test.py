@@ -21,6 +21,7 @@ import unittest
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 MODULE_PATH = REPOSITORY_ROOT / "tools" / "packaging" / "windows_native_app_manifest.py"
 RELEASE_CONFIG = REPOSITORY_ROOT / "packaging" / "native-apps-win64" / "release.json"
+RELEASE_CONFIG_ISIS10 = REPOSITORY_ROOT / "packaging" / "native-apps-win64" / "release-isis10.json"
 CLI_MANIFEST = REPOSITORY_ROOT / "ports" / "windows" / "isis" / "windows-app-manifest.json"
 
 
@@ -35,7 +36,7 @@ def _load_module():
 
 
 class WindowsNativeAppManifestTests(unittest.TestCase):
-    """Validate the immutable Windows ISIS 9 native APP release boundary."""
+    """Validate the version-isolated Windows ISIS native APP release boundary."""
 
     @classmethod
     def setUpClass(cls):
@@ -70,6 +71,22 @@ class WindowsNativeAppManifestTests(unittest.TestCase):
         self.assertEqual(len(contract.public_apps), 151)
         self.assertTrue({"reduce", "jigsaw", "qnet"} <= set(contract.public_apps))
         self.assertEqual(contract.runtime_helpers, ("isisui",))
+
+    def test_repository_contract_resolves_isis10_inventory(self):
+        contract = self.module.load_release_contract(RELEASE_CONFIG_ISIS10, CLI_MANIFEST)
+        self.assertEqual(contract.isis_version, "10.0.0")
+        self.assertEqual(len(contract.public_cli_apps), 150)
+        self.assertEqual(contract.public_gui_apps, ("qnet",))
+        self.assertEqual(len(contract.public_apps), 151)
+
+    def test_isis9_rejects_experimental_inventory_status(self):
+        release_data = self._load_release_data()
+        manifest_data = json.loads(CLI_MANIFEST.read_text(encoding="utf-8"))
+        manifest_data["apps"][0]["versions"]["9.0.0"]["status"] = "experimental"
+        with TemporaryDirectory() as temp_dir:
+            release, manifest = self._write_fixture(temp_dir, release_data, manifest_data)
+            with self.assertRaisesRegex(ValueError, "invalid status"):
+                self.module.load_release_contract(release, manifest)
 
     def test_cli_manifest_hash_drift_is_fatal(self):
         with TemporaryDirectory() as temp_dir:

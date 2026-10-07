@@ -444,22 +444,43 @@ def stage_native_apps(
             )
 
         for pattern in release_contract.qt_plugin_globs:
-            matches: list[tuple[Path, Path]] = []
+            pattern_path = Path(pattern)
+            try:
+                plugin_relative = pattern_path.relative_to(Path("Library") / "plugins")
+            except ValueError as error:
+                raise ValueError(
+                    f"Qt plugin pattern must be rooted at Library/plugins: {pattern}"
+                ) from error
+            matches: list[tuple[Path, Path, Path]] = []
             for prefix in dependency_prefixes:
-                matches.extend(
-                    (source, prefix)
-                    for source in prefix.glob(pattern)
+                standard_root = prefix / "Library" / "plugins"
+                standard_matches = [
+                    (source, prefix, source.relative_to(standard_root))
+                    for source in standard_root.glob(str(plugin_relative))
                     if source.is_file()
-                )
+                ]
+                matches.extend(standard_matches)
+                if not standard_matches:
+                    # Some Windows Qt packages place plugins below Library/bin.
+                    # Stage them under the portable package's canonical plugins root.
+                    for alternate_root in (
+                        prefix / "Library" / "bin",
+                        prefix / "plugins",
+                        prefix / "bin",
+                    ):
+                        matches.extend(
+                            (source, prefix, source.relative_to(alternate_root))
+                            for source in alternate_root.glob(str(plugin_relative))
+                            if source.is_file()
+                        )
             if not matches:
                 raise FileNotFoundError(
                     f"Qt plugin pattern matched no files: {pattern}"
                 )
-            for source, prefix in sorted(
+            for source, prefix, relative in sorted(
                 matches,
-                key=lambda item: (item[0].name.lower(), str(item[0]).lower()),
+                key=lambda item: (str(item[2]).lower(), str(item[0]).lower()),
             ):
-                relative = source.relative_to(prefix / "Library" / "plugins")
                 _copy_file(source, prefix, root, Path("plugins") / relative)
                 seeds.append(source)
 

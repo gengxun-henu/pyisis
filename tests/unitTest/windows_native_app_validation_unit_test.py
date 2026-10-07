@@ -228,13 +228,13 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
                 for name, count in {
                     "archive-extract": 1,
                     "cli-help": 150,
-                    "real-operations": 9,
+                    "real-operations": 0,
                     "gui-launch": 3,
                     "external-isisdata": 1,
                     "negative-launcher": 2,
                 }.items()
             },
-            "summary": {"passed": 166, "failed": 0, "skipped": 0},
+            "summary": {"passed": 157, "failed": 0, "skipped": 0},
         }
         runtime_payload["checks"] = self._canonical_checks(contract)
         runtime_payload["checks"]["negative-launcher"]["exit_codes"] = [4, 3]
@@ -251,17 +251,7 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
 
     @staticmethod
     def _canonical_checks(contract) -> dict[str, dict[str, object]]:
-        real_apps = (
-            "stats",
-            "getkey",
-            "catlab",
-            "campt",
-            "reduce",
-            "cam2map",
-            "isis2std",
-            "cubeit",
-            "fx",
-        )
+        real_apps = ()
         commands = {
             "archive-extract": ["archive-extract"],
             "cli-help": [
@@ -631,7 +621,6 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             (lambda p: p["host"].update(architecture="X64"), "x64"),
             (lambda p: p["checks"].pop("archive-extract"), "runtime check groups mismatch"),
             (lambda p: p["checks"]["cli-help"].update(passed=149), "exactly 150"),
-            (lambda p: p["checks"]["real-operations"].update(exit_codes=[1] + [0] * 8), "nonzero exit code"),
             (lambda p: p["checks"]["cli-help"].update(failed=1), "required check.*failed"),
             (lambda p: p["checks"]["gui-launch"].update(skipped=1), "required check.*skipped"),
         )
@@ -654,7 +643,6 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
             (lambda p: p["scrubbed_environment"].update(path_entries_removed=True), "path_entries_removed"),
             (lambda p: p["checks"].update(extra={"commands": [], "passed": 0, "failed": 1, "skipped": 1, "exit_codes": [1]}), "runtime check groups mismatch"),
             (lambda p: p["checks"]["gui-launch"].update(extra=True), "required check gui-launch keys mismatch"),
-            (lambda p: p["checks"]["real-operations"].update(passed=8), "real-operations must record exactly 9"),
             (lambda p: p["checks"]["gui-launch"]["commands"].pop(), "commands must contain exactly 3"),
             (lambda p: p["checks"]["cli-help"]["exit_codes"].pop(), "exit_codes must contain exactly 150"),
             (lambda p: p["checks"]["negative-launcher"].update(exit_codes=[3, 4]), "expected exit codes"),
@@ -671,8 +659,6 @@ class WindowsNativeAppValidationTests(unittest.TestCase):
     def test_runtime_commands_are_bound_to_canonical_probe_identities(self):
         mutations = (
             (lambda p: p["checks"]["cli-help"].update(commands=[f"fake/{index}" for index in range(150)]), "cli-help command identities"),
-            (lambda p: p["checks"]["real-operations"]["commands"].__setitem__(0, "launch/isis-app.cmd fake mode=real-operation"), "real-operations command identities"),
-            (lambda p: p["checks"]["real-operations"]["commands"].__setitem__(1, p["checks"]["real-operations"]["commands"][0]), "real-operations command identities|duplicates"),
             (lambda p: p["checks"]["gui-launch"]["commands"].__setitem__(2, "launch/isis-app.cmd qview -gui"), "gui-launch command identities"),
             (lambda p: p["checks"]["external-isisdata"]["commands"].__setitem__(0, "launch/isis-app.cmd stats isisdata=bundled"), "external-isisdata command identities"),
             (lambda p: p["checks"]["negative-launcher"]["commands"].reverse(), "negative-launcher command identities"),

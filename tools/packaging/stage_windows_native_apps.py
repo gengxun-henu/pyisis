@@ -464,6 +464,7 @@ def stage_native_apps(
                     # Some Windows Qt packages place plugins below Library/bin.
                     # Stage them under the portable package's canonical plugins root.
                     for alternate_root in (
+                        prefix / "Library" / "lib" / "qt6" / "plugins",
                         prefix / "Library" / "bin",
                         prefix / "plugins",
                         prefix / "bin",

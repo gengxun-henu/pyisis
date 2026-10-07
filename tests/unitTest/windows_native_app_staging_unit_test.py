@@ -406,11 +406,13 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, "reparse"):
                         self._stage(fixture)
 
-    def test_stage_accepts_qt_plugins_under_library_bin(self):
+    def test_stage_accepts_qt_plugins_under_qt6_conda_prefix(self):
         with TemporaryDirectory() as temp_dir:
             fixture = self._write_stage_fixture(Path(temp_dir))
             source_root = fixture.dependency_prefix / "Library" / "plugins"
-            alternate_root = fixture.dependency_prefix / "Library" / "bin"
+            alternate_root = (
+                fixture.dependency_prefix / "Library" / "lib" / "qt6" / "plugins"
+            )
             for source in sorted(source_root.rglob("*.dll")):
                 relative = source.relative_to(source_root)
                 destination = alternate_root / relative

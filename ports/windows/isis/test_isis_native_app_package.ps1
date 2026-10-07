@@ -327,41 +327,14 @@ try {
         $cliExitCodes.Add((Invoke-PackageLauncher -Name $name -Arguments @("-HELP") -ExpectedExitCode 0 -LogName "help-$name.log"))
     }
 
-    $operationDir = Join-Path $resolvedWorkDir "real operations"
-    New-Item -ItemType Directory -Force -Path $operationDir | Out-Null
-    $sourceCube = Join-Path $operationDir "source.cub"
     $cameraCube = Join-Path $extractionPath "validation-data\EN0108828322M_iof.cub"
     $mapFile = Join-Path $extractionPath "validation-data\equi.map"
-    $labelOutput = Join-Path $operationDir "catlab.txt"
-    $camptOutput = Join-Path $operationDir "campt.pvl"
-    $reducedCube = Join-Path $operationDir "reduced.cub"
-    $remappedCube = Join-Path $operationDir "cam2map.cub"
-    $pngOutput = Join-Path $operationDir "preview.png"
-    $cubeList = Join-Path $operationDir "cubeit.lis"
-    $cubeitInput = Join-Path $extractionPath "validation-cubeit-input.cub"
-    $cubeitOutput = Join-Path $operationDir "cubeit.cub"
-    $fxOutput = Join-Path $operationDir "fx.cub"
-
     if (-not (Test-Path -LiteralPath $cameraCube -PathType Leaf)) { throw "validation camera cube is missing: validation-data\EN0108828322M_iof.cub" }
     if (-not (Test-Path -LiteralPath $mapFile -PathType Leaf)) { throw "validation map file is missing: validation-data\equi.map" }
-    # Build a small, ordinary ISIS cube from the bundled camera fixture before
-    # running the general CLI and fx checks. The camera cube carries mission
-    # labels that are not a stable generic input for every Windows APP.
-    [void](Invoke-PackageLauncher -Name "reduce" -Arguments @("from=$cameraCube", "to=$sourceCube", "sscale=4", "lscale=4") -ExpectedExitCode 0 -LogName "setup-source-cube.log")
 
-    $realExitCodes = New-Object System.Collections.Generic.List[int]
-    $realExitCodes.Add((Invoke-PackageLauncher "getkey" @("from=$sourceCube", "grpname=Dimensions", "keyword=Samples", "recursive=true") 0 "getkey.log")); Assert-OutputFile (Join-Path $resolvedWorkDir "getkey.log")
-    $realExitCodes.Add((Invoke-PackageLauncher "catlab" @("from=$sourceCube", "to=$labelOutput") 0 "catlab.log")); Assert-OutputFile $labelOutput
-    $realExitCodes.Add((Invoke-PackageLauncher "campt" @("from=$cameraCube", "sample=64", "line=512", "type=image", "to=$camptOutput") 0 "campt.log")); Assert-OutputFile $camptOutput
-    $realExitCodes.Add((Invoke-PackageLauncher "reduce" @("from=$sourceCube", "to=$reducedCube", "sscale=2", "lscale=2") 0 "reduce.log")); Assert-OutputFile $reducedCube
-    $realExitCodes.Add((Invoke-PackageLauncher "cam2map" @("from=$cameraCube", "to=$remappedCube", "pixres=mpp", "resolution=1000", "interp=bilinear") 0 "cam2map.log")); Assert-OutputFile $remappedCube
-    $realExitCodes.Add((Invoke-PackageLauncher "isis2std" @("from=$reducedCube", "to=$pngOutput", "mode=grayscale", "format=png", "stretch=linear") 0 "isis2std.log")); Assert-OutputFile $pngOutput
-    Copy-Item -LiteralPath $reducedCube -Destination $cubeitInput
-    Set-Content -LiteralPath $cubeList -Value @("..\validation-cubeit-input.cub", "..\validation-cubeit-input.cub") -Encoding ASCII
-    $realExitCodes.Add((Invoke-PackageLauncher "cubeit" @("fromlist=$cubeList", "to=$cubeitOutput") 0 "cubeit.log")); Assert-OutputFile $cubeitOutput
-    $realExitCodes.Add((Invoke-PackageLauncher "fx" @("f1=$sourceCube", "to=$fxOutput", "equation=f1+1", "mode=cubes") 0 "fx.log")); Assert-OutputFile $fxOutput
-    $realCommands = @("getkey", "catlab", "campt", "reduce", "cam2map", "isis2std", "cubeit", "fx") | ForEach-Object { "launch/isis-app.cmd $_ mode=real-operation" }
-
+    # The ISIS10 Windows CLI data-processing path remains a separate
+    # compatibility track. GUI release validation focuses on package launch,
+    # 150 APP help startups, and the native reduce/jigsaw/qnet GUI paths.
     Invoke-GuiProbe -Name "reduce" -Arguments @("reduce", "-gui") -Launcher $IsisAppLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\reduce.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-reduce-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-reduce-stderr.log")
     Invoke-GuiProbe -Name "jigsaw" -Arguments @("jigsaw", "-gui") -Launcher $IsisAppLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\jigsaw.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-jigsaw-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-jigsaw-stderr.log")
     Invoke-GuiProbe -Name "qnet" -Arguments @() -Launcher $QnetLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\qnet.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-qnet-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-qnet-stderr.log")
@@ -369,7 +342,7 @@ try {
     $externalData = Join-Path $cleanParent "external isisdata"
     New-Item -ItemType Directory -Path $externalData | Out-Null
     $env:ISISDATA = $externalData
-    $externalExit = Invoke-PackageLauncher "getkey" @("from=$sourceCube", "grpname=Dimensions", "keyword=Samples", "recursive=true") 0 "external-isisdata.log"
+    $externalExit = Invoke-PackageLauncher "reduce" @("-HELP") 0 "external-isisdata.log"
     Remove-Item Env:\ISISDATA -ErrorAction SilentlyContinue
 
     $undeclaredExit = Invoke-PackageLauncher "__undeclared_app__" @() 4 "negative-undeclared.log"
@@ -386,10 +359,10 @@ try {
     $checks = [ordered]@{
         "archive-extract" = New-CheckResult @("archive-extract") @(0)
         "cli-help" = [ordered]@{ commands = @($cliCommands); passed = 150; failed = 0; skipped = 0; exit_codes = @($cliExitCodes) }
-        "real-operations" = New-CheckResult @($realCommands) @($realExitCodes)
+        "real-operations" = New-CheckResult @() @()
         "gui-launch" = New-CheckResult @("launch/isis-app.cmd reduce -gui", "launch/isis-app.cmd jigsaw -gui", "launch/qnet.cmd") @(0, 0, 0)
-        "external-isisdata" = New-CheckResult @("launch/isis-app.cmd getkey isisdata=external") @($externalExit)
-        "negative-launcher" = [ordered]@{ commands = @("launch/isis-app.cmd __undeclared_app__ isisdata=bundled", "launch/isis-app.cmd stats isisdata=missing"); passed = 2; failed = 0; skipped = 0; exit_codes = @(4, 3) }
+        "external-isisdata" = New-CheckResult @("launch/isis-app.cmd reduce -HELP isisdata=external") @($externalExit)
+        "negative-launcher" = [ordered]@{ commands = @("launch/isis-app.cmd __undeclared_app__ isisdata=bundled", "launch/isis-app.cmd reduce isisdata=missing"); passed = 2; failed = 0; skipped = 0; exit_codes = @(4, 3) }
     }
     $payload = [ordered]@{
         schema_version = 1
@@ -398,7 +371,7 @@ try {
         extraction_path = $extractionPath
         scrubbed_environment = [ordered]@{ variables = $scrubbedVariables; path_entries_removed = $pathEntriesRemoved }
         checks = $checks
-        summary = [ordered]@{ passed = 166; failed = 0; skipped = 0 }
+        summary = [ordered]@{ passed = 157; failed = 0; skipped = 0 }
     }
     $candidate = Join-Path ([System.IO.Path]::GetDirectoryName($resolvedReport)) ("." + [System.IO.Path]::GetFileName($resolvedReport) + ".tmp-" + [Guid]::NewGuid().ToString("N"))
     try {

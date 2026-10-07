@@ -26,7 +26,7 @@ index 051d8e5..cef9400 100644
 +#if defined(_MSC_VER) && defined(isis_EXPORTS)
 +#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllexport)
 +#else
-+#define ISIS_MSVC_QOBJECT_EXPORT
++#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllimport)
 +#endif
 +#endif
 +
@@ -54,7 +54,7 @@ index 028b247..433ff06 100644
 +#if defined(_MSC_VER) && defined(isis_EXPORTS)
 +#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllexport)
 +#else
-+#define ISIS_MSVC_QOBJECT_EXPORT
++#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllimport)
 +#endif
 +#endif
 +
@@ -82,7 +82,7 @@ index c1e6be6..b2ae357 100755
 +#if defined(_MSC_VER) && defined(isis_EXPORTS)
 +#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllexport)
 +#else
-+#define ISIS_MSVC_QOBJECT_EXPORT
++#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllimport)
 +#endif
 +#endif
 +
@@ -110,7 +110,7 @@ index 40655b7..c5f2986 100644
 +#if defined(_MSC_VER) && defined(isis_EXPORTS)
 +#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllexport)
 +#else
-+#define ISIS_MSVC_QOBJECT_EXPORT
++#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllimport)
 +#endif
 +#endif
 +

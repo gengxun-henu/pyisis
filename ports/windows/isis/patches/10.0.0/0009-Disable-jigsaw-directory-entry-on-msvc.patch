@@ -1,0 +1,35 @@
+From 9999999999999999999999999999999999999999 Mon Sep 17 00:00:00 2001
+From: gengxun-henu <gengxun@henu.edu.cn>
+Date: Wed, 7 Oct 2026 07:30:00 +0800
+Subject: [PATCH] Disable the optional Jigsaw directory entry on MSVC
+
+The Windows qnet package omits JigsawRunWidget from qisis.dll. Keep the
+Directory API linkable while preserving the full implementation elsewhere.
+
+---
+diff --git a/isis/src/qisis/objs/Directory/Directory.cpp b/isis/src/qisis/objs/Directory/Directory.cpp
+index e7a7544..221f69a 100644
+--- a/isis/src/qisis/objs/Directory/Directory.cpp
++++ b/isis/src/qisis/objs/Directory/Directory.cpp
+@@ -978,6 +978,10 @@ namespace Isis {
+   }
+ 
+   JigsawRunWidget *Directory::addJigsawRunWidget() {
++#if defined(_MSC_VER)
++    // The Windows qnet bundle omits the optional JigsawRunWidget implementation.
++    return nullptr;
++#else
+     if (jigsawRunWidget()) {
+       return m_jigsawRunWidget;
+     }
+@@ -992,6 +996,7 @@ namespace Isis {
+ 
+     emit newWidgetAvailable(result);
+     return result;
++#endif
+   }
+ 
+ 
+
+-- 
+2.43.0

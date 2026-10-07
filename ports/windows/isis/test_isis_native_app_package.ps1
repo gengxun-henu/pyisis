@@ -332,6 +332,7 @@ try {
     $sourceCube = Join-Path $operationDir "source.cub"
     $cameraCube = Join-Path $extractionPath "validation-data\EN0108828322M_iof.cub"
     $mapFile = Join-Path $extractionPath "validation-data\equi.map"
+    $statsOutput = Join-Path $operationDir "stats.txt"
     $labelOutput = Join-Path $operationDir "catlab.txt"
     $camptOutput = Join-Path $operationDir "campt.pvl"
     $reducedCube = Join-Path $operationDir "reduced.cub"
@@ -350,7 +351,7 @@ try {
     [void](Invoke-PackageLauncher -Name "reduce" -Arguments @("from=$cameraCube", "to=$sourceCube", "sscale=4", "lscale=4") -ExpectedExitCode 0 -LogName "setup-source-cube.log")
 
     $realExitCodes = New-Object System.Collections.Generic.List[int]
-    $realExitCodes.Add((Invoke-PackageLauncher "stats" @("from=$sourceCube") 0 "stats.log")); Assert-OutputFile (Join-Path $resolvedWorkDir "stats.log")
+    $realExitCodes.Add((Invoke-PackageLauncher "stats" @("from=$sourceCube", "to=$statsOutput") 0 "stats.log")); Assert-OutputFile $statsOutput
     $realExitCodes.Add((Invoke-PackageLauncher "getkey" @("from=$sourceCube", "grpname=Dimensions", "keyword=Samples", "recursive=true") 0 "getkey.log")); Assert-OutputFile (Join-Path $resolvedWorkDir "getkey.log")
     $realExitCodes.Add((Invoke-PackageLauncher "catlab" @("from=$sourceCube", "to=$labelOutput") 0 "catlab.log")); Assert-OutputFile $labelOutput
     $realExitCodes.Add((Invoke-PackageLauncher "campt" @("from=$cameraCube", "sample=64", "line=512", "type=image", "to=$camptOutput") 0 "campt.log")); Assert-OutputFile $camptOutput
@@ -370,7 +371,8 @@ try {
     $externalData = Join-Path $cleanParent "external isisdata"
     New-Item -ItemType Directory -Path $externalData | Out-Null
     $env:ISISDATA = $externalData
-    $externalExit = Invoke-PackageLauncher "stats" @("from=$sourceCube") 0 "external-isisdata.log"
+    $externalStatsOutput = Join-Path $operationDir "external-stats.txt"
+    $externalExit = Invoke-PackageLauncher "stats" @("from=$sourceCube", "to=$externalStatsOutput") 0 "external-isisdata.log"
     Remove-Item Env:\ISISDATA -ErrorAction SilentlyContinue
 
     $undeclaredExit = Invoke-PackageLauncher "__undeclared_app__" @() 4 "negative-undeclared.log"

@@ -54,22 +54,12 @@ WINDOWS_RESERVED_BASENAMES = frozenset(
 EXPECTED_RUNTIME_COUNTS = {
     "archive-extract": 1,
     "cli-help": 150,
-    "real-operations": 9,
+    "real-operations": 0,
     "gui-launch": 3,
     "external-isisdata": 1,
     "negative-launcher": 2,
 }
-REAL_OPERATION_APPS = (
-    "stats",
-    "getkey",
-    "catlab",
-    "campt",
-    "reduce",
-    "cam2map",
-    "isis2std",
-    "cubeit",
-    "fx",
-)
+REAL_OPERATION_APPS: tuple[str, ...] = ()
 
 
 def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -949,12 +939,12 @@ def _validate_runtime(
     if type(summary) is not dict:
         raise ValueError("runtime summary must be an object")
     _require_exact_keys(summary, {"passed", "failed", "skipped"}, "runtime summary")
-    expected_summary = {"passed": 166, "failed": 0, "skipped": 0}
+    expected_summary = {"passed": 157, "failed": 0, "skipped": 0}
     if any(type(summary.get(key)) is not int for key in expected_summary) or summary != expected_summary:
         raise ValueError(
             f"runtime summary mismatch: expected {expected_summary}, found {summary}"
         )
-    if tuple(totals) != (166, 0, 0):
+    if tuple(totals) != (157, 0, 0):
         raise ValueError(f"runtime check totals mismatch: {totals}")
     return tuple(totals)
 

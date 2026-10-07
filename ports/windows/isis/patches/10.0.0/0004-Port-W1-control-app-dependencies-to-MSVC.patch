@@ -17,7 +17,7 @@ index 4989f0a85..1ed15effe 100644
 --- a/isis/src/CMakeLists.txt
 +++ b/isis/src/CMakeLists.txt
 @@ -7,0 +8,3 @@ endif()
-+if(MSVC AND "jigsaw" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST)
++if(MSVC AND ("jigsaw" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST OR "qnet" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST))
 +  list(REMOVE_ITEM ISIS_DISABLED_OBJ_FOLDERS BundleAdjust)
 +endif()
 diff --git a/isis/src/control/apps/cnethist/main.cpp b/isis/src/control/apps/cnethist/main.cpp

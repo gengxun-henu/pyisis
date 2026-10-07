@@ -1,0 +1,33 @@
+From 3333333333333333333333333333333333333333 Mon Sep 17 00:00:00 2001
+From: gengxun-henu <gengxun@henu.edu.cn>
+Date: Wed, 7 Oct 2026 05:30:00 +0800
+Subject: [PATCH] Export qnet cross-module symbols on MSVC
+
+The qisis Windows module links against the core ISIS DLL. Several QObject
+metadata symbols and the BundleAdjust constructor are not exported by MSVC's
+automatic export scan, so explicitly export the small set required by qnet.
+
+---
+ isis/cmake/Utilities.cmake | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/isis/cmake/Utilities.cmake b/isis/cmake/Utilities.cmake
+index 0000000..1111111 100644
+--- a/isis/cmake/Utilities.cmake
++++ b/isis/cmake/Utilities.cmake
+@@ -244,4 +244,12 @@ function(add_library_wrapper name sourceFiles libDependencies)
+   add_library(${name} SHARED ${sourceFiles})
+   set_target_properties(${name} PROPERTIES LINKER_LANGUAGE CXX)
+   target_link_libraries(${name} ${libDependencies})
++  if(MSVC AND ${name} STREQUAL ${CORE_LIB_NAME} AND "qnet" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST)
++    target_link_options(${name} PRIVATE
++      "/EXPORT:?staticMetaObject@ControlPoint@Isis@@2UQMetaObject@@B"
++      "/EXPORT:?staticMetaObject@BundleResults@Isis@@2UQMetaObject@@B"
++      "/EXPORT:?staticMetaObject@BundleSolutionInfo@Isis@@2UQMetaObject@@B"
++      "/EXPORT:??0BundleAdjust@Isis@@QEAA@V?$QSharedPointer@VBundleSettings@Isis@@@@AEAVControl@1@V?$QList@PEAVImageList@Isis@@@@_N@Z"
++    )
++  endif()
+   install(TARGETS ${name} DESTINATION lib)
+ 
+--
+2.43.0

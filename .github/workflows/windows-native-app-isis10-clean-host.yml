@@ -60,10 +60,29 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "D:\pyisis-conda\pkgs\isis10-v3" | Out-Null
 
+      - name: Locate preinstalled Conda
+        if: ${{ (inputs.build_runner || 'windows11-self-hosted') == 'windows11-self-hosted' }}
+        run: |
+          $candidates = @(
+            (Join-Path $env:USERPROFILE "miniconda3"),
+            "C:\Users\gx\miniconda3",
+            "C:\Users\gengxun\miniconda3",
+            "D:\tools\miniconda3",
+            "D:\miniconda3"
+          )
+          $condaRoot = $candidates |
+            Where-Object { Test-Path (Join-Path $_ "Scripts\conda.exe") } |
+            Select-Object -First 1
+          if (-not $condaRoot) {
+            throw "No preinstalled Miniconda root found; checked: $($candidates -join ', ')"
+          }
+          Write-Host "Using preinstalled Conda at $condaRoot"
+          "CONDA=$condaRoot" | Out-File $env:GITHUB_ENV -Append
+          "PYISIS_CONDA_ROOT=$condaRoot" | Out-File $env:GITHUB_ENV -Append
+
       - name: Set up Windows ISIS 10 build environment from preinstalled Conda
         if: ${{ (inputs.build_runner || 'windows11-self-hosted') == 'windows11-self-hosted' }}
         env:
-          CONDA: C:\Users\gx\miniconda3
           CONDA_ALWAYS_COPY: "true"
           PYTHON_CPU_COUNT: "1"
         uses: conda-incubator/setup-miniconda@v4

@@ -344,10 +344,10 @@ try {
 
     if (-not (Test-Path -LiteralPath $cameraCube -PathType Leaf)) { throw "validation camera cube is missing: validation-data\EN0108828322M_iof.cub" }
     if (-not (Test-Path -LiteralPath $mapFile -PathType Leaf)) { throw "validation map file is missing: validation-data\equi.map" }
-    # ISIS10 Windows currently aborts in the output-only fx initialization path
-    # when no input cube is supplied. Use the bundled validation cube as f1 so the
-    # release check covers real fx read/compute/write behavior.
-    Copy-Item -LiteralPath $cameraCube -Destination $sourceCube
+    # Build a small, ordinary ISIS cube from the bundled camera fixture before
+    # running the general CLI and fx checks. The camera cube carries mission
+    # labels that are not a stable generic input for every Windows APP.
+    [void](Invoke-PackageLauncher -Name "reduce" -Arguments @("from=$cameraCube", "to=$sourceCube", "sscale=4", "lscale=4") -ExpectedExitCode 0 -LogName "setup-source-cube.log")
 
     $realExitCodes = New-Object System.Collections.Generic.List[int]
     $realExitCodes.Add((Invoke-PackageLauncher "stats" @("from=$sourceCube") 0 "stats.log")); Assert-OutputFile (Join-Path $resolvedWorkDir "stats.log")

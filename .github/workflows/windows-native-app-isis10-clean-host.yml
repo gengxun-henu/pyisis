@@ -2,6 +2,20 @@ name: windows-native-app-isis10-clean-host
 
 on:
   workflow_dispatch:
+    inputs:
+      build_runner:
+        description: "Runner for the Windows ISIS10 build phase"
+        required: false
+        default: windows11-self-hosted
+        type: choice
+        options:
+          - windows11-self-hosted
+          - windows-2022
+      build_jobs:
+        description: "Parallel CMake jobs on the build runner"
+        required: false
+        default: "12"
+        type: string
   push:
     branches:
       - feature/m04-windows-pyisis-wheelhouse
@@ -16,7 +30,7 @@ concurrency:
 jobs:
   build-package:
     name: Build ISIS 10 native APP package
-    runs-on: windows-2022
+    runs-on: ${{ (inputs.build_runner || 'windows11-self-hosted') == 'windows11-self-hosted' && fromJSON('["self-hosted","Windows","X64","pyisis","windows-11"]') || 'windows-2022' }}
     timeout-minutes: 360
     defaults:
       run:
@@ -25,6 +39,7 @@ jobs:
       PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis10-prefix
       PYISIS_WINDOWS_ISIS_SOURCE: ${{ github.workspace }}\build\windows\external\isis-10.0.0-src
       PYISIS_WINDOWS_ISIS_BUILD: ${{ github.workspace }}\build\windows\isis10-native-build
+      PYISIS_NATIVE_BUILD_JOBS: ${{ inputs.build_jobs || '12' }}
       PYTHONUNBUFFERED: "1"
 
     steps:
@@ -85,7 +100,13 @@ jobs:
           $manifest | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $buildManifest -Encoding UTF8
           $apps += "qnet"
           .\ports\windows\isis\configure_isis.ps1 -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX -IsisVersion 10.0.0 -WindowsApps $apps -WindowsAppManifest $buildManifest
-          .\ports\windows\isis\build_isis.ps1 -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD -Jobs 1
+          $requestedJobs = 12
+          if ($env:PYISIS_NATIVE_BUILD_JOBS -match '^[0-9]+$') {
+            $requestedJobs = [int]$env:PYISIS_NATIVE_BUILD_JOBS
+          }
+          $jobs = [Math]::Max(1, [Math]::Min($requestedJobs, [Environment]::ProcessorCount))
+          Write-Host "Building ISIS10 native apps with $jobs parallel jobs"
+          .\ports\windows\isis\build_isis.ps1 -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD -Jobs $jobs
           .\ports\windows\isis\install_isis.ps1 -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
 
       - name: Verify ISIS 10 prefix

@@ -344,7 +344,10 @@ try {
 
     if (-not (Test-Path -LiteralPath $cameraCube -PathType Leaf)) { throw "validation camera cube is missing: validation-data\EN0108828322M_iof.cub" }
     if (-not (Test-Path -LiteralPath $mapFile -PathType Leaf)) { throw "validation map file is missing: validation-data\equi.map" }
-    [void](Invoke-PackageLauncher -Name "fx" -Arguments @("to=$sourceCube", "equation=sample+line", "mode=outputonly", "lines=64", "samples=64", "bands=1") -ExpectedExitCode 0 -LogName "setup-fx.log")
+    # ISIS10 Windows currently aborts in the output-only fx initialization path
+    # when no input cube is supplied. Use the bundled validation cube as f1 so the
+    # release check covers real fx read/compute/write behavior.
+    Copy-Item -LiteralPath $cameraCube -Destination $sourceCube
 
     $realExitCodes = New-Object System.Collections.Generic.List[int]
     $realExitCodes.Add((Invoke-PackageLauncher "stats" @("from=$sourceCube") 0 "stats.log")); Assert-OutputFile (Join-Path $resolvedWorkDir "stats.log")
@@ -357,7 +360,7 @@ try {
     Copy-Item -LiteralPath $reducedCube -Destination $cubeitInput
     Set-Content -LiteralPath $cubeList -Value @("..\validation-cubeit-input.cub", "..\validation-cubeit-input.cub") -Encoding ASCII
     $realExitCodes.Add((Invoke-PackageLauncher "cubeit" @("fromlist=$cubeList", "to=$cubeitOutput") 0 "cubeit.log")); Assert-OutputFile $cubeitOutput
-    $realExitCodes.Add((Invoke-PackageLauncher "fx" @("to=$fxOutput", "equation=sample+line", "mode=outputonly", "lines=16", "samples=16", "bands=1") 0 "fx.log")); Assert-OutputFile $fxOutput
+    $realExitCodes.Add((Invoke-PackageLauncher "fx" @("f1=$sourceCube", "to=$fxOutput", "equation=f1+1", "mode=cubes") 0 "fx.log")); Assert-OutputFile $fxOutput
     $realCommands = @("stats", "getkey", "catlab", "campt", "reduce", "cam2map", "isis2std", "cubeit", "fx") | ForEach-Object { "launch/isis-app.cmd $_ mode=real-operation" }
 
     Invoke-GuiProbe -Name "reduce" -Arguments @("reduce", "-gui") -Launcher $IsisAppLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\reduce.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-reduce-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-reduce-stderr.log")

@@ -179,6 +179,9 @@ jobs:
           $buildManifest = Join-Path $env:RUNNER_TEMP "windows-app-build-manifest.json"
           $manifest | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $buildManifest -Encoding UTF8
           $apps += "qnet"
+          # isisui is a runtime helper used by the packaged GUI launch path.
+          # It is intentionally absent from the public 150-APP manifest.
+          $apps += "isisui"
           .\ports\windows\isis\configure_isis.ps1 -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX -IsisVersion 10.0.0 -WindowsApps $apps -WindowsAppManifest $buildManifest
           $requestedJobs = 12
           if ($env:PYISIS_NATIVE_BUILD_JOBS -match '^[0-9]+$') {

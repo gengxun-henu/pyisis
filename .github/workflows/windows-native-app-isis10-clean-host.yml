@@ -60,28 +60,51 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "D:\pyisis-conda\pkgs\isis10-v3" | Out-Null
 
-      - name: Locate preinstalled Conda
+      - name: Locate self-hosted Conda environment
+        id: locate-conda
         if: ${{ (inputs.build_runner || 'windows11-self-hosted') == 'windows11-self-hosted' }}
         run: |
+          $envPrefix = "D:\pyisis-conda\envs\isis10-v3"
+          try {
+            $envReady = Test-Path (Join-Path $envPrefix "python.exe") -ErrorAction Stop
+          }
+          catch {
+            $envReady = $false
+          }
+          if ($envReady) {
+            Write-Host "Reusing preinstalled ISIS10 environment at $envPrefix"
+            "ready=true" | Out-File $env:GITHUB_OUTPUT -Append
+            "PYISIS_CONDA_PREFIX=$envPrefix" | Out-File $env:GITHUB_ENV -Append
+            return
+          }
           $candidates = @(
             (Join-Path $env:USERPROFILE "miniconda3"),
-            "C:\Users\gx\miniconda3",
-            "C:\Users\gengxun\miniconda3",
+            "C:\Users\runneradmin\miniconda3",
+            "C:\ProgramData\miniconda3",
             "D:\tools\miniconda3",
             "D:\miniconda3"
           )
-          $condaRoot = $candidates |
-            Where-Object { Test-Path (Join-Path $_ "Scripts\conda.exe") } |
-            Select-Object -First 1
+          $condaRoot = $null
+          foreach ($candidate in $candidates) {
+            try {
+              if (Test-Path (Join-Path $candidate "Scripts\conda.exe") -ErrorAction Stop) {
+                $condaRoot = $candidate
+                break
+              }
+            }
+            catch {
+              Write-Warning "Cannot inspect Conda candidate $candidate"
+            }
+          }
           if (-not $condaRoot) {
-            throw "No preinstalled Miniconda root found; checked: $($candidates -join ', ')"
+            throw "No reusable ISIS10 environment or readable Miniconda root found"
           }
           Write-Host "Using preinstalled Conda at $condaRoot"
+          "ready=false" | Out-File $env:GITHUB_OUTPUT -Append
           "CONDA=$condaRoot" | Out-File $env:GITHUB_ENV -Append
-          "PYISIS_CONDA_ROOT=$condaRoot" | Out-File $env:GITHUB_ENV -Append
 
       - name: Set up Windows ISIS 10 build environment from preinstalled Conda
-        if: ${{ (inputs.build_runner || 'windows11-self-hosted') == 'windows11-self-hosted' }}
+        if: ${{ (inputs.build_runner || 'windows11-self-hosted') == 'windows11-self-hosted' && steps.locate-conda.outputs.ready != 'true' }}
         env:
           CONDA_ALWAYS_COPY: "true"
           PYTHON_CPU_COUNT: "1"
@@ -105,7 +128,7 @@ jobs:
       - name: Resolve dependency prefix
         run: |
           if ('${{ (inputs.build_runner || 'windows11-self-hosted') }}' -eq 'windows11-self-hosted') {
-            $prefix = 'D:\pyisis-conda\envs\isis10-v3'
+            $prefix = $env:PYISIS_CONDA_PREFIX
           }
           else {
             $prefix = (& python -c "import sys; print(sys.prefix)").Trim()

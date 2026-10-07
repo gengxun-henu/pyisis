@@ -766,11 +766,11 @@ def canonical_runtime_commands(
             "launch/qnet.cmd",
         ),
         "external-isisdata": (
-            "launch/isis-app.cmd stats isisdata=external",
+            "launch/isis-app.cmd reduce -HELP isisdata=external",
         ),
         "negative-launcher": (
             "launch/isis-app.cmd __undeclared_app__ isisdata=bundled",
-            "launch/isis-app.cmd stats isisdata=missing",
+            "launch/isis-app.cmd reduce isisdata=missing",
         ),
     }
 

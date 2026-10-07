@@ -1,0 +1,31 @@
+From 5555555555555555555555555555555555555555 Mon Sep 17 00:00:00 2001
+From: gengxun-henu <gengxun@henu.edu.cn>
+Date: Wed, 7 Oct 2026 07:00:00 +0800
+Subject: [PATCH] Exclude optional Jigsaw widget from qnet DLL
+
+The qnet Windows package does not expose the Jigsaw runner UI. Exclude its
+object from the qisis DLL so the package does not require the BundleAdjust
+constructor across the core-module boundary.
+
+---
+ isis/cmake/AddIsisModule.cmake | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/isis/cmake/AddIsisModule.cmake b/isis/cmake/AddIsisModule.cmake
+index 1d1756355..2b7f5f1c1 100644
+--- a/isis/cmake/AddIsisModule.cmake
++++ b/isis/cmake/AddIsisModule.cmake
+@@ -246,2 +246,10 @@ function(add_isis_module name)
+     # Start with the objs folder
+     get_subdirectory_list(${objsDir} thisObjFolders)
++    if(MSVC AND ${name} STREQUAL "qisis" AND "qnet" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST)
++      foreach(thisObjFolder ${thisObjFolders})
++        get_filename_component(thisObjName ${thisObjFolder} NAME)
++        if(thisObjName STREQUAL "JigsawRunWidget")
++          list(REMOVE_ITEM thisObjFolders ${thisObjFolder})
++        endif()
++      endforeach()
++    endif()
+ 
+-- 
+2.43.0

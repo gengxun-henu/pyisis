@@ -1,33 +1,130 @@
-From 3333333333333333333333333333333333333333 Mon Sep 17 00:00:00 2001
+From 4444444444444444444444444444444444444444 Mon Sep 17 00:00:00 2001
 From: gengxun-henu <gengxun@henu.edu.cn>
-Date: Wed, 7 Oct 2026 05:30:00 +0800
-Subject: [PATCH] Export qnet cross-module symbols on MSVC
+Date: Wed, 7 Oct 2026 06:00:00 +0800
+Subject: [PATCH] Export qnet QObject classes from the ISIS core DLL
 
-The qisis Windows module links against the core ISIS DLL. Several QObject
-metadata symbols and the BundleAdjust constructor are not exported by MSVC's
-automatic export scan, so explicitly export the small set required by qnet.
+The separate qisis Windows module consumes QObject metadata and methods from
+control classes. Mark the small set of GUI-facing QObject classes for MSVC DLL
+export so qisis can link against the core import library.
 
 ---
- isis/cmake/Utilities.cmake | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ isis/src/control/objs/BundleAdjust/BundleAdjust.h      | 10 ++++++++--
+ isis/src/control/objs/BundleResults/BundleResults.h    | 10 ++++++++--
+ isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h | 10 ++++++++--
+ isis/src/control/objs/ControlPoint/ControlPoint.h      | 10 ++++++++--
+ 4 files changed, 32 insertions(+), 8 deletions(-)
 
-diff --git a/isis/cmake/Utilities.cmake b/isis/cmake/Utilities.cmake
-index 0000000..1111111 100644
---- a/isis/cmake/Utilities.cmake
-+++ b/isis/cmake/Utilities.cmake
-@@ -244,4 +244,12 @@ function(add_library_wrapper name sourceFiles libDependencies)
-   add_library(${name} SHARED ${sourceFiles})
-   set_target_properties(${name} PROPERTIES LINKER_LANGUAGE CXX)
-   target_link_libraries(${name} ${libDependencies})
-+  if(MSVC AND ${name} STREQUAL ${CORE_LIB_NAME} AND "qnet" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST)
-+    target_link_options(${name} PRIVATE
-+      "/EXPORT:?staticMetaObject@ControlPoint@Isis@@2UQMetaObject@@B"
-+      "/EXPORT:?staticMetaObject@BundleResults@Isis@@2UQMetaObject@@B"
-+      "/EXPORT:?staticMetaObject@BundleSolutionInfo@Isis@@2UQMetaObject@@B"
-+      "/EXPORT:??0BundleAdjust@Isis@@QEAA@V?$QSharedPointer@VBundleSettings@Isis@@@@AEAVControl@1@V?$QList@PEAVImageList@Isis@@@@_N@Z"
-+    )
-+  endif()
-   install(TARGETS ${name} DESTINATION lib)
+diff --git a/isis/src/control/objs/BundleAdjust/BundleAdjust.h b/isis/src/control/objs/BundleAdjust/BundleAdjust.h
+index 051d8e5..cef9400 100644
+--- a/isis/src/control/objs/BundleAdjust/BundleAdjust.h
++++ b/isis/src/control/objs/BundleAdjust/BundleAdjust.h
+@@ -9,6 +9,14 @@ find files of those names at the top level of this repository. **/
  
---
+ /* SPDX-License-Identifier: CC0-1.0 */
+ 
++#ifndef ISIS_MSVC_QOBJECT_EXPORT
++#if defined(_MSC_VER) && defined(isis_EXPORTS)
++#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllexport)
++#else
++#define ISIS_MSVC_QOBJECT_EXPORT
++#endif
++#endif
++
+ #include <QObject> // parent class
+ 
+ // std lib
+@@ -330,7 +338,7 @@ namespace Isis {
+    *                           report statistics on coordinate 3 UNLESS bundle and report types are
+    *                           BOTH Latitudinal AND Radius is OFF.
+    */
+-  class BundleAdjust : public QObject {
++  class ISIS_MSVC_QOBJECT_EXPORT BundleAdjust : public QObject {
+       Q_OBJECT
+     public:
+       BundleAdjust(BundleSettingsQsp bundleSettings,
+diff --git a/isis/src/control/objs/BundleResults/BundleResults.h b/isis/src/control/objs/BundleResults/BundleResults.h
+index 028b247..433ff06 100644
+--- a/isis/src/control/objs/BundleResults/BundleResults.h
++++ b/isis/src/control/objs/BundleResults/BundleResults.h
+@@ -9,6 +9,14 @@ find files of those names at the top level of this repository. **/
+ 
+ /* SPDX-License-Identifier: CC0-1.0 */
+ 
++#ifndef ISIS_MSVC_QOBJECT_EXPORT
++#if defined(_MSC_VER) && defined(isis_EXPORTS)
++#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllexport)
++#else
++#define ISIS_MSVC_QOBJECT_EXPORT
++#endif
++#endif
++
+ // Qt Library
+ #include <QList>
+ #include <QObject>
+@@ -87,7 +95,7 @@ namespace Isis {
+    *                            m_rmsLidarImageResiduals. Also added accessors for these lists and a
+    *                            method to set them (setRmsLidarImageResidualLists).
+    */
+-  class BundleResults : public QObject {
++  class ISIS_MSVC_QOBJECT_EXPORT BundleResults : public QObject {
+     Q_OBJECT
+     public:
+       BundleResults(QObject *parent = 0);
+diff --git a/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h b/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h
+index c1e6be6..b2ae357 100755
+--- a/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h
++++ b/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h
+@@ -9,6 +9,14 @@ find files of those names at the top level of this repository. **/
+ 
+ /* SPDX-License-Identifier: CC0-1.0 */
+ 
++#ifndef ISIS_MSVC_QOBJECT_EXPORT
++#if defined(_MSC_VER) && defined(isis_EXPORTS)
++#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllexport)
++#else
++#define ISIS_MSVC_QOBJECT_EXPORT
++#endif
++#endif
++
+ #include <QList>
+ #include <QObject>
+ #include <QString>
+@@ -171,7 +179,7 @@ namespace Isis {
+    *   @history 2025-01-19 Ken Edmundson - Added three columns to the end of each line in the
+    *                          points.csv file for the adjusted XYZ point sigmas.
+    */
+-  class BundleSolutionInfo : public QObject {
++  class ISIS_MSVC_QOBJECT_EXPORT BundleSolutionInfo : public QObject {
+     Q_OBJECT
+     public:
+       BundleSolutionInfo(BundleSettingsQsp inputSettings,
+diff --git a/isis/src/control/objs/ControlPoint/ControlPoint.h b/isis/src/control/objs/ControlPoint/ControlPoint.h
+index 40655b7..c5f2986 100644
+--- a/isis/src/control/objs/ControlPoint/ControlPoint.h
++++ b/isis/src/control/objs/ControlPoint/ControlPoint.h
+@@ -9,6 +9,14 @@ find files of those names at the top level of this repository. **/
+ 
+ /* SPDX-License-Identifier: CC0-1.0 */
+ 
++#ifndef ISIS_MSVC_QOBJECT_EXPORT
++#if defined(_MSC_VER) && defined(isis_EXPORTS)
++#define ISIS_MSVC_QOBJECT_EXPORT __declspec(dllexport)
++#else
++#define ISIS_MSVC_QOBJECT_EXPORT
++#endif
++#endif
++
+ #include <bitset>
+ 
+ #include <QObject>
+@@ -351,7 +359,7 @@ namespace Isis {
+    *  @history 2019-05-16 Debbie A. Cook  See history entry for ComputeResiduals.  Modified call to
+    *                           CameraGroundMap to not do back-of-planet test. References #2591.
+    */
+-  class ControlPoint : public QObject {
++  class ISIS_MSVC_QOBJECT_EXPORT ControlPoint : public QObject {
+ 
+       Q_OBJECT
+ 
+-- 
 2.43.0

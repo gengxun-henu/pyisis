@@ -300,6 +300,25 @@ jobs:
             -ForbiddenPath $forbidden[1]
           if ($LASTEXITCODE -ne 0) { throw "clean-host runtime matrix failed" }
 
+      - name: Collect clean-host diagnostics
+        if: always()
+        run: |
+          $diagnostics = Join-Path $env:GITHUB_WORKSPACE "clean-runtime-diagnostics"
+          New-Item -ItemType Directory -Force -Path $diagnostics | Out-Null
+          $cleanRoot = Join-Path $env:RUNNER_TEMP "pyisis-native-clean"
+          if (Test-Path -LiteralPath $cleanRoot) {
+            Copy-Item -LiteralPath $cleanRoot -Destination $diagnostics -Recurse -Force
+          }
+
+      - name: Upload clean-host diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-app-isis10-clean-runtime-diagnostics-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 7
+          path: clean-runtime-diagnostics
+
       - name: Bind clean-host provenance
         env:
           HEAD_SHA: ${{ github.sha }}

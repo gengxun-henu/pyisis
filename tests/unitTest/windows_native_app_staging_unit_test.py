@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-08-18
-Last Modified: 2026-08-18
+Last Modified: 2026-10-07
 Updated: 2026-08-18  Geng Xun added package-relative launcher safety and execution coverage.
 Updated: 2026-08-18  Geng Xun added unlimited argv and metacharacter regression coverage.
 Updated: 2026-08-18  Geng Xun covered binder-shaped and empty APP arguments.
@@ -14,6 +14,7 @@ Updated: 2026-08-18  Geng Xun covered bundled clean-host camera validation data.
 Updated: 2026-08-18  Geng Xun covered the Windows executable-name XML lookup.
 Updated: 2026-08-18  Geng Xun covered isolated worker launch from metacharacter roots.
 Updated: 2026-08-18  Geng Xun covered native process argv and runtime-root resources.
+Updated: 2026-10-07  Geng Xun covered Qt plugin staging from alternate Windows layouts.
 """
 
 from __future__ import annotations
@@ -404,6 +405,27 @@ class WindowsNativeAppPayloadStagingTests(unittest.TestCase):
                 ):
                     with self.assertRaisesRegex(ValueError, "reparse"):
                         self._stage(fixture)
+
+    def test_stage_accepts_qt_plugins_under_library_bin(self):
+        with TemporaryDirectory() as temp_dir:
+            fixture = self._write_stage_fixture(Path(temp_dir))
+            source_root = fixture.dependency_prefix / "Library" / "plugins"
+            alternate_root = fixture.dependency_prefix / "Library" / "bin"
+            for source in sorted(source_root.rglob("*.dll")):
+                relative = source.relative_to(source_root)
+                destination = alternate_root / relative
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                source.replace(destination)
+            result = self._stage(fixture)
+            self.assertTrue(
+                (result.root / "plugins" / "platforms" / "qwindows.dll").is_file()
+            )
+            self.assertTrue(
+                (result.root / "plugins" / "imageformats" / "qjpeg.dll").is_file()
+            )
+            self.assertTrue(
+                (result.root / "plugins" / "styles" / "qwindowsvistastyle.dll").is_file()
+            )
 
     def test_stage_copies_only_declared_payload_and_hashes_every_file(self):
         with TemporaryDirectory() as temp_dir:

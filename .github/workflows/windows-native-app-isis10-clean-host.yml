@@ -176,6 +176,19 @@ jobs:
               }
             }
           }
+          # isisui is a runtime helper used by the packaged GUI launch path.
+          # Keep it in the temporary build manifest only; it is not a public APP.
+          $manifest.apps += [pscustomobject]@{
+            name = "isisui"
+            source_dir = "isis/src/base/apps/isisui"
+            xml = "isis/src/base/apps/isisui/isisui.xml"
+            versions = [pscustomobject]@{
+              "10.0.0" = [pscustomobject]@{
+                status = "experimental"
+                build_status = "compiled_installed"
+              }
+            }
+          }
           $buildManifest = Join-Path $env:RUNNER_TEMP "windows-app-build-manifest.json"
           $manifest | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $buildManifest -Encoding UTF8
           $apps += "qnet"

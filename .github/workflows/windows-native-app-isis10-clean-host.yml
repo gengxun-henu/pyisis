@@ -215,7 +215,21 @@ jobs:
           $output = Join-Path $env:GITHUB_WORKSPACE "build\windows\native-clean-host-output"
           New-Item -ItemType Directory -Force -Path $output | Out-Null
           $dependency = Join-Path $output "usgs-isis-native-apps-10.0.0-win64-dll-dependencies.json"
-          & python tools\packaging\stage_windows_native_apps.py --isis-prefix $env:PYISIS_WINDOWS_ISIS_PREFIX --minimal-data-root packaging\isisdata-minimal\src\pyisis_isisdata_minimal\data --release packaging\native-apps-win64\release-isis10.json --cli-manifest ports\windows\isis\windows-app-manifest.json --stage-parent $stageParent --dependency-report $dependency --dependency-prefix $env:CONDA_PREFIX
+          $condaRoot = (Resolve-Path (Join-Path $env:CONDA_PREFIX "..\.." )).Path
+          Write-Host "Searching Conda prefixes for Qt platform plugins"
+          Get-ChildItem -Path @($env:CONDA_PREFIX, $condaRoot) -Filter qwindows.dll -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName }
+          $stageArgs = @(
+            "tools\packaging\stage_windows_native_apps.py",
+            "--isis-prefix", $env:PYISIS_WINDOWS_ISIS_PREFIX,
+            "--minimal-data-root", "packaging\isisdata-minimal\src\pyisis_isisdata_minimal\data",
+            "--release", "packaging\native-apps-win64\release-isis10.json",
+            "--cli-manifest", "ports\windows\isis\windows-app-manifest.json",
+            "--stage-parent", $stageParent,
+            "--dependency-report", $dependency,
+            "--dependency-prefix", $env:CONDA_PREFIX,
+            "--dependency-prefix", $condaRoot
+          )
+          & python @stageArgs
           if ($LASTEXITCODE -ne 0) { throw "native APP staging failed" }
           & python tools\packaging\archive_windows_native_apps.py --stage-root (Join-Path $stageParent "usgs-isis-native-apps-10.0.0-win64") --archive (Join-Path $output "usgs-isis-native-apps-10.0.0-win64.zip")
           if ($LASTEXITCODE -ne 0) { throw "native APP archive creation failed" }

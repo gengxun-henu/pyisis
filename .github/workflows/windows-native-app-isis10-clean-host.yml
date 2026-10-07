@@ -46,6 +46,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Prepare Windows shell tools
+        run: |
+          $gitUsrBin = Join-Path $env:ProgramFiles "Git\usr\bin"
+          if (-not (Test-Path (Join-Path $gitUsrBin "cygpath.exe"))) {
+            throw "Git for Windows cygpath.exe is required by setup-micromamba"
+          }
+          $gitUsrBin | Out-File $env:GITHUB_PATH -Append
+
       - name: Set up Windows ISIS 10 build environment
         uses: mamba-org/setup-micromamba@v3
         with:

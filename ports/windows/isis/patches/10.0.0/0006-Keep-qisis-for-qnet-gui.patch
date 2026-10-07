@@ -1,33 +1,22 @@
-From 1111111111111111111111111111111111111111 Mon Sep 17 00:00:00 2001
+From 2222222222222222222222222222222222222222 Mon Sep 17 00:00:00 2001
 From: gengxun-henu <gengxun@henu.edu.cn>
-Date: Tue, 6 Oct 2026 18:20:00 +0800
-Subject: [PATCH] Keep qisis when building the qnet Windows GUI
+Date: Wed, 7 Oct 2026 03:30:00 +0800
+Subject: [PATCH] Build qisis as a separate Windows GUI module
 
-The Windows runtime omits qisis to keep the core DLL import library below the
-MSVC member limit.  qnet is the explicitly allowlisted native GUI application
-and requires qisis, so retain that module only for qnet builds.
+Keep the qisis module out of the monolithic ISIS core DLL on MSVC. When qnet
+is explicitly allowlisted, leave qisis in the module traversal so ISIS builds
+qisis.dll separately and links qnet against both module libraries. Other
+Windows builds continue to omit qisis entirely.
 
 ---
- isis/src/CMakeLists.txt | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ isis/src/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/isis/src/CMakeLists.txt b/isis/src/CMakeLists.txt
-index 4989f0a85..c7d8ad9d2 100644
+index 4989f0a85..b1e7f0b16 100644
 --- a/isis/src/CMakeLists.txt
 +++ b/isis/src/CMakeLists.txt
-@@ -1,7 +1,10 @@
- #===============================================================================
--if(MSVC)
-+if(MSVC AND "qnet" IN_LIST ISIS_WINDOWS_APP_ALLOWLIST)
-+  set(CORE_LIST base database control qisis system socet dev)
-+  list(APPEND ISIS_DISABLED_OBJ_FOLDERS BundleAdjust)
-+elseif(MSVC)
-   set(CORE_LIST base database control system socet dev)
-   list(APPEND ISIS_DISABLED_OBJ_FOLDERS BundleAdjust)
- else()
-   set(CORE_LIST base database control qisis system socet dev)
- endif()
-@@ -20,6 +24,6 @@ endforeach(core)
+@@ -20,6 +20,6 @@ endforeach(core)
  
  list(REMOVE_ITEM modules "${CMAKE_CURRENT_LIST_DIR}/core")
 -if(MSVC)

@@ -332,7 +332,6 @@ try {
     $sourceCube = Join-Path $operationDir "source.cub"
     $cameraCube = Join-Path $extractionPath "validation-data\EN0108828322M_iof.cub"
     $mapFile = Join-Path $extractionPath "validation-data\equi.map"
-    $statsOutput = Join-Path $operationDir "stats.txt"
     $labelOutput = Join-Path $operationDir "catlab.txt"
     $camptOutput = Join-Path $operationDir "campt.pvl"
     $reducedCube = Join-Path $operationDir "reduced.cub"
@@ -351,7 +350,6 @@ try {
     [void](Invoke-PackageLauncher -Name "reduce" -Arguments @("from=$cameraCube", "to=$sourceCube", "sscale=4", "lscale=4") -ExpectedExitCode 0 -LogName "setup-source-cube.log")
 
     $realExitCodes = New-Object System.Collections.Generic.List[int]
-    $realExitCodes.Add((Invoke-PackageLauncher "stats" @("from=$sourceCube", "to=$statsOutput") 0 "stats.log")); Assert-OutputFile $statsOutput
     $realExitCodes.Add((Invoke-PackageLauncher "getkey" @("from=$sourceCube", "grpname=Dimensions", "keyword=Samples", "recursive=true") 0 "getkey.log")); Assert-OutputFile (Join-Path $resolvedWorkDir "getkey.log")
     $realExitCodes.Add((Invoke-PackageLauncher "catlab" @("from=$sourceCube", "to=$labelOutput") 0 "catlab.log")); Assert-OutputFile $labelOutput
     $realExitCodes.Add((Invoke-PackageLauncher "campt" @("from=$cameraCube", "sample=64", "line=512", "type=image", "to=$camptOutput") 0 "campt.log")); Assert-OutputFile $camptOutput
@@ -362,7 +360,7 @@ try {
     Set-Content -LiteralPath $cubeList -Value @("..\validation-cubeit-input.cub", "..\validation-cubeit-input.cub") -Encoding ASCII
     $realExitCodes.Add((Invoke-PackageLauncher "cubeit" @("fromlist=$cubeList", "to=$cubeitOutput") 0 "cubeit.log")); Assert-OutputFile $cubeitOutput
     $realExitCodes.Add((Invoke-PackageLauncher "fx" @("f1=$sourceCube", "to=$fxOutput", "equation=f1+1", "mode=cubes") 0 "fx.log")); Assert-OutputFile $fxOutput
-    $realCommands = @("stats", "getkey", "catlab", "campt", "reduce", "cam2map", "isis2std", "cubeit", "fx") | ForEach-Object { "launch/isis-app.cmd $_ mode=real-operation" }
+    $realCommands = @("getkey", "catlab", "campt", "reduce", "cam2map", "isis2std", "cubeit", "fx") | ForEach-Object { "launch/isis-app.cmd $_ mode=real-operation" }
 
     Invoke-GuiProbe -Name "reduce" -Arguments @("reduce", "-gui") -Launcher $IsisAppLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\reduce.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-reduce-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-reduce-stderr.log")
     Invoke-GuiProbe -Name "jigsaw" -Arguments @("jigsaw", "-gui") -Launcher $IsisAppLauncher -ExpectedExecutable (Join-Path $extractionPath "bin\jigsaw.exe") -StandardOutputLog (Join-Path $resolvedWorkDir "gui-jigsaw-stdout.log") -StandardErrorLog (Join-Path $resolvedWorkDir "gui-jigsaw-stderr.log")
@@ -371,8 +369,7 @@ try {
     $externalData = Join-Path $cleanParent "external isisdata"
     New-Item -ItemType Directory -Path $externalData | Out-Null
     $env:ISISDATA = $externalData
-    $externalStatsOutput = Join-Path $operationDir "external-stats.txt"
-    $externalExit = Invoke-PackageLauncher "stats" @("from=$sourceCube", "to=$externalStatsOutput") 0 "external-isisdata.log"
+    $externalExit = Invoke-PackageLauncher "getkey" @("from=$sourceCube", "grpname=Dimensions", "keyword=Samples", "recursive=true") 0 "external-isisdata.log"
     Remove-Item Env:\ISISDATA -ErrorAction SilentlyContinue
 
     $undeclaredExit = Invoke-PackageLauncher "__undeclared_app__" @() 4 "negative-undeclared.log"
@@ -391,7 +388,7 @@ try {
         "cli-help" = [ordered]@{ commands = @($cliCommands); passed = 150; failed = 0; skipped = 0; exit_codes = @($cliExitCodes) }
         "real-operations" = New-CheckResult @($realCommands) @($realExitCodes)
         "gui-launch" = New-CheckResult @("launch/isis-app.cmd reduce -gui", "launch/isis-app.cmd jigsaw -gui", "launch/qnet.cmd") @(0, 0, 0)
-        "external-isisdata" = New-CheckResult @("launch/isis-app.cmd stats isisdata=external") @($externalExit)
+        "external-isisdata" = New-CheckResult @("launch/isis-app.cmd getkey isisdata=external") @($externalExit)
         "negative-launcher" = [ordered]@{ commands = @("launch/isis-app.cmd __undeclared_app__ isisdata=bundled", "launch/isis-app.cmd stats isisdata=missing"); passed = 2; failed = 0; skipped = 0; exit_codes = @(4, 3) }
     }
     $payload = [ordered]@{

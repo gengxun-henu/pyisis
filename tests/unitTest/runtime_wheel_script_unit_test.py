@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-08-21
+Last Modified: 2026-10-07
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
@@ -21,6 +21,7 @@ Updated: 2026-08-18  Geng Xun classified the Qt WTS dependency as a Windows syst
 Updated: 2026-08-18  Geng Xun covered embedded Python DLLs for native APP archives.
 Updated: 2026-08-21  Geng Xun classified ISIS 10 Windows SDK imports as system DLLs.
 Updated: 2026-08-21  Geng Xun aligned runtime staging fixtures with both rc3 package lines.
+Updated: 2026-10-07  Geng Xun classified Windows GUI system imports used by ISIS10 qnet.
 """
 
 from __future__ import annotations
@@ -202,10 +203,12 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
 
         for dependency in (
             "authz.dll",
+            "d3d9.dll",
             "d3d12.dll",
             "dwrite.dll",
             "odbc32.dll",
             "psapi.dll",
+            "uiautomationcore.dll",
             "winhttp.dll",
         ):
             with self.subTest(dependency=dependency):

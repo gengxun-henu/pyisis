@@ -327,6 +327,11 @@ try {
         $cliExitCodes.Add((Invoke-PackageLauncher -Name $name -Arguments @("-HELP") -ExpectedExitCode 0 -LogName "help-$name.log"))
     }
 
+    $cameraCube = Join-Path $extractionPath "validation-data\EN0108828322M_iof.cub"
+    $mapFile = Join-Path $extractionPath "validation-data\equi.map"
+    if (-not (Test-Path -LiteralPath $cameraCube -PathType Leaf)) { throw "validation camera cube is missing: validation-data\EN0108828322M_iof.cub" }
+    if (-not (Test-Path -LiteralPath $mapFile -PathType Leaf)) { throw "validation map file is missing: validation-data\equi.map" }
+
     # The ISIS10 Windows CLI data-processing path remains a separate
     # compatibility track. GUI release validation focuses on package launch,
     # 150 APP help startups, and the native reduce/jigsaw/qnet GUI paths.
@@ -366,7 +371,7 @@ try {
         extraction_path = $extractionPath
         scrubbed_environment = [ordered]@{ variables = $scrubbedVariables; path_entries_removed = $pathEntriesRemoved }
         checks = $checks
-        summary = [ordered]@{ passed = 166; failed = 0; skipped = 0 }
+        summary = [ordered]@{ passed = 157; failed = 0; skipped = 0 }
     }
     $candidate = Join-Path ([System.IO.Path]::GetDirectoryName($resolvedReport)) ("." + [System.IO.Path]::GetFileName($resolvedReport) + ".tmp-" + [Guid]::NewGuid().ToString("N"))
     try {

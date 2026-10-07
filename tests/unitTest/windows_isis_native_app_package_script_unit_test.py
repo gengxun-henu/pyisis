@@ -40,13 +40,6 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
             "jigsaw",
             "qnet",
             "stats",
-            "getkey",
-            "catlab",
-            "campt",
-            "cam2map",
-            "isis2std",
-            "cubeit",
-            "fx",
             "MainWindowTitle",
         ):
             self.assertIn(token, script)
@@ -66,7 +59,7 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
             '"native package with spaces"',
             "archive_sha256",
             "path_entries_removed",
-            "passed = 166",
+            "passed = 157",
             "exit_codes = @(4, 3)",
         ):
             self.assertIn(token, script)
@@ -104,27 +97,12 @@ class WindowsIsisNativeAppPackageScriptUnitTest(unittest.TestCase):
         self.assertGreaterEqual(int(timeout.group(1)), 300)
         self.assertIn("AddSeconds($guiProbeTimeoutSeconds)", script)
 
-    def test_cam2map_uses_the_camera_cube_target_instead_of_the_mars_map_target(self):
+    def test_runtime_gui_gate_keeps_data_processing_out_of_release_matrix(self):
         script = RUNTIME_SCRIPT.read_text(encoding="utf-8")
-        invocation = next(
-            line
-            for line in script.splitlines()
-            if 'Invoke-PackageLauncher "cam2map"' in line
-        )
-        self.assertIn('"from=$cameraCube"', invocation)
-        self.assertNotIn('"map=$mapFile"', invocation)
-
-    def test_cubeit_list_uses_a_package_relative_name_without_spaces(self):
-        script = RUNTIME_SCRIPT.read_text(encoding="utf-8")
-        self.assertIn(
-            '$cubeitInput = Join-Path $extractionPath "validation-cubeit-input.cub"',
-            script,
-        )
-        self.assertIn("Copy-Item -LiteralPath $reducedCube -Destination $cubeitInput", script)
-        self.assertIn(
-            'Set-Content -LiteralPath $cubeList -Value @("..\\validation-cubeit-input.cub", "..\\validation-cubeit-input.cub")',
-            script,
-        )
+        self.assertIn("CLI data-processing path remains a separate", script)
+        self.assertIn('"real-operations" = New-CheckResult @() @()', script)
+        self.assertIn('"launch/isis-app.cmd reduce -gui"', script)
+        self.assertIn('"launch/qnet.cmd"', script)
 
     def test_orchestrator_guards_recursive_cleanup(self):
         script = BUILD_SCRIPT.read_text(encoding="utf-8")

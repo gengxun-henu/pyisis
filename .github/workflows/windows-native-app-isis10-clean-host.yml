@@ -47,6 +47,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Prepare Windows shell tools
+        if: ${{ (inputs.build_runner || 'windows11-self-hosted') != 'windows11-self-hosted' }}
         run: |
           $gitUsrBin = Join-Path $env:ProgramFiles "Git\usr\bin"
           if (-not (Test-Path (Join-Path $gitUsrBin "cygpath.exe"))) {
@@ -54,7 +55,28 @@ jobs:
           }
           $gitUsrBin | Out-File $env:GITHUB_PATH -Append
 
-      - name: Set up Windows ISIS 10 build environment
+      - name: Configure Windows self-hosted Conda storage
+        if: ${{ (inputs.build_runner || 'windows11-self-hosted') == 'windows11-self-hosted' }}
+        run: |
+          New-Item -ItemType Directory -Force -Path "D:\pyisis-conda\pkgs\isis10-v3" | Out-Null
+
+      - name: Set up Windows ISIS 10 build environment from preinstalled Conda
+        if: ${{ (inputs.build_runner || 'windows11-self-hosted') == 'windows11-self-hosted' }}
+        env:
+          CONDA: C:\Users\gx\miniconda3
+          CONDA_ALWAYS_COPY: "true"
+          PYTHON_CPU_COUNT: "1"
+        uses: conda-incubator/setup-miniconda@v4
+        with:
+          activate-environment: D:\pyisis-conda\envs\isis10-v3
+          environment-file: ports/windows/env/pyisis-isis10-win64.yml
+          conda-solver: libmamba
+          pkgs-dirs: D:\pyisis-conda\pkgs\isis10-v3
+          auto-activate: false
+          run-init: false
+
+      - name: Set up Windows ISIS 10 build environment with Micromamba
+        if: ${{ (inputs.build_runner || 'windows11-self-hosted') != 'windows11-self-hosted' }}
         uses: mamba-org/setup-micromamba@v3
         with:
           environment-file: ports/windows/env/pyisis-isis10-win64.yml
@@ -63,7 +85,15 @@ jobs:
 
       - name: Resolve dependency prefix
         run: |
-          $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          if ('${{ (inputs.build_runner || 'windows11-self-hosted') }}' -eq 'windows11-self-hosted') {
+            $prefix = 'D:\pyisis-conda\envs\isis10-v3'
+          }
+          else {
+            $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          }
+          if (-not (Test-Path -LiteralPath "$prefix\python.exe")) {
+            throw "Conda environment Python is missing: $prefix\python.exe"
+          }
           "CONDA_PREFIX=$prefix" | Out-File $env:GITHUB_ENV -Append
           "$prefix" | Out-File $env:GITHUB_PATH -Append
           "$prefix\Scripts" | Out-File $env:GITHUB_PATH -Append

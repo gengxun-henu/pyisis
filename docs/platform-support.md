@@ -6,7 +6,7 @@ runtime binaries are never source-controlled.
 
 | Platform | Development input | Release layout | Current validation |
 | --- | --- | --- | --- |
-| Windows 11 x64 | MSVC, versioned ISIS 9/10 source and patch queues, and isolated conda environments | Version-isolated PyISIS wheels plus native ISIS APP/GUI ZIPs | ISIS 9 native APP/GUI clean-runtime is covered by M43; ISIS 9/10 PyISIS wheels are covered by Windows CI; ISIS 10 native GUI package remains a release gate |
+| Windows 11 x64 | MSVC, versioned ISIS 9/10 source and patch queues, and isolated conda environments | Version-isolated PyISIS wheels plus native ISIS APP/GUI ZIPs | ISIS 9/10 PyISIS wheels and the ISIS 10 native GUI package are release-ready; direct Windows 11 native GUI revalidation remains pending |
 | Linux x86_64 | Versioned ISIS 9/10 conda environments, pinned GCC toolchain, and the PyPA manylinux container | Version-isolated PyISIS wheelhouses in the GitHub Release | Wheelhouses are clean-installed on Ubuntu 22.04, 24.04, and 26.04; see `docs/platform-release-policy.md` for the exact matrix |
 | macOS | Not implemented | None | Unsupported |
 

@@ -1,6 +1,6 @@
 # PyISIS Release Readiness
 
-Updated: 2026-10-04
+Updated: 2026-10-09
 
 This page is the current release gate for the ISIS 9/10 binary lines. It keeps
 artifact identity and validation commands in one place; it does not create or
@@ -87,3 +87,24 @@ The repository-side Windows APP contract is closed: 49 focused manifest, native 
 ## M43 hosted Windows clean-runtime validation (2026-10-05)
 
 The ISIS 9 native APP clean-runtime path now uses GitHub-hosted `windows-2025` instead of the unavailable self-hosted runner. Run `37274861782` confirmed that `windows-2022` is Windows Server 2022 and correctly failed the package's Windows 11 host check. Corrected run `37280009059` passed ISIS 9 package construction, the Windows 2025 clean-runtime matrix, and final evidence binding. The retained final evidence artifact is `native-app-final-evidence-37280009059`; all four run artifacts were unexpired when recorded.
+
+## M47 ISIS 10 native GUI release closure (2026-10-07)
+
+Run `37643375990` built `usgs-isis-native-apps-10.0.0-win64.zip` on the
+Windows 11 self-hosted build runner and passed the GitHub-hosted Windows 2025
+clean-host and final evidence gates: 157 passed, 0 failed, and 0 skipped.
+The package and its dependency/validation reports are attached to
+`v1.4.0rc4-isis10.0.0`. This evidence covers GUI startup and packaging; real
+CLI data-processing operations remain a separate compatibility track.
+
+Direct Windows 11 clean-runtime revalidation is intentionally deferred and is
+not represented as completed evidence in this release record.
+
+## Linux self-hosted runner health (2026-10-09)
+
+The `pyisis-ubuntu26` runner is online but its checkout workspace contains
+root-owned files and an invalid stale submodule path. The runner account cannot
+remove or repair those files, so self-hosted sanity and build jobs remain
+unhealthy. GitHub-hosted Linux fallback remains the supported release path until
+a host administrator repairs ownership or recreates
+`/opt/actions-runner-pyisis/_work/pyisis`.

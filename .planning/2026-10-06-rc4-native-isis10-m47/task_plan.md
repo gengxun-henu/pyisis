@@ -13,11 +13,13 @@ Create versioned RC4 wheel artifacts and Windows x64 native APP/GUI ZIPs for ISI
 
 ## Phases
 
-- [ ] Update RC4 package/release metadata and native ISIS10 contract
-- [ ] Parameterize native Windows workflow and validate ISIS10 ZIP
-- [ ] Build and validate RC4 wheels on hosted Linux/Windows matrix
-- [ ] Create PR, merge, synchronize local main, and publish RC4 releases
+- [x] Update RC4 package/release metadata and native ISIS10 contract
+- [x] Parameterize native Windows workflow and validate ISIS10 ZIP
+- [x] Build and validate RC4 wheels on hosted Linux/Windows matrix
+- [x] Create PR, merge, synchronize local main, and publish RC4 releases
 
 ## Next Step
 
-Update the versioned metadata and add the ISIS10 native release contract.
+M47 is complete. Continue with post-release runner health and the separate
+Windows native CLI compatibility track; direct Windows 11 clean-runtime
+revalidation is intentionally deferred.

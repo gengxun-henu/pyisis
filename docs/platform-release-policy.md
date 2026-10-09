@@ -32,9 +32,9 @@ ISIS 9 和 ISIS 10 必须使用独立的运行时、wheelhouse、native package 
 - ISIS 9 和 ISIS 10 的 wheelhouse、native package、Release tag 和 `SHA256SUMS.txt` 必须分别命名和发布。
 - GitHub-hosted 构建通过只能证明该 hosted image 的兼容性；若产品声明为 Windows 11 桌面支持，必须有真实 Windows 11 运行证据。
 
-## 当前状态（2026-10-05）
+## 当前状态（2026-10-09）
 
 - Linux ISIS 9/10 wheelhouse：Ubuntu 22.04/24.04/26.04 fallback 矩阵已通过。
 - Windows ISIS 9 native APP/GUI：已在 Windows 2025 hosted clean-runtime 通过 M43；真实 Windows 11 self-hosted 复验仍建议保留。
 - Windows ISIS 9/10 PyISIS wheelhouse：已有构建、安装和导入验证。
-- Windows ISIS 10 native APP/GUI：M47 生成并验证 `usgs-isis-native-apps-10.0.0-win64.zip` 后，才可在 RC4 中声明 ISIS 10 Windows GUI 发布支持。
+- Windows ISIS 10 native APP/GUI：M47 已生成并验证 `usgs-isis-native-apps-10.0.0-win64.zip`，RC4 已发布该包；GitHub-hosted Windows 2025 clean-host 证据通过。真实 Windows 11 self-hosted 复验按当前计划暂缓，因此暂不把它写成 Windows 11 真机证据。
